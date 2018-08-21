@@ -351,11 +351,11 @@
 }
 
 .utv-publish{
-  background: transparent url('../i/ok3.png') no-repeat 0 0;
+  background: transparent url('../public/img/ok3.png') no-repeat 0 0;
 }
 
 .utv-unpublish{
-  background: transparent url('../i/cancel3.png') no-repeat 0 0;
+  background: transparent url('../public/img/cancel3.png') no-repeat 0 0;
 }
 
 .utv-row-title{
@@ -475,7 +475,7 @@
   height: 48px;
   margin: -24px 0 0 -24px;
   -webkit-transition: opacity .1s linear;
-  background: transparent url('../i/checkf.png') no-repeat 0 0;
+  background: transparent url('../public/img/checkf.png') no-repeat 0 0;
 }
 
 .utv-album-thumb-choice, .utv-playlist-choice{
@@ -652,12 +652,12 @@
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 
   .utv-publish{
-    background: transparent url('../i/ok3@2x.png') no-repeat 0 0;
+    background: transparent url('../public/img/ok3@2x.png') no-repeat 0 0;
     background-size: 20px 20px;
   }
 
   .utv-unpublish{
-    background: transparent url('../i/cancel3@2x.png') no-repeat 0 0;
+    background: transparent url('../public/img/cancel3@2x.png') no-repeat 0 0;
     background-size: 20px 20px;
   }
 

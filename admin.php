@@ -37,7 +37,7 @@ if (!class_exists('utvAdmin'))
 
     public function addMenus()
     {
-      add_menu_page(__('uTubeVideo Galleries', 'utvg'), 'uTubeVideo', 'edit_pages', 'utubevideo', array($this, 'gallery_panel'), plugins_url('utubevideo-gallery/i/utubevideo_icon_16x16.png'));
+      add_menu_page(__('uTubeVideo Galleries', 'utvg'), 'uTubeVideo', 'edit_pages', 'utubevideo', array($this, 'gallery_panel'), plugins_url('utubevideo-gallery/public/img/utubevideo_icon_16x16.png'));
       add_submenu_page('utubevideo', 'uTubeVideo Playlists', __('Playlists', 'utvg'), 'edit_pages', 'utubevideo_playlists', array($this, 'playlists_panel'));
       add_submenu_page('utubevideo', 'uTubeVideo Settings', __('Settings', 'utvg'), 'edit_pages', 'utubevideo_settings', array($this, 'option_panel'));
     }

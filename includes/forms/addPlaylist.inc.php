@@ -63,7 +63,7 @@ $data = $data[0];
   <div class="utv-formbox utv-top-formbox card">
     <h3><?php echo __('Playlist Items:', 'utvg'); ?><span class="utv-playlist-preview-count">( <span id="utv-playlist-preview-selectedcount">0</span> / <span id="utv-playlist-preview-totalcount">0</span> selected )</span></h3>
     <div id="utv-playlist-preview"></div>
-    <img id="utv-playlist-preview-loader" class="utv-hide" src="<?php echo plugins_url('utubevideo-gallery/i/hex-loader.gif'); ?>"/>
+    <img id="utv-playlist-preview-loader" class="utv-hide" src="<?php echo plugins_url('utubevideo-gallery/public/img/hex-loader.gif'); ?>"/>
     <span id="utv-playlist-preview-empty" class="utv-hide"><?php _e('No videos loaded yet', 'utvg'); ?></span>
   </div>
 </div>

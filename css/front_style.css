@@ -86,21 +86,21 @@
   width: 48px;
   height: 48px;
   margin: -24px 0 0 -24px;
-  background: transparent url('../i/play_icon.png') no-repeat 0 0;
+  background: transparent url('../public/img/play_icon.png') no-repeat 0 0;
 }
 
 .utv-icon-blue .utv-thumb .utv-play-btn{
   width: 48px;
   height: 34px;
   margin: -17px 0 0 -24px;
-  background: transparent url('../i/play_icon_blue.png') no-repeat 0 0;
+  background: transparent url('../public/img/play_icon_blue.png') no-repeat 0 0;
 }
 
 .utv-icon-red .utv-thumb .utv-play-btn{
   width: 48px;
   height: 34px;
   margin: -17px 0 0 -24px;
-  background: transparent url('../i/play_icon_red.png') no-repeat 0 0;
+  background: transparent url('../public/img/play_icon_red.png') no-repeat 0 0;
 }
 
 .utv-container .utv-thumb:hover .utv-play-btn, .utv-panel .utv-thumb:hover .utv-play-btn{
@@ -282,12 +282,12 @@
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 
   .utv-icon-blue .utv-thumb .utv-play-btn{
-    background: transparent url('../i/play_icon_blue@2x.png') no-repeat 0 0;
+    background: transparent url('../public/img/play_icon_blue@2x.png') no-repeat 0 0;
     background-size: 48px 34px;
   }
 
   .utv-icon-red .utv-thumb .utv-play-btn{
-    background: transparent url('../i/play_icon_red@2x.png') no-repeat 0 0;
+    background: transparent url('../public/img/play_icon_red@2x.png') no-repeat 0 0;
     background-size: 48px 34px;
   }
 
