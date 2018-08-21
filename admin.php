@@ -49,8 +49,8 @@ if (!class_exists('utvAdmin'))
       wp_enqueue_script('jquery-ui-sortable');
       wp_enqueue_script('retina-js', 'https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.2/retina.min.js', null, null, true);
       wp_enqueue_script('utv-admin', plugins_url('public/js/dashboard.min.js', __FILE__), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $this->_version, true);
-      wp_enqueue_style('utv-style', plugins_url('css/admin_style.min.css', __FILE__), false, $this->_version);
-      wp_enqueue_style('jquery-ui-sortable', plugins_url('css/jquery-ui-1.10.3.custom.min.css', __FILE__), false, $this->_version);
+      wp_enqueue_style('utv-style', plugins_url('public/css/dashboard.min.css', __FILE__), false, $this->_version);
+      wp_enqueue_style('jquery-ui-sortable', plugins_url('public/css/jquery-ui-1.10.3.custom.min.css', __FILE__), false, $this->_version);
 
       $dir = wp_upload_dir();
       $dir = $dir['baseurl'];

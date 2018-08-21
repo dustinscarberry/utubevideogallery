@@ -36,8 +36,8 @@ if (!class_exists('utvFrontend'))
     public function addCSS()
     {
       //load frontend styles
-      wp_enqueue_style('utv_style', plugins_url('css/front_style.min.css', __FILE__), false, $this->_version);
-      wp_enqueue_style('font-awesome', '//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css');
+      wp_enqueue_style('utv_style', plugins_url('public/css/app.min.css', __FILE__), false, $this->_version);
+      wp_enqueue_style('font-awesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css');
 
       //add embedded thumbnail sizing css
       $css = '.utv-thumb,.utv-thumb>a{width:' . $this->_options['thumbnailWidth'] . 'px!important}.utv-thumb{margin:' . $this->_options['thumbnailVerticalPadding'] . 'px ' . $this->_options['thumbnailPadding'] . 'px!important}.utv-thumb>a{position:relative}';

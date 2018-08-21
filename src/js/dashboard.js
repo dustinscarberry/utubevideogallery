@@ -1,3 +1,5 @@
+import '../scss/dashboard.scss';
+
 var utvAdmin = {};
 
 utvAdmin.initialize = function($)

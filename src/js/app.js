@@ -1,3 +1,5 @@
+import '../scss/app.scss';
+
 var utvFrontend = {};
 
 utvFrontend.initialize = function($)
