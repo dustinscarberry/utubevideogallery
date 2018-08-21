@@ -72,7 +72,7 @@ if (!class_exists('utvFrontend'))
       );
 
       wp_enqueue_script('retina-js', 'https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.2/retina.min.js', null, null, true);
-      wp_enqueue_script('utv-frontend', plugins_url('js/frontend.min.js', __FILE__), array('jquery'), $this->_version, true);
+      wp_enqueue_script('utv-frontend', plugins_url('public/js/app.min.js', __FILE__), array('jquery'), $this->_version, true);
       wp_localize_script('utv-frontend', 'utvJSData', $jsdata);
     }
 
