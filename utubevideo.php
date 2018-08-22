@@ -25,11 +25,13 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-if (!class_exists('utvGallery'))
+namespace CodeClouds\UTubeVideoGallery;
+
+if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 {
-  class utvGallery
+  class App
   {
-    private $_utvadmin, $_utvfrontend, $_options, $_dirpath;
+    private $_options, $_dirpath;
     const CURRENT_VERSION = '1.9.8';
 
     public function __construct()
@@ -119,13 +121,13 @@ if (!class_exists('utvGallery'))
       //load backend or frontend dependencies
       if (is_admin())
       {
-        require ($this->_dirpath . '/admin.php');
-        $this->_utvadmin = new utvAdmin(self::CURRENT_VERSION);
+        require ($this->_dirpath . '/dashboard.php');
+        new \CodeClouds\UTubeVideoGallery\Dashboard(self::CURRENT_VERSION);
       }
       else
       {
-        require ($this->_dirpath . '/frontend.php');
-        $this->_utvfrontend = new utvFrontend(self::CURRENT_VERSION);
+        require ($this->_dirpath . '/ui.php');
+        new \CodeClouds\UTubeVideoGallery\UI(self::CURRENT_VERSION);
       }
     }
 
@@ -407,7 +409,7 @@ if (!class_exists('utvGallery'))
     }
 
     //recursive function for making sure slugs are unique
-    private function checkslug(&$slug, &$sluglist, &$mark)
+    private function checkslug($slug, $sluglist, $mark)
     {
       if (in_array($slug, $sluglist))
       {
@@ -427,7 +429,5 @@ if (!class_exists('utvGallery'))
     }
   }
 
-  $utvg = new utvGallery();
+  new App();
 }
-
-?>

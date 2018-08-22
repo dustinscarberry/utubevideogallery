@@ -1,6 +1,6 @@
 <?php
 /**
- * utvFrontend - Frontend section for uTubeVideo Gallery
+ * CodeClouds\uTubeVideoGallery\UI - Frontend for uTubeVideo Gallery
  *
  * @package uTubeVideo Gallery
  * @author Dustin Scarberry
@@ -8,9 +8,11 @@
  * @since 1.3
  */
 
-if (!class_exists('utvFrontend'))
+namespace CodeClouds\UTubeVideoGallery;
+
+if (!class_exists('CodeClouds\uTubeVideoGallery\UI'))
 {
-  class utvFrontend
+  class UI
   {
     private $_options, $_version;
 
@@ -91,22 +93,21 @@ if (!class_exists('utvFrontend'))
       //panel view
       if (isset($atts['view']) && $atts['view'] == 'panel')
       {
-        $utvVideoGen = new utvVideoGen($atts, $this->_options);
+        $utvVideoGen = new \utvVideoGen($atts, $this->_options);
         return $utvVideoGen->printPanel();
       }
       //regular gallery view
       else
       {
         if (get_query_var('albumid') != null)
-          $utvVideoGen = new utvVideoGen($atts, $this->_options, 'permalink', get_query_var('albumid'));
+          $utvVideoGen = new \utvVideoGen($atts, $this->_options, 'permalink', get_query_var('albumid'));
         elseif (isset($_GET['aid']))
-          $utvVideoGen = new utvVideoGen($atts, $this->_options, 'query', $_GET['aid']);
+          $utvVideoGen = new \utvVideoGen($atts, $this->_options, 'query', $_GET['aid']);
         else
-          $utvVideoGen = new utvVideoGen($atts, $this->_options);
+          $utvVideoGen = new \utvVideoGen($atts, $this->_options);
 
         return $utvVideoGen->printGallery();
       }
     }
   }
 }
-?>

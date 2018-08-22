@@ -1,6 +1,6 @@
 <?php
 /**
- * utvAdmin - Admin section for uTubeVideo Gallery
+ * CodeClouds\uTubeVideoGallery\Dashboard - Admin panel for uTubeVideo Gallery
  *
  * @package uTubeVideo Gallery
  * @author Dustin Scarberry
@@ -8,9 +8,11 @@
  * @since 1.3
  */
 
-if (!class_exists('utvAdmin'))
+namespace CodeClouds\UTubeVideoGallery;
+
+if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
 {
-  class utvAdmin
+  class Dashboard
   {
     private $_options, $_version, $_dirpath;
 
@@ -32,7 +34,7 @@ if (!class_exists('utvAdmin'))
 
       //ajax hooks
       require($this->_dirpath . '/includes/ajax.php');
-      $utvAdminAjax = new utvAdminAjax($this->_options);
+      $utvAdminAjax = new \utvAdminAjax($this->_options);
     }
 
     public function addMenus()
@@ -164,8 +166,5 @@ if (!class_exists('utvAdmin'))
     {
       require($this->_dirpath . '/includes/processor.inc.php');
     }
-
   }
-
 }
-?>
