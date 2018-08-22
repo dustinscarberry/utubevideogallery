@@ -3,6 +3,7 @@ Contributors: dman25560
 Donate link: http://www.codeclouds.net/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
 Requires at least: 4.4.0
+Requires PHP: 5.6
 Tested up to: 4.8.2
 Stable tag: 1.9.8
 License: GPLv2 or later
