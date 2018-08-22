@@ -10,11 +10,11 @@ class utvVideoListTable extends utvWPListTableBase
   {
     global $status, $page;
 
-    parent::__construct(array(
+    parent::__construct([
       'singular' => '',
       'plural' => 'utv-sortable-table',
       'ajax' => false
-    ));
+    ]);
 
     $this->_id = $id;
     $this->_baseURL = wp_upload_dir();
@@ -23,13 +23,13 @@ class utvVideoListTable extends utvWPListTableBase
 
   function get_columns()
   {
-    $columns = array(
+    $columns = [
       'cb' => '<input type="checkbox">',
       'utv-vidthumbnail' => __('Thumbnail', 'utvg'),
       'name' => __('Name', 'utvg'),
       'published' => __('Published', 'utvg'),
       'dateadd' => __('Date Added', 'utvg')
-    );
+    ];
 
     return $columns;
   }
@@ -39,14 +39,14 @@ class utvVideoListTable extends utvWPListTableBase
     $this->process_bulk_action();
 
     $columns = $this->get_columns();
-    $hidden = array();
+    $hidden = [];
     $sortable = $this->get_sortable_columns();
-    $this->_column_headers = array($columns, $hidden, $sortable);
+    $this->_column_headers = [$columns, $hidden, $sortable];
 
     $this->items = $this->setup_items();
 
     if (!empty($_GET['orderby']) && !empty($_GET['order']))
-      usort($this->items, array($this, 'usort_reorder'));
+      usort($this->items, [$this, 'usort_reorder']);
   }
 
   function column_default($item, $column_name)
@@ -57,7 +57,7 @@ class utvVideoListTable extends utvWPListTableBase
       case 'name':
       case 'published':
       case 'dateadd':
-        return $item[ $column_name ];
+        return $item[$column_name];
       default:
         return 'An unknown error has occured';
     }
@@ -65,11 +65,11 @@ class utvVideoListTable extends utvWPListTableBase
 
   function get_sortable_columns()
   {
-    $sortable_columns = array(
-      'name'  => array('name', false),
-      'published' => array('published', false),
-      'dateadd' => array('dateadd', false)
-    );
+    $sortable_columns = [
+      'name'  => ['name', false],
+      'published' => ['published', false],
+      'dateadd' => ['dateadd', false]
+    ];
 
     return $sortable_columns;
   }
@@ -99,12 +99,12 @@ class utvVideoListTable extends utvWPListTableBase
 
   function get_bulk_actions()
   {
-    $actions = array(
+    $actions = [
       'delete' => __('Delete', 'utvg'),
       'publish' => __('Publish', 'utvg'),
       'unpublish' => __('Unpublish', 'utvg'),
       'refresh' => __('Refresh Thumbnail', 'utvg')
-    );
+    ];
 
     return $actions;
   }
@@ -135,7 +135,7 @@ class utvVideoListTable extends utvWPListTableBase
 
   function column_cb($item)
   {
-    return sprintf('<input type="checkbox" name="video[]" value="%s" />', $item['ID']);
+    return sprintf('<input type="checkbox" name="video[]" value="%s">', $item['ID']);
   }
 
   function no_items()
@@ -146,13 +146,13 @@ class utvVideoListTable extends utvWPListTableBase
   function setup_items()
   {
     global $wpdb;
-    $cells = array();
+    $cells = [];
 
     $data = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $this->_id . ' ORDER BY VID_POS', ARRAY_A);
 
     foreach ($data as $val)
     {
-      array_push($cells, array(
+      array_push($cells, [
         'ID' => $val['VID_ID'],
         'utv-vidthumbnail' => ($val['VID_SOURCE'] == 'youtube' ? '<a href="https://www.youtube.com/watch?v=' . $val['VID_URL'] . '" target="_blank" title="' . __('Watch On YouTube', 'utvg') . '">' : '<a href="https://www.vimeo.com/' . $val['VID_URL'] . '" target="_blank" title="' . __('Watch On Vimeo', 'utvg') . '">') .
         '<img src="' . $this->_baseURL . $val['VID_URL'] . $val['VID_ID'] . '.jpg" class="utv-preview-thumb" data-rjs="2">
@@ -167,7 +167,7 @@ class utvVideoListTable extends utvWPListTableBase
         </div>',
         'published' => $val['VID_PUBLISH'] == '1' ? '<a href="" class="utv-publish" title="' . __('Click to toggle', 'utvg') . '"/>' : '<a href="" class="utv-unpublish" title="' . __('Click to toggle', 'utvg') . '"/>',
         'dateadd' => date('Y/m/d', $val['VID_UPDATEDATE'])
-      ));
+      ]);
     }
 
     return $cells;

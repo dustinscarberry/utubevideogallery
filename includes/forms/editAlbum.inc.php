@@ -68,10 +68,10 @@ $thumbs = $wpdb->get_results('SELECT VID_ID, VID_URL FROM ' . $wpdb->prefix . 'u
 
           <?php
 
-          $opts = array(
-            array('text' => __('Top to Bottom', 'utvg'), 'value' => 'asc'),
-            array('text' => __('Bottom to Top', 'utvg'), 'value' => 'desc')
-          );
+          $opts = [
+            ['text' => __('Top to Bottom', 'utvg'), 'value' => 'asc'],
+            ['text' => __('Bottom to Top', 'utvg'), 'value' => 'desc']
+          ];
 
           foreach ($opts as $val)
           {

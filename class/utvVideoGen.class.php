@@ -12,7 +12,7 @@ if (!class_exists('utvVideoGen'))
       global $wpdb;
 
       //set atts array
-      $this->_atts = shortcode_atts(array(
+      $this->_atts = shortcode_atts([
         'id' => null,
         'align' => 'left', //[left, right, center]
         'panelvideocount' => 14, //video count per panel view / page
@@ -21,7 +21,7 @@ if (!class_exists('utvVideoGen'))
         'controls' => 'false', //[true, false]
         'videocount' => null, //[any integer]
         'albumcount' => null //[any integer]
-      ), $atts, 'utubevideo');
+      ], $atts, 'utubevideo');
 
       //get gallery basic data
       $this->_gallery = $wpdb->get_results('SELECT DATA_SORT, DATA_DISPLAYTYPE FROM ' . $wpdb->prefix . 'utubevideo_dataset WHERE DATA_ID = "' . $this->_atts['id'] . '"', ARRAY_A)[0];
@@ -126,7 +126,7 @@ if (!class_exists('utvVideoGen'))
             $this->printGalleryOpeningContainer();
 
             //fetch video data for above albums
-            $videos = Array();
+            $videos = [];
 
             foreach ($albums as $val)
             {
@@ -189,7 +189,7 @@ if (!class_exists('utvVideoGen'))
       if (!empty($albumIds))
       {
         //fetch video data for above albums
-        $videos = Array();
+        $videos = [];
 
         foreach ($albumIds as $val)
         {

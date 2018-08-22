@@ -26,9 +26,9 @@ if (!class_exists('utvAdmin'))
       $this->_options = get_option('utubevideo_main_opts');
 
       //main hooks
-      add_action('admin_init', array($this, 'processor'));
-      add_action('admin_menu', array($this, 'addMenus'));
-      add_action('admin_enqueue_scripts', array($this, 'addScripts'));
+      add_action('admin_init', [$this, 'processor']);
+      add_action('admin_menu', [$this, 'addMenus']);
+      add_action('admin_enqueue_scripts', [$this, 'addScripts']);
 
       //ajax hooks
       require($this->_dirpath . '/includes/ajax.php');
@@ -37,9 +37,9 @@ if (!class_exists('utvAdmin'))
 
     public function addMenus()
     {
-      add_menu_page(__('uTubeVideo Galleries', 'utvg'), 'uTubeVideo', 'edit_pages', 'utubevideo', array($this, 'gallery_panel'), plugins_url('utubevideo-gallery/public/img/utubevideo_icon_16x16.png'));
-      add_submenu_page('utubevideo', 'uTubeVideo Playlists', __('Playlists', 'utvg'), 'edit_pages', 'utubevideo_playlists', array($this, 'playlists_panel'));
-      add_submenu_page('utubevideo', 'uTubeVideo Settings', __('Settings', 'utvg'), 'edit_pages', 'utubevideo_settings', array($this, 'option_panel'));
+      add_menu_page(__('uTubeVideo Galleries', 'utvg'), 'uTubeVideo', 'edit_pages', 'utubevideo', [$this, 'gallery_panel'], plugins_url('utubevideo-gallery/public/img/utubevideo_icon_16x16.png'));
+      add_submenu_page('utubevideo', 'uTubeVideo Playlists', __('Playlists', 'utvg'), 'edit_pages', 'utubevideo_playlists', [$this, 'playlists_panel']);
+      add_submenu_page('utubevideo', 'uTubeVideo Settings', __('Settings', 'utvg'), 'edit_pages', 'utubevideo_settings', [$this, 'option_panel']);
     }
 
     public function addScripts()
@@ -48,22 +48,22 @@ if (!class_exists('utvAdmin'))
       wp_enqueue_script('jquery-ui-core');
       wp_enqueue_script('jquery-ui-sortable');
       wp_enqueue_script('retina-js', 'https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.2/retina.min.js', null, null, true);
-      wp_enqueue_script('utv-admin', plugins_url('public/js/dashboard.min.js', __FILE__), array('jquery', 'jquery-ui-core', 'jquery-ui-sortable'), $this->_version, true);
+      wp_enqueue_script('utv-admin', plugins_url('public/js/dashboard.min.js', __FILE__), ['jquery', 'jquery-ui-core', 'jquery-ui-sortable'], $this->_version, true);
       wp_enqueue_style('utv-style', plugins_url('public/css/dashboard.min.css', __FILE__), false, $this->_version);
       wp_enqueue_style('jquery-ui-sortable', plugins_url('public/css/jquery-ui-1.10.3.custom.min.css', __FILE__), false, $this->_version);
 
       $dir = wp_upload_dir();
       $dir = $dir['baseurl'];
 
-      $jsdata = array(
+      $jsdata = [
         'thumbCacheDirectory' => $dir . '/utubevideo-cache/',
-        'translations' => array(
+        'translations' => [
           'confirmGalleryDelete' => __('Are you sure you want to delete this gallery?', 'utvg'),
           'confirmAlbumDelete' => __('Are you sure you want to delete this album?', 'utvg'),
           'confirmVideoDelete' => __('Are you sure you want to delete this video?', 'utvg'),
           'confirmPlaylistDelete' => __('Are you sure you want to delete this playlist? All videos contained will be deleted.', 'utvg')
-        ),
-        'nonces' => array(
+        ],
+        'nonces' => [
           'deleteGallery' => wp_create_nonce('ut-delete-gallery'),
           'deleteAlbum' => wp_create_nonce('ut-delete-album'),
           'deleteVideo' => wp_create_nonce('ut-delete-video'),
@@ -71,8 +71,8 @@ if (!class_exists('utvAdmin'))
           'publishAlbum' => wp_create_nonce('ut-publish-album'),
           'publishVideo' => wp_create_nonce('ut-publish-video'),
           'retrievePlaylist' => wp_create_nonce('ut-retrieve-playlist')
-        )
-      );
+        ]
+      ];
 
       wp_localize_script('utv-admin', 'utvJSData', $jsdata);
     }

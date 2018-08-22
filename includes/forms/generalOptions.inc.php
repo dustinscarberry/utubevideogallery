@@ -49,7 +49,10 @@ if (isset($_GET['action']))
 
               <?php
 
-              $opts = array(array('text' => __('Dark', 'utvg'), 'value' => 'dark'), array('text' => __('Light', 'utvg'), 'value' => 'light'));
+              $opts = [
+                ['text' => __('Dark', 'utvg'), 'value' => 'dark'],
+                ['text' => __('Light', 'utvg'), 'value' => 'light']
+              ];
 
               foreach ($opts as $val)
               {
@@ -70,7 +73,10 @@ if (isset($_GET['action']))
 
               <?php
 
-              $opts = array(array('text' => __('Red', 'utvg'), 'value' => 'red'), array('text' => __('White', 'utvg'), 'value' => 'white'));
+              $opts = [
+                ['text' => __('Red', 'utvg'), 'value' => 'red'], 
+                ['text' => __('White', 'utvg'), 'value' => 'white']
+              ];
 
               foreach ($opts as $val)
               {

@@ -69,10 +69,10 @@ if (!empty($_POST))
           {
             $wpdb->update(
               $wpdb->prefix . 'utubevideo_video',
-              array(
+              [
                 'VID_THUMBTYPE' => $video['DATA_THUMBTYPE']
-              ),
-              array('VID_ID' => $video['VID_ID'])
+              ],
+              ['VID_ID' => $video['VID_ID']]
             );
           }
         }
@@ -156,13 +156,13 @@ if (!empty($_POST))
 
       if ($wpdb->insert(
         $wpdb->prefix . 'utubevideo_dataset',
-        array(
+        [
           'DATA_NAME' => $shortname,
           'DATA_SORT' => $albumsort,
           'DATA_THUMBTYPE' => $thumbType,
           'DATA_DISPLAYTYPE' => $displaytype,
           'DATA_UPDATEDATE' => $time
-        )
+        ]
       ))
         utvAdminGen::printMessage(__('Gallery created', 'utvg'), 'success', true, true);
       else
@@ -189,14 +189,14 @@ if (!empty($_POST))
 
       if ($wpdb->update(
         $wpdb->prefix . 'utubevideo_dataset',
-        array(
+        [
           'DATA_NAME' => $galleryName,
           'DATA_SORT' => $albumSort,
           'DATA_THUMBTYPE' => $thumbType,
           'DATA_DISPLAYTYPE' => $displayType,
           'DATA_UPDATEDATE' => $time
-        ),
-        array('DATA_ID' => $galleryID)
+        ],
+        ['DATA_ID' => $galleryID]
       ) >= 0)
         utvAdminGen::printMessage(__('Gallery updated', 'utvg'), 'success', true, true);
       else
@@ -227,7 +227,7 @@ if (!empty($_POST))
 
       if ($wpdb->insert(
         $wpdb->prefix . 'utubevideo_album',
-        array(
+        [
           'ALB_NAME' => $albumName,
           'ALB_SLUG' => $slug,
           'ALB_THUMB' => 'missing',
@@ -235,7 +235,7 @@ if (!empty($_POST))
           'ALB_UPDATEDATE' => $time,
           'ALB_POS' => $nextSortPos,
           'DATA_ID' => $galleryID
-        )
+        ]
       ))
         utvAdminGen::printMessage(__('Video album created', 'utvg'), 'success', true, true);
       else
@@ -286,7 +286,7 @@ if (!empty($_POST))
       //insert new video
       if ($wpdb->insert(
         $wpdb->prefix . 'utubevideo_video',
-        array(
+        [
           'VID_SOURCE' => $videoSource,
           'VID_NAME' => $videoName,
           'VID_URL' => $vID,
@@ -298,7 +298,7 @@ if (!empty($_POST))
           'VID_POS' => $nextSortPos,
           'VID_UPDATEDATE' => $time,
           'ALB_ID' => $albumID
-        )
+        ]
       ))
       {
         //get last insert id and save thumbnail
@@ -349,7 +349,7 @@ if (!empty($_POST))
       //insert playlist into database
       if (!$wpdb->insert(
         $wpdb->prefix . 'utubevideo_playlist',
-        array(
+        [
           'PLAY_TITLE' => $playlistTitle,
           'PLAY_SOURCE' => $playlistSource,
           'PLAY_SOURCEID' => $playlistSourceId,
@@ -357,7 +357,7 @@ if (!empty($_POST))
           'PLAY_CHROME' => $chrome,
           'PLAY_UPDATEDATE' => $time,
           'ALB_ID' => $albumID
-        )
+        ]
       ))
       {
         utvAdminGen::printMessage(__('An internal error has occurred.', 'utvg'), 'error');
@@ -414,12 +414,12 @@ if (!empty($_POST))
       //update playlist record
       if ($wpdb->update(
         $wpdb->prefix . 'utubevideo_playlist',
-        array(
+        [
           'PLAY_QUALITY' => $playlistQuality,
           'PLAY_CHROME' => $playlistChrome,
           'PLAY_UPDATEDATE' => $time,
-        ),
-        array('PLAY_ID' => $playlistID)
+        ],
+        ['PLAY_ID' => $playlistID]
       ) < 0)
       {
         utvAdminGen::printMessage(__('Error saving playlist changes', 'utvg'), 'error');
@@ -433,7 +433,7 @@ if (!empty($_POST))
         {
           //delete local video as it is unselected
           if (!$video['selected'] && $video['localID'] != '')
-            utvAdminGen::deleteVideos(array($video['localID']), $wpdb);
+            utvAdminGen::deleteVideos([$video['localID']], $wpdb);
           //if selected
           elseif ($video['selected'])
           {
@@ -534,15 +534,15 @@ if (!empty($_POST))
 
       if ($wpdb->update(
         $wpdb->prefix . 'utubevideo_album',
-        array(
+        [
           'ALB_NAME' => $albumName,
           'ALB_SLUG' => $slug,
           'ALB_THUMB' => $thumb,
           'ALB_SORT' => $videoSort,
           'ALB_UPDATEDATE' => $time,
           'DATA_ID' => $albumGallery
-        ),
-        array('ALB_ID' => $albumID)
+        ],
+        ['ALB_ID' => $albumID]
       ) >= 0)
         utvAdminGen::printMessage(__('Video album updated', 'utvg'), 'success', true, true);
       else
@@ -592,7 +592,7 @@ if (!empty($_POST))
       //update database entry
       if ($wpdb->update(
         $wpdb->prefix . 'utubevideo_video',
-        array(
+        [
           'VID_NAME' => $videoName,
           'VID_THUMBTYPE' => $gallery['DATA_THUMBTYPE'],
           'VID_QUALITY' => $quality,
@@ -601,8 +601,8 @@ if (!empty($_POST))
           'VID_ENDTIME' => $endTime,
           'VID_UPDATEDATE' => $time,
           'ALB_ID' => $videoAlbum
-        ),
-        array('VID_ID' => $videoID)
+        ],
+        ['VID_ID' => $videoID]
       ) >= 0)
         utvAdminGen::printMessage(__('Video updated', 'utvg'), 'success', true, true);
       else

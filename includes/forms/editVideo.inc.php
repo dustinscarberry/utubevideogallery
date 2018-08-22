@@ -73,11 +73,11 @@ else
 
           <?php
 
-          $opts = array(
-            array('text' => '480p', 'value' => 'large'),
-            array('text' => '720p', 'value' => 'hd720'),
-            array('text' => '1080p', 'value' => 'hd1080')
-          );
+          $opts = [
+            ['text' => '480p', 'value' => 'large'],
+            ['text' => '720p', 'value' => 'hd720'],
+            ['text' => '1080p', 'value' => 'hd1080']
+          ];
 
           foreach ($opts as $val)
           {

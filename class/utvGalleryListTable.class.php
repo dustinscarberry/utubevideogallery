@@ -8,22 +8,22 @@ class utvGalleryListTable extends utvWPListTableBase
   {
     global $status, $page;
 
-    parent::__construct(array(
+    parent::__construct([
       'singular' => '',
       'plural' => '',
       'ajax' => false
-    ));
+    ]);
   }
 
   function get_columns()
   {
-    $columns = array(
-      'cb' => '<input type="checkbox"/>',
+    $columns = [
+      'cb' => '<input type="checkbox">',
       'name' => __('Name', 'utvg'),
       'shortcode' => __('Shortcode', 'utvg'),
       'dateadd' => __('Date Added', 'utvg'),
       'albums' => __('# Albums', 'utvg')
-    );
+    ];
 
     return $columns;
   }
@@ -33,14 +33,14 @@ class utvGalleryListTable extends utvWPListTableBase
     $this->process_bulk_action();
 
     $columns = $this->get_columns();
-    $hidden = array();
+    $hidden = [];
     $sortable = $this->get_sortable_columns();
-    $this->_column_headers = array($columns, $hidden, $sortable);
+    $this->_column_headers = [$columns, $hidden, $sortable];
 
     $this->items = $this->setup_items();
 
     if (!empty($_GET['orderby']) && !empty($_GET['order']))
-      usort($this->items, array($this, 'usort_reorder'));
+      usort($this->items, [$this, 'usort_reorder']);
   }
 
   function column_default($item, $column_name)
@@ -51,7 +51,7 @@ class utvGalleryListTable extends utvWPListTableBase
       case 'shortcode':
       case 'dateadd':
       case 'albums':
-        return $item[ $column_name ];
+        return $item[$column_name];
       default:
         return 'An unknown error has occured';
     }
@@ -60,11 +60,11 @@ class utvGalleryListTable extends utvWPListTableBase
   function get_sortable_columns()
   {
 
-    $sortable_columns = array(
-      'name'  => array('name',false),
-      'dateadd' => array('dateadd',false),
-      'albums'   => array('albums',false)
-    );
+    $sortable_columns = [
+      'name'  => ['name', false],
+      'dateadd' => ['dateadd', false],
+      'albums'   => ['albums', false]
+    ];
 
     return $sortable_columns;
   }
@@ -94,9 +94,9 @@ class utvGalleryListTable extends utvWPListTableBase
 
   function get_bulk_actions()
   {
-    $actions = array(
+    $actions = [
       'delete' => __('Delete', 'utvg')
-    );
+    ];
 
     return $actions;
   }
@@ -132,7 +132,7 @@ class utvGalleryListTable extends utvWPListTableBase
   function setup_items()
   {
     global $wpdb;
-    $cells = array();
+    $cells = [];
 
     $galleries = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_dataset ORDER BY DATA_ID', ARRAY_A);
 
@@ -140,7 +140,7 @@ class utvGalleryListTable extends utvWPListTableBase
     {
       $albumCount = $wpdb->get_results('SELECT COUNT(ALB_ID) AS ALB_COUNT FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $gallery['DATA_ID'], ARRAY_A)[0];
 
-      array_push($cells, array(
+      array_push($cells, [
         'ID' => $gallery['DATA_ID'],
         'name' => '<a href="?page=utubevideo&view=gallery&id=' . $gallery['DATA_ID'] . '" title="' . __('View', 'utvg') . '" class="utv-row-title">' . $gallery['DATA_NAME'] . '</a>
         <div class="utv-row-actions">
@@ -153,7 +153,7 @@ class utvGalleryListTable extends utvWPListTableBase
         'shortcode' => '[utubevideo id="' . $gallery['DATA_ID'] . '"]',
         'dateadd' => date('Y/m/d', $gallery['DATA_UPDATEDATE']),
         'albums' => $albumCount['ALB_COUNT']
-      ));
+      ]);
     }
 
     return $cells;

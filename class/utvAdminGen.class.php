@@ -174,10 +174,8 @@ if (!class_exists('utvAdminGen'))
       {
         if ($wpdb->update(
           $wpdb->prefix . 'utubevideo_album',
-          array(
-            'ALB_THUMB' => 'missing'
-          ),
-          array('ALB_ID' => $videos[0]['ALB_ID'])
+          ['ALB_THUMB' => 'missing'],
+          ['ALB_ID' => $videos[0]['ALB_ID']]
         ) === false)
           return false;
       }
@@ -217,7 +215,7 @@ if (!class_exists('utvAdminGen'))
 
     public static function deleteGalleries($galleries, &$wpdb)
     {
-      $albumIdArray = array();
+      $albumIdArray = [];
 
       //sanitize key array
       $galleriesQueryString = implode(', ', array_map('intval', $galleries));
@@ -253,7 +251,7 @@ if (!class_exists('utvAdminGen'))
 
       //query database for video ids in playlist
       $videos = $wpdb->get_results('SELECT VID_ID FROM ' . $wpdb->prefix . 'utubevideo_video WHERE PLAY_ID IN (' . $playlistsQueryString . ')', ARRAY_A);
-      $videoIDs = array();
+      $videoIDs = [];
 
       //build correct array format of ids
       foreach ($videos as $video)
@@ -322,10 +320,8 @@ if (!class_exists('utvAdminGen'))
         {
           $wpdb->update(
             $wpdb->prefix . 'utubevideo_video',
-            array(
-              'VID_THUMBTYPE' => $video['DATA_THUMBTYPE']
-            ),
-            array('VID_ID' => $video['VID_ID'])
+            ['VID_THUMBTYPE' => $video['DATA_THUMBTYPE']],
+            ['VID_ID' => $video['VID_ID']]
           );
         }
       }
@@ -388,7 +384,7 @@ if (!class_exists('utvAdminGen'))
     public static function getYouTubePlaylistData($apiKey, $playlistID)
     {
       //return array of data
-      $return = array('title' => '', 'videos' => array());
+      $return = ['title' => '', 'videos' => []];
 
       //check for a possibly valid api key before continuing
       if (self::isNullOrEmpty($apiKey))
@@ -403,7 +399,7 @@ if (!class_exists('utvAdminGen'))
 
       //get base data from youtube api
       $nextPageToken = true;
-      $baseData = array();
+      $baseData = [];
 
       while ($nextPageToken)
       {
@@ -420,7 +416,7 @@ if (!class_exists('utvAdminGen'))
       }
 
       //generate video id strings to get additonal details needed to filter out deleted and private videos
-      $videoIDsList = array();
+      $videoIDsList = [];
       $IDString = '';
       $IDCount = 0;
 
@@ -444,7 +440,7 @@ if (!class_exists('utvAdminGen'))
         array_push($videoIDsList, trim($IDString, ','));
 
       //reuse basedata array
-      $baseData = array();
+      $baseData = [];
 
       //get final video data to filter with
       foreach ($videoIDsList as $list)
@@ -465,7 +461,15 @@ if (!class_exists('utvAdminGen'))
           $duration->add(new DateInterval($video['contentDetails']['duration']));
           $duration = $duration->format('H:i:s');
 
-          array_push($return['videos'], array('title' => htmlspecialchars($video['snippet']['title'], ENT_QUOTES), 'videoId' => $video['id'], 'thumbURL' => 'https://img.youtube.com/vi/' . $video['id'] . '/0.jpg', 'duration' => $duration));
+          array_push(
+            $return['videos'],
+            [
+              'title' => htmlspecialchars($video['snippet']['title'], ENT_QUOTES),
+              'videoId' => $video['id'],
+              'thumbURL' => 'https://img.youtube.com/vi/' . $video['id'] . '/0.jpg',
+              'duration' => $duration
+            ]
+          );
         }
       }
 
@@ -475,9 +479,9 @@ if (!class_exists('utvAdminGen'))
     public static function getVimeoPlaylistData($playlistID)
     {
       //return array of data
-      $return = array('title' => '', 'videos' => array());
+      $return = ['title' => '', 'videos' => []];
       //basedata array
-      $baseData = array();
+      $baseData = [];
 
       if (!$albumData = self::queryAPI('https://vimeo.com/api/v2/album/' . $playlistID . '/info.json'))
         return false;
@@ -503,7 +507,15 @@ if (!class_exists('utvAdminGen'))
        foreach ($data as $val)
        {
          $duration = gmdate('H:i:s', $val['duration']);
-         array_push($return['videos'], array('title' => htmlspecialchars($val['title'], ENT_QUOTES), 'videoId' => $val['id'], 'thumbURL' => $val['thumbnail_large'], 'duration' => $duration));
+         array_push(
+           $return['videos'],
+           [
+             'title' => htmlspecialchars($val['title'], ENT_QUOTES),
+             'videoId' => $val['id'],
+             'thumbURL' => $val['thumbnail_large'],
+             'duration' => $duration
+           ]
+         );
        }
 
       return $return;
@@ -522,12 +534,12 @@ if (!class_exists('utvAdminGen'))
 
       if ($wpdb->update(
         $wpdb->prefix . 'utubevideo_video',
-        array(
+        [
           'VID_NAME' => $videoTitle,
           'VID_QUALITY' => $videoQuality,
           'VID_CHROME' => $videoChrome
-        ),
-        array('VID_ID' => $localID)
+        ],
+        ['VID_ID' => $localID]
       ) < 0)
         return false;
       else
@@ -557,7 +569,7 @@ if (!class_exists('utvAdminGen'))
       //if video insertion successful; save thumbnail and increment new video count++
       if ($wpdb->insert(
         $wpdb->prefix . 'utubevideo_video',
-        array(
+        [
           'VID_SOURCE' => $videoSource,
           'VID_NAME' => $videoTitle,
           'VID_URL' => $videoSourceID,
@@ -568,7 +580,7 @@ if (!class_exists('utvAdminGen'))
           'VID_UPDATEDATE' => $time,
           'ALB_ID' => $albumID,
           'PLAY_ID' => $playlistID
-        )
+        ]
       ))
       {
         $videoID = $wpdb->insert_id;

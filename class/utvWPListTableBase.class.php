@@ -361,7 +361,7 @@ class utvWPListTableBase {
 <p class="search-box">
   <label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>"><?php echo $text; ?>:</label>
   <input type="search" id="<?php echo esc_attr( $input_id ); ?>" name="s" value="<?php _admin_search_query(); ?>" />
-  <?php submit_button( $text, 'button', '', false, array( 'id' => 'search-submit' ) ); ?>
+  <?php submit_button( $text, 'button', '', false, ['id' => 'search-submit'] ); ?>
 </p>
 <?php
   }
@@ -1364,14 +1364,15 @@ class utvWPListTableBase {
    *
    * @access public
    */
-  public function _js_vars() {
-    $args = array(
-      'class'  => get_class( $this ),
-      'screen' => array(
+  public function _js_vars()
+  {
+    $args = [
+      'class'  => get_class($this),
+      'screen' => [
         'id'   => $this->screen->id,
         'base' => $this->screen->base,
-      )
-    );
+      ]
+    ];
 
     printf( "<script type='text/javascript'>list_args = %s;</script>\n", wp_json_encode( $args ) );
   }

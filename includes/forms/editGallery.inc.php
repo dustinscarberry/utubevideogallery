@@ -1,10 +1,10 @@
 <?php
 
     $ID = sanitize_key($_GET['id']);
-  $gallery = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_dataset WHERE DATA_ID = ' . $ID, ARRAY_A);
+    $gallery = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_dataset WHERE DATA_ID = ' . $ID, ARRAY_A);
 
     if (!isset($gallery[0]))
-  {
+    {
         _e('Invalid Gallery ID', 'utvg');
         return;
     }
@@ -29,10 +29,10 @@
 
           <?php
 
-          $opts = array(
-            array('text' => __('Top to Bottom', 'utvg'), 'value' => 'asc'),
-            array('text' => __('Bottom to Top', 'utvg'), 'value' => 'desc')
-          );
+          $opts = [
+            ['text' => __('Top to Bottom', 'utvg'), 'value' => 'asc'],
+            ['text' => __('Bottom to Top', 'utvg'), 'value' => 'desc']
+          ];
 
           foreach ($opts as $val)
           {
@@ -53,10 +53,10 @@
 
         <?php
 
-        $opts = array(
-          array('text' => __('Rectangle', 'utvg'), 'value' => 'rectangle'),
-          array('text' => __('Square', 'utvg'), 'value' => 'square')
-        );
+        $opts = [
+          ['text' => __('Rectangle', 'utvg'), 'value' => 'rectangle'],
+          ['text' => __('Square', 'utvg'), 'value' => 'square']
+        ];
 
         foreach ($opts as $val)
         {
@@ -77,10 +77,10 @@
 
           <?php
 
-          $opts = array(
-            array('text' => __('Albums', 'utvg'), 'value' => 'album'),
-            array('text' => __('Just Videos', 'utvg'), 'value' => 'video')
-          );
+          $opts = [
+            ['text' => __('Albums', 'utvg'), 'value' => 'album'],
+            ['text' => __('Just Videos', 'utvg'), 'value' => 'video']
+          ];
 
           foreach ($opts as $val)
           {

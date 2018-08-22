@@ -8,22 +8,22 @@ class utvPlaylistListTable extends utvWPListTableBase
   {
     global $status, $page;
 
-    parent::__construct(array(
+    parent::__construct([
       'singular' => '',
       'plural' => '',
       'ajax' => false
-    ));
+    ]);
   }
 
   function get_columns()
   {
-    $columns = array(
+    $columns = [
       'cb' => '<input type="checkbox">',
       'title' => __('Title', 'utvg'),
       'source' => __('Source', 'utvg'),
       'album' => __('Album', 'utvg'),
       'updatedate' => __('Updated', 'utvg')
-    );
+    ];
 
     return $columns;
   }
@@ -33,14 +33,14 @@ class utvPlaylistListTable extends utvWPListTableBase
     $this->process_bulk_action();
 
     $columns = $this->get_columns();
-    $hidden = array();
+    $hidden = [];
     $sortable = $this->get_sortable_columns();
-    $this->_column_headers = array($columns, $hidden, $sortable);
+    $this->_column_headers = [$columns, $hidden, $sortable];
 
     $this->items = $this->setup_items();
 
     if (!empty($_GET['orderby']) && !empty($_GET['order']))
-      usort($this->items, array($this, 'usort_reorder'));
+      usort($this->items, [$this, 'usort_reorder']);
   }
 
   function column_default($item, $column_name)
@@ -59,11 +59,11 @@ class utvPlaylistListTable extends utvWPListTableBase
 
   function get_sortable_columns()
   {
-    $sortable_columns = array(
-      'title'  => array('title', false),
-      'source'   => array('source', false),
-      'updatedate' => array('updatedate', false)
-    );
+    $sortable_columns = [
+      'title'  => ['title', false],
+      'source'   => ['source', false],
+      'updatedate' => ['updatedate', false]
+    ];
 
     return $sortable_columns;
   }
@@ -93,11 +93,11 @@ class utvPlaylistListTable extends utvWPListTableBase
 
   function get_bulk_actions()
   {
-    $actions = array(
+    $actions = [
       //'syncnew' => __('Sync New Items', 'utvg'),
       //'refreshall' => __('Refresh All Items', 'utvg')
       'delete' => __('Delete', 'utvg')
-    );
+    ];
 
     return $actions;
   }
@@ -133,7 +133,7 @@ class utvPlaylistListTable extends utvWPListTableBase
   function setup_items()
   {
     global $wpdb;
-    $cells = array();
+    $cells = [];
 
     $data = $wpdb->get_results('SELECT p.*, ALB_NAME FROM ' . $wpdb->prefix . 'utubevideo_playlist p INNER JOIN ' . $wpdb->prefix . 'utubevideo_album a ON p.ALB_ID = a.ALB_ID ORDER BY PLAY_ID', ARRAY_A);
 
@@ -144,7 +144,7 @@ class utvPlaylistListTable extends utvWPListTableBase
       $source = ($val['PLAY_SOURCE'] == 'youtube' ? 'YouTube' : 'Vimeo');
       $updateDate = date('Y/m/d', $val['PLAY_UPDATEDATE']);
 
-      array_push($cells, array(
+      array_push($cells, [
         'ID' => $val['PLAY_ID'],
         'title' => '<a href="?page=utubevideo_playlists&view=playlistview&id=' . $val['PLAY_ID'] . '" title="' . __('Edit / Sync', 'utvg') . '" class="utv-row-title">' . $title . '</a>
           <div class="utv-row-actions">
@@ -157,7 +157,7 @@ class utvPlaylistListTable extends utvWPListTableBase
         'source' => $source,
         'album' => $val['ALB_NAME'],
         'updatedate' => $updateDate
-      ));
+      ]);
     }
 
     return $cells;

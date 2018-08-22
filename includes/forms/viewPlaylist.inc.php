@@ -21,20 +21,20 @@ else
   $externalVideos = utvAdminGen::getVimeoPlaylistData($playlist['PLAY_SOURCEID']);
 
 //legend 0 = own, 1 = external, 2 = both
-$combinedVideos = array();
+$combinedVideos = [];
 $thumbCacheDirectory = wp_upload_dir()['baseurl'] . '/utubevideo-cache/';
 
 //filter with internal videos
 foreach ($internalVideos as $video)
 {
   $needle = $video['VID_URL'];
-  $combinedVideos[$needle] = array(
+  $combinedVideos[$needle] = [
     'videoTitle' => htmlspecialchars(stripcslashes($video['VID_NAME']), ENT_QUOTES),
     'thumbURL' => $thumbCacheDirectory . $needle . $video['VID_ID'] . '.jpg',
     'apiThumbURL' => '',
     'localID' => $video['VID_ID'],
     'legend' => 0
-  );
+  ];
 }
 
 //filter with external videos
@@ -43,13 +43,13 @@ foreach ($externalVideos['videos'] as $video)
   $needle = $video['videoId'];
 
   if (!array_key_exists($needle, $combinedVideos))
-    $combinedVideos[$needle] = array(
+    $combinedVideos[$needle] = [
       'videoTitle' => $video['title'],
       'thumbURL' => $video['thumbURL'],
       'apiThumbURL' => $video['thumbURL'],
       'localID' => '',
       'legend' => 1
-    );
+    ];
   else
   {
     $combinedVideos[$needle]['legend'] = 2;
@@ -88,11 +88,11 @@ $selectedVideosCount = count($internalVideos);
 
           <?php
 
-          $opts = array(
-            array('text' => '480p', 'value' => 'large'),
-            array('text' => '720p', 'value' => 'hd720'),
-            array('text' => '1080p', 'value' => 'hd1080')
-          );
+          $opts = [
+            ['text' => '480p', 'value' => 'large'],
+            ['text' => '720p', 'value' => 'hd720'],
+            ['text' => '1080p', 'value' => 'hd1080']
+          ];
 
           foreach ($opts as $val)
           {

@@ -10,11 +10,11 @@ class utvAlbumListTable extends utvWPListTableBase
   {
     global $status, $page;
 
-    parent::__construct(array(
+    parent::__construct([
       'singular' => '',
       'plural' => 'utv-sortable-table',
       'ajax' => false
-    ));
+    ]);
 
     $this->_id = $id;
     $this->_baseURL = wp_upload_dir();
@@ -23,14 +23,14 @@ class utvAlbumListTable extends utvWPListTableBase
 
   function get_columns()
   {
-    $columns = array(
+    $columns = [
       'cb' => '<input type="checkbox"/>',
       'utv-albthumbnail' => __('Thumbnail', 'utvg'),
       'name' => __('Name', 'utvg'),
       'published' => __('Published', 'utvg'),
       'dateadd' => __('Date Added', 'utvg'),
       'videos' => __('# Videos', 'utvg')
-    );
+    ];
 
     return $columns;
   }
@@ -40,14 +40,14 @@ class utvAlbumListTable extends utvWPListTableBase
     $this->process_bulk_action();
 
     $columns = $this->get_columns();
-    $hidden = array();
+    $hidden = [];
     $sortable = $this->get_sortable_columns();
-    $this->_column_headers = array($columns, $hidden, $sortable);
+    $this->_column_headers = [$columns, $hidden, $sortable];
 
     $this->items = $this->setup_items();
 
     if (!empty($_GET['orderby']) && !empty($_GET['order']))
-      usort($this->items, array($this, 'usort_reorder'));
+      usort($this->items, [$this, 'usort_reorder']);
   }
 
   function column_default($item, $column_name)
@@ -67,12 +67,12 @@ class utvAlbumListTable extends utvWPListTableBase
 
   function get_sortable_columns()
   {
-    $sortable_columns = array(
-      'name'  => array('name', false),
-      'published' => array('published', false),
-      'dateadd' => array('dateadd', false),
-      'videos'   => array('videos', false)
-    );
+    $sortable_columns = [
+      'name'  => ['name', false],
+      'published' => ['published', false],
+      'dateadd' => ['dateadd', false],
+      'videos'   => ['videos', false]
+    ];
 
     return $sortable_columns;
   }
@@ -102,11 +102,11 @@ class utvAlbumListTable extends utvWPListTableBase
 
   function get_bulk_actions()
   {
-    $actions = array(
+    $actions = [
       'delete' => __('Delete', 'utvg'),
       'publish' => __('Publish', 'utvg'),
       'unpublish' => __('Unpublish', 'utvg')
-    );
+    ];
 
     return $actions;
   }
@@ -145,7 +145,7 @@ class utvAlbumListTable extends utvWPListTableBase
   function setup_items()
   {
     global $wpdb;
-    $cells = array();
+    $cells = [];
 
     $albums = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $this->_id . ' ORDER BY ALB_POS', ARRAY_A);
 
@@ -153,7 +153,7 @@ class utvAlbumListTable extends utvWPListTableBase
     {
       $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VID_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $album['ALB_ID'], ARRAY_A)[0];
 
-      array_push($cells, array(
+      array_push($cells, [
         'ID' => $album['ALB_ID'],
         'utv-albthumbnail' => '<a href="?page=utubevideo&view=album&id=' . $album['ALB_ID'] . '&pid=' . $this->_id . '" title="' . __('View', 'utvg') . '"><img src="' . $this->_baseURL . $album['ALB_THUMB'] . '.jpg" class="utv-preview-thumb" data-rjs="2"></a><span class="utv-sortable-handle" title="' . __('Click and drag to reorder') . '">::</span>',
         'name' => '<a href="?page=utubevideo&view=album&id=' . $album['ALB_ID'] . '&pid=' . $this->_id . '" class="utv-row-title" title="' . __('View', 'utvg') . '">' . stripslashes($album['ALB_NAME']) . '</a>
@@ -172,7 +172,7 @@ class utvAlbumListTable extends utvWPListTableBase
 
         'dateadd' => date('Y/m/d', $album['ALB_UPDATEDATE']),
         'videos' => $videoCount['VID_COUNT']
-      ));
+      ]);
     }
 
     return $cells;

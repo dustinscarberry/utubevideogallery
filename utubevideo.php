@@ -47,9 +47,9 @@ if (!class_exists('utvGallery'))
       $this->load_dependencies();
 
       //activation hook
-      register_activation_hook(__FILE__, array(&$this, 'activate'));
+      register_activation_hook(__FILE__, [$this, 'activate']);
 
-      add_filter('query_vars', array(&$this, 'insert_query_vars'));
+      add_filter('query_vars', [$this, 'insert_query_vars']);
 
       /////////////////////////
       /////////////////////////
@@ -222,7 +222,7 @@ if (!class_exists('utvGallery'))
 
       //initalize main if empty
       if (empty($this->_options))
-        $this->_options = array();
+        $this->_options = [];
 
       //fix video sorting if not done yet
       if (!isset($this->_options['sortFix']))
@@ -237,10 +237,8 @@ if (!class_exists('utvGallery'))
           foreach ($videoIds as $video)
           {
             $wpdb->update($wpdb->prefix . 'utubevideo_video',
-              array(
-                'VID_POS' => $posCounter
-              ),
-              array('VID_ID' => $video['VID_ID'])
+              ['VID_POS' => $posCounter],
+              ['VID_ID' => $video['VID_ID']]
             );
 
             $posCounter++;
@@ -263,10 +261,8 @@ if (!class_exists('utvGallery'))
           foreach ($albumIds as $album)
           {
             $wpdb->update($wpdb->prefix . 'utubevideo_album',
-              array(
-                'ALB_POS' => $posCounter
-              ),
-              array('ALB_ID' => $album['ALB_ID'])
+              ['ALB_POS' => $posCounter],
+              ['ALB_ID' => $album['ALB_ID']]
             );
 
             $posCounter++;
@@ -280,7 +276,7 @@ if (!class_exists('utvGallery'))
       if (!isset($this->_options['setSlugs']))
       {
         $mark = 1;
-        $sluglist = array();
+        $sluglist = [];
 
         $data = $wpdb->get_results('SELECT ALB_ID, ALB_NAME FROM ' . $wpdb->prefix . 'utubevideo_album', ARRAY_A);
 
@@ -298,10 +294,8 @@ if (!class_exists('utvGallery'))
           $mark = 1;
 
           $wpdb->update($wpdb->prefix . 'utubevideo_album',
-            array(
-              'ALB_SLUG' => $slug
-            ),
-            array('ALB_ID' => $value['ALB_ID'])
+            ['ALB_SLUG' => $slug],
+            ['ALB_ID' => $value['ALB_ID']]
           );
         }
 
@@ -334,10 +328,8 @@ if (!class_exists('utvGallery'))
         {
           $wpdb->update(
             $wpdb->prefix . 'utubevideo_album',
-            array(
-              'ALB_THUMB' => $val['ALB_THUMB'] . $val['VID_ID'],
-            ),
-            array('ALB_ID' => $val['ALB_ID'])
+            ['ALB_THUMB' => $val['ALB_THUMB'] . $val['VID_ID']],
+            ['ALB_ID' => $val['ALB_ID']]
           );
         }
 
@@ -408,10 +400,10 @@ if (!class_exists('utvGallery'))
       wp_mkdir_p($dir . '/utubevideo-cache');
 
       //copy 'missing.jpg' into cache directory
-      copy(plugins_url('missing.jpg', __FILE__), $dir . '/utubevideo-cache/missing.jpg');
+      copy(plugins_url('public/img/missing.jpg', __FILE__), $dir . '/utubevideo-cache/missing.jpg');
 
       //add rewrite rules to rewrite engine
-      add_action('init', array(&$this, 'setup_rewrite_rules'));
+      add_action('init', [$this, 'setup_rewrite_rules']);
     }
 
     //recursive function for making sure slugs are unique

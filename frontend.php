@@ -23,17 +23,17 @@ if (!class_exists('utvFrontend'))
       $this->_options = get_option('utubevideo_main_opts');
 
       //add hooks
-      add_shortcode('utubevideo', array($this, 'shortcode'));
-      add_action('wp_enqueue_scripts', array($this, 'addJS'));
-      add_action('wp_enqueue_scripts', array($this, 'addCSS'));
+      add_shortcode('utubevideo', [$this, 'shortcode']);
+      add_action('wp_enqueue_scripts', [$this, 'loadJS']);
+      add_action('wp_enqueue_scripts', [$this, 'loadCSS']);
 
       //check for extra lightbox script inclusion
       if ($this->_options['skipMagnificPopup'] == 'no')
-        add_action('wp_enqueue_scripts', array($this, 'addLightboxScripts'));
+        add_action('wp_enqueue_scripts', [$this, 'addLightboxScripts']);
     }
 
     //insert styles for galleries
-    public function addCSS()
+    public function loadCSS()
     {
       //load frontend styles
       wp_enqueue_style('utv_style', plugins_url('public/css/app.min.css', __FILE__), false, $this->_version);
@@ -54,9 +54,9 @@ if (!class_exists('utvFrontend'))
     }
 
     //insert javascript for galleries
-    public function addJS()
+    public function loadJS()
     {
-      $jsdata = array(
+      $jsdata = [
         'thumbnailWidth' => $this->_options['thumbnailWidth'],
         'thumbnailPadding' => $this->_options['thumbnailPadding'],
         'playerWidth' => $this->_options['playerWidth'],
@@ -69,10 +69,10 @@ if (!class_exists('utvFrontend'))
         'vimeoAutoplay' => $this->_options['vimeoAutoplay'],
         'youtubeDetailsHide' => $this->_options['youtubeDetailsHide'],
         'vimeoDetailsHide' => $this->_options['vimeoDetailsHide']
-      );
+      ];
 
       wp_enqueue_script('retina-js', 'https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.2/retina.min.js', null, null, true);
-      wp_enqueue_script('utv-frontend', plugins_url('public/js/app.min.js', __FILE__), array('jquery'), $this->_version, true);
+      wp_enqueue_script('utv-frontend', plugins_url('public/js/app.min.js', __FILE__), ['jquery'], $this->_version, true);
       wp_localize_script('utv-frontend', 'utvJSData', $jsdata);
     }
 
@@ -80,7 +80,7 @@ if (!class_exists('utvFrontend'))
     {
       //load jquery and lightbox js / css
       wp_enqueue_script('jquery');
-      wp_enqueue_script('codeclouds-mp-js', 'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js', array('jquery'), null, true);
+      wp_enqueue_script('codeclouds-mp-js', 'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js', ['jquery'], null, true);
       wp_enqueue_style('codeclouds-mp-css', 'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css', false, null);
     }
 
