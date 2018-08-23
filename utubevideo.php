@@ -36,6 +36,8 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
     public function __construct()
     {
+      spl_autoload_register([$this, 'autoloader']);
+
       //set dirpath
       $this->_dirpath = dirname(__FILE__);
 
@@ -52,6 +54,8 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       register_activation_hook(__FILE__, [$this, 'activate']);
 
       add_filter('query_vars', [$this, 'insert_query_vars']);
+
+
 
       /////////////////////////
       /////////////////////////
@@ -426,6 +430,12 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
     {
       array_push($vars, 'albumid');
       return $vars;
+    }
+
+    public function autoloader($className)
+    {
+      $className = str_replace('\\', '/', $className);
+      include_once('class/' . $className . '.class.php');
     }
   }
 

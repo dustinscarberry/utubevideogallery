@@ -10,6 +10,8 @@
 
 namespace CodeClouds\UTubeVideoGallery;
 
+use CodeClouds\UTubeVideoGallery\API\ShortcodeAPI;
+
 if (!class_exists('CodeClouds\uTubeVideoGallery\UI'))
 {
   class UI
@@ -32,6 +34,10 @@ if (!class_exists('CodeClouds\uTubeVideoGallery\UI'))
       //check for extra lightbox script inclusion
       if ($this->_options['skipMagnificPopup'] == 'no')
         add_action('wp_enqueue_scripts', [$this, 'addLightboxScripts']);
+
+      //hook APIs
+      $shortcodeAPI = new ShortcodeAPI();
+      $shortcodeAPI->hookAPI();
     }
 
     //insert styles for galleries
