@@ -1,4 +1,31 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import GalleryContainer from './container/GalleryContainer';
+import PanelContainer from './container/PanelContainer';
 import '../scss/app.scss';
+
+
+let galleries = document.querySelectorAll('.utv-gallery2');
+let panels = document.querySelectorAll('.utv-panel2');
+
+panels.forEach(function(e)
+{
+  ReactDOM.render(
+    <PanelContainer/>
+  , e);
+});
+
+galleries.forEach(function(e)
+{
+  ReactDOM.render(
+    <GalleryContainer/>
+  , e);
+});
+
+
+
+
+
 
 var utvFrontend = {};
 
