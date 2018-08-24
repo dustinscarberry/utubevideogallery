@@ -10,7 +10,7 @@
 
 namespace CodeClouds\UTubeVideoGallery;
 
-use CodeClouds\UTubeVideoGallery\API\ShortcodeAPI;
+use CodeClouds\UTubeVideoGallery\API\GalleriesAPI;
 
 if (!class_exists('CodeClouds\uTubeVideoGallery\UI'))
 {
@@ -36,8 +36,8 @@ if (!class_exists('CodeClouds\uTubeVideoGallery\UI'))
         add_action('wp_enqueue_scripts', [$this, 'addLightboxScripts']);
 
       //hook APIs
-      $shortcodeAPI = new ShortcodeAPI();
-      $shortcodeAPI->hookAPI();
+      $galleriesAPI = new GalleriesAPI();
+      $galleriesAPI->hookAPI();
     }
 
     //insert styles for galleries
