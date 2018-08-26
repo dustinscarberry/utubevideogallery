@@ -11,8 +11,10 @@ let panels = document.querySelectorAll('.utv-panel2');
 panels.forEach(function(e)
 {
   ReactDOM.render(
-    <PanelContainer/>
-  , e);
+    <PanelContainer
+      id={e.getAttribute('data-id')}
+      perPage={e.getAttribute('data-perpage')}
+    />, e);
 });
 
 galleries.forEach(function(e)

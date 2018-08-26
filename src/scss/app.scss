@@ -152,15 +152,15 @@
 .utv-video-panel-paging{
   height: 20px;
   text-align: right;
-  padding: 10px 0 15px 0;
+  padding: 10px;
 }
 
-.utv-panel-light .utv-video-panel-thumbnails, .utv-panel-light .utv-video-panel-controls{
+.utv-panel-light{
   background-color: #eee;
   color: #000;
 }
 
-.utv-panel-dark .utv-video-panel-thumbnails, .utv-panel-dark .utv-video-panel-controls{
+.utv-panel-dark{
   background-color: #111;
   color: #eee;
 }
