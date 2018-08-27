@@ -153,8 +153,14 @@ utvFrontend.setupObjects = function($)
     this.setPanelFlow = function()
     {
       var outerwidth = $(this.outercontainer).width();
+      var windowWidth = $(window).width();
+
+      if (windowWidth < outerwidth)
+        outerwidth = windowWidth;
+
       var blocks = Math.floor(outerwidth / (utvFrontend.memory.thumbwidth + (utvFrontend.memory.thumbpadding * 2)));
       var size = (utvFrontend.memory.thumbwidth + (utvFrontend.memory.thumbpadding * 2)) * blocks;
+
       $(this.innercontainer).css('width', size + 'px');
       $(this.outercontainer).removeClass('utv-invis');
     };
