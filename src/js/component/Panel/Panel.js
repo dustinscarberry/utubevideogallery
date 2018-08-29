@@ -4,15 +4,16 @@ import Controls from './Controls';
 import Thumbnails from './Thumbnails';
 import Paging from './Paging';
 
-const Panel = ({videos, selectedVideo, thumbnailType, onPreviousVideo, onNextVideo, onChangeVideo, currentPage, totalPages, onChangePage, perPage}) =>
+const Panel = ({videos, selectedVideo, thumbnailType, onPreviousVideo, onNextVideo, onChangeVideo, currentPage, totalPages, onChangePage, videosPerPage, controls}) =>
 {
   //get selected video data
   let selectedVideoData = videos[selectedVideo];
 
   return (
-    <div className="utv-panel utv-panel-light utv-icon-red" data-panel-video-count="14" data-visible-controls="false">
+    <div className="utv-panel utv-panel-light utv-icon-red">
       <VideoPlayer
         videoData={selectedVideoData}
+        controls={controls}
       />
       <Controls
         videoData={selectedVideoData}
@@ -24,7 +25,7 @@ const Panel = ({videos, selectedVideo, thumbnailType, onPreviousVideo, onNextVid
         selectedVideo={selectedVideo}
         onChangeVideo={onChangeVideo}
         currentPage={currentPage}
-        perPage={perPage}
+        videosPerPage={videosPerPage}
       />
       <Paging
         currentPage={currentPage}

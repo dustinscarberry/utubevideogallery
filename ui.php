@@ -100,7 +100,7 @@ if (!class_exists('CodeClouds\uTubeVideoGallery\UI'))
       if (isset($atts['view']) && $atts['view'] == 'panel')
       {
         $utvVideoGen = new \utvVideoGen($atts, $this->_options);
-        return '<div class="utv-panel2" data-id="' . $atts['id'] . '"></div><br><br><br><br><br>' . $utvVideoGen->printPanel();
+        return '<div class="utv-panel" data-id="' . $atts['id'] . '" data-controls="true" data-videos-per-page="12"></div>';
       }
       //regular gallery view
       else

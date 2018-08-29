@@ -1,16 +1,22 @@
 import React from 'react';
+import YouTubeVideo from './YouTubeVideo';
+import VimeoVideo from './VimeoVideo';
 
-const VideoPlayer = ({videoData}) =>
+const VideoPlayer = ({videoData, controls}) =>
 {
-  //check out .chrome false true
+  let video = undefined;
+
+  if (videoData.source == 'youtube')
+    video = <YouTubeVideo
+      videoData={videoData}
+      controls={controls}
+    />;
+  else if (videoData.source == 'vimeo')
+    video = <VimeoVideo videoData={videoData}/>;
+
   return (
     <div className="utv-video-panel-wrapper">
-      <iframe
-        className="utv-video-panel-iframe"
-        src={'https://www.youtube.com/embed/' + videoData.slugID + '?modestbranding=1&rel=0&showinfo=0&autohide=1&controls=0&theme=dark&color=red&autoplay=0&iv_load_policy=3&start=' + videoData.startTime + '&end=' + videoData.endTime}
-        frameBorder="0"
-        allowFullScreen="">
-      </iframe>
+      {video}
     </div>
   );
 }

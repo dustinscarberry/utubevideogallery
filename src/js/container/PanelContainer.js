@@ -13,8 +13,7 @@ class PanelContainer extends React.Component
       thumbnailType: undefined,
       selectedVideo: undefined,
       totalPages: undefined,
-      currentPage: 1,
-      perPage: 12
+      currentPage: 1
     }
 
     this.loadAPIData = this.loadAPIData.bind(this);
@@ -32,13 +31,19 @@ class PanelContainer extends React.Component
   previousVideo()
   {
     if (this.state.selectedVideo > 0)
-      this.setState({selectedVideo: this.state.selectedVideo - 1});
+    {
+      this.changeVideo(this.state.selectedVideo - 1);
+      this.changePage(Math.ceil(this.state.selectedVideo / this.props.videosPerPage));
+    }
   }
 
   nextVideo()
   {
     if (this.state.selectedVideo < this.state.videos.length - 1)
-      this.setState({selectedVideo: this.state.selectedVideo + 1});
+    {
+      this.changeVideo(this.state.selectedVideo + 1);
+      this.changePage(Math.ceil((this.state.selectedVideo + 2) / this.props.videosPerPage));
+    }
   }
 
   changeVideo(videoIndex)
@@ -53,6 +58,7 @@ class PanelContainer extends React.Component
 
   async loadAPIData()
   {
+    console.log(this.props);
     let videos = [];
     let results = await axios.get('http://localhost/wp-json/utubevideogallery/v1/galleries/' + this.props.id);
 
@@ -64,15 +70,13 @@ class PanelContainer extends React.Component
           videos.push(video);
       }
 
-      let perPage = this.props.perPage || 12;
-      let totalPages = Math.ceil(videos.length / perPage);
+      let totalPages = Math.ceil(videos.length / this.props.videosPerPage);
 
       this.setState({
         videos: videos,
         thumbnailType: results.data.thumbtype,
         selectedVideo: 5,
-        totalPages: totalPages,
-        perPage: perPage
+        totalPages: totalPages
       });
     }
   }
@@ -93,10 +97,16 @@ class PanelContainer extends React.Component
         currentPage={this.state.currentPage}
         totalPages={this.state.totalPages}
         onChangePage={this.changePage}
-        perPage={this.state.perPage}
+        videosPerPage={this.props.videosPerPage}
+        controls={this.props.controls}
       />
     );
   }
 }
+
+PanelContainer.defaultProps = {
+  videosPerPage: 12,
+  controls: false
+};
 
 export default PanelContainer;
