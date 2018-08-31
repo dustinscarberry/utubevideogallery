@@ -6,8 +6,6 @@ class Thumbnails extends React.Component
   constructor(props)
   {
     super(props);
-
-    //this.setFlow = this.setFlow.bind(this);
   }
 
   componentDidMount()

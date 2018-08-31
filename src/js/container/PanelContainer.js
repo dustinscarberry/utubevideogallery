@@ -11,11 +11,13 @@ class PanelContainer extends React.Component
     this.state = {
       videos: [],
       thumbnailType: undefined,
-      selectedVideo: undefined,
+      selectedVideo: 0,
       totalPages: undefined,
-      currentPage: 1
+      currentPage: 1,
+      isFirstRender: true
     }
 
+    this.invalidateFirstRender = this.invalidateFirstRender.bind(this);
     this.loadAPIData = this.loadAPIData.bind(this);
     this.previousVideo = this.previousVideo.bind(this);
     this.nextVideo = this.nextVideo.bind(this);
@@ -26,6 +28,11 @@ class PanelContainer extends React.Component
   componentWillMount()
   {
     this.loadAPIData();
+  }
+
+  invalidateFirstRender()
+  {
+    this.setState({isFirstRender: false});
   }
 
   previousVideo()
@@ -48,6 +55,7 @@ class PanelContainer extends React.Component
 
   changeVideo(videoIndex)
   {
+    this.invalidateFirstRender();
     this.setState({selectedVideo: videoIndex});
   }
 
@@ -58,7 +66,6 @@ class PanelContainer extends React.Component
 
   async loadAPIData()
   {
-    console.log(this.props);
     let videos = [];
     let results = await axios.get('http://localhost/wp-json/utubevideogallery/v1/galleries/' + this.props.id);
 
@@ -75,7 +82,6 @@ class PanelContainer extends React.Component
       this.setState({
         videos: videos,
         thumbnailType: results.data.thumbtype,
-        selectedVideo: 5,
         totalPages: totalPages
       });
     }
@@ -83,7 +89,7 @@ class PanelContainer extends React.Component
 
   render()
   {
-    if (this.state.selectedVideo === undefined)
+    if (this.state.videos.length == 0)
       return null;
 
     return (
@@ -99,6 +105,7 @@ class PanelContainer extends React.Component
         onChangePage={this.changePage}
         videosPerPage={this.props.videosPerPage}
         controls={this.props.controls}
+        isFirstRender={this.state.isFirstRender}
       />
     );
   }

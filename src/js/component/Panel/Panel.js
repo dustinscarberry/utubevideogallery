@@ -4,7 +4,20 @@ import Controls from './Controls';
 import Thumbnails from './Thumbnails';
 import Paging from './Paging';
 
-const Panel = ({videos, selectedVideo, thumbnailType, onPreviousVideo, onNextVideo, onChangeVideo, currentPage, totalPages, onChangePage, videosPerPage, controls}) =>
+const Panel = ({
+  videos,
+  selectedVideo,
+  thumbnailType,
+  onPreviousVideo,
+  onNextVideo,
+  onChangeVideo,
+  currentPage,
+  totalPages,
+  onChangePage,
+  videosPerPage,
+  controls,
+  isFirstRender,
+  onInvalidateFirstRender}) =>
 {
   //get selected video data
   let selectedVideoData = videos[selectedVideo];
@@ -14,6 +27,7 @@ const Panel = ({videos, selectedVideo, thumbnailType, onPreviousVideo, onNextVid
       <VideoPlayer
         videoData={selectedVideoData}
         controls={controls}
+        isFirstRender={isFirstRender}
       />
       <Controls
         videoData={selectedVideoData}
