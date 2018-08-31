@@ -2,7 +2,7 @@ import React from 'react';
 import YouTubeVideo from './YouTubeVideo';
 import VimeoVideo from './VimeoVideo';
 
-const VideoPlayer = ({videoData, controls, isFirstRender}) =>
+const VideoPlayer = ({videoData, controls, forceNoAutoplay}) =>
 {
   let video = undefined;
 
@@ -10,12 +10,12 @@ const VideoPlayer = ({videoData, controls, isFirstRender}) =>
     video = <YouTubeVideo
       videoData={videoData}
       controls={controls}
-      forceNoAutoplay={isFirstRender}
+      forceNoAutoplay={forceNoAutoplay}
     />;
   else if (videoData.source == 'vimeo')
     video = <VimeoVideo
       videoData={videoData}
-      forceNoAutoplay={isFirstRender}
+      forceNoAutoplay={forceNoAutoplay}
     />;
 
   return (

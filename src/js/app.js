@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import GalleryContainer from './container/GalleryContainer';
-import PanelContainer from './container/PanelContainer';
+import Gallery from './component/Gallery/Gallery';
+import Panel from './component/Panel/Panel';
 import '../scss/app.scss';
 
 let galleries = document.querySelectorAll('.utv-gallery2');
@@ -10,17 +10,20 @@ let panels = document.querySelectorAll('.utv-panel');
 panels.forEach(function(e)
 {
   ReactDOM.render(
-    <PanelContainer
+    <Panel
       id={e.getAttribute('data-id')}
       videosPerPage={e.getAttribute('data-videos-per-page')}
       controls={e.getAttribute('data-controls')}
+      theme={e.getAttribute('data-theme')}
+      icon={e.getAttribute('data-icon')}
     />, e);
 });
 
 galleries.forEach(function(e)
 {
   ReactDOM.render(
-    <GalleryContainer/>
+    <Gallery
+    />
   , e);
 });
 
