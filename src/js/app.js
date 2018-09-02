@@ -4,7 +4,7 @@ import Gallery from './component/Gallery/Gallery';
 import Panel from './component/Panel/Panel';
 import '../scss/app.scss';
 
-let galleries = document.querySelectorAll('.utv-gallery2');
+let galleries = document.querySelectorAll('.utv-gallery');
 let panels = document.querySelectorAll('.utv-panel');
 
 panels.forEach(function(e)
@@ -23,6 +23,7 @@ galleries.forEach(function(e)
 {
   ReactDOM.render(
     <Gallery
+      id={e.getAttribute('data-id')}
     />
   , e);
 });
