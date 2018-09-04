@@ -99,24 +99,14 @@ if (!class_exists('CodeClouds\uTubeVideoGallery\UI'))
       //panel view
       if (isset($atts['view']) && $atts['view'] == 'panel')
       {
-        $utvVideoGen = new \utvVideoGen($atts, $this->_options);
-        return '<div class="utv-panel" data-id="' . $atts['id'] . '" data-controls="true" data-videos-per-page="12" data-theme="light" data-icon="red"></div>
-        <br><br><br><br><br><div class="utv-gallery" data-id="' . $atts['id'] . '"></div>';
-
-
-
+        //$utvVideoGen = new \utvVideoGen($atts, $this->_options);
+        return '<div class="utv-panel-root" data-id="' . $atts['id'] . '" data-controls="true" data-videos-per-page="12" data-theme="light" data-icon="red"></div>';
       }
       //regular gallery view
       else
       {
-        if (get_query_var('albumid') != null)
-          $utvVideoGen = new \utvVideoGen($atts, $this->_options, 'permalink', get_query_var('albumid'));
-        elseif (isset($_GET['aid']))
-          $utvVideoGen = new \utvVideoGen($atts, $this->_options, 'query', $_GET['aid']);
-        else
-          $utvVideoGen = new \utvVideoGen($atts, $this->_options);
-
-        return $utvVideoGen->printGallery();
+        //$utvVideoGen = new \utvVideoGen($atts, $this->_options);*/
+        return '<div class="utv-gallery-root" data-id="' . $atts['id'] . '"></div>';
       }
     }
   }

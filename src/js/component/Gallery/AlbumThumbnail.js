@@ -1,18 +1,10 @@
 import React from 'react';
 
-const AlbumThumbnail = ({title, image, value, selected, onChangeVideo}) =>
+const AlbumThumbnail = ({title, image, value, onChangeAlbum}) =>
 {
-  let thumbnailClasses = ['utv-thumb'];
-
-  if (selected)
-    thumbnailClasses.push('utv-panel-video-active');
-
   return (
-    <div className={thumbnailClasses.join(' ')} onClick={() => onChangeVideo(value)}>
-      <a>
-        <span className="utv-play-btn"></span>
-        <img src={image} data-rjs="2"/>
-      </a>
+    <div className='utv-thumb utv-album'>
+      <img onClick={() => onChangeAlbum(value)} src={image} data-rjs='2'/>
       <span>{title}</span>
     </div>
   );

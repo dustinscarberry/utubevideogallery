@@ -1,13 +1,13 @@
+import '../scss/app.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Gallery from './component/Gallery/Gallery';
 import Panel from './component/Panel/Panel';
-import '../scss/app.scss';
 
-let galleries = document.querySelectorAll('.utv-gallery');
-let panels = document.querySelectorAll('.utv-panel');
+let galleries = document.querySelectorAll('.utv-gallery-root');
+let panels = document.querySelectorAll('.utv-panel-root');
 
-panels.forEach(function(e)
+Array.prototype.forEach.call(panels, function(e)
 {
   ReactDOM.render(
     <Panel
@@ -19,7 +19,7 @@ panels.forEach(function(e)
     />, e);
 });
 
-galleries.forEach(function(e)
+Array.prototype.forEach.call(galleries, function(e)
 {
   ReactDOM.render(
     <Gallery
@@ -27,6 +27,28 @@ galleries.forEach(function(e)
     />
   , e);
 });
+
+/*
+panels.forEach(function(e)
+{
+  ReactDOM.render(
+    <Panel
+      id={e.getAttribute('data-id')}
+      videosPerPage={e.getAttribute('data-videos-per-page')}
+      controls={e.getAttribute('data-controls')}
+      theme={e.getAttribute('data-theme')}
+      icon={e.getAttribute('data-icon')}
+    />, e);
+});*/
+/*
+galleries.forEach(function(e)
+{
+  ReactDOM.render(
+    <Gallery
+      id={e.getAttribute('data-id')}
+    />
+  , e);
+});*/
 
 
 
@@ -86,35 +108,6 @@ utvFrontend.setupObjects = function($)
 
   this.Gallery = function(container)
   {
-    //properties
-    this.outercontainer = container;
-    this.innercontainer = $(this.outercontainer).find('.utv-inner-wrapper');
-
-    //methods
-    this.setGalleryFlow = function()
-    {
-      var outerwidth = $(this.outercontainer).width();
-      var blocks = Math.floor(outerwidth / (utvFrontend.memory.thumbwidth + (utvFrontend.memory.thumbpadding * 2)));
-      var size = (utvFrontend.memory.thumbwidth + (utvFrontend.memory.thumbpadding * 2)) * blocks;
-      $(this.innercontainer).css('width', size + 'px');
-      $(this.outercontainer).removeClass('utv-invis');
-    };
-
-    //setup panel flow
-    this.setGalleryFlow();
-
-    //window resize event
-    $(window).resize({'classRoot': this}, function(e)
-    {
-      e.data.classRoot.setGalleryFlow();
-    });
-
-    //window load event backup
-    $(window).on('load', {'classRoot': this}, function(e)
-    {
-      e.data.classRoot.setGalleryFlow();
-    });
-
     //video lightbox events
     $(this.outercontainer).on('click', 'a.utv-popup', function()
     {

@@ -1,28 +1,25 @@
 import React from 'react';
-import Thumbnail from './Thumbnail';
+import AlbumThumbnail from './AlbumThumbnail';
 
 class AlbumThumbnails extends React.Component
 {
   constructor(props)
   {
     super(props);
+
+    this.setFlow = this.setFlow.bind(this);
   }
 
   componentDidMount()
   {
-    let self = this;
-
     this.setFlow();
-
-    window.onresize = function(event)
-    {
-      self.setFlow();
-    };
+    window.addEventListener('resize', this.setFlow);
   }
 
   setFlow()
   {
     let outerWidth = this.refs.outerContainer.getBoundingClientRect().width;
+    console.log(this.refs.outerContainer);
     let windowWidth = document.documentElement.clientWidth;
 
     if (windowWidth < outerWidth)
@@ -40,20 +37,15 @@ class AlbumThumbnails extends React.Component
 
   render()
   {
-    let startIndex = (this.props.currentPage - 1) * this.props.videosPerPage;
-    let endIndex = startIndex + this.props.videosPerPage;
-
-    let thumbnails = this.props.videos.map((e, i) =>
+    let thumbnails = this.props.albums.map((e, i) =>
     {
-      if (i >= startIndex && i < endIndex)
-        return (<Thumbnail
-          key={i}
-          title={e.title}
-          image={e.thumbnail}
-          value={i}
-          selected={i == this.props.selectedVideo ? true : false}
-          onChangeVideo={this.props.onChangeVideo}
-        />);
+      return (<AlbumThumbnail
+        key={i}
+        title={e.title}
+        image={e.thumbnail}
+        value={i}
+        onChangeAlbum={this.props.onChangeAlbum}
+      />);
     });
 
     return (

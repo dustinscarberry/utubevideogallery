@@ -70,14 +70,14 @@ class Panel extends React.Component
 
   getPanelClasses()
   {
-    let panelClasses = ['utv-panel'];
+    var panelClasses = ['utv-panel'];
 
     if (this.props.theme == 'light')
       panelClasses.push('utv-panel-light');
     else if (this.props.theme == 'dark')
       panelClasses.push('utv-panel-dark');
     else if (this.props.theme == 'transparent')
-      panelClasses.push('utv-panel-transparent');1
+      panelClasses.push('utv-panel-transparent');
 
     if (this.props.icon == 'red')
       panelClasses.push('utv-icon-red');

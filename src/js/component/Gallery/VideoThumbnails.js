@@ -1,23 +1,19 @@
 import React from 'react';
-import Thumbnail from './Thumbnail';
+import VideoThumbnail from './VideoThumbnail';
 
 class VideoThumbnails extends React.Component
 {
   constructor(props)
   {
     super(props);
+
+    this.setFlow = this.setFlow.bind(this);
   }
 
   componentDidMount()
   {
-    let self = this;
-
     this.setFlow();
-
-    window.onresize = function(event)
-    {
-      self.setFlow();
-    };
+    window.addEventListener('resize', this.setFlow);
   }
 
   setFlow()
@@ -40,20 +36,15 @@ class VideoThumbnails extends React.Component
 
   render()
   {
-    let startIndex = (this.props.currentPage - 1) * this.props.videosPerPage;
-    let endIndex = startIndex + this.props.videosPerPage;
-
     let thumbnails = this.props.videos.map((e, i) =>
     {
-      if (i >= startIndex && i < endIndex)
-        return (<Thumbnail
-          key={i}
-          title={e.title}
-          image={e.thumbnail}
-          value={i}
-          selected={i == this.props.selectedVideo ? true : false}
-          onChangeVideo={this.props.onChangeVideo}
-        />);
+      return (<VideoThumbnail
+        key={i}
+        title={e.title}
+        image={e.thumbnail}
+        value={i}
+        onOpenVideo={this.props.onOpenVideo}
+      />);
     });
 
     return (

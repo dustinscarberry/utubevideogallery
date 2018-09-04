@@ -9,7 +9,7 @@ let sourceDir = path.resolve(__dirname, 'src/js');
 module.exports =
 {
   entry: {
-    app: sourceDir + '/app.js',
+    app: ['babel-polyfill', sourceDir + '/app.js'],
     dashboard: sourceDir + '/dashboard.js'
   },
   output: {
@@ -25,7 +25,7 @@ module.exports =
           {
             loader: 'babel-loader',
             query: {
-              presets: ['es2015', 'react']
+              presets: ['es2015', 'react', 'env']
             }
           }
         ]
@@ -57,5 +57,6 @@ module.exports =
       }),
       new OptimizeCssAssetsPlugin({})
     ]
-  }
+  },
+  devtool: 'source-map'
 };

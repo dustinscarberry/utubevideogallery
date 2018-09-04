@@ -6,18 +6,14 @@ class Thumbnails extends React.Component
   constructor(props)
   {
     super(props);
+
+    this.setFlow = this.setFlow.bind(this);
   }
 
   componentDidMount()
   {
-    let self = this;
-
     this.setFlow();
-
-    window.onresize = function(event)
-    {
-      self.setFlow();
-    };
+    window.addEventListener('resize', this.setFlow);
   }
 
   setFlow()

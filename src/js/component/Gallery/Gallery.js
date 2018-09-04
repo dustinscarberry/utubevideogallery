@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import AlbumView from './AlbumView';
+import VideoView from './VideoView';
 
 class Gallery extends React.Component
 {
@@ -8,9 +10,10 @@ class Gallery extends React.Component
     super(props);
 
     this.state = {
-      albums: [],
+      albums: [],//object of albums and there videos
+      videos: [],//object of just videos
       thumbnailType: undefined,
-      selectedAlbum: undefined
+      displayType: undefined
     };
 
     this.loadAPIData = this.loadAPIData.bind(this);
@@ -25,96 +28,43 @@ class Gallery extends React.Component
   {
     let results = await axios.get('http://localhost/wp-json/utubevideogallery/v1/galleries/' + this.props.id);
 
-    console.log(results.data);
-
     if (results.status == 200)
     {
+      let videos = [];
+
+      for (let album of results.data.albums)
+      {
+        for (let video of album.videos)
+          videos.push(video);
+      }
+
       this.setState({
         albums: results.data.albums || [],
-        thumbnailType: results.data.thumbtype || undefined
+        videos: videos,
+        thumbnailType: results.data.thumbtype || undefined,
+        displayType: (results.data.displaytype == 'album' ? 'albums' : 'videos') || undefined
       });
     }
   }
 
   render()
   {
+    if (this.state.albums.length == 0)
+      return null;
 
-
-
-    /*
-
-
-    render
-      albums
-      videos of album
-      all videos of all albums
-
-
-      <BreadCrumb/>
-      <AlbumThumbnails/> || <VideoThumbnails/> //needs all album and video data given to it
-
-
-
-      <VideoThumbnails/> needs all video data given to it
-
-
-
-
-
-
-    */
-
-
-
-    return (
-      <div className="utv-container utv-albums utv-icon-red">
-
-
-
-
-
-        <div className="utv-outer-wrapper utv-align-center">
-          <div className="utv-inner-wrapper" style={{'width': '1120px'}}>
-
-
-            <div className="utv-thumb utv-album utv-youtube-rt">
-      				<a href="https://www.codeclouds.net/utubevideo-gallery/album/trailers/">
-      					<img src="https://www.codeclouds.net/wp-content/uploads/utubevideo-cache/iVAgTiBrrDA44.jpg" data-rjs="2"/>
-      				</a>
-      				<span>Trailers</span>
-      			</div>
-
-
-            <div className="utv-thumb utv-album utv-vimeo-rt">
-      				<a href="https://www.codeclouds.net/utubevideo-gallery/album/vimeo/">
-      					<img src="https://www.codeclouds.net/wp-content/uploads/utubevideo-cache/5746539239.jpg" data-rjs="2"/>
-      				</a>
-      				<span>Vimeo</span>
-      			</div>
-            <div className="utv-thumb utv-album utv-youtube-rt">
-      				<a href="https://www.codeclouds.net/utubevideo-gallery/album/music-videos/">
-      					<img src="https://www.codeclouds.net/wp-content/uploads/utubevideo-cache/n5HexLIqWY841.jpg" data-rjs="2"/>
-      				</a>
-      				<span>Music Videos</span>
-      			</div>
-            <div className="utv-thumb utv-album utv-youtube-rt">
-      				<a href="https://www.codeclouds.net/utubevideo-gallery/album/disney/">
-      					<img src="https://www.codeclouds.net/wp-content/uploads/utubevideo-cache/ywjX6AF6oVc13.jpg" data-rjs="2"/>
-      				</a>
-      				<span>Disney</span>
-      			</div>
-          </div>
-        </div>
-
-
-
-      </div>
-    );
+    if (this.state.displayType == 'albums')
+      return <AlbumView
+        albums={this.state.albums}
+      />;
+    else if (this.state.displayType == 'videos')
+      return <VideoView
+        videos={this.state.videos}
+      />;
+    else
+      return null;
   }
 }
 
-Gallery.defaultProps = {
-
-};
+Gallery.defaultProps = {};
 
 export default Gallery;
