@@ -1,5 +1,4 @@
 import React from 'react';
-import Thumbnail from './Thumbnail';
 
 class Thumbnails extends React.Component
 {
@@ -36,26 +35,10 @@ class Thumbnails extends React.Component
 
   render()
   {
-    let startIndex = (this.props.currentPage - 1) * this.props.videosPerPage;
-    let endIndex = startIndex + this.props.videosPerPage;
-
-    let thumbnails = this.props.videos.map((e, i) =>
-    {
-      if (i >= startIndex && i < endIndex)
-        return (<Thumbnail
-          key={i}
-          title={e.title}
-          image={e.thumbnail}
-          value={i}
-          selected={i == this.props.selectedVideo ? true : false}
-          onChangeVideo={this.props.onChangeVideo}
-        />);
-    });
-
     return (
-      <div className="utv-video-panel-thumbnails utv-align-center" ref="outerContainer">
+      <div className={this.props.className} ref="outerContainer">
         <div className="utv-inner-wrapper" ref="innerContainer">
-          {thumbnails}
+          {this.props.children}
         </div>
       </div>
     );

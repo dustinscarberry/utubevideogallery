@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer';
 import Controls from './Controls';
-import Thumbnails from './Thumbnails';
+import PanelThumbnails from './PanelThumbnails';
 import Paging from './Paging';
 
 class Panel extends React.Component
@@ -129,7 +129,7 @@ class Panel extends React.Component
           onPreviousVideo={this.previousVideo}
           onNextVideo={this.nextVideo}
         />
-        <Thumbnails
+        <PanelThumbnails
           videos={this.state.videos}
           selectedVideo={this.state.selectedVideo}
           onChangeVideo={this.changeVideo}
