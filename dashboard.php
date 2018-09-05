@@ -42,6 +42,16 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
       add_menu_page(__('uTubeVideo Galleries', 'utvg'), 'uTubeVideo', 'edit_pages', 'utubevideo', [$this, 'gallery_panel'], plugins_url('utubevideo-gallery/public/img/utubevideo_icon_16x16.png'));
       add_submenu_page('utubevideo', 'uTubeVideo Playlists', __('Playlists', 'utvg'), 'edit_pages', 'utubevideo_playlists', [$this, 'playlists_panel']);
       add_submenu_page('utubevideo', 'uTubeVideo Settings', __('Settings', 'utvg'), 'edit_pages', 'utubevideo_settings', [$this, 'option_panel']);
+
+      add_menu_page(
+        __('uTubeVideo React', 'utvg'),
+        'React',
+        'edit_pages',
+        'utubevideoreact',
+        [$this, 'dashboardPanel'],
+        'dashicons-video-alt3'
+      );
+
     }
 
     public function addScripts()
@@ -77,6 +87,11 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
       ];
 
       wp_localize_script('utv-admin', 'utvJSData', $jsdata);
+    }
+
+    public function dashboardPanel()
+    {
+      echo '<div id="utv-dashboard-root">Not reacted</div>';
     }
 
     public function gallery_panel()
