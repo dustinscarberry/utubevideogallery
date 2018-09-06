@@ -1,4 +1,6 @@
 import React from 'react';
+import Tabs from './Tabs';
+import Pane from './Pane';
 
 class Dashboard extends React.Component
 {
@@ -14,7 +16,14 @@ class Dashboard extends React.Component
         <h2 id="utv-masthead">uTubeVideo</h2>
 
 
-        tabs will go here
+        <Tabs selected={0}>
+          <Pane label="General" iconClass="fa-gear">
+            <p>Hi Pane</p>
+          </Pane>
+          <Pane label="General2" iconClass="fa-gear">
+            <p>Hi Pane 2</p>
+          </Pane>
+        </Tabs>
       </div>
     );
   }
