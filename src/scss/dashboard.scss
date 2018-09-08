@@ -1,9 +1,13 @@
 /*ADMIN CSS*/
 
 
+.utv-section-header{
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
 .utv-card{
   position: relative;
-  margin-top: 15px;
   padding: .7em 2em 1em;
   min-width: 255px;
   max-width: 100%;
@@ -11,6 +15,38 @@
   box-shadow: 0 1px 1px rgba(0,0,0,.04);
   background: #fff;
   min-height: 500px;
+  box-sizing: border-box;
+  margin-top: 20px;
+}
+
+.utv-columns{
+  position: relative;
+  box-sizing: border-box;
+  overflow: auto;
+
+  .utv-left-two-thirds-column{
+    margin-right: 270px;
+  }
+
+  .utv-right-one-third-column{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 250px;
+  }
+}
+
+.utv-formfield{
+
+  label{
+    display: block;
+    margin: 7px 0;
+  }
+
+  input[type=text]{
+    width: 100%;
+    padding: 5px;
+  }
 }
 
 
