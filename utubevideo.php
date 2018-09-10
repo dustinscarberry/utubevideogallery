@@ -27,6 +27,13 @@ License: GPL2
 
 namespace CodeClouds\UTubeVideoGallery;
 
+use CodeClouds\UTubeVideoGallery\Dashboard;
+use CodeClouds\UTubeVideoGallery\UI;
+use CodeClouds\UTubeVideoGallery\API\GalleryAPI;
+use CodeClouds\UTubeVideoGallery\API\AlbumAPI;
+use CodeClouds\UTubeVideoGallery\API\VideoAPI;
+use CodeClouds\UTubeVideoGallery\API\GalleryDataAPI;
+
 if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 {
   class App
@@ -49,6 +56,9 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
       //load external files
       $this->load_dependencies();
+
+      //hook APIs
+      $this->hookAPIs();
 
       //activation hook
       register_activation_hook(__FILE__, [$this, 'activate']);
@@ -96,6 +106,15 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       $this->maintenance();
     }
 
+    public function hookAPIs()
+    {
+      //hook APIs
+      $galleryAPI = new GalleryAPI();
+      $albumAPI = new AlbumAPI();
+      $videoAPI = new VideoAPI();
+      $galleryDataAPI = new GalleryDataAPI();
+    }
+
     //rewrite rules setup function
     public function setup_rewrite_rules()
     {
@@ -126,12 +145,12 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       if (is_admin())
       {
         require ($this->_dirpath . '/dashboard.php');
-        new \CodeClouds\UTubeVideoGallery\Dashboard(self::CURRENT_VERSION);
+        new Dashboard(self::CURRENT_VERSION);
       }
       else
       {
         require ($this->_dirpath . '/ui.php');
-        new \CodeClouds\UTubeVideoGallery\UI(self::CURRENT_VERSION);
+        new UI(self::CURRENT_VERSION);
       }
     }
 
@@ -151,7 +170,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       global $wpdb;
 
       //require helper classes
-        require_once($this->_dirpath . '/class/utvAdminGen.class.php');
+        require_once($this->_dirpath . '/class/utvAdminGen.php');
         utvAdminGen::initialize($this->_options);
 
       //extra include due to libaries not being loaded at this hook point
@@ -435,7 +454,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
     public function autoloader($className)
     {
       $className = str_replace('\\', '/', $className);
-      include_once('class/' . $className . '.class.php');
+      include_once('class/' . $className . '.php');
     }
   }
 

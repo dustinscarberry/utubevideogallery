@@ -27,7 +27,7 @@ class Gallery extends React.Component
 
   async loadAPIData()
   {
-    let results = await axios.get('http://localhost/wp-json/utubevideogallery/v1/galleries/' + this.props.id);
+    let results = await axios.get('/wp-json/utubevideogallery/v1/galleriesdata/' + this.props.id);
 
     if (results.status == 200)
     {

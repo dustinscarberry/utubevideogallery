@@ -92,7 +92,7 @@ class Panel extends React.Component
   async loadAPIData()
   {
     let videos = [];
-    let results = await axios.get('/wp-json/utubevideogallery/v1/galleries/' + this.props.id);
+    let results = await axios.get('/wp-json/utubevideogallery/v1/galleriesdata/' + this.props.id);
 
     if (results.status == 200)
     {

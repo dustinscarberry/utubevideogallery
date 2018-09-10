@@ -10,7 +10,7 @@ module.exports =
 {
   entry: {
     app: ['babel-polyfill', sourceDir + '/app.js'],
-    dashboard: sourceDir + '/dashboard.js'
+    dashboard: ['babel-polyfill', sourceDir + '/dashboard.js']
   },
   output: {
     path: distDir,

@@ -63,6 +63,8 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
       wp_enqueue_script('utv-admin', plugins_url('public/js/dashboard.min.js', __FILE__), ['jquery', 'jquery-ui-core', 'jquery-ui-sortable'], $this->_version, true);
       wp_enqueue_style('utv-style', plugins_url('public/css/dashboard.min.css', __FILE__), false, $this->_version);
       wp_enqueue_style('jquery-ui-sortable', plugins_url('public/css/jquery-ui-1.10.3.custom.min.css', __FILE__), false, $this->_version);
+      wp_enqueue_style('utv-fontawesome5', 'https://use.fontawesome.com/releases/v5.3.1/css/all.css', false);
+
 
       $dir = wp_upload_dir();
       $dir = $dir['baseurl'];
