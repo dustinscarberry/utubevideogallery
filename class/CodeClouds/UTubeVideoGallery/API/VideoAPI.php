@@ -38,28 +38,29 @@ class VideoAPI
     $thumbnailDirectory = wp_upload_dir()['baseurl'];
     global $wpdb;
 
-    $albums = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $req['galleryID'] . ' ORDER BY ALB_POS');
+    $videos = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $req['albumID'] . ' ORDER BY VID_POS');
 
-    if (!$albums)
+    if (!$videos)
       return null;
 
-    foreach ($albums as $album)
+    foreach ($videos as $video)
     {
-      $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VIDEO_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $album->ALB_ID)[0];
+      $videoData = new stdClass();
+      $videoData->id = $video->VID_ID;
+      $videoData->title = $video->VID_NAME;
+      $videoData->source = $video->VID_SOURCE;
+      $videoData->thumbnail = $thumbnailDirectory . '/utubevideo-cache/' . $video->VID_URL . $video->VID_ID . '.jpg';
+      $videoData->url = $video->VID_URL;
+      $videoData->quality = $video->VID_QUALITY;
+      $videoData->showChrome = $video->VID_CHROME;
+      $videoData->startTime = $video->VID_STARTTIME;
+      $videoData->endTime = $video->VID_ENDTIME;
+      $videoData->position = $video->VID_POS;
+      $videoData->published = $video->VID_PUBLISH;
+      $videoData->updateDate = $video->VID_UPDATEDATE;
+      $videoData->albumID = $video->ALB_ID;
 
-      $albumData = new stdClass();
-      $albumData->id = $album->ALB_ID;
-      $albumData->title = $album->ALB_NAME;
-      $albumData->slug = $album->ALB_SLUG;
-      $albumData->thumbnail = $thumbnailDirectory . '/utubevideo-cache/' . $album->ALB_THUMB . '.jpg';
-      $albumData->sortDirection = $album->ALB_SORT;
-      $albumData->position = $album->ALB_POS;
-      $albumData->published = $album->ALB_PUBLISH;
-      $albumData->updateDate = $album->ALB_UPDATEDATE;
-      $albumData->videoCount = $videoCount->VIDEO_COUNT;
-      $albumData->galleryID = $album->DATA_ID;
-
-      $data[] = $albumData;
+      $data[] = $videoData;
     }
 
     return $data;
