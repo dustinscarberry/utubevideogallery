@@ -6,7 +6,7 @@ if (!empty($_POST))
   global $wpdb;
 
   //require helper classes
-  require_once(dirname(__FILE__) . '/../class/utvAdminGen.class.php');
+  require_once(dirname(__FILE__) . '/../class/utvAdminGen.php');
   utvAdminGen::initialize($this->_options);
 
   //save general options script//

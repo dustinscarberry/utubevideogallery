@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../../class/utvGalleryListTable.class.php');
+require_once(dirname(__FILE__) . '/../../class/utvGalleryListTable.php');
 
 $galleries = new utvGalleryListTable();
 $galleries->prepare_items();

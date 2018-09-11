@@ -8,7 +8,7 @@ if (!class_exists('utvAdminAjax'))
 
     public function __construct($options)
     {
-      require_once(dirname(__FILE__) . '/../class/utvAdminGen.class.php');
+      require_once(dirname(__FILE__) . '/../class/utvAdminGen.php');
 
       $this->_options = $options;
       utvAdminGen::initialize($this->_options);

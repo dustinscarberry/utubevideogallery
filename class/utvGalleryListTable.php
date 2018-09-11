@@ -1,6 +1,6 @@
 <?php
 
-require_once(plugin_dir_path(__FILE__) . 'utvWPListTableBase.class.php');
+require_once(plugin_dir_path(__FILE__) . 'utvWPListTableBase.php');
 
 class utvGalleryListTable extends utvWPListTableBase
 {
@@ -108,7 +108,7 @@ class utvGalleryListTable extends utvWPListTableBase
     if ($action != -1)
     {
       global $wpdb;
-      require_once 'utvAdminGen.class.php';
+      require_once 'utvAdminGen.php';
 
       $options = get_option('utubevideo_main_opts');
 

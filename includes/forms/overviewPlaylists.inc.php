@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../../class/utvPlaylistListTable.class.php');
+require_once(dirname(__FILE__) . '/../../class/utvPlaylistListTable.php');
 
 $playlists = new utvPlaylistListTable();
 $playlists->prepare_items();

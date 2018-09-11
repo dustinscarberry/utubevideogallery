@@ -12,7 +12,7 @@
 
     $gallery = $gallery[0];
 
-    require_once(dirname(__FILE__) . '/../../class/utvAlbumListTable.class.php');
+    require_once(dirname(__FILE__) . '/../../class/utvAlbumListTable.php');
 
     $albumListTable = new utvAlbumListTable($galleryID);
     $albumListTable->prepare_items();

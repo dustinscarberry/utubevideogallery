@@ -14,7 +14,7 @@ if (!isset($album[0]))
 
 $album = $album[0];
 
-require_once(dirname(__FILE__) . '/../../class/utvVideoListTable.class.php');
+require_once(dirname(__FILE__) . '/../../class/utvVideoListTable.php');
 
 $videoListTable = new utvVideoListTable($albumID);
 $videoListTable->prepare_items();
