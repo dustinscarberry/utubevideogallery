@@ -9,7 +9,10 @@ import Columns from './Columns';
 import Column from './Column';
 import SectionHeader from './SectionHeader';
 import Toggle from './Toggle';
-import Griddle from './Griddle/Griddle';
+import GalleryTable from './GalleryTable';
+import AlbumTable from './AlbumTable';
+import VideoTable from './VideoTable';
+import PlaylistTable from './PlaylistTable';
 
 class Dashboard extends React.Component
 {
@@ -38,177 +41,28 @@ class Dashboard extends React.Component
 
   getGalleriesTable()
   {
-    let galleryHeaders = [
-      {
-        key: 'id',
-        title: 'ID',
-        sortable: true,
-        sortDirection: 'desc'
-      },
-      {
-        key: 'title',
-        title: 'Title',
-        sortable: true,
-        sortDirection: '',
-        formatter: (row, cellData) =>
-        {
-          return <a
-            onClick={() => this.changeGallery(row.id)}
-            href="javascript:void(0)"
-            className="utv-row-title">
-              {cellData}
-          </a>
-        }
-      },
-      {
-        key: 'shortcode',
-        title: 'Shortcode',
-        sortable: true,
-        sortDirection: ''
-      },
-      {
-        key: 'dateAdded',
-        title: 'Date Added',
-        sortable: true,
-        sortDirection: ''
-      },
-      {
-        key: 'albumCount',
-        title: '# Albums',
-        sortable: true,
-        sortDirection: ''
-      }
-    ];
-
-    let albumHeaders = [
-      {
-        key: 'id',
-        title: 'ID',
-        sortable: true,
-        sortDirection: 'desc'
-      },
-      {
-        key: 'thumbnail',
-        title: 'Thumbnail',
-        sortable: false,
-        sortDirection: '',
-        formatter: (row, cellData) =>
-        {
-          return <img
-            src={cellData}
-            className="utv-preview-thumb"
-            data-rjs="2"
-          />
-        }
-      },
-      {
-        key: 'title',
-        title: 'Title',
-        sortable: true,
-        sortDirection: ''
-      },
-      {
-        key: 'published',
-        title: 'Published',
-        sortable: true,
-        sortDirection: ''
-      },
-      {
-        key: 'dateAdded',
-        title: 'Date Added',
-        sortable: true,
-        sortDirection: ''
-      },
-      {
-        key: 'videoCount',
-        title: '# Videos',
-        sortable: true,
-        sortDirection: ''
-      }
-    ];
-
-    let videoHeaders = [
-      {key: 'id', title: 'ID', sortable: true, sortDirection: 'desc'},
-      {key: 'thumbnail', title: 'Thumbnail', sortable: false, sortDirection: ''}, //formatter: (row, cellData) => {return <Link to={'/ticket/' + row.ticketNumber}>{cellData}</Link>}},
-      {key: 'title', title: 'Title', sortable: true, sortDirection: ''}, //formatter: (row, cellData) => {return <Link to={'/ticket/' + row.ticketNumber}>{cellData}</Link>}},
-      {key: 'published', title: 'Published', sortable: true, sortDirection: ''},
-      {key: 'dateAdded', title: 'Date Added', sortable: true, sortDirection: ''},
-    ];
-
     if (this.state.selectedAlbum != undefined)
-      return <Griddle
-        headers={videoHeaders}
-        recordLabel="videos"
+      return <VideoTable
+        selectedGallery={this.state.selectedGallery}
+        selectedAlbum={this.state.selectedAlbum}
       />
     else if (this.state.selectedGallery != undefined)
-      return <Griddle
-        headers={albumHeaders}
-        recordLabel="albums"
-        apiLoadPath={'/wp-json/utubevideogallery/v1/galleries/' + this.state.selectedGallery + '/albums'}
-        dataMapper={(data) =>
-          {
-            let newData = [];
-
-            for (let item of data)
-            {
-              let record = {};
-              let dateAdded = new Date(item.updateDate * 1000);
-              record.id =  item.id;
-              record.thumbnail = item.thumbnail;
-              record.title = item.title;
-              record.published = item.published;
-              record.dateAdded = dateAdded.getFullYear() + '/' + (dateAdded.getMonth() + 1) + '/' + dateAdded.getDate();
-              record.videoCount = item.videoCount;
-              newData.push(record);
-            }
-
-            return newData;
-          }
-        }
+      return <AlbumTable
+        changeAlbum={this.changeAlbum}
+        selectedGallery={this.state.selectedGallery}
       />
     else
-      return <Griddle
-        headers={galleryHeaders}
-        recordLabel="galleries"
-        apiLoadPath="/wp-json/utubevideogallery/v1/galleries"
-        dataMapper={(data) =>
-          {
-            let newData = [];
-
-            for (let item of data)
-            {
-              let record = {};
-              let updateDate = new Date(item.updateDate * 1000);
-              record.id = item.id;
-              record.title = item.title;
-              record.shortcode = '[utubevideo id="' + item.id + '"]';
-              record.dateAdded = updateDate.getFullYear() + '/' + (updateDate.getMonth() + 1) + '/' + updateDate.getDate();
-              record.albumCount = item.albumCount;
-              newData.push(record);
-            }
-
-            return newData;
-          }
-        }
+      return <GalleryTable
+        changeGallery={this.changeGallery}
       />
   }
 
   getPlaylistsTable()
   {
-    let galleryHeaders = [
-      {key: 'id', title: 'ID', sortable: true, sortDirection: 'desc'},
-      {key: 'galleryName', title: 'Name', sortable: true, sortDirection: ''}, //formatter: (row, cellData) => {return <Link to={'/ticket/' + row.ticketNumber}>{cellData}</Link>}},
-      {key: 'shortcode', title: 'Shortcode', sortable: true, sortDirection: ''},
-      {key: 'dateAdded', title: 'Date Added', sortable: true, sortDirection: ''},
-      {key: 'albumsCount', title: '# Albums', sortable: true, sortDirection: ''}
-    ];
-
-    return <Griddle
-      headers={galleryHeaders}
-      recordLabel="playlists"
+    return <PlaylistTable
+      changeGallery={this.changeGallery}
     />
   }
-
 
   render()
   {
