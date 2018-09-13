@@ -15,7 +15,8 @@ class GalleryTable extends React.Component
         key: 'id',
         title: 'ID',
         sortable: true,
-        sortDirection: 'desc'
+        sortDirection: 'desc',
+        width: '60px'
       },
       {
         key: 'title',

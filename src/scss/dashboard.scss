@@ -1,4 +1,17 @@
 /*ADMIN CSS*/
+.utv-published-icon,
+.utv-unpublished-icon{
+  font-size: 20px;
+}
+
+.utv-published-icon{
+  color: #2d8034;
+}
+
+.utv-unpublished-icon{
+  color: #a92134;
+}
+
 
 
 .tabs-content{
@@ -675,6 +688,7 @@
 .utv-row-title{
   font-size: 14px!important;
   font-weight: bold!important;
+  text-decoration: none;
 }
 
 .utv-row-divider{

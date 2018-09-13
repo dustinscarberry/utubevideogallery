@@ -1,11 +1,14 @@
 import React from 'react';
 import Griddle from './Griddle/Griddle';
+import axios from 'axios';
 
 class VideoTable extends React.Component
 {
   constructor(props)
   {
     super(props);
+
+    this.togglePublishStatus = this.togglePublishStatus.bind(this);
   }
 
   getHeaders()
@@ -15,13 +18,15 @@ class VideoTable extends React.Component
         key: 'id',
         title: 'ID',
         sortable: true,
-        sortDirection: 'desc'
+        sortDirection: 'desc',
+        width: '60px'
       },
       {
         key: 'thumbnail',
         title: 'Thumbnail',
         sortable: false,
         sortDirection: '',
+        width: '150px',
         formatter: (row, cellData) =>
         {
           return <img
@@ -35,13 +40,30 @@ class VideoTable extends React.Component
         key: 'title',
         title: 'Title',
         sortable: true,
-        sortDirection: ''
+        sortDirection: '',
+        formatter: (row, cellData) =>
+        {
+          return <span className="utv-row-title">{cellData}</span>;
+        }
       },
       {
         key: 'published',
         title: 'Published',
         sortable: true,
-        sortDirection: ''
+        sortDirection: '',
+        formatter: (row, cellData) =>
+        {
+          if (cellData == 1)
+            return <i
+              onClick={this.togglePublishStatus(row.id, 0)}
+              className="utv-published-icon far fa-check-circle"
+            ></i>
+          else
+            return <i
+              onClick={this.togglePublishStatus(row.id, 1)}
+              className="utv-unpublished-icon far fa-times-circle"
+            ></i>
+        }
       },
       {
         key: 'dateAdded',
@@ -69,6 +91,39 @@ class VideoTable extends React.Component
     }
 
     return newData;
+  }
+
+  async togglePublishStatus(videoID, changeTo)
+  {
+    let rsp = await axios.get('/wp-json/utubevideogallery/v1/');
+
+    /*
+
+
+    create gallery
+    create album
+    create video
+    create playlist
+
+    edit gallery
+    edit album
+    edit video
+    edit playlist
+
+    delete gallery
+    delete album
+    delete video
+    delete playlist
+    
+
+
+
+    */
+
+    if (apiData.status == 200)
+    {
+
+    }
   }
 
   render()

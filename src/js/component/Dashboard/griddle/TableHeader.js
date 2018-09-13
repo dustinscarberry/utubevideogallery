@@ -6,6 +6,10 @@ const TableHeader = (props) =>
   const headers = props.headers.map(x =>
   {
     let classes = '';
+    let styles = {};
+
+    if (x.width)
+      styles.width = x.width;
 
     if (x.sortable)
     {
@@ -14,10 +18,10 @@ const TableHeader = (props) =>
       else
         classes = 'sortable';
 
-      return (<HeaderCell key={x.key} text={x.title} classes={classes} updateColumnSort={props.updateColumnSort} indexKey={x.key}/>);
+      return (<HeaderCell key={x.key} text={x.title} classes={classes} styles={styles} updateColumnSort={props.updateColumnSort} indexKey={x.key}/>);
     }
     else
-      return (<HeaderCell key={x.key} text={x.title}/>);
+      return (<HeaderCell key={x.key} styles={styles} text={x.title}/>);
   });
 
   return (
