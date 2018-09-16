@@ -1,12 +1,12 @@
 import React from 'react';
-import Card from './Card';
-import FormField from './FormField';
-import TextInput from './TextInput';
-import Label from './Label';
-import Columns from './Columns';
-import Column from './Column';
-import SectionHeader from './SectionHeader';
-import Toggle from './Toggle';
+import Card from '../shared/Card';
+import FormField from '../shared/FormField';
+import TextInput from '../shared/TextInput';
+import Label from '../shared/Label';
+import Columns from '../shared/Columns';
+import Column from '../shared/Column';
+import SectionHeader from '../shared/SectionHeader';
+import Toggle from '../shared/Toggle';
 
 class SettingsTabView extends React.Component
 {

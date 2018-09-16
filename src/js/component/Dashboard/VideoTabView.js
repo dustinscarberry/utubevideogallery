@@ -18,9 +18,9 @@ class VideoTabView extends React.Component
         <div className="utv-breadcrumbs">
           <a tabIndex="0" className="utv-breadcrumb-link" onClick={() => this.props.changeGallery(undefined)}>Galleries</a>
           <i className="utv-breadcrumb-divider fas fa-chevron-right"></i>
-          <a tabIndex="0" className="utv-breadcrumb-link" onClick={() => this.props.changeAlbum(undefined)}>Gallery Name</a>
+          <a tabIndex="0" className="utv-breadcrumb-link" onClick={() => this.props.changeAlbum(undefined)}>Master</a>
           <i className="utv-breadcrumb-divider fas fa-chevron-right"></i>
-          <span className="utv-breadcrumb-static">Album Name</span>
+          <span className="utv-breadcrumb-static">Disney</span>
         </div>
         <VideoTable
           selectedGallery={this.props.selectedGallery}

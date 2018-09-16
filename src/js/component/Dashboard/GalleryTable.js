@@ -1,5 +1,5 @@
 import React from 'react';
-import Griddle from './Griddle/Griddle';
+import Griddle from '../shared/griddle/Griddle';
 
 class GalleryTable extends React.Component
 {

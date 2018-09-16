@@ -1,5 +1,5 @@
 import React from 'react';
-import Griddle from './Griddle/Griddle';
+import Griddle from '../shared/griddle/Griddle';
 import axios from 'axios';
 
 class VideoTable extends React.Component
@@ -114,7 +114,7 @@ class VideoTable extends React.Component
     delete album
     delete video
     delete playlist
-    
+
 
 
 
