@@ -93,7 +93,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
 
     public function dashboardPanel()
     {
-      echo '<div id="utv-dashboard-root">Not reacted</div>';
+      echo '<div id="utv-dashboard-root"></div>';
     }
 
     public function gallery_panel()

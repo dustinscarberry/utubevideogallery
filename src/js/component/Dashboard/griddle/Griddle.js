@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import _ from 'lodash';
 import axios from 'axios';
 import Table from './Table';
 import PageRecords from './PageRecords';

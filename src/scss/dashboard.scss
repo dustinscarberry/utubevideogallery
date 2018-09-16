@@ -14,6 +14,33 @@
 
 
 
+
+
+.utv-breadcrumbs{
+  margin: 20px 0;
+  font-weight: 600;
+
+  .utv-breadcrumb-static{
+    font-size: 1.3em;
+  }
+
+  .utv-breadcrumb-link{
+    font-size: 1.3em;
+    cursor: pointer;
+  }
+
+  .utv-breadcrumb-divider{
+    font-size: 1.1em;
+    margin: 0 4px;
+  }
+}
+
+
+
+
+
+
+
 .tabs-content{
   margin-top: 20px;
 }
@@ -183,7 +210,13 @@
   min-height: 500px;
   box-sizing: border-box;
   margin-bottom: 20px;
+
+  &.even-padding{
+    padding: 2rem;
+  }
 }
+
+
 
 .utv-columns{
   position: relative;
@@ -199,6 +232,17 @@
     right: 0;
     top: 0;
     width: 350px;
+  }
+
+  .utv-left-one-thirds-column{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 490px;
+  }
+
+  .utv-right-two-thirds-column{
+    margin-left: 510px;
   }
 }
 
