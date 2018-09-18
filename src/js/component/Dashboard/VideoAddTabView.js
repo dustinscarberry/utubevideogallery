@@ -7,13 +7,101 @@ import Columns from '../shared/Columns';
 import Column from '../shared/Column';
 import SectionHeader from '../shared/SectionHeader';
 import Toggle from '../shared/Toggle';
+import ResponsiveIframe from '../shared/ResponsiveIframe';
+import SelectBox from '../shared/SelectBox';
+import NumberInput from '../shared/NumberInput';
+import Button from '../shared/Button';
 
 class VideoAddTabView extends React.Component
 {
   constructor(props)
   {
     super(props);
+
+    this.state = {
+      source: undefined,
+      url: '',
+      urlKey: undefined,
+      name: '',
+      quality: '',
+      controls: false,
+      startTime: undefined,
+      endTime: undefined
+    };
+
+    this.changeValue = this.changeValue.bind(this);
+    this.changeURL = this.changeURL.bind(this);
   }
+
+  changeValue(event)
+  {
+    this.setState({[event.target.name]: event.target.value});
+  }
+
+  changeURL(event)
+  {
+    let url = event.target.value.trim();
+
+    this.setState({source: undefined, url: url, urlKey: undefined});
+
+    if (url && url != '')
+    {
+      let compareURL = url.toLowerCase();
+
+      if (compareURL.indexOf('youtube') !== -1)
+      {
+        let matches = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
+
+        if (matches)
+          this.setState({source: 'youtube', urlKey: matches[1]});
+      }
+      else if (compareURL.indexOf('vimeo') !== -1)
+      {
+        let matches = url.match(/https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/);
+
+        if (matches)
+          this.setState({source: 'vimeo', urlKey: matches[2]})
+      }
+    }
+  }
+
+  addVideo()
+  {
+
+  }
+
+  getVideoPreview()
+  {
+    let src = '';
+
+    if (this.state.source == 'youtube')
+    {
+      src = 'https://www.youtube.com/embed/';
+      src += this.state.urlKey;
+      src += '?modestbranding=1';
+      src += '&rel=0';
+      src += '&showinfo=0';
+      src += '&autohide=0';
+      src += '&iv_load_policy=3';
+      src += '&color=white';
+      src += '&theme=dark';
+      src += '&autoplay=0';
+      src += '&start=' + this.state.startTime;
+      src += '&end=' + this.state.endTime;
+    }
+    else if (this.state.source == 'vimeo')
+    {
+
+    }
+
+    return <ResponsiveIframe src={src}/>;
+
+      //return 'https://player.vimeo.com/video/' + utvAdmin.videomemory.vid + '?&title=0&portrait=0&byline=0badge=0&rand=' + utvAdmin.generateRandomInt() + '&autoplay=' + utvAdmin.videomemory.autoplay + '#t=' + utvAdmin.videomemory.starttime;
+
+
+  }
+
+
 
   render()
   {
@@ -34,15 +122,32 @@ class VideoAddTabView extends React.Component
               <SectionHeader text="Add Video"/>
               <FormField>
                 <Label text="URL"/>
-                <TextInput/>
+                <TextInput
+                  name="url"
+                  value={this.state.url}
+                  onChange={this.changeURL}
+                />
               </FormField>
               <FormField>
                 <Label text="Name"/>
-                <TextInput/>
+                <TextInput
+                  name="name"
+                  value={this.state.name}
+                  onChange={this.changeValue}
+                />
               </FormField>
               <FormField>
                 <Label text="Quality"/>
-                <TextInput/>
+                <SelectBox
+                  name="quality"
+                  value={this.state.quality}
+                  onChange={this.changeValue}
+                  data={[
+                    {name: '480p', value: 'large'},
+                    {name: '720p', value: 'hd720'},
+                    {name: '1080p', value: 'hd1080'}
+                  ]}
+                />
               </FormField>
               <FormField>
                 <Label text="Controls"/>
@@ -50,19 +155,32 @@ class VideoAddTabView extends React.Component
               </FormField>
               <FormField>
                 <Label text="Start Time"/>
-                <TextInput/>
+                <NumberInput
+                  name="startTime"
+                  value={this.state.startTime}
+                  onChange={this.changeValue}
+                />
               </FormField>
               <FormField>
                 <Label text="End Time"/>
-                <TextInput/>
+                <NumberInput
+                  name="endTime"
+                  value={this.state.endTime}
+                  onChange={this.changeValue}
+                />
+              </FormField>
+              <FormField>
+                <Button
+                  title="Submit"
+                  classes="button-primary"
+                  onClick={this.addVideo}
+                />
               </FormField>
             </Card>
           </Column>
           <Column className="utv-right-two-thirds-column">
-            <Card className="utv-even-padding">
-              <div className="utv-flexvideo utv-flexvideo-16x9">
-                <iframe id="utv-video-preview" src="https://www.youtube.com/embed/cx53Eh0Di5k" allowfullscreen=""></iframe>
-              </div>
+            <Card classes="utv-even-padding">
+              {this.getVideoPreview()}
             </Card>
           </Column>
         </Columns>

@@ -27,6 +27,7 @@ class AlbumTable extends React.Component
         formatter: (row, cellData) =>
         {
           return <img
+            onClick={() => this.props.changeAlbum(row.id)}
             src={cellData}
             className="utv-preview-thumb"
             data-rjs="2"

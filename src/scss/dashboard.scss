@@ -202,47 +202,40 @@
 .utv-card{
   position: relative;
   padding: .7em 2em 1em;
-  min-width: 255px;
   max-width: 100%;
   border: 1px solid #e5e5e5;
   box-shadow: 0 1px 1px rgba(0,0,0,.04);
   background: #fff;
-  min-height: 500px;
   box-sizing: border-box;
   margin-bottom: 20px;
 
   &.utv-even-padding{
-    padding: 2rem;
+    padding: 15px;
   }
 }
 
 
 
 .utv-columns{
-  position: relative;
   box-sizing: border-box;
   overflow: auto;
 
   .utv-left-two-thirds-column{
-    margin-right: 370px;
+    margin-right: 365px;
   }
 
   .utv-right-one-third-column{
-    position: absolute;
-    right: 0;
-    top: 0;
+    float: right;
     width: 350px;
   }
 
   .utv-left-one-thirds-column{
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 490px;
+    float: left;
+    width: 450px;
   }
 
   .utv-right-two-thirds-column{
-    margin-left: 510px;
+    margin-left: 465px;
   }
 }
 
@@ -253,7 +246,7 @@
     margin: 10px 0 7px;
   }
 
-  input[type=text]{
+  input[type=text], input[type=number], select{
     width: 100%;
     padding: 5px;
   }

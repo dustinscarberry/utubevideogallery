@@ -31,13 +31,17 @@ class Dashboard extends React.Component
   {
     this.setState({
       selectedGallery: value,
-      selectedAlbum: undefined
+      selectedAlbum: undefined,
+      currentView: undefined
     });
   }
 
   changeAlbum(value)
   {
-    this.setState({selectedAlbum: value});
+    this.setState({
+      selectedAlbum: value,
+      currentView: undefined
+    });
   }
 
   changeView(view)
@@ -54,10 +58,13 @@ class Dashboard extends React.Component
     else if (this.state.currentView == 'addAlbum')
       return <AlbumAddTabView
         changeView={this.changeView}
+        changeGallery={this.changeGallery}
       />
     else if (this.state.currentView == 'addVideo')
       return <VideoAddTabView
         changeView={this.changeView}
+        changeGallery={this.changeGallery}
+        changeAlbum={this.changeAlbum}
       />
     else if (this.state.selectedAlbum != undefined)
       return <VideoTabView

@@ -1,12 +1,11 @@
 import React from 'react';
+import classnames from 'classnames';
 
-const Card = (props) =>
+const Card = ({classes, children}) =>
 {
-  let classes = 'utv-card ' + props.className;
-
   return (
-    <div className={classes}>
-      {props.children}
+    <div className={classnames('utv-card', classes)}>
+      {children}
     </div>
   );
 }

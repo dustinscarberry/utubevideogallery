@@ -1,16 +1,16 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const TextInput = ({classes, name, value, onChange}) =>
+const NumberInput = ({classes, name, value, onChange}) =>
 {
   return <input
     className={classnames(classes)}
     style={{'display': 'block'}}
-    type="text"
+    type="number"
     name={name}
     value={value}
     onChange={onChange}
   />;
 }
 
-export default TextInput;
+export default NumberInput;

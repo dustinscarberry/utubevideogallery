@@ -55,12 +55,12 @@ class VideoTable extends React.Component
         {
           if (cellData == 1)
             return <i
-              onClick={this.togglePublishStatus(row.id, 0)}
+              onClick={() => this.togglePublishStatus(row.id, 0)}
               className="utv-published-icon far fa-check-circle"
             ></i>
           else
             return <i
-              onClick={this.togglePublishStatus(row.id, 1)}
+              onClick={() => this.togglePublishStatus(row.id, 1)}
               className="utv-unpublished-icon far fa-times-circle"
             ></i>
         }
@@ -120,7 +120,7 @@ class VideoTable extends React.Component
 
     */
 
-    if (apiData.status == 200)
+    if (rsp.status == 200)
     {
 
     }
