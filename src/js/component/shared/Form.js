@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 
 class Form extends React.Component
 {
@@ -17,48 +18,27 @@ class Form extends React.Component
   validate()
   {
     let form = this.refs.form;
+    let formValid = form.checkValidity() || false;
 
-    if (form.checkValidity() === false)
+    for (let i = 0; i < form.length; i++)
     {
-      for (let i = 0; i < form.length; i++)
-      {
-        let element = form[i];
+      let element = form[i];
 
-        if (element.nodeName.toLowerCase() !== 'button')
+      if (element.nodeName.toLowerCase() !== 'button')
+      {
+        if (!formValid && !element.validity.valid)
         {
-          if (!element.validity.valid)
-          {
-            let errorNode = element.parentNode.querySelector('.utv-invalid-feedback');
+          let errorNode = element.parentNode.querySelector('.utv-invalid-feedback');
 
-            if (errorNode)
-              errorNode.remove();
+          if (errorNode)
+            errorNode.remove();
 
-            errorNode = document.createElement('span');
-            errorNode.textContent = element.validationMessage;
-            errorNode.className = this.props.errorclass;
-            element.parentNode.insertBefore(errorNode, element.nextSibling);
-
-
-          }
-          else
-          {
-            let errorNode = element.parentNode.querySelector('.utv-invalid-feedback');
-
-            if (errorNode)
-              errorNode.remove();
-          }
+          errorNode = document.createElement('span');
+          errorNode.textContent = element.validationMessage;
+          errorNode.className = this.props.errorclass;
+          element.parentNode.insertBefore(errorNode, element.nextSibling);
         }
-      }
-
-      return false;
-    }
-    else
-    {
-      for (let i = 0; i < form.length; i++)
-      {
-        let element = form[i];
-
-        if (element.nodeName.toLowerCase() !== 'button')
+        else
         {
           let errorNode = element.parentNode.querySelector('.utv-invalid-feedback');
 
@@ -66,42 +46,36 @@ class Form extends React.Component
             errorNode.remove();
         }
       }
-
-      return true;
     }
+
+    return formValid;
   }
 
   onSubmit(event)
   {
     event.preventDefault();
 
-    if (this.validate())
-      this.props.action();
+    if (this.validate() && this.props.submit)
+      this.props.submit();
 
     this.setState({isValidated: true});
   }
 
   render()
   {
-    let classNames = [];
-
-    if (this.props.classes)
-    {
-      classNames = [...this.props.classes];
-      //delete this.props.className;
-    }
-
-    if (this.state.isValidated)
-      classNames.push('was-validated');
+    let classNames = classnames(
+      this.props.classes,
+      {'was-validated': this.state.isValidated}
+    );
 
     return (
       <form
         ref="form"
         onSubmit={this.onSubmit}
-        {...this.props}
         className={classNames}
         noValidate
       >
+        {this.props.children}
       </form>
     );
   }

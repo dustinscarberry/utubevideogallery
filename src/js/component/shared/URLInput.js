@@ -1,12 +1,12 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const NumberInput = ({classes, name, value, required, onChange}) =>
+const URLInput = ({classes, name, value, required, onChange}) =>
 {
   return <input
     className={classnames(classes)}
     style={{'display': 'block'}}
-    type="number"
+    type="url"
     name={name}
     value={value}
     onChange={onChange}
@@ -14,4 +14,4 @@ const NumberInput = ({classes, name, value, required, onChange}) =>
   />;
 }
 
-export default NumberInput;
+export default URLInput;

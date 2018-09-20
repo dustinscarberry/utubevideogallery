@@ -259,7 +259,10 @@
     margin: 10px 0 7px;
   }
 
-  input[type=text], input[type=number], select{
+  input[type=text],
+  input[type=number],
+  input[type=url],
+  select{
     width: 100%;
     height: auto;
     padding: 5px;
@@ -272,8 +275,6 @@
     color: #666;
   }
 
-
-
   .utv-invalid-feedback{
     color: #dc3545;
   }
@@ -281,7 +282,8 @@
 
 form.was-validated{
   input[type=text],
-  input[type=number]{
+  input[type=number],
+  input[type=url]{
     &:invalid{
       border: 1px solid #dc3545;
     }

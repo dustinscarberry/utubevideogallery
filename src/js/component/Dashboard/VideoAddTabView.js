@@ -15,6 +15,7 @@ import FieldHint from '../shared/FieldHint';
 import Breadcrumbs from '../shared/Breadcrumbs';
 import SubmitButton from '../shared/SubmitButton';
 import Form from '../shared/Form';
+import URLInput from '../shared/URLInput';
 
 class VideoAddTabView extends React.Component
 {
@@ -153,10 +154,11 @@ class VideoAddTabView extends React.Component
               >
                 <FormField>
                   <Label text="URL"/>
-                  <TextInput
+                  <URLInput
                     name="url"
                     value={this.state.url}
                     onChange={this.changeURL}
+                    required={true}
                   />
                 </FormField>
                 <FormField>
@@ -165,6 +167,7 @@ class VideoAddTabView extends React.Component
                     name="title"
                     value={this.state.title}
                     onChange={this.changeValue}
+                    required={true}
                   />
                 </FormField>
                 <FormField>
@@ -196,7 +199,7 @@ class VideoAddTabView extends React.Component
                     value={this.state.startTime}
                     onChange={this.changeValue}
                   />
-                  <FieldHint text="Begin timestamp (seconds)"/>
+                  <FieldHint text="Beginning timestamp (seconds)"/>
                 </FormField>
                 <FormField>
                   <Label text="End Time"/>
@@ -205,7 +208,7 @@ class VideoAddTabView extends React.Component
                     value={this.state.endTime}
                     onChange={this.changeValue}
                   />
-                  <FieldHint text="End timestamp (seconds)"/>
+                  <FieldHint text="Ending timestamp (seconds)"/>
                 </FormField>
                 <FormField>
                   <SubmitButton

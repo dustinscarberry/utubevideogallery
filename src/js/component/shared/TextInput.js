@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const TextInput = ({classes, name, value, onChange}) =>
+const TextInput = ({classes, name, value, required, onChange}) =>
 {
   return <input
     className={classnames(classes)}
@@ -10,7 +10,7 @@ const TextInput = ({classes, name, value, onChange}) =>
     name={name}
     value={value}
     onChange={onChange}
-    required
+    required={required}
   />;
 }
 
