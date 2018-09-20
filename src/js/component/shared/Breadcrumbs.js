@@ -1,21 +1,21 @@
 import React from 'react';
 
 const Breadcrumbs = ({crumbs}) =>
-{/*
+{
   let crumbsNodes = [];
 
-  for (let index, crumb of crumbs)
+  for (let i = 0; i < crumbs.length; i++)
   {
-    if (index != 0)
-      crumbsNodes += <i className="utv-breadcrumb-divider fas fa-chevron-right"></i>;
+    //add separater
+    if (i != 0)
+      crumbsNodes.push(<i className="utv-breadcrumb-divider fas fa-chevron-right"></i>);
 
-    if (crumb.onClick)
-      crumbsNodes += <a className="utv-breadcrumb-link" onClick={crumb.onClick}>{crumb.text}</a>;
+    //add breadcrumb
+    if (crumbs[i].onClick)
+      crumbsNodes.push(<a className="utv-breadcrumb-link" onClick={crumbs[i].onClick}>{crumbs[i].text}</a>);
     else
-      crumbsNodes += <span className="utv-breadcrumb-static">{crumb.text}</span>
-  }*/
-
-  let crumbsNodes = undefined;
+      crumbsNodes.push(<span className="utv-breadcrumb-static">{crumbs[i].text}</span>);
+  }
 
   return (
     <div className="utv-breadcrumbs">

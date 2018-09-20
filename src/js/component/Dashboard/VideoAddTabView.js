@@ -114,26 +114,10 @@ class VideoAddTabView extends React.Component
 
   }
 
-
-
   render()
   {
     return (
-
-
       <div>
-
-
-
-        <div className="utv-breadcrumbs">
-          <a tabIndex="0" className="utv-breadcrumb-link" onClick={() => this.props.changeGallery(undefined)}>Galleries</a>
-          <i className="utv-breadcrumb-divider fas fa-chevron-right"></i>
-          <a tabIndex="0" className="utv-breadcrumb-link" onClick={() => this.props.changeAlbum(undefined)}>Master</a>
-          <i className="utv-breadcrumb-divider fas fa-chevron-right"></i>
-          <span className="utv-breadcrumb-static">Disney</span>
-        </div>
-
-
         <Breadcrumbs
           crumbs={[
             {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
@@ -141,9 +125,6 @@ class VideoAddTabView extends React.Component
             {text: 'Disney'}
           ]}
         />
-
-
-
         <Columns>
           <Column className="utv-left-one-thirds-column">
             <Card>
