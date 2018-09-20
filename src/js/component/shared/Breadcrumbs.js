@@ -8,13 +8,13 @@ const Breadcrumbs = ({crumbs}) =>
   {
     //add separater
     if (i != 0)
-      crumbsNodes.push(<i className="utv-breadcrumb-divider fas fa-chevron-right"></i>);
+      crumbsNodes.push(<i key={'chevron' + i} className="utv-breadcrumb-divider fas fa-chevron-right"></i>);
 
     //add breadcrumb
     if (crumbs[i].onClick)
-      crumbsNodes.push(<a className="utv-breadcrumb-link" onClick={crumbs[i].onClick}>{crumbs[i].text}</a>);
+      crumbsNodes.push(<a key={i} className="utv-breadcrumb-link" onClick={crumbs[i].onClick}>{crumbs[i].text}</a>);
     else
-      crumbsNodes.push(<span className="utv-breadcrumb-static">{crumbs[i].text}</span>);
+      crumbsNodes.push(<span key={i} className="utv-breadcrumb-static">{crumbs[i].text}</span>);
   }
 
   return (

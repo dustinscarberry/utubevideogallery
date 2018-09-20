@@ -81,8 +81,6 @@ class VideoAddTabView extends React.Component
     console.log('addvideo');
   }
 
-
-
   getVideoPreview()
   {
     let src = '';
@@ -104,14 +102,17 @@ class VideoAddTabView extends React.Component
     }
     else if (this.state.source == 'vimeo')
     {
-
+      src = 'https://player.vimeo.com/video/';
+      src += this.state.urlKey;
+      src += '?title=0';
+      src += '&portrait=0';
+      src += '&byline=0';
+      src += '&badge=0';
+      src += '&autoplay=0';
+      src += '#t=' + this.state.startTime;
     }
 
     return <ResponsiveIframe src={src}/>;
-
-      //return 'https://player.vimeo.com/video/' + utvAdmin.videomemory.vid + '?&title=0&portrait=0&byline=0badge=0&rand=' + utvAdmin.generateRandomInt() + '&autoplay=' + utvAdmin.videomemory.autoplay + '#t=' + utvAdmin.videomemory.starttime;
-
-
   }
 
   render()
