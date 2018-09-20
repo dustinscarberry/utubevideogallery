@@ -1,21 +1,21 @@
 import React from 'react';
 import Card from '../shared/Card';
-import FormField from '../shared/FormField';
-import TextInput from '../shared/TextInput';
-import Label from '../shared/Label';
 import Columns from '../shared/Columns';
 import Column from '../shared/Column';
 import SectionHeader from '../shared/SectionHeader';
-import Toggle from '../shared/Toggle';
 import ResponsiveIframe from '../shared/ResponsiveIframe';
+import Breadcrumbs from '../shared/Breadcrumbs';
+import Form from '../shared/Form';
+import FormField from '../shared/FormField';
+import Label from '../shared/Label';
+import FieldHint from '../shared/FieldHint';
+import TextInput from '../shared/TextInput';
+import URLInput from '../shared/URLInput';
+import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
 import Button from '../shared/Button';
-import FieldHint from '../shared/FieldHint';
-import Breadcrumbs from '../shared/Breadcrumbs';
 import SubmitButton from '../shared/SubmitButton';
-import Form from '../shared/Form';
-import URLInput from '../shared/URLInput';
 
 class VideoAddTabView extends React.Component
 {
@@ -28,7 +28,7 @@ class VideoAddTabView extends React.Component
       url: '',
       urlKey: undefined,
       title: '',
-      quality: '',
+      quality: undefined,
       controls: true,
       startTime: undefined,
       endTime: undefined
@@ -131,7 +131,7 @@ class VideoAddTabView extends React.Component
             <Card>
               <SectionHeader text="Add Video"/>
               <Form
-                action={this.addVideo}
+                submit={this.addVideo}
                 errorclass="utv-invalid-feedback"
               >
                 <FormField>

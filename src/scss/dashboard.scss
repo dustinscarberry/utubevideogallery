@@ -238,6 +238,10 @@
     margin-left: 465px;
   }
 
+  .utv-left-fixed-single-column{
+    width: 600px;
+  }
+
   @media screen and (max-width: 1200px)
   {
     .utv-left-one-thirds-column{
@@ -247,6 +251,13 @@
 
     .utv-right-two-thirds-column{
       margin-left: 0;
+    }
+  }
+
+  @media screen and (max-width: 1000px)
+  {
+    .utv-left-fixed-single-column{
+      width: 100%;
     }
   }
 }
