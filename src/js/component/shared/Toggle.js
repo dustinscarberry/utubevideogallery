@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Toggle = (props) =>
+const Toggle = ({name, value, onChange, text}) =>
 {
   return (
     <div className="ui toggle checkbox">
-      <input type="checkbox" name={props.name} checked={props.checked} onChange={props.onChange}/>
-      <label>{props.text}</label>
+      <input type="checkbox" name={name} checked={value} onChange={onChange}/>
+      <label></label>
     </div>
   );
 }

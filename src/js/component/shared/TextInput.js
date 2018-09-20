@@ -10,6 +10,7 @@ const TextInput = ({classes, name, value, onChange}) =>
     name={name}
     value={value}
     onChange={onChange}
+    required
   />;
 }
 

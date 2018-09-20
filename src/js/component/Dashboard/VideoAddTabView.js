@@ -11,6 +11,10 @@ import ResponsiveIframe from '../shared/ResponsiveIframe';
 import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
 import Button from '../shared/Button';
+import FieldHint from '../shared/FieldHint';
+import Breadcrumbs from '../shared/Breadcrumbs';
+import SubmitButton from '../shared/SubmitButton';
+import Form from '../shared/Form';
 
 class VideoAddTabView extends React.Component
 {
@@ -22,20 +26,26 @@ class VideoAddTabView extends React.Component
       source: undefined,
       url: '',
       urlKey: undefined,
-      name: '',
+      title: '',
       quality: '',
-      controls: false,
+      controls: true,
       startTime: undefined,
       endTime: undefined
     };
 
     this.changeValue = this.changeValue.bind(this);
+    this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
     this.changeURL = this.changeURL.bind(this);
   }
 
   changeValue(event)
   {
     this.setState({[event.target.name]: event.target.value});
+  }
+
+  changeCheckboxValue(event)
+  {
+    this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
   changeURL(event)
@@ -67,8 +77,10 @@ class VideoAddTabView extends React.Component
 
   addVideo()
   {
-
+    console.log('addvideo');
   }
+
+
 
   getVideoPreview()
   {
@@ -109,6 +121,9 @@ class VideoAddTabView extends React.Component
 
 
       <div>
+
+
+
         <div className="utv-breadcrumbs">
           <a tabIndex="0" className="utv-breadcrumb-link" onClick={() => this.props.changeGallery(undefined)}>Galleries</a>
           <i className="utv-breadcrumb-divider fas fa-chevron-right"></i>
@@ -116,66 +131,94 @@ class VideoAddTabView extends React.Component
           <i className="utv-breadcrumb-divider fas fa-chevron-right"></i>
           <span className="utv-breadcrumb-static">Disney</span>
         </div>
+
+
+        <Breadcrumbs
+          crumbs={[
+            {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
+            {text: 'Master', onClick: () => this.props.changeAlbum(undefined)},
+            {text: 'Disney'}
+          ]}
+        />
+
+
+
         <Columns>
           <Column className="utv-left-one-thirds-column">
             <Card>
               <SectionHeader text="Add Video"/>
-              <FormField>
-                <Label text="URL"/>
-                <TextInput
-                  name="url"
-                  value={this.state.url}
-                  onChange={this.changeURL}
-                />
-              </FormField>
-              <FormField>
-                <Label text="Name"/>
-                <TextInput
-                  name="name"
-                  value={this.state.name}
-                  onChange={this.changeValue}
-                />
-              </FormField>
-              <FormField>
-                <Label text="Quality"/>
-                <SelectBox
-                  name="quality"
-                  value={this.state.quality}
-                  onChange={this.changeValue}
-                  data={[
-                    {name: '480p', value: 'large'},
-                    {name: '720p', value: 'hd720'},
-                    {name: '1080p', value: 'hd1080'}
-                  ]}
-                />
-              </FormField>
-              <FormField>
-                <Label text="Controls"/>
-                <Toggle/>
-              </FormField>
-              <FormField>
-                <Label text="Start Time"/>
-                <NumberInput
-                  name="startTime"
-                  value={this.state.startTime}
-                  onChange={this.changeValue}
-                />
-              </FormField>
-              <FormField>
-                <Label text="End Time"/>
-                <NumberInput
-                  name="endTime"
-                  value={this.state.endTime}
-                  onChange={this.changeValue}
-                />
-              </FormField>
-              <FormField>
-                <Button
-                  title="Submit"
-                  classes="button-primary"
-                  onClick={this.addVideo}
-                />
-              </FormField>
+              <Form
+                action={this.addVideo}
+                errorclass="utv-invalid-feedback"
+              >
+                <FormField>
+                  <Label text="URL"/>
+                  <TextInput
+                    name="url"
+                    value={this.state.url}
+                    onChange={this.changeURL}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Title"/>
+                  <TextInput
+                    name="title"
+                    value={this.state.title}
+                    onChange={this.changeValue}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Quality"/>
+                  <SelectBox
+                    name="quality"
+                    value={this.state.quality}
+                    onChange={this.changeValue}
+                    data={[
+                      {name: '480p', value: 'large'},
+                      {name: '720p', value: 'hd720'},
+                      {name: '1080p', value: 'hd1080'}
+                    ]}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Controls"/>
+                  <Toggle
+                    name="controls"
+                    value={this.state.controls}
+                    onChange={this.changeCheckboxValue}
+                  />
+                  <FieldHint text="Visible player controls"/>
+                </FormField>
+                <FormField>
+                  <Label text="Start Time"/>
+                  <NumberInput
+                    name="startTime"
+                    value={this.state.startTime}
+                    onChange={this.changeValue}
+                  />
+                  <FieldHint text="Begin timestamp (seconds)"/>
+                </FormField>
+                <FormField>
+                  <Label text="End Time"/>
+                  <NumberInput
+                    name="endTime"
+                    value={this.state.endTime}
+                    onChange={this.changeValue}
+                  />
+                  <FieldHint text="End timestamp (seconds)"/>
+                </FormField>
+                <FormField>
+                  <SubmitButton
+                    title="Add Video"
+                    classes="button-primary"
+                  />
+                  <Button
+                    title="Cancel"
+                    classes="utv-cancel"
+                    onClick={() => this.props.changeView(undefined)}
+                  />
+                </FormField>
+              </Form>
             </Card>
           </Column>
           <Column className="utv-right-two-thirds-column">
