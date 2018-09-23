@@ -1,10 +1,10 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const FormField = ({classes, children}) =>
+const FormField = ({className, children}) =>
 {
   return (
-    <div className={classnames('utv-formfield', classes)}>
+    <div className={classnames('utv-formfield', className)}>
       {children}
     </div>
   );

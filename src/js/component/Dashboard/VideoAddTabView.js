@@ -192,7 +192,7 @@ class VideoAddTabView extends React.Component
                   />
                   <FieldHint text="Ending timestamp (seconds)"/>
                 </FormField>
-                <FormField>
+                <FormField classes="utv-formfield-action">
                   <SubmitButton
                     title="Add Video"
                     classes="button-primary"

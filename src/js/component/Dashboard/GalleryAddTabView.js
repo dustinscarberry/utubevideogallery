@@ -77,7 +77,7 @@ class GalleryAddTabView extends React.Component
                     value={this.state.albumSorting}
                     onChange={this.changeValue}
                     data={[
-                      {name: 'First To Last', value: 'asc'},
+                      {name: 'First to Last', value: 'asc'},
                       {name: 'Last to First', value: 'desc'}
                     ]}
                   />
@@ -106,7 +106,7 @@ class GalleryAddTabView extends React.Component
                     ]}
                   />
                 </FormField>
-                <FormField>
+                <FormField classes="utv-formfield-action">
                   <SubmitButton
                     title="Add Gallery"
                     classes="button-primary"
