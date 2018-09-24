@@ -7,6 +7,7 @@ import VideoTabView from './VideoTabView';
 import GalleryAddTabView from './GalleryAddTabView';
 import AlbumAddTabView from './AlbumAddTabView';
 import VideoAddTabView from './VideoAddTabView';
+import VideoEditTabView from './VideoEditTabView';
 import SettingsTabView from './SettingsTabView';
 import PlaylistTable from './PlaylistTable';
 
@@ -19,7 +20,8 @@ class Dashboard extends React.Component
     this.state = {
       selectedGallery: undefined,
       selectedAlbum: undefined,
-      currentView: undefined
+      currentView: undefined,
+      currentViewID: undefined
     };
 
     this.changeGallery = this.changeGallery.bind(this);
@@ -44,9 +46,9 @@ class Dashboard extends React.Component
     });
   }
 
-  changeView(view)
+  changeView(view, id = undefined)
   {
-    this.setState({currentView: view});
+    this.setState({currentView: view, currentViewID: id});
   }
 
   getGalleriesTab()
@@ -65,6 +67,13 @@ class Dashboard extends React.Component
         changeView={this.changeView}
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
+      />
+    else if (this.state.currentView == 'editVideo')
+      return <VideoEditTabView
+        changeView={this.changeView}
+        changeGallery={this.changeGallery}
+        changeAlbum={this.changeAlbum}
+        videoID={this.currentViewID}
       />
     else if (this.state.selectedAlbum != undefined)
       return <VideoTabView

@@ -1,5 +1,6 @@
 import React from 'react';
 import Griddle from '../shared/griddle/Griddle';
+import TableRowActions from '../shared/TableRowActions';
 import axios from 'axios';
 
 class VideoTable extends React.Component
@@ -37,13 +38,24 @@ class VideoTable extends React.Component
         }
       },
       {
-        key: 'title',
+        key: 'titleActions',
         title: 'Title',
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) =>
         {
-          return <span className="utv-row-title">{cellData}</span>;
+          return (
+            <div>
+              <span className="utv-row-title">{cellData.title}</span>
+              <TableRowActions
+                actions={[
+                  {text: 'Edit', onClick: () => this.props.changeView('editVideo', row.id)},
+                  {text: 'Watch', link: 'https://youtu.be/' + cellData.url},
+                  {text: 'Delete'}
+                ]}
+              />
+            </div>
+          );
         }
       },
       {
@@ -84,7 +96,7 @@ class VideoTable extends React.Component
       let dateAdded = new Date(item.updateDate * 1000);
       record.id =  item.id;
       record.thumbnail = item.thumbnail;
-      record.title = item.title;
+      record.titleActions = {title: item.title, url: item.url},
       record.published = item.published;
       record.dateAdded = dateAdded.getFullYear() + '/' + (dateAdded.getMonth() + 1) + '/' + dateAdded.getDate();
       newData.push(record);

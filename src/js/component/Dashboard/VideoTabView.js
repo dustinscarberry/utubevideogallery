@@ -25,6 +25,7 @@ class VideoTabView extends React.Component
         <VideoTable
           selectedGallery={this.props.selectedGallery}
           selectedAlbum={this.props.selectedAlbum}
+          changeView={this.props.changeView}
         />
       </div>
     );
