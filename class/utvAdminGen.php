@@ -6,7 +6,7 @@ if (!class_exists('utvAdminGen'))
   {
     private static $_options, $_basePath;
 
-    public static function initialize(&$options)
+    public static function initialize($options)
     {
       self::$_options = $options;
       self::$_basePath = wp_upload_dir();

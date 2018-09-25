@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import Card from '../shared/Card';
 import Columns from '../shared/Columns';
 import Column from '../shared/Column';
@@ -37,6 +38,7 @@ class VideoAddTabView extends React.Component
     this.changeValue = this.changeValue.bind(this);
     this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
     this.changeURL = this.changeURL.bind(this);
+    this.addVideo = this.addVideo.bind(this);
   }
 
   changeValue(event)
@@ -76,9 +78,31 @@ class VideoAddTabView extends React.Component
     }
   }
 
-  addVideo()
+  async addVideo()
   {
-    console.log('addvideo');
+    let apiData = await axios.post(
+      '/wp-json/utubevideogallery/v1/videos/',
+      {
+        urlKey: this.state.urlKey,
+        title: this.state.title,
+        quality: this.state.quality,
+        controls: this.state.controls,
+        startTime: this.state.startTime,
+        endTime: this.state.endTime,
+        source: this.state.source,
+        albumID: this.props.selectedAlbum
+      },
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+
+    if (apiData.status == 200)
+    {
+      let data = apiData.data;
+      console.log(data);
+    }
+
   }
 
   getVideoPreview()

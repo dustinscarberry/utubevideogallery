@@ -70,6 +70,7 @@ class Dashboard extends React.Component
         changeView={this.changeView}
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
+        selectedAlbum={this.state.selectedAlbum}
       />
     else if (this.state.currentView == 'editVideo')
       return <VideoEditTabView
