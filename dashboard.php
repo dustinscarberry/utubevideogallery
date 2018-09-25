@@ -85,7 +85,9 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
           'publishAlbum' => wp_create_nonce('ut-publish-album'),
           'publishVideo' => wp_create_nonce('ut-publish-video'),
           'retrievePlaylist' => wp_create_nonce('ut-retrieve-playlist')
-        ]
+        ],
+        'restURL' => esc_url_raw(rest_url()),
+        'restNonce' => wp_create_nonce('wp_rest')
       ];
 
       wp_localize_script('utv-admin', 'utvJSData', $jsdata);

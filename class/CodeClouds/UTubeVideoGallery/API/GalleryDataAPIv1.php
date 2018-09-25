@@ -6,7 +6,7 @@ use WP_REST_Request;
 use WP_REST_Server;
 use stdClass;
 
-class GalleryDataAPI
+class GalleryDataAPIv1
 {
   private $_namespace = 'utubevideogallery';
   private $_version = 'v1';

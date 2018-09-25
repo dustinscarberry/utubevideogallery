@@ -46,20 +46,27 @@ class VideoEditTabView extends React.Component
 
   async loadData()
   {
-    let apiData = await axios.get('/wp-json/utubevideogallery/v1/videos/' + this.props.currentViewID);
+    let apiData = await axios.get(
+      '/wp-json/utubevideogallery/v1/videos/' + this.props.currentViewID,
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
 
     if (apiData.status == 200)
     {
+      let data = apiData.data;
+
       this.setState({
-        thumbnail: '',
-        source: '',
-        urlKey: undefined,
-        title: '',
-        quality: '',
-        controls: true,
-        startTime: undefined,
-        endTime: undefined,
-        updateDate: 1234567
+        thumbnail: data.thumbnail,
+        source: data.source,
+        urlKey: data.url,
+        title: data.title,
+        quality: data.quality,
+        controls: data.showChrome,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        updateDate: data.updateDate
       });
     }
   }
@@ -121,7 +128,7 @@ class VideoEditTabView extends React.Component
           crumbs={[
             {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
             {text: 'Master', onClick: () => this.props.changeAlbum(undefined)},
-            {text: 'Disney'}
+            {text: 'Disney', onClick: () => this.props.changeView(undefined)}
           ]}
         />
         <Columns>
@@ -204,7 +211,7 @@ class VideoEditTabView extends React.Component
                 </FormField>
                 <FormField>
                   <Label text="Last Updated"/>
-                  <NumberInput
+                  <TextInput
                     name="updateDate"
                     value={this.state.updateDate}
                     disabled={true}

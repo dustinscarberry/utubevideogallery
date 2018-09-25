@@ -29,10 +29,10 @@ namespace CodeClouds\UTubeVideoGallery;
 
 use CodeClouds\UTubeVideoGallery\Dashboard;
 use CodeClouds\UTubeVideoGallery\UI;
-use CodeClouds\UTubeVideoGallery\API\GalleryAPI;
-use CodeClouds\UTubeVideoGallery\API\AlbumAPI;
-use CodeClouds\UTubeVideoGallery\API\VideoAPI;
-use CodeClouds\UTubeVideoGallery\API\GalleryDataAPI;
+use CodeClouds\UTubeVideoGallery\API\GalleryAPIv1;
+use CodeClouds\UTubeVideoGallery\API\AlbumAPIv1;
+use CodeClouds\UTubeVideoGallery\API\VideoAPIv1;
+use CodeClouds\UTubeVideoGallery\API\GalleryDataAPIv1;
 
 if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 {
@@ -109,10 +109,10 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
     public function hookAPIs()
     {
       //hook APIs
-      $galleryAPI = new GalleryAPI();
-      $albumAPI = new AlbumAPI();
-      $videoAPI = new VideoAPI();
-      $galleryDataAPI = new GalleryDataAPI();
+      $galleryAPI = new GalleryAPIv1();
+      $albumAPI = new AlbumAPIv1();
+      $videoAPI = new VideoAPIv1();
+      $galleryDataAPI = new GalleryDataAPIv1();
     }
 
     //rewrite rules setup function
