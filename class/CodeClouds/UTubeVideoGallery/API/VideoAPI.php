@@ -20,7 +20,7 @@ class VideoAPI
   {
     register_rest_route(
       $this->_namespace . '/' . $this->_version,
-      'galleries/(?P<galleryID>\d+)/albums/(?P<albumID>\d+)/videos',
+      'albums/(?P<albumID>\d+)/videos',
       [
         'methods' => WP_REST_Server::READABLE,
         'callback' => [$this, 'getAllItems'],
@@ -31,6 +31,31 @@ class VideoAPI
       ]
     );
   }
+
+  /*
+
+
+
+  /videos/id
+
+  getItem
+  updateItem
+  createItem
+  deleteItem
+
+
+  /albums/id
+
+   
+
+
+
+  /videos
+
+
+
+
+  */
 
   public function getAllItems(WP_REST_Request $req)
   {

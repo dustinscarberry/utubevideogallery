@@ -143,7 +143,7 @@ class VideoTable extends React.Component
     return <Griddle
       headers={this.getHeaders()}
       recordLabel="videos"
-      apiLoadPath={'/wp-json/utubevideogallery/v1/galleries/' + this.props.selectedGallery + '/albums/' + this.props.selectedAlbum + '/videos'}
+      apiLoadPath={'/wp-json/utubevideogallery/v1/albums/' + this.props.selectedAlbum + '/videos'}
       dataMapper={this.getDataMapping}
     />
   }

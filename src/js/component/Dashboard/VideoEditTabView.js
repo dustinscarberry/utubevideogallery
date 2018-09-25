@@ -10,7 +10,6 @@ import FormField from '../shared/FormField';
 import Label from '../shared/Label';
 import FieldHint from '../shared/FieldHint';
 import TextInput from '../shared/TextInput';
-import URLInput from '../shared/URLInput';
 import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
@@ -25,19 +24,18 @@ class VideoEditTabView extends React.Component
     super(props);
 
     this.state = {
+      thumbnail: undefined,
       source: undefined,
-      url: '',
-      urlKey: undefined,
       title: '',
       quality: undefined,
       controls: true,
       startTime: undefined,
-      endTime: undefined
+      endTime: undefined,
+      updateDate: undefined
     };
 
     this.changeValue = this.changeValue.bind(this);
     this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
-    this.changeURL = this.changeURL.bind(this);
     this.saveVideo = this.saveVideo.bind(this);
   }
 
@@ -46,18 +44,23 @@ class VideoEditTabView extends React.Component
     this.loadData();
   }
 
-  loadData()
+  async loadData()
   {
-    //let apiData = await axios.get('/wp-json/utubevideogallery/v1/galleries/');
+    let apiData = await axios.get('/wp-json/utubevideogallery/v1/videos/' + this.props.currentViewID);
 
     if (apiData.status == 200)
     {
-      //let data = this.props.dataMapper(apiData.data);
-
-      //this.setState({
-       //data: data,
-        //loading: false
-     // });
+      this.setState({
+        thumbnail: '',
+        source: '',
+        urlKey: undefined,
+        title: '',
+        quality: '',
+        controls: true,
+        startTime: undefined,
+        endTime: undefined,
+        updateDate: 1234567
+      });
     }
   }
 
@@ -69,33 +72,6 @@ class VideoEditTabView extends React.Component
   changeCheckboxValue(event)
   {
     this.setState({[event.target.name]: !this.state[event.target.name]});
-  }
-
-  changeURL(event)
-  {
-    let url = event.target.value.trim();
-
-    this.setState({source: undefined, url: url, urlKey: undefined});
-
-    if (url && url != '')
-    {
-      let compareURL = url.toLowerCase();
-
-      if (compareURL.indexOf('youtube') !== -1)
-      {
-        let matches = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
-
-        if (matches)
-          this.setState({source: 'youtube', urlKey: matches[1]});
-      }
-      else if (compareURL.indexOf('vimeo') !== -1)
-      {
-        let matches = url.match(/https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/);
-
-        if (matches)
-          this.setState({source: 'vimeo', urlKey: matches[2]})
-      }
-    }
   }
 
   saveVideo()
@@ -157,12 +133,11 @@ class VideoEditTabView extends React.Component
                 errorclass="utv-invalid-feedback"
               >
                 <FormField>
-                  <Label text="URL"/>
-                  <URLInput
-                    name="url"
-                    value={this.state.url}
-                    onChange={this.changeURL}
-                    required={true}
+                  <Label text="Source"/>
+                  <TextInput
+                    name="source"
+                    value={this.state.source}
+                    disabled={true}
                   />
                 </FormField>
                 <FormField>
@@ -172,6 +147,19 @@ class VideoEditTabView extends React.Component
                     value={this.state.title}
                     onChange={this.changeValue}
                     required={true}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Album"/>
+                  <SelectBox
+                    name="quality"
+                    value={this.state.quality}
+                    onChange={this.changeValue}
+                    data={[
+                      {name: '480p', value: 'large'},
+                      {name: '720p', value: 'hd720'},
+                      {name: '1080p', value: 'hd1080'}
+                    ]}
                   />
                 </FormField>
                 <FormField>
@@ -214,9 +202,17 @@ class VideoEditTabView extends React.Component
                   />
                   <FieldHint text="Ending timestamp (seconds)"/>
                 </FormField>
+                <FormField>
+                  <Label text="Last Updated"/>
+                  <NumberInput
+                    name="updateDate"
+                    value={this.state.updateDate}
+                    disabled={true}
+                  />
+                </FormField>
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
-                    title="Add Video"
+                    title="Save Video"
                     classes="button-primary"
                   />
                   <Button
