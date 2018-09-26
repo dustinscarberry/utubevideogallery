@@ -10,6 +10,7 @@ class VideoTable extends React.Component
     super(props);
 
     this.togglePublishStatus = this.togglePublishStatus.bind(this);
+    this.deleteVideo = this.deleteVideo.bind(this);
   }
 
   getHeaders()
@@ -31,8 +32,9 @@ class VideoTable extends React.Component
         formatter: (row, cellData) =>
         {
           return <img
+            onClick={() => this.props.changeView('editVideo', row.id)}
             src={cellData}
-            className="utv-preview-thumb"
+            className="utv-preview-thumb utv-is-clickable"
             data-rjs="2"
           />
         }
@@ -51,7 +53,7 @@ class VideoTable extends React.Component
                 actions={[
                   {text: 'Edit', onClick: () => this.props.changeView('editVideo', row.id)},
                   {text: 'Watch', link: 'https://youtu.be/' + cellData.url},
-                  {text: 'Delete'}
+                  {text: 'Delete', onClick: () => this.deleteVideo(row.id)}
                 ]}
               />
             </div>
@@ -81,7 +83,15 @@ class VideoTable extends React.Component
         key: 'dateAdded',
         title: 'Date Added',
         sortable: true,
-        sortDirection: ''
+        sortDirection: '',
+        formatter: (row, cellData) =>
+        {
+          let dateAdded = new Date(cellData * 1000);
+
+          return dateAdded.getFullYear()
+            + '/' + (dateAdded.getMonth() + 1)
+            + '/' + dateAdded.getDate();
+        }
       }
     ];
   }
@@ -93,12 +103,11 @@ class VideoTable extends React.Component
     for (let item of data)
     {
       let record = {};
-      let dateAdded = new Date(item.updateDate * 1000);
       record.id =  item.id;
       record.thumbnail = item.thumbnail;
-      record.titleActions = {title: item.title, url: item.url},
+      record.titleActions = {title: item.title, url: item.url};
       record.published = item.published;
-      record.dateAdded = dateAdded.getFullYear() + '/' + (dateAdded.getMonth() + 1) + '/' + dateAdded.getDate();
+      record.dateAdded = item.updateDate;
       newData.push(record);
     }
 
@@ -107,33 +116,16 @@ class VideoTable extends React.Component
 
   async togglePublishStatus(videoID, changeTo)
   {
-    let rsp = await axios.get('/wp-json/utubevideogallery/v1/');
 
-    /*
+  }
 
-
-    create gallery
-    create album
-    create video
-    create playlist
-
-    edit gallery
-    edit album
-    edit video
-    edit playlist
-
-    delete gallery
-    delete album
-    delete video
-    delete playlist
-
-
-
-
-    */
-
-    if (rsp.status == 200)
+  async deleteVideo(videoID)
+  {
+    if (confirm('Are you sure you want to delete this?'))
     {
+      //fire ajax request
+
+
 
     }
   }

@@ -15,6 +15,12 @@
 
 
 
+.utv-is-clickable{
+  cursor: pointer;
+}
+
+
+
 
 .utv-breadcrumbs{
   margin: 20px 0;
@@ -1041,6 +1047,23 @@ form.was-validated{
   font-size: 14px;
 }
 
+
+
+
+.utv-row-actions{
+  margin-top: 10px;
+}
+
+.utv-row-actions a{
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+
+
+
+
 #utv-videoplayer-dimensions-option{
   display: block;
 }
@@ -1049,10 +1072,13 @@ form.was-validated{
 
   .utv-row-actions{
     visibility: hidden;
-    margin-top: 3px;
   }
 
   .utv-formbox tbody tr:hover .utv-row-actions{
+    visibility: visible;
+  }
+
+  table tbody tr:hover .utv-row-actions{
     visibility: visible;
   }
 

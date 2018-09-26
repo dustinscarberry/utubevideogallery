@@ -31,7 +31,9 @@ class VideoEditTabView extends React.Component
       controls: true,
       startTime: undefined,
       endTime: undefined,
-      updateDate: undefined
+      updateDate: undefined,
+      album: undefined,
+      albums: undefined
     };
 
     this.changeValue = this.changeValue.bind(this);
@@ -42,6 +44,7 @@ class VideoEditTabView extends React.Component
   componentDidMount()
   {
     this.loadData();
+    this.loadAlbums();
   }
 
   async loadData()
@@ -68,6 +71,26 @@ class VideoEditTabView extends React.Component
         endTime: data.endTime,
         updateDate: data.updateDate
       });
+    }
+  }
+
+  async loadAlbums()
+  {
+    let apiData = await axios.get(
+      '/wp-json/utubevideogallery/v1/galleries/'
+      + this.props.selectedGallery
+      + '/albums'
+    );
+
+    if (apiData.status == 200)
+    {
+      let data = apiData.data.data;
+      let albums = [];
+
+      for (let album of data)
+        albums.push({name: album.title, value: album.id});
+
+      this.setState({albums: albums});
     }
   }
 
@@ -122,6 +145,16 @@ class VideoEditTabView extends React.Component
 
   render()
   {
+    let source = undefined;
+
+    if (this.state.source == 'youtube')
+      source = 'YouTube';
+    else if (this.state.source == 'vimeo')
+      source = 'Vimeo';
+
+    let updateDate = new Date(this.state.updateDate * 1000);
+    updateDate = updateDate.getFullYear() + '/' + (updateDate.getMonth() + 1) + '/' + updateDate.getDate();
+
     return (
       <div>
         <Breadcrumbs
@@ -143,7 +176,7 @@ class VideoEditTabView extends React.Component
                   <Label text="Source"/>
                   <TextInput
                     name="source"
-                    value={this.state.source}
+                    value={source}
                     disabled={true}
                   />
                 </FormField>
@@ -159,14 +192,10 @@ class VideoEditTabView extends React.Component
                 <FormField>
                   <Label text="Album"/>
                   <SelectBox
-                    name="quality"
-                    value={this.state.quality}
+                    name="album"
+                    value={this.state.album}
                     onChange={this.changeValue}
-                    data={[
-                      {name: '480p', value: 'large'},
-                      {name: '720p', value: 'hd720'},
-                      {name: '1080p', value: 'hd1080'}
-                    ]}
+                    data={this.state.albums}
                   />
                 </FormField>
                 <FormField>
@@ -213,7 +242,7 @@ class VideoEditTabView extends React.Component
                   <Label text="Last Updated"/>
                   <TextInput
                     name="updateDate"
-                    value={this.state.updateDate}
+                    value={updateDate}
                     disabled={true}
                   />
                 </FormField>

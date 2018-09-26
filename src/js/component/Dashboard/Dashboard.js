@@ -78,6 +78,7 @@ class Dashboard extends React.Component
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
         currentViewID={this.state.currentViewID}
+        selectedGallery={this.state.selectedGallery}
       />
     else if (this.state.selectedAlbum != undefined)
       return <VideoTabView

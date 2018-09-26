@@ -29,7 +29,7 @@ class AlbumTable extends React.Component
           return <img
             onClick={() => this.props.changeAlbum(row.id)}
             src={cellData}
-            className="utv-preview-thumb"
+            className="utv-preview-thumb utv-is-clickable"
             data-rjs="2"
           />
         }
