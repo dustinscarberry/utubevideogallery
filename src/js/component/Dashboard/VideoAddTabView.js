@@ -29,7 +29,7 @@ class VideoAddTabView extends React.Component
       url: '',
       urlKey: undefined,
       title: '',
-      quality: undefined,
+      quality: 'hd1080',
       controls: true,
       startTime: undefined,
       endTime: undefined
@@ -97,12 +97,12 @@ class VideoAddTabView extends React.Component
       }
     );
 
-    if (apiData.status == 200)
-    {
-      let data = apiData.data;
-      console.log(data);
-    }
+    console.log(apiData.data);
 
+    if (apiData.status == 201)
+    {
+      this.props.changeView(undefined);
+    }
   }
 
   getVideoPreview()
@@ -173,7 +173,6 @@ class VideoAddTabView extends React.Component
                     name="title"
                     value={this.state.title}
                     onChange={this.changeValue}
-                    required={true}
                   />
                 </FormField>
                 <FormField>

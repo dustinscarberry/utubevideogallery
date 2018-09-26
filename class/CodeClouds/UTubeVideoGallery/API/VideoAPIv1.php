@@ -2,16 +2,14 @@
 
 namespace CodeClouds\UTubeVideoGallery\API;
 
+use CodeClouds\UTubeVideoGallery\API\APIv1;
 use WP_REST_Request;
 use WP_REST_Server;
 use stdClass;
 use utvAdminGen;
 
-class VideoAPIv1
+class VideoAPIv1 extends APIv1
 {
-  private $_namespace = 'utubevideogallery';
-  private $_version = 'v1';
-
   public function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
@@ -97,7 +95,7 @@ class VideoAPIv1
     $video = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_video WHERE VID_ID = ' . $req['videoID']);
 
     if (!$video)
-      return null;
+      return $this->errorResponse('The specified video resource was not found');
 
     $video = $video[0];
     $videoData->id = $video->VID_ID;
@@ -114,7 +112,7 @@ class VideoAPIv1
     $videoData->updateDate = $video->VID_UPDATEDATE;
     $videoData->albumID = $video->ALB_ID;
 
-    return $videoData;
+    return $this->response($videoData);
   }
 
   public function createItem(WP_REST_Request $req)
@@ -128,44 +126,34 @@ class VideoAPIv1
 
     global $wpdb;
 
-
-
-    $urlKey = sanitize_text_field($req->get_param('urlKey'));
-    $title = sanitize_text_field($req->get_param('title'));
-    $quality = sanitize_text_field($req->get_param('quality'));
-    $controls = ($req->get_param('controls') ? 0 : 1);
-    $startTime = sanitize_text_field($req->get_param('startTime'));
-    $endTime = sanitize_text_field($req->get_param('endTime'));
-
-    $source = sanitize_text_field($req->get_param('source'));
-    $albumID = sanitize_key($req->get_param('albumID'));
-
+    //gather data fields
+    $urlKey = sanitize_text_field($req['urlKey']);
+    $title = sanitize_text_field($req['title']);
+    $quality = sanitize_text_field($req['quality']);
+    $controls = ($req['controls'] ? 0 : 1);
+    $startTime = sanitize_text_field($req['startTime']);
+    $endTime = sanitize_text_field($req['endTime']);
+    $source = sanitize_text_field($req['source']);
+    $albumID = sanitize_key($req['albumID']);
     $time = current_time('timestamp');
 
-
+    //check for required fields
     if (empty($urlKey) || empty($quality) || !isset($controls) || empty($source) || !isset($albumID))
-      return 'Bad parameters';
+      return $this->errorResponse('Invalid parameters');
 
-
-
-    //get current video count for album//
+    //get current video count for album
     $videoCount = $wpdb->get_results('SELECT COUNT(VID_ID) AS VID_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $albumID)[0];
     $gallery = $wpdb->get_results('SELECT DATA_THUMBTYPE FROM ' . $wpdb->prefix . 'utubevideo_album a INNER JOIN ' . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID WHERE a.ALB_ID = ' . $albumID)[0];
-
     $nextSortPos = $videoCount->VID_COUNT;
 
-
+    //get source thumbnail
     if ($source == 'youtube')
       $sourceThumbnail = 'http://img.youtube.com/vi/' . $urlKey . '/0.jpg';
     elseif ($source == 'vimeo')
     {
-
-
-
       $data = utvAdminGen::queryAPI('https://vimeo.com/api/v2/video/' . $urlKey . '.json');
       $sourceThumbnail = $data[0]['thumbnail_large'];
     }
-
 
     //insert new video
     if ($wpdb->insert(
@@ -191,26 +179,26 @@ class VideoAPIv1
       if (!utvAdminGen::saveThumbnail($sourceThumbnail, $urlKey . $videoID, $gallery->DATA_THUMBTYPE))
       {
         $wpdb->query('DELETE FROM ' . $wpdb->prefix . 'utubevideo_video WHERE VID_ID ="' . $videoID . '"');
-        return 'Video thumbnail failed to save correctly.';
+        return $this->errorResponse('Video thumbnail save error');
       }
 
-      return 'Video added to album.';
+      return $this->response(null, 201);
     }
     else
-      return 'Something went wrong. Please try again.';
-
-
-      return 'hi';
-
-
-
-
-
-
+      return $this->errorResponse('An unexpected error has occurred');
   }
 
   public function deleteItem(WP_REST_Request $req)
   {
+
+
+
+
+    
+
+
+
+
 
   }
 
@@ -226,9 +214,6 @@ class VideoAPIv1
     global $wpdb;
 
     $videos = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $req['albumID'] . ' ORDER BY VID_POS');
-
-    if (!$videos)
-      return null;
 
     foreach ($videos as $video)
     {
@@ -250,6 +235,6 @@ class VideoAPIv1
       $data[] = $videoData;
     }
 
-    return $data;
+    return $this->response($data);
   }
 }

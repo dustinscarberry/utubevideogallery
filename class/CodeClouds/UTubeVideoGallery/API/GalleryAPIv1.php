@@ -2,15 +2,13 @@
 
 namespace CodeClouds\UTubeVideoGallery\API;
 
+use CodeClouds\UTubeVideoGallery\API\APIv1;
 use WP_REST_Request;
 use WP_REST_Server;
 use stdClass;
 
-class GalleryAPIv1
+class GalleryAPIv1 extends APIv1
 {
-  private $_namespace = 'utubevideogallery';
-  private $_version = 'v1';
-
   public function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
@@ -88,7 +86,7 @@ class GalleryAPIv1
     $gallery = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_dataset WHERE DATA_ID = ' . $req['galleryID']);
 
     if (!$gallery)
-      return null;
+      return $this->errorResponse('The specified gallery resource was not found');
 
     $gallery = $gallery[0];
     $albumCount = $wpdb->get_results('SELECT COUNT(ALB_ID) AS ALBUM_COUNT FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $req['galleryID']);
@@ -96,7 +94,7 @@ class GalleryAPIv1
     if ($albumCount)
       $albumCount = $albumCount[0]->ALBUM_COUNT;
     else
-      $albumCount = null;
+      $albumCount = 0;
 
     $galleryData->id = $gallery->DATA_ID;
     $galleryData->title = $gallery->DATA_NAME;
@@ -106,7 +104,7 @@ class GalleryAPIv1
     $galleryData->albumCount = $albumCount;
     $galleryData->thumbnailType = $gallery->DATA_THUMBTYPE;
 
-    return $galleryData;
+    return $this->response($galleryData);
   }
 
   public function createItem(WP_REST_Request $req)
@@ -138,7 +136,7 @@ class GalleryAPIv1
       if ($albumCount)
         $albumCount = $albumCount[0]->ALBUM_COUNT;
       else
-        $albumCount = null;
+        $albumCount = 0;
 
       $galleryData = new stdClass();
       $galleryData->id = $gallery->DATA_ID;
@@ -152,6 +150,6 @@ class GalleryAPIv1
       $data[] = $galleryData;
     }
 
-    return $data;
+    return $this->response($data);
   }
 }

@@ -1,16 +1,13 @@
 <?php
-
 namespace CodeClouds\UTubeVideoGallery\API;
 
+use CodeClouds\UTubeVideoGallery\API\APIv1;
 use WP_REST_Request;
 use WP_REST_Server;
 use stdClass;
 
-class AlbumAPIv1
+class AlbumAPIv1 extends APIv1
 {
-  private $_namespace = 'utubevideogallery';
-  private $_version = 'v1';
-
   public function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
@@ -91,7 +88,7 @@ class AlbumAPIv1
     $album = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_album WHERE ALB_ID = ' . $req['albumID']);
 
     if (!$album)
-      return null;
+      return $this->errorResponse('The specified album resource was not found');
 
     $album = $album[0];
     $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VIDEO_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $req['albumID']);
@@ -99,7 +96,7 @@ class AlbumAPIv1
     if ($videoCount)
       $videoCount = $videoCount[0]->VIDEO_COUNT;
     else
-      $videoCount = null;
+      $videoCount = 0;
 
     $albumData->id = $album->ALB_ID;
     $albumData->title = $album->ALB_NAME;
@@ -112,7 +109,7 @@ class AlbumAPIv1
     $albumData->videoCount = $videoCount;
     $albumData->galleryID = $album->DATA_ID;
 
-    return $albumData;
+    return $this->response($albumData);
   }
 
   public function createItem(WP_REST_Request $req)
@@ -137,10 +134,7 @@ class AlbumAPIv1
 
     global $wpdb;
     $albums = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $req['galleryID'] . ' ORDER BY ALB_POS');
-
-    if (!$albums)
-      return null;
-
+    
     foreach ($albums as $album)
     {
       $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VIDEO_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $req['galleryID']);
@@ -148,7 +142,7 @@ class AlbumAPIv1
       if ($videoCount)
         $videoCount = $videoCount[0]->VIDEO_COUNT;
       else
-        $videoCount = null;
+        $videoCount = 0;
 
       $albumData = new stdClass();
       $albumData->id = $album->ALB_ID;
@@ -165,6 +159,6 @@ class AlbumAPIv1
       $data[] = $albumData;
     }
 
-    return $data;
+    return $this->response($data);
   }
 }

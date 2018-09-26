@@ -33,7 +33,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
       add_action('admin_enqueue_scripts', [$this, 'addScripts']);
 
       //ajax hooks
-      require($this->_dirpath . '/includes/ajax.php');
+      require($this->_dirpath . '/../../../includes/ajax.php');
       $utvAdminAjax = new \utvAdminAjax($this->_options);
     }
 
@@ -60,8 +60,8 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
       wp_enqueue_script('jquery-ui-core');
       wp_enqueue_script('jquery-ui-sortable');
       wp_enqueue_script('retina-js', 'https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.2/retina.min.js', null, null, true);
-      wp_enqueue_script('utv-admin', plugins_url('public/js/dashboard.min.js', __FILE__), ['jquery', 'jquery-ui-core', 'jquery-ui-sortable'], $this->_version, true);
-      wp_enqueue_style('utv-style', plugins_url('public/css/dashboard.min.css', __FILE__), false, $this->_version);
+      wp_enqueue_script('utv-admin', plugins_url('../../../public/js/dashboard.min.js', __FILE__), ['jquery', 'jquery-ui-core', 'jquery-ui-sortable'], $this->_version, true);
+      wp_enqueue_style('utv-style', plugins_url('../../../public/css/dashboard.min.css', __FILE__), false, $this->_version);
       wp_enqueue_style('jquery-ui-sortable', plugins_url('public/css/jquery-ui-1.10.3.custom.min.css', __FILE__), false, $this->_version);
       wp_enqueue_style('utv-fontawesome5', 'https://use.fontawesome.com/releases/v5.3.1/css/all.css', false);
 
@@ -114,37 +114,37 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
       {
         //view video albums in a gallery//
         if($_GET['view'] == 'gallery')
-          require($this->_dirpath . '/includes/forms/viewGallery.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/viewGallery.inc.php');
         //display create a gallery form//
         elseif($_GET['view'] == 'gallerycreate')
-          require($this->_dirpath . '/includes/forms/createGallery.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/createGallery.inc.php');
         //display gallery edit form//
         elseif($_GET['view'] == 'galleryedit')
-          require($this->_dirpath . '/includes/forms/editGallery.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/editGallery.inc.php');
         //view videos within a video album//
         elseif($_GET['view'] == 'album')
-          require($this->_dirpath . '/includes/forms/viewAlbum.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/viewAlbum.inc.php');
         //display create album form//
         elseif($_GET['view'] == 'albumcreate')
-          require($this->_dirpath . '/includes/forms/createAlbum.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/createAlbum.inc.php');
         //display album edit form//
         elseif($_GET['view'] == 'albumedit')
-          require($this->_dirpath . '/includes/forms/editAlbum.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/editAlbum.inc.php');
         //display add video form//
         elseif($_GET['view'] == 'videoadd')
-          require($this->_dirpath . '/includes/forms/addVideo.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/addVideo.inc.php');
         //display add playlist form//
         elseif($_GET['view'] == 'playlistadd')
-          require($this->_dirpath . '/includes/forms/addPlaylist.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/addPlaylist.inc.php');
         //display video edit form//
         elseif($_GET['view'] == 'videoedit')
-          require($this->_dirpath . '/includes/forms/editVideo.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/editVideo.inc.php');
         elseif($_GET['view'] == 'playlistdetail')
-          require($this->_dirpath . '/includes/forms/playlistDetail.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/playlistDetail.inc.php');
       }
       //display galleries//
       else
-        require($this->_dirpath . '/includes/forms/overviewGalleries.inc.php');
+        require($this->_dirpath . '/../../../includes/forms/overviewGalleries.inc.php');
       ?>
 
     </div>
@@ -169,21 +169,21 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
       {
         //display playlist sync form//
         if ($_GET['view'] == 'playlistview')
-          require($this->_dirpath . '/includes/forms/viewPlaylist.inc.php');
+          require($this->_dirpath . '/../../../includes/forms/viewPlaylist.inc.php');
       }
       //display playlists overview
       else
-        require($this->_dirpath . '/includes/forms/overviewPlaylists.inc.php');
+        require($this->_dirpath . '/../../../includes/forms/overviewPlaylists.inc.php');
     }
 
     public function option_panel()
     {
-      require($this->_dirpath . '/includes/forms/generalOptions.inc.php');
+      require($this->_dirpath . '/../../../includes/forms/generalOptions.inc.php');
     }
 
     public function processor()
     {
-      require($this->_dirpath . '/includes/processor.inc.php');
+      require($this->_dirpath . '/../../../includes/processor.inc.php');
     }
   }
 }

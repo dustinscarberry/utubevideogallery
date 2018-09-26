@@ -143,15 +143,9 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
       //load backend or frontend dependencies
       if (is_admin())
-      {
-        require ($this->_dirpath . '/dashboard.php');
         new Dashboard(self::CURRENT_VERSION);
-      }
       else
-      {
-        require ($this->_dirpath . '/ui.php');
         new UI(self::CURRENT_VERSION);
-      }
     }
 
     private function maintenance()
@@ -453,8 +447,11 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
     public function autoloader($className)
     {
-      $className = str_replace('\\', '/', $className);
-      include_once('class/' . $className . '.php');
+      if (strpos($className, 'CodeClouds\UTubeVideoGallery') !== false)
+      {
+        $className = str_replace('\\', '/', $className);
+        include_once('class/' . $className . '.php');
+      }
     }
   }
 

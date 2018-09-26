@@ -69,7 +69,7 @@ class Griddle extends React.Component
 
     if (apiData.status == 200)
     {
-      let data = this.props.dataMapper(apiData.data);
+      let data = this.props.dataMapper(apiData.data.data);
 
       this.setState({
         data: data,

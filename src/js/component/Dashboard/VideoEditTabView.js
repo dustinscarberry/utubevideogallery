@@ -55,7 +55,7 @@ class VideoEditTabView extends React.Component
 
     if (apiData.status == 200)
     {
-      let data = apiData.data;
+      let data = apiData.data.data;
 
       this.setState({
         thumbnail: data.thumbnail,
