@@ -1,5 +1,5 @@
 import React from 'react';
-import Griddle from '../shared/griddle/Griddle';
+import Griddle from '../shared/Griddle';
 import TableRowActions from '../shared/TableRowActions';
 import axios from 'axios';
 
@@ -21,7 +21,7 @@ class VideoTable extends React.Component
         title: 'ID',
         sortable: true,
         sortDirection: 'desc',
-        width: '60px'
+        width: '75px'
       },
       {
         key: 'thumbnail',

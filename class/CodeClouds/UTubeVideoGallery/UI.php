@@ -38,7 +38,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\UI'))
     public function loadCSS()
     {
       //load frontend styles
-      wp_enqueue_style('utv_style', plugins_url('public/css/app.min.css', __FILE__), false, $this->_version);
+      wp_enqueue_style('utv_style', plugins_url('../../../public/css/app.min.css', __FILE__), false, $this->_version);
       wp_enqueue_style('font-awesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css');
 
       //add embedded thumbnail sizing css
@@ -74,7 +74,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\UI'))
       ];
 
       wp_enqueue_script('retina-js', 'https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.2/retina.min.js', null, null, true);
-      wp_enqueue_script('utv-frontend', plugins_url('public/js/app.min.js', __FILE__), ['jquery'], $this->_version, true);
+      wp_enqueue_script('utv-frontend', plugins_url('../../../public/js/app.min.js', __FILE__), ['jquery'], $this->_version, true);
       wp_localize_script('utv-frontend', 'utvJSData', $jsdata);
     }
 
@@ -88,7 +88,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\UI'))
 
     public function shortcode($atts)
     {
-      require_once 'class/utvVideoGen.php';
+      //require_once '../../../utvVideoGen.php';
 
       //panel view
       if (isset($atts['view']) && $atts['view'] == 'panel')

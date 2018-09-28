@@ -5,7 +5,9 @@ import GalleryTabView from './GalleryTabView';
 import AlbumTabView from './AlbumTabView';
 import VideoTabView from './VideoTabView';
 import GalleryAddTabView from './GalleryAddTabView';
+import GalleryEditTabView from './GalleryEditTabView';
 import AlbumAddTabView from './AlbumAddTabView';
+import AlbumEditTabView from './AlbumEditTabView';
 import VideoAddTabView from './VideoAddTabView';
 import VideoEditTabView from './VideoEditTabView';
 import SettingsTabView from './SettingsTabView';
@@ -60,10 +62,22 @@ class Dashboard extends React.Component
       return <GalleryAddTabView
         changeView={this.changeView}
       />
+    else if (this.state.currentView == 'editGallery')
+      return <GalleryEditTabView
+        changeView={this.changeView}
+        currentViewID={this.state.currentViewID}
+      />
     else if (this.state.currentView == 'addAlbum')
       return <AlbumAddTabView
         changeView={this.changeView}
         changeGallery={this.changeGallery}
+      />
+    else if (this.state.currentView == 'editAlbum')
+      return <AlbumEditTabView
+        changeView={this.changeView}
+        changeGallery={this.changeGallery}
+        changeAlbum={this.changeAlbum}
+        currentViewID={this.currentViewID}
       />
     else if (this.state.currentView == 'addVideo')
       return <VideoAddTabView

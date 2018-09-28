@@ -1,5 +1,6 @@
 import React from 'react';
 import GalleryTable from './GalleryTable';
+import Breadcrumbs from '../shared/Breadcrumbs';
 
 class GalleryTabView extends React.Component
 {
@@ -15,11 +16,14 @@ class GalleryTabView extends React.Component
         <div className="utv-actionbar" style={{'margin': '20px 0'}}>
           <button className="utv-link-submit-button" onClick={() => this.props.changeView('addGallery')}>Add Gallery</button>
         </div>
-        <div className="utv-breadcrumbs">
-          <span className="utv-breadcrumb-static">Galleries</span>
-        </div>
+        <Breadcrumbs
+          crumbs={[
+            {text: 'Galleries'}
+          ]}
+        />
         <GalleryTable
           changeGallery={this.props.changeGallery}
+          changeView={this.props.changeView}
         />
       </div>
     );

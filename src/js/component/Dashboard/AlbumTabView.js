@@ -1,5 +1,6 @@
 import React from 'react';
 import AlbumTable from './AlbumTable';
+import Breadcrumbs from '../shared/Breadcrumbs';
 
 class AlbumTabView extends React.Component
 {
@@ -15,13 +16,15 @@ class AlbumTabView extends React.Component
         <div className="utv-actionbar" style={{'margin': '20px 0'}}>
           <button className="utv-link-submit-button" onClick={() => this.props.changeView('addAlbum')}>Add Album</button>
         </div>
-        <div className="utv-breadcrumbs">
-          <a className="utv-breadcrumb-link" onClick={() => this.props.changeGallery(undefined)}>Galleries</a>
-          <i className="utv-breadcrumb-divider fas fa-chevron-right"></i>
-          <span className="utv-breadcrumb-static">Gallery Name</span>
-        </div>
+        <Breadcrumbs
+          crumbs={[
+            {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
+            {text: 'Gallery Name'}
+          ]}
+        />
         <AlbumTable
           changeAlbum={this.props.changeAlbum}
+          changeView={this.props.changeView}
           selectedGallery={this.props.selectedGallery}
         />
       </div>

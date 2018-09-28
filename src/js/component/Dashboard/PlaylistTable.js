@@ -1,5 +1,5 @@
 import React from 'react';
-import Griddle from '../shared/Griddle/Griddle';
+import Griddle from '../shared/Griddle';
 
 class PlaylistTable extends React.Component
 {

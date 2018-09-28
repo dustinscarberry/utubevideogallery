@@ -17,7 +17,7 @@ import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
 import axios from 'axios';
 
-class VideoEditTabView extends React.Component
+class AlbumEditTabView extends React.Component
 {
   constructor(props)
   {
@@ -25,32 +25,28 @@ class VideoEditTabView extends React.Component
 
     this.state = {
       thumbnail: undefined,
-      source: undefined,
       title: '',
-      quality: undefined,
-      controls: true,
-      startTime: undefined,
-      endTime: undefined,
+      videoSorting: undefined,
       updateDate: undefined,
-      album: undefined,
-      albums: undefined
+      gallery: undefined,
+      galleries: undefined
     };
 
     this.changeValue = this.changeValue.bind(this);
     this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
-    this.saveVideo = this.saveVideo.bind(this);
+    this.saveAlbum = this.saveAlbum.bind(this);
   }
 
   componentDidMount()
   {
     this.loadData();
-    this.loadAlbums();
+    this.loadGalleries();
   }
 
   async loadData()
   {
     let apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/videos/' + this.props.currentViewID,
+      '/wp-json/utubevideogallery/v1/albums/' + this.props.currentViewID,
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
@@ -59,7 +55,7 @@ class VideoEditTabView extends React.Component
     if (apiData.status == 200)
     {
       let data = apiData.data.data;
-
+/*
       this.setState({
         thumbnail: data.thumbnail,
         source: data.source,
@@ -71,26 +67,23 @@ class VideoEditTabView extends React.Component
         endTime: data.endTime,
         updateDate: data.updateDate
       });
+      */
     }
   }
 
-  async loadAlbums()
+  async loadGalleries()
   {
-    let apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/galleries/'
-      + this.props.selectedGallery
-      + '/albums'
-    );
+    let apiData = await axios.get('/wp-json/utubevideogallery/v1/galleries/');
 
     if (apiData.status == 200)
     {
       let data = apiData.data.data;
-      let albums = [];
+      let galleries = [];
 
-      for (let album of data)
-        albums.push({name: album.title, value: album.id});
+      for (let gallery of data)
+        galleries.push({name: gallery.title, value: gallery.id});
 
-      this.setState({albums: albums});
+      this.setState({galleries: galleries});
     }
   }
 
@@ -104,54 +97,13 @@ class VideoEditTabView extends React.Component
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  saveVideo()
+  saveAlbum()
   {
-    console.log('savevideo');
-  }
-
-  getVideoPreview()
-  {
-    let src = '';
-
-    if (this.state.source == 'youtube')
-    {
-      src = 'https://www.youtube.com/embed/';
-      src += this.state.urlKey;
-      src += '?modestbranding=1';
-      src += '&rel=0';
-      src += '&showinfo=0';
-      src += '&autohide=0';
-      src += '&iv_load_policy=3';
-      src += '&color=white';
-      src += '&theme=dark';
-      src += '&autoplay=0';
-      src += '&start=' + this.state.startTime;
-      src += '&end=' + this.state.endTime;
-    }
-    else if (this.state.source == 'vimeo')
-    {
-      src = 'https://player.vimeo.com/video/';
-      src += this.state.urlKey;
-      src += '?title=0';
-      src += '&portrait=0';
-      src += '&byline=0';
-      src += '&badge=0';
-      src += '&autoplay=0';
-      src += '#t=' + this.state.startTime;
-    }
-
-    return <ResponsiveIframe src={src}/>;
+    console.log('savealbum');
   }
 
   render()
   {
-    let source = undefined;
-
-    if (this.state.source == 'youtube')
-      source = 'YouTube';
-    else if (this.state.source == 'vimeo')
-      source = 'Vimeo';
-
     let updateDate = new Date(this.state.updateDate * 1000);
     let updateDateFormatted = updateDate.getFullYear()
       + '/'
@@ -164,26 +116,17 @@ class VideoEditTabView extends React.Component
         <Breadcrumbs
           crumbs={[
             {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
-            {text: 'Master', onClick: () => this.props.changeAlbum(undefined)},
-            {text: 'Disney', onClick: () => this.props.changeView(undefined)}
+            {text: 'Master', onClick: () => this.props.changeAlbum(undefined)}
           ]}
         />
         <Columns>
           <Column className="utv-left-one-thirds-column">
             <Card>
-              <SectionHeader text="Edit Video"/>
+              <SectionHeader text="Edit Album"/>
               <Form
-                submit={this.saveVideo}
+                submit={this.saveAlbum}
                 errorclass="utv-invalid-feedback"
               >
-                <FormField>
-                  <Label text="Source"/>
-                  <TextInput
-                    name="source"
-                    value={source}
-                    disabled={true}
-                  />
-                </FormField>
                 <FormField>
                   <Label text="Title"/>
                   <TextInput
@@ -194,65 +137,37 @@ class VideoEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Album"/>
+                  <Label text="Gallery"/>
                   <SelectBox
-                    name="album"
-                    value={this.state.album}
+                    name="gallery"
+                    value={this.state.gallery}
                     onChange={this.changeValue}
-                    data={this.state.albums}
+                    data={this.state.galleries}
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Quality"/>
+                  <Label text="Video Sorting"/>
                   <SelectBox
-                    name="quality"
-                    value={this.state.quality}
+                    name="videoSorting"
+                    value={this.state.videoSorting}
                     onChange={this.changeValue}
                     data={[
-                      {name: '480p', value: 'large'},
-                      {name: '720p', value: 'hd720'},
-                      {name: '1080p', value: 'hd1080'}
+                      {name: 'First to Last', value: 'asc'},
+                      {name: 'Last to First', value: 'desc'}
                     ]}
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Controls"/>
-                  <Toggle
-                    name="controls"
-                    value={this.state.controls}
-                    onChange={this.changeCheckboxValue}
-                  />
-                  <FieldHint text="Visible player controls"/>
-                </FormField>
-                <FormField>
-                  <Label text="Start Time"/>
-                  <NumberInput
-                    name="startTime"
-                    value={this.state.startTime}
-                    onChange={this.changeValue}
-                  />
-                  <FieldHint text="Beginning timestamp (seconds)"/>
-                </FormField>
-                <FormField>
-                  <Label text="End Time"/>
-                  <NumberInput
-                    name="endTime"
-                    value={this.state.endTime}
-                    onChange={this.changeValue}
-                  />
-                  <FieldHint text="Ending timestamp (seconds)"/>
-                </FormField>
-                <FormField>
                   <Label text="Last Updated"/>
                   <TextInput
-                    name="updateDateFormatted"
+                    name="updateDate"
                     value={updateDateFormatted}
                     disabled={true}
                   />
                 </FormField>
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
-                    title="Save Video"
+                    title="Save Album"
                     classes="button-primary"
                   />
                   <Button
@@ -265,8 +180,8 @@ class VideoEditTabView extends React.Component
             </Card>
           </Column>
           <Column className="utv-right-two-thirds-column">
-            <Card classes="utv-even-padding">
-              {this.getVideoPreview()}
+            <Card>
+              album thumbnails here
             </Card>
           </Column>
         </Columns>
@@ -275,4 +190,4 @@ class VideoEditTabView extends React.Component
   }
 }
 
-export default VideoEditTabView;
+export default AlbumEditTabView;

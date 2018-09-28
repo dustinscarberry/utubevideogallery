@@ -1,11 +1,14 @@
 import React from 'react';
-import Griddle from '../shared/griddle/Griddle';
+import Griddle from '../shared/Griddle';
+import TableRowActions from '../shared/TableRowActions';
 
 class GalleryTable extends React.Component
 {
   constructor(props)
   {
     super(props);
+
+    this.deleteGallery = this.deleteGallery.bind(this);
   }
 
   getHeaders()
@@ -16,21 +19,32 @@ class GalleryTable extends React.Component
         title: 'ID',
         sortable: true,
         sortDirection: 'desc',
-        width: '60px'
+        width: '75px'
       },
       {
-        key: 'title',
+        key: 'titleActions',
         title: 'Title',
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) =>
         {
-          return <a
-            onClick={() => this.props.changeGallery(row.id)}
-            href="javascript:void(0)"
-            className="utv-row-title">
-              {cellData}
-          </a>
+          return (
+            <div>
+              <a
+                onClick={() => this.props.changeGallery(row.id)}
+                href="javascript:void(0)"
+                className="utv-row-title">
+                  {cellData.title}
+              </a>
+              <TableRowActions
+                actions={[
+                  {text: 'Edit', onClick: () => this.props.changeView('editGallery', row.id)},
+                  {text: 'View', onClick: () => this.props.changeGallery(row.id)},
+                  {text: 'Delete', onClick: () => this.deleteGallery(row.id)}
+                ]}
+              />
+            </div>
+          );
         }
       },
       {
@@ -43,7 +57,15 @@ class GalleryTable extends React.Component
         key: 'dateAdded',
         title: 'Date Added',
         sortable: true,
-        sortDirection: ''
+        sortDirection: '',
+        formatter: (row, cellData) =>
+        {
+          let dateAdded = new Date(cellData * 1000);
+
+          return dateAdded.getFullYear()
+            + '/' + (dateAdded.getMonth() + 1)
+            + '/' + dateAdded.getDate();
+        }
       },
       {
         key: 'albumCount',
@@ -54,6 +76,17 @@ class GalleryTable extends React.Component
     ];
   }
 
+  async deleteGallery(galleryID)
+  {
+    if (confirm('Are you sure you want to delete this?'))
+    {
+      //fire ajax request
+
+
+
+    }
+  }
+
   getDataMapping(data)
   {
     let newData = [];
@@ -61,11 +94,10 @@ class GalleryTable extends React.Component
     for (let item of data)
     {
       let record = {};
-      let updateDate = new Date(item.updateDate * 1000);
       record.id = item.id;
-      record.title = item.title;
+      record.titleActions = {title: item.title};
       record.shortcode = '[utubevideo id="' + item.id + '"]';
-      record.dateAdded = updateDate.getFullYear() + '/' + (updateDate.getMonth() + 1) + '/' + updateDate.getDate();
+      record.dateAdded = item.updateDate;
       record.albumCount = item.albumCount;
       newData.push(record);
     }
