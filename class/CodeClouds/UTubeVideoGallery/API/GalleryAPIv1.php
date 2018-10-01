@@ -20,8 +20,18 @@ class GalleryAPIv1 extends APIv1
       $this->_namespace . '/' . $this->_version,
       '/galleries',
       [
-        'methods' => WP_REST_Server::READABLE,
-        'callback' => [$this, 'getAllItems']
+        [
+          'methods' => WP_REST_Server::READABLE,
+          'callback' => [$this, 'getAllItems']
+        ],
+        [
+          'methods' => WP_REST_Server::CREATABLE,
+          'callback' => [$this, 'createItem'],
+          'permission_callback' => function() {
+            return true;
+            //return current_user_can('edit_others_posts');
+          }
+        ]
       ]
     );
 
@@ -32,17 +42,6 @@ class GalleryAPIv1 extends APIv1
         [
           'methods' => WP_REST_Server::READABLE,
           'callback' => [$this, 'getItem'],
-          'args' => [
-            'galleryID'
-          ],
-          'permission_callback' => function() {
-            return true;
-            //return current_user_can('edit_others_posts');
-          }
-        ],
-        [
-          'methods' => WP_REST_Server::CREATABLE,
-          'callback' => [$this, 'createItem'],
           'args' => [
             'galleryID'
           ],
@@ -109,7 +108,33 @@ class GalleryAPIv1 extends APIv1
 
   public function createItem(WP_REST_Request $req)
   {
+    global $wpdb;
 
+    //gather data fields
+    $title = sanitize_text_field($req['title']);
+    $albumSorting = sanitize_text_field($req['albumSorting'] == 'desc' ? 'desc' : 'asc');
+    $thumbnailType = sanitize_text_field($req['thumbnailType'] == 'square' ? 'square' : 'rectangle');
+    $displayType = sanitize_text_field($req['displayType'] == 'video' ? 'video' : 'album');
+    $time = current_time('timestamp');
+
+    //check for required fields
+    if (empty($title) || empty($albumSorting) || empty($thumbnailType) || empty($displayType))
+      return $this->errorResponse('Invalid parameters');
+
+    //insert new gallery
+    if ($wpdb->insert(
+      $wpdb->prefix . 'utubevideo_dataset',
+      [
+        'DATA_NAME' => $title,
+        'DATA_SORT' => $albumSorting,
+        'DATA_THUMBTYPE' => $thumbnailType,
+        'DATA_DISPLAYTYPE' => $displayType,
+        'DATA_UPDATEDATE' => $time
+      ]
+    ))
+      return $this->response(null, 201);
+    else
+      return $this->errorResponse('A database error has occurred');
   }
 
   public function deleteItem(WP_REST_Request $req)

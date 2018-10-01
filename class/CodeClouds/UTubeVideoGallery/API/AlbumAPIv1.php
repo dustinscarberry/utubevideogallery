@@ -29,22 +29,24 @@ class AlbumAPIv1 extends APIv1
 
     register_rest_route(
       $this->_namespace . '/' . $this->_version,
+      'albums',
+      [
+        'methods' => WP_REST_Server::CREATABLE,
+        'callback' => [$this, 'createItem'],
+        'permission_callback' => function() {
+          return true;
+          //return current_user_can('edit_others_posts');
+        }
+      ]
+    );
+
+    register_rest_route(
+      $this->_namespace . '/' . $this->_version,
       'albums/(?P<albumID>\d+)',
       [
         [
           'methods' => WP_REST_Server::READABLE,
           'callback' => [$this, 'getItem'],
-          'args' => [
-            'albumID'
-          ],
-          'permission_callback' => function() {
-            return true;
-            //return current_user_can('edit_others_posts');
-          }
-        ],
-        [
-          'methods' => WP_REST_Server::CREATABLE,
-          'callback' => [$this, 'createItem'],
           'args' => [
             'albumID'
           ],
@@ -114,6 +116,54 @@ class AlbumAPIv1 extends APIv1
 
   public function createItem(WP_REST_Request $req)
   {
+    global $wpdb;
+
+    //gather data fields
+    $title = sanitize_text_field($req['title']);
+    $videoSorting = ($req['videoSorting'] == 'desc' ? 'desc' : 'asc');
+    $galleryID = sanitize_key($req['albumID']);
+    $time = current_time('timestamp');
+
+    //check for required fields
+    if (empty($title) || empty($videoSorting) || !isset($galleryID))
+      return $this->errorResponse('Invalid parameters');
+
+
+
+/*
+
+
+    $slug = utvAdminGen::generateSlug($albumName, $wpdb);
+
+    //get current album count for gallery//
+    $albumCount = $wpdb->get_results('SELECT COUNT(ALB_ID) AS ALB_COUNT FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $galleryID, ARRAY_A)[0];
+    $nextSortPos = $albumCount['ALB_COUNT'];
+
+    //insert new album
+    if ($wpdb->insert(
+      $wpdb->prefix . 'utubevideo_album',
+      [
+        'ALB_NAME' => $albumName,
+        'ALB_SLUG' => $slug,
+        'ALB_THUMB' => 'missing',
+        'ALB_SORT' => $videoSort,
+        'ALB_UPDATEDATE' => $time,
+        'ALB_POS' => $nextSortPos,
+        'DATA_ID' => $galleryID
+      ]
+    ))
+      utvAdminGen::printMessage(__('Video album created', 'utvg'), 'success', true, true);
+    else
+      utvAdminGen::printMessage(__('Error: Something went wrong', 'utvg'), 'error');
+
+
+*/
+
+
+
+
+
+
 
   }
 
@@ -134,7 +184,7 @@ class AlbumAPIv1 extends APIv1
 
     global $wpdb;
     $albums = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $req['galleryID'] . ' ORDER BY ALB_POS');
-    
+
     foreach ($albums as $album)
     {
       $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VIDEO_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $req['galleryID']);

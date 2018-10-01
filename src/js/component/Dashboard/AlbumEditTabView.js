@@ -55,19 +55,14 @@ class AlbumEditTabView extends React.Component
     if (apiData.status == 200)
     {
       let data = apiData.data.data;
-/*
+
       this.setState({
         thumbnail: data.thumbnail,
-        source: data.source,
-        urlKey: data.url,
         title: data.title,
-        quality: data.quality,
-        controls: data.showChrome,
-        startTime: data.startTime,
-        endTime: data.endTime,
-        updateDate: data.updateDate
+        videoSorting: data.sortDirection,
+        updateDate: data.updateDate,
+        gallery: data.galleryID
       });
-      */
     }
   }
 

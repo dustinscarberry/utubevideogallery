@@ -245,7 +245,7 @@
   }
 
   .utv-left-fixed-single-column{
-    width: 600px;
+    width: 1000px;
   }
 
   @media screen and (max-width: 1200px)
@@ -281,8 +281,8 @@
   input[type=url],
   select{
     width: 100%;
-    /*height: auto;*/
-    padding: 5px;
+    height: 100%;
+    padding: 6px;
   }
 
   .utv-hint{

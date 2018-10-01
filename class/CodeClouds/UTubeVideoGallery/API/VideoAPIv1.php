@@ -185,7 +185,7 @@ class VideoAPIv1 extends APIv1
       return $this->response(null, 201);
     }
     else
-      return $this->errorResponse('An unexpected error has occurred');
+      return $this->errorResponse('A database error has occurred');
   }
 
   public function deleteItem(WP_REST_Request $req)
@@ -194,7 +194,7 @@ class VideoAPIv1 extends APIv1
 
 
 
-    
+
 
 
 

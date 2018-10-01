@@ -77,7 +77,7 @@ class Dashboard extends React.Component
         changeView={this.changeView}
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
-        currentViewID={this.currentViewID}
+        currentViewID={this.state.currentViewID}
       />
     else if (this.state.currentView == 'addVideo')
       return <VideoAddTabView

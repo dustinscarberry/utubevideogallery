@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import Card from '../shared/Card';
 import Columns from '../shared/Columns';
 import Column from '../shared/Column';
@@ -25,9 +26,9 @@ class GalleryAddTabView extends React.Component
 
     this.state = {
       title: '',
-      albumSorting: undefined,
-      thumbnailType: undefined,
-      displayType: undefined
+      albumSorting: 'asc',
+      thumbnailType: 'rectangle',
+      displayType: 'album'
     };
 
     this.changeValue = this.changeValue.bind(this);
@@ -39,9 +40,27 @@ class GalleryAddTabView extends React.Component
     this.setState({[event.target.name]: event.target.value});
   }
 
-  addGallery()
+  async addGallery()
   {
+    let apiData = await axios.post(
+      '/wp-json/utubevideogallery/v1/galleries/',
+      {
+        title: this.state.title,
+        albumSorting: this.state.albumSorting,
+        thumbnailType: this.state.thumbnailType,
+        displayType: this.state.displayType
+      },
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
 
+    console.log(apiData);
+
+    if (apiData.status == 201)
+    {
+      this.props.changeView(undefined);
+    }
   }
 
   render()
@@ -80,6 +99,7 @@ class GalleryAddTabView extends React.Component
                       {name: 'First to Last', value: 'asc'},
                       {name: 'Last to First', value: 'desc'}
                     ]}
+                    required={true}
                   />
                 </FormField>
                 <FormField>
@@ -92,6 +112,7 @@ class GalleryAddTabView extends React.Component
                       {name: 'Rectangle', value: 'rectangle'},
                       {name: 'Square', value: 'square'}
                     ]}
+                    required={true}
                   />
                 </FormField>
                 <FormField>
@@ -104,6 +125,7 @@ class GalleryAddTabView extends React.Component
                       {name: 'Albums', value: 'album'},
                       {name: 'Just Videos', value: 'video'}
                     ]}
+                    required={true}
                   />
                 </FormField>
                 <FormField classes="utv-formfield-action">

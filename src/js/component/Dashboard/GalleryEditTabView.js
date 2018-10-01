@@ -24,12 +24,11 @@ class GalleryEditTabView extends React.Component
     super(props);
 
     this.state = {
-      thumbnail: undefined,
       title: '',
-      videoSorting: undefined,
-      updateDate: undefined,
-      gallery: undefined,
-      galleries: undefined
+      albumSorting: undefined,
+      thumbnailType: undefined,
+      displayType: undefined,
+      updateDate: undefined
     };
 
     this.changeValue = this.changeValue.bind(this);
@@ -45,7 +44,7 @@ class GalleryEditTabView extends React.Component
   async loadData()
   {
     let apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/albums/' + this.props.currentViewID,
+      '/wp-json/utubevideogallery/v1/galleries/' + this.props.currentViewID,
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
@@ -54,19 +53,14 @@ class GalleryEditTabView extends React.Component
     if (apiData.status == 200)
     {
       let data = apiData.data.data;
-/*
+
       this.setState({
-        thumbnail: data.thumbnail,
-        source: data.source,
-        urlKey: data.url,
         title: data.title,
-        quality: data.quality,
-        controls: data.showChrome,
-        startTime: data.startTime,
-        endTime: data.endTime,
+        albumSorting: data.sortDirection,
+        thumbnailType: data.thumbnailType,
+        displayType: data.displayType,
         updateDate: data.updateDate
       });
-      */
     }
   }
 
@@ -120,23 +114,38 @@ class GalleryEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Gallery"/>
+                  <Label text="Album Sorting"/>
                   <SelectBox
-                    name="gallery"
-                    value={this.state.gallery}
-                    onChange={this.changeValue}
-                    data={this.state.galleries}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text="Video Sorting"/>
-                  <SelectBox
-                    name="videoSorting"
-                    value={this.state.videoSorting}
+                    name="albumSorting"
+                    value={this.state.albumSorting}
                     onChange={this.changeValue}
                     data={[
                       {name: 'First to Last', value: 'asc'},
                       {name: 'Last to First', value: 'desc'}
+                    ]}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Thumbnail Type"/>
+                  <SelectBox
+                    name="thumbnailType"
+                    value={this.state.thumbnailType}
+                    onChange={this.changeValue}
+                    data={[
+                      {name: 'Rectangle', value: 'rectangle'},
+                      {name: 'Square', value: 'square'}
+                    ]}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Display Type"/>
+                  <SelectBox
+                    name="displayType"
+                    value={this.state.displayType}
+                    onChange={this.changeValue}
+                    data={[
+                      {name: 'Albums', value: 'album'},
+                      {name: 'Just Videos', value: 'video'}
                     ]}
                   />
                 </FormField>
@@ -150,7 +159,7 @@ class GalleryEditTabView extends React.Component
                 </FormField>
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
-                    title="Save Album"
+                    title="Save Gallery"
                     classes="button-primary"
                   />
                   <Button
