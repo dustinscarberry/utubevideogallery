@@ -71,6 +71,7 @@ class Dashboard extends React.Component
       return <AlbumAddTabView
         changeView={this.changeView}
         changeGallery={this.changeGallery}
+        selectedGallery={this.state.selectedGallery}
       />
     else if (this.state.currentView == 'editAlbum')
       return <AlbumEditTabView

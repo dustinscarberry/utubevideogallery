@@ -5,6 +5,7 @@ use CodeClouds\UTubeVideoGallery\API\APIv1;
 use WP_REST_Request;
 use WP_REST_Server;
 use stdClass;
+use utvAdminGen;
 
 class AlbumAPIv1 extends APIv1
 {
@@ -116,55 +117,49 @@ class AlbumAPIv1 extends APIv1
 
   public function createItem(WP_REST_Request $req)
   {
+    //require helper classes
+    require_once(dirname(__FILE__) . '/../../../utvAdminGen.php');
+    utvAdminGen::initialize([]);
+
     global $wpdb;
 
     //gather data fields
     $title = sanitize_text_field($req['title']);
     $videoSorting = ($req['videoSorting'] == 'desc' ? 'desc' : 'asc');
-    $galleryID = sanitize_key($req['albumID']);
+    $galleryID = sanitize_key($req['galleryID']);
     $time = current_time('timestamp');
 
     //check for required fields
     if (empty($title) || empty($videoSorting) || !isset($galleryID))
       return $this->errorResponse('Invalid parameters');
 
+    //get next album sorting position
+    $nextAlbumPosition = $wpdb->get_results('SELECT COUNT(ALB_ID) AS ALBUM_COUNT FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $galleryID);
 
+    if ($nextAlbumPosition)
+      $nextAlbumPosition = $nextAlbumPosition[0]->ALBUM_COUNT;
+    else
+      $nextAlbumPosition = 0;
 
-/*
-
-
-    $slug = utvAdminGen::generateSlug($albumName, $wpdb);
-
-    //get current album count for gallery//
-    $albumCount = $wpdb->get_results('SELECT COUNT(ALB_ID) AS ALB_COUNT FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $galleryID, ARRAY_A)[0];
-    $nextSortPos = $albumCount['ALB_COUNT'];
+    //generate slug and store for possible use in future
+    $slug = utvAdminGen::generateSlug($title, $wpdb);
 
     //insert new album
     if ($wpdb->insert(
       $wpdb->prefix . 'utubevideo_album',
       [
-        'ALB_NAME' => $albumName,
+        'ALB_NAME' => $title,
         'ALB_SLUG' => $slug,
         'ALB_THUMB' => 'missing',
-        'ALB_SORT' => $videoSort,
+        'ALB_SORT' => $videoSorting,
         'ALB_UPDATEDATE' => $time,
-        'ALB_POS' => $nextSortPos,
+        'ALB_POS' => $nextAlbumPosition,
         'DATA_ID' => $galleryID
       ]
     ))
-      utvAdminGen::printMessage(__('Video album created', 'utvg'), 'success', true, true);
+      return $this->response(null, 201);
     else
-      utvAdminGen::printMessage(__('Error: Something went wrong', 'utvg'), 'error');
-
-
-*/
-
-
-
-
-
-
-
+      return $this->errorResponse('A database error has occurred');
   }
 
   public function deleteItem(WP_REST_Request $req)

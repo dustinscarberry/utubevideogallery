@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import Card from '../shared/Card';
 import Columns from '../shared/Columns';
 import Column from '../shared/Column';
@@ -25,7 +26,7 @@ class AlbumAddTabView extends React.Component
 
     this.state = {
       title: '',
-      videoSorting: undefined
+      videoSorting: 'asc'
     };
 
     this.changeValue = this.changeValue.bind(this);
@@ -37,9 +38,24 @@ class AlbumAddTabView extends React.Component
     this.setState({[event.target.name]: event.target.value});
   }
 
-  addAlbum()
+  async addAlbum()
   {
+    let apiData = await axios.post(
+      '/wp-json/utubevideogallery/v1/albums/',
+      {
+        title: this.state.title,
+        videoSorting: this.state.videoSorting,
+        galleryID: this.props.selectedGallery
+      },
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
 
+    if (apiData.status == 201)
+    {
+      this.props.changeView(undefined);
+    }
   }
 
   render()
@@ -57,7 +73,7 @@ class AlbumAddTabView extends React.Component
             <Card>
               <SectionHeader text="Add Album"/>
               <Form
-                submit={this.addGallery}
+                submit={this.addAlbum}
                 errorclass="utv-invalid-feedback"
               >
                 <FormField>
@@ -79,6 +95,7 @@ class AlbumAddTabView extends React.Component
                       {name: 'First to Last', value: 'asc'},
                       {name: 'Last to First', value: 'desc'}
                     ]}
+                    required={true}
                   />
                 </FormField>
                 <FormField classes="utv-formfield-action">

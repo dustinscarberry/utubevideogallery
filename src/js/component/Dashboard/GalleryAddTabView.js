@@ -55,8 +55,6 @@ class GalleryAddTabView extends React.Component
       }
     );
 
-    console.log(apiData);
-
     if (apiData.status == 201)
     {
       this.props.changeView(undefined);
