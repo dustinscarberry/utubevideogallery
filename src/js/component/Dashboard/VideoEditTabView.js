@@ -69,7 +69,8 @@ class VideoEditTabView extends React.Component
         controls: data.showChrome,
         startTime: data.startTime,
         endTime: data.endTime,
-        updateDate: data.updateDate
+        updateDate: data.updateDate,
+        album: data.albumID
       });
     }
   }
@@ -104,9 +105,30 @@ class VideoEditTabView extends React.Component
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  saveVideo()
+  async saveVideo()
   {
-    console.log('savevideo');
+    let apiData = await axios.patch(
+      '/wp-json/utubevideogallery/v1/videos/'
+      + this.props.currentViewID,
+      {
+        title: this.state.title,
+        quality: this.state.quality,
+        controls: this.state.controls,
+        startTime: this.state.startTime,
+        endTime: this.state.endTime,
+        albumID: this.state.album
+      },
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+
+    console.log(apiData);
+
+    if (apiData.status == 200)
+    {
+      this.props.changeView(undefined);
+    }
   }
 
   getVideoPreview()

@@ -8,6 +8,15 @@ use WP_REST_Server;
 use stdClass;
 use utvAdminGen;
 
+
+
+
+
+//thumbnail
+////load
+////save
+
+
 class VideoAPIv1 extends APIv1
 {
   public function __construct()
@@ -117,9 +126,6 @@ class VideoAPIv1 extends APIv1
 
   public function createItem(WP_REST_Request $req)
   {
-
-
-
     //require helper classes
     require_once(dirname(__FILE__) . '/../../../utvAdminGen.php');
     utvAdminGen::initialize([]);
@@ -204,7 +210,112 @@ class VideoAPIv1 extends APIv1
 
   public function updateItem(WP_REST_Request $req)
   {
+    //require helper classes
+    require_once(dirname(__FILE__) . '/../../../utvAdminGen.php');
+    utvAdminGen::initialize([]);
 
+    global $wpdb;
+
+    //check for valid videoID
+    if (!$req['videoID'])
+      return $this->errorResponse('Invalid Video ID');
+
+    //gather data fields
+    $title = sanitize_text_field($req['title']);
+    $quality = sanitize_text_field($req['quality']);
+    $controls = ($req['controls'] ? 0 : 1);
+    $startTime = sanitize_text_field($req['startTime']);
+    $endTime = sanitize_text_field($req['endTime']);
+    $albumID = sanitize_key($req['albumID']);
+    $updateDate = current_time('timestamp');
+
+    //get thumbnail type
+    if ($albumID != null)
+    {
+      //get by new album id
+      $thumbnailType = $wpdb->get_results(
+        'SELECT d.DATA_THUMBTYPE AS THUMBNAIL_TYPE FROM '
+        . $wpdb->prefix . 'utubevideo_album a INNER JOIN '
+        . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID '
+        . 'WHERE a.ALB_ID = ' . $albumID
+      );
+    }
+    else
+    {
+      //get by current album id
+      $thumbnailType = $wpdb->get_results(
+        'SELECT d.DATA_THUMBTYPE AS THUMBNAIL_TYPE FROM '
+        . $wpdb->prefix . 'utubevideo_video v INNER JOIN '
+        . $wpdb->prefix . 'utubevideo_album a ON v.ALB_ID = a.ALB_ID INNER JOIN '
+        . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID '
+        . 'WHERE v.VID_ID = ' . $req['videoID']
+      );
+    }
+
+    if (!isset($thumbnailType[0]->THUMBNAIL_TYPE))
+      return $this->errorResponse('Cannot determine thumbnail type');
+
+    $thumbnailType = $thumbnailType[0]->THUMBNAIL_TYPE;
+
+    //get video source
+    $thumbnailData = $wpdb->get_results(
+      'SELECT VID_ID, VID_SOURCE, VID_URL FROM '
+      . $wpdb->prefix . 'utubevideo_video '
+      . 'WHERE VID_ID = ' . $req['videoID']
+    );
+
+    if (!$thumbnailData)
+      return $this->errorResponse('Cannot determine video source data');
+
+    $thumbnailData = $thumbnailData[0];
+
+    //regenerate video thumbnail
+    if ($thumbnailData->VID_SOURCE == 'youtube')
+      $sourceURL = 'http://img.youtube.com/vi/' . $thumbnailData->VID_URL . '/0.jpg';
+    elseif ($thumbnailData->VID_SOURCE == 'vimeo')
+    {
+      $data = utvAdminGen::queryAPI('https://vimeo.com/api/v2/video/' . $thumbnailData->VID_URL . '.json')[0];
+      $sourceURL = $data['thumbnail_large'];
+    }
+
+    if (!utvAdminGen::saveThumbnail($sourceURL, $thumbnailData->VID_URL . $thumbnailData->VID_ID, $thumbnailType))
+      return $this->errorResponse('Video thumbnail refresh failed');
+
+    //create updatedFields array
+    $updatedFields = [];
+
+    //set optional update fields
+    if ($title != null)
+      $updatedFields['VID_NAME'] = $title;
+
+    if ($quality != null)
+      $updatedFields['VID_QUALITY'] = $quality;
+
+    if ($controls != null)
+      $updatedFields['VID_CHROME'] = $controls;
+
+    if ($startTime != null)
+      $updatedFields['VID_STARTTIME'] = $startTime;
+
+    if ($endTime != null)
+      $updatedFields['VID_ENDTIME'] = $endTime;
+
+    if ($albumID != null)
+      $updatedFields['ALB_ID'] = $albumID;
+
+    //set required update fields
+    $updatedFields['VID_UPDATEDATE'] = $updateDate;
+    $updatedFields['VID_THUMBTYPE'] = $thumbnailType;
+
+    //update database entry
+    if ($wpdb->update(
+      $wpdb->prefix . 'utubevideo_video',
+      $updatedFields,
+      ['VID_ID' => $req['videoID']]
+    ) >= 0)
+      return $this->response(null);
+    else
+      return $this->errorResponse('A database error has occurred');
   }
 
   public function getAllItems(WP_REST_Request $req)
