@@ -3,24 +3,19 @@
 namespace CodeClouds\UTubeVideoGallery\API;
 
 use CodeClouds\UTubeVideoGallery\API\APIv1;
+use CodeClouds\UTubeVideoGallery\Shared\Thumbnail;
 use WP_REST_Request;
 use WP_REST_Server;
 use stdClass;
 use utvAdminGen;
 
-
-
-
-
-//thumbnail
-////load
-////save
-
-
 class VideoAPIv1 extends APIv1
 {
-  public function __construct()
+  private $_options;
+
+  public function __construct($options)
   {
+    $this->_options = $options;
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
@@ -229,58 +224,6 @@ class VideoAPIv1 extends APIv1
     $albumID = sanitize_key($req['albumID']);
     $updateDate = current_time('timestamp');
 
-    //get thumbnail type
-    if ($albumID != null)
-    {
-      //get by new album id
-      $thumbnailType = $wpdb->get_results(
-        'SELECT d.DATA_THUMBTYPE AS THUMBNAIL_TYPE FROM '
-        . $wpdb->prefix . 'utubevideo_album a INNER JOIN '
-        . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID '
-        . 'WHERE a.ALB_ID = ' . $albumID
-      );
-    }
-    else
-    {
-      //get by current album id
-      $thumbnailType = $wpdb->get_results(
-        'SELECT d.DATA_THUMBTYPE AS THUMBNAIL_TYPE FROM '
-        . $wpdb->prefix . 'utubevideo_video v INNER JOIN '
-        . $wpdb->prefix . 'utubevideo_album a ON v.ALB_ID = a.ALB_ID INNER JOIN '
-        . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID '
-        . 'WHERE v.VID_ID = ' . $req['videoID']
-      );
-    }
-
-    if (!isset($thumbnailType[0]->THUMBNAIL_TYPE))
-      return $this->errorResponse('Cannot determine thumbnail type');
-
-    $thumbnailType = $thumbnailType[0]->THUMBNAIL_TYPE;
-
-    //get video source
-    $thumbnailData = $wpdb->get_results(
-      'SELECT VID_ID, VID_SOURCE, VID_URL FROM '
-      . $wpdb->prefix . 'utubevideo_video '
-      . 'WHERE VID_ID = ' . $req['videoID']
-    );
-
-    if (!$thumbnailData)
-      return $this->errorResponse('Cannot determine video source data');
-
-    $thumbnailData = $thumbnailData[0];
-
-    //regenerate video thumbnail
-    if ($thumbnailData->VID_SOURCE == 'youtube')
-      $sourceURL = 'http://img.youtube.com/vi/' . $thumbnailData->VID_URL . '/0.jpg';
-    elseif ($thumbnailData->VID_SOURCE == 'vimeo')
-    {
-      $data = utvAdminGen::queryAPI('https://vimeo.com/api/v2/video/' . $thumbnailData->VID_URL . '.json')[0];
-      $sourceURL = $data['thumbnail_large'];
-    }
-
-    if (!utvAdminGen::saveThumbnail($sourceURL, $thumbnailData->VID_URL . $thumbnailData->VID_ID, $thumbnailType))
-      return $this->errorResponse('Video thumbnail refresh failed');
-
     //create updatedFields array
     $updatedFields = [];
 
@@ -305,7 +248,7 @@ class VideoAPIv1 extends APIv1
 
     //set required update fields
     $updatedFields['VID_UPDATEDATE'] = $updateDate;
-    $updatedFields['VID_THUMBTYPE'] = $thumbnailType;
+    $updatedFields['VID_THUMBTYPE'] = 'default';
 
     //update database entry
     if ($wpdb->update(
@@ -313,7 +256,15 @@ class VideoAPIv1 extends APIv1
       $updatedFields,
       ['VID_ID' => $req['videoID']]
     ) >= 0)
+    {
+      $thumbnail = new Thumbnail($req['videoID'], $this->_options);
+
+return $thumbnail->save();
+      if (!$thumbnail->save())
+        return $this->errorResponse('Video thumbnail refresh failed');
+
       return $this->response(null);
+    }
     else
       return $this->errorResponse('A database error has occurred');
   }
