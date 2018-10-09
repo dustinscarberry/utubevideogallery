@@ -111,7 +111,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       //hook APIs
       $galleryAPI = new GalleryAPIv1($this->_options);
       $albumAPI = new AlbumAPIv1($this->_options);
-      $videoAPI = new VideoAPIv1($this->_options);
+      $videoAPI = new VideoAPIv1();
       $galleryDataAPI = new GalleryDataAPIv1($this->_options);
     }
 

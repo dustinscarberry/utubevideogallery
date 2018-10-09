@@ -13,7 +13,7 @@ class VideoAPIv1 extends APIv1
 {
   private $_options;
 
-  public function __construct($options)
+  public function __construct()
   {
     $this->_options = $options;
     add_action('rest_api_init', [$this, 'registerRoutes']);
@@ -121,10 +121,6 @@ class VideoAPIv1 extends APIv1
 
   public function createItem(WP_REST_Request $req)
   {
-    //require helper classes
-    require_once(dirname(__FILE__) . '/../../../utvAdminGen.php');
-    utvAdminGen::initialize([]);
-
     global $wpdb;
 
     //gather data fields
@@ -147,15 +143,6 @@ class VideoAPIv1 extends APIv1
     $gallery = $wpdb->get_results('SELECT DATA_THUMBTYPE FROM ' . $wpdb->prefix . 'utubevideo_album a INNER JOIN ' . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID WHERE a.ALB_ID = ' . $albumID)[0];
     $nextSortPos = $videoCount->VID_COUNT;
 
-    //get source thumbnail
-    if ($source == 'youtube')
-      $sourceThumbnail = 'http://img.youtube.com/vi/' . $urlKey . '/0.jpg';
-    elseif ($source == 'vimeo')
-    {
-      $data = utvAdminGen::queryAPI('https://vimeo.com/api/v2/video/' . $urlKey . '.json');
-      $sourceThumbnail = $data[0]['thumbnail_large'];
-    }
-
     //insert new video
     if ($wpdb->insert(
       $wpdb->prefix . 'utubevideo_video',
@@ -177,10 +164,12 @@ class VideoAPIv1 extends APIv1
       //get last insert id and save thumbnail
       $videoID = $wpdb->insert_id;
 
-      if (!utvAdminGen::saveThumbnail($sourceThumbnail, $urlKey . $videoID, $gallery->DATA_THUMBTYPE))
+      $thumbnail = new Thumbnail($videoID);
+
+      if (!$thumbnail->save())
       {
         $wpdb->query('DELETE FROM ' . $wpdb->prefix . 'utubevideo_video WHERE VID_ID ="' . $videoID . '"');
-        return $this->errorResponse('Video thumbnail save error');
+        return $this->errorResponse('Video thumbnail failed to save');
       }
 
       return $this->response(null, 201);
@@ -257,9 +246,8 @@ class VideoAPIv1 extends APIv1
       ['VID_ID' => $req['videoID']]
     ) >= 0)
     {
-      $thumbnail = new Thumbnail($req['videoID'], $this->_options);
+      $thumbnail = new Thumbnail($req['videoID']);
 
-return $thumbnail->save();
       if (!$thumbnail->save())
         return $this->errorResponse('Video thumbnail refresh failed');
 

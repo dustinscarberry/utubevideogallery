@@ -4,7 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Shared;
 
 class Thumbnail
 {
-  private $_options;
+  private $_pluginOptions;
   private $_destinationPath;
   private $_videoID;
   private $_videoSource;
@@ -14,39 +14,36 @@ class Thumbnail
   private $_imageQuality = 95;
   private $_4kImageQuality = 65;
 
-  public function __construct($videoID, $options)
+  //constructor
+  public function __construct($videoID, $options = [])
   {
-    $this->_options = $options;
+    $this->_videoID = $videoID;
+    $this->_pluginOptions = get_option('utubevideo_main_opts');
 
     $dir = wp_upload_dir();
     $this->_destinationPath = $dir['basedir'] . '/utubevideo-cache/';
   }
 
+  //load data and save thumbnails
   public function save()
   {
-    global $wpdb;
-
-    if (!$videoID)
+    if (!$this->_videoID)
       return false;
 
     $this->setThumbnailData();
     $this->setSourceURL();
 
-    return 'yes';
-
-return $this->saveThumbnail();
     if (!$this->saveThumbnail())
       return false;
 
     return true;
   }
 
+  //save thumbnails
   private function saveThumbnail()
   {
     $image = wp_get_image_editor($this->_sourceURL);
     $baseFilename = $this->_videoSlug . $this->_videoID;
-
-    return $baseFilename;
 
     if (is_wp_error($image))
     {
@@ -58,36 +55,39 @@ return $this->saveThumbnail();
 
     if ($this->_thumbnailType == 'square')
     {
-      $image->resize($this->_options['thumbnailWidth'] * 2, $this->_options['thumbnailWidth'] * 2, true);
-      $image->set_quality(65);
+      $image->resize($this->_pluginOptions['thumbnailWidth'] * 2, $this->_pluginOptions['thumbnailWidth'] * 2, true);
+      $image->set_quality($this->_4kImageQuality);
       $image->save($this->_destinationPath . $baseFilename . '@2x.jpg');
 
-      $image->resize($this->_options['thumbnailWidth'], $this->_options['thumbnailWidth'], true);
-      $image->set_quality(95);
+      $image->resize($this->_pluginOptions['thumbnailWidth'], $this->_pluginOptions['thumbnailWidth'], true);
+      $image->set_quality($this->_imageQuality);
       $image->save($this->_destinationPath . $baseFilename . '.jpg');
     }
     else
     {
-      $image->resize($this->_options['thumbnailWidth'] * 2, $this->_options['thumbnailWidth'] * 2);
-      $image->set_quality(65);
+      $image->resize($this->_pluginOptions['thumbnailWidth'] * 2, $this->_pluginOptions['thumbnailWidth'] * 2);
+      $image->set_quality($this->_4kImageQuality);
       $image->save($this->_destinationPath . $baseFilename . '@2x.jpg');
 
-      $image->resize($this->_options['thumbnailWidth'], $this->_options['thumbnailWidth']);
-      $image->set_quality(95);
+      $image->resize($this->_pluginOptions['thumbnailWidth'], $this->_pluginOptions['thumbnailWidth']);
+      $image->set_quality($this->_imageQuality);
       $image->save($this->_destinationPath . $baseFilename . '.jpg');
     }
 
     return true;
   }
 
+  //load thumbnail data
   private function setThumbnailData()
   {
+    global $wpdb;
+
     $thumbnailData = $wpdb->get_results(
       'SELECT d.DATA_THUMBTYPE AS THUMBNAIL_TYPE, v.VID_ID AS VIDEO_ID, v.VID_SOURCE AS VIDEO_SOURCE, v.VID_URL AS VIDEO_SLUG FROM '
       . $wpdb->prefix . 'utubevideo_video v INNER JOIN '
       . $wpdb->prefix . 'utubevideo_album a ON v.ALB_ID = a.ALB_ID INNER JOIN '
       . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID '
-      . 'WHERE v.VID_ID = ' . $videoID
+      . 'WHERE v.VID_ID = ' . $this->_videoID
     );
 
     if (!$thumbnailData)
@@ -102,22 +102,20 @@ return $this->saveThumbnail();
 
   private function setSourceURL()
   {
-    $thumbnailData = $this->getThumbnailData();
-
-    if ($thumbnailData->VIDEO_SOURCE == 'youtube')
+    if ($this->_videoSource == 'youtube')
       $this->_sourceURL = $this->getYouTubeSource();
-    elseif ($thumbnailData->VIDEO_SOURCE == 'vimeo')
+    elseif ($this->_videoSource == 'vimeo')
       $this->_sourceURL = $this->getVimeoSource();
   }
 
   private function getYouTubeSource()
   {
-    return 'https://img.youtube.com/vi/' . $thumbnailData->VID_URL . '/0.jpg';
+    return 'https://img.youtube.com/vi/' . $this->_videoSlug . '/0.jpg';
   }
 
   private function getVimeoSource()
   {
-    $data = $this->queryAPI('https://vimeo.com/api/v2/video/' . $thumbnailData->VID_URL . '.json');
+    $data = $this->queryAPI('https://vimeo.com/api/v2/video/' . $this->_videoSlug . '.json');
     return $data['thumbnail_large'];
   }
 
