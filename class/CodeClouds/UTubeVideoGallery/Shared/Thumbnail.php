@@ -110,13 +110,29 @@ class Thumbnail
 
   private function getYouTubeSource()
   {
-    return 'https://img.youtube.com/vi/' . $this->_videoSlug . '/0.jpg';
+    $data = $this->queryAPI('https://www.googleapis.com/youtube/v3/videos?part=id,snippet&id=' . $this->_videoSlug . '&key=' . $this->_pluginOptions['youtubeApiKey']);
+
+    if (!$data)
+      return false;
+
+    $thumbnailSources = $data->items[0]->snippet->thumbnails;
+
+    end($thumbnailSources);
+    $thumbnailKey = key($thumbnailSources);
+
+    return $thumbnailSources->{$thumbnailKey}->url;
   }
 
   private function getVimeoSource()
   {
     $data = $this->queryAPI('https://vimeo.com/api/v2/video/' . $this->_videoSlug . '.json');
-    return $data['thumbnail_large'];
+
+    if (!$data)
+      return false;
+
+    $data = $data[0];
+
+    return $data->thumbnail_large;
   }
 
   private function queryAPI($query)

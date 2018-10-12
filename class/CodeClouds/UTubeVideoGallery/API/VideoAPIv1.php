@@ -60,8 +60,7 @@ class VideoAPIv1 extends APIv1
             'videoID'
           ],
           'permission_callback' => function() {
-            return true;
-            //return current_user_can('edit_others_posts');
+            return current_user_can('edit_others_posts');
           }
         ],
         [
@@ -71,8 +70,7 @@ class VideoAPIv1 extends APIv1
             'videoID'
           ],
           'permission_callback' => function() {
-            return true;
-            //return current_user_can('edit_others_posts');
+            return current_user_can('edit_others_posts');
           }
         ],
         [
@@ -82,8 +80,7 @@ class VideoAPIv1 extends APIv1
             'videoID'
           ],
           'permission_callback' => function() {
-            return true;
-            //return current_user_can('edit_others_posts');
+            return current_user_can('edit_others_posts');
           }
         ]
       ]
@@ -195,8 +192,8 @@ class VideoAPIv1 extends APIv1
   public function updateItem(WP_REST_Request $req)
   {
     //require helper classes
-    require_once(dirname(__FILE__) . '/../../../utvAdminGen.php');
-    utvAdminGen::initialize([]);
+    //require_once(dirname(__FILE__) . '/../../../utvAdminGen.php');
+    //utvAdminGen::initialize([]);
 
     global $wpdb;
 
