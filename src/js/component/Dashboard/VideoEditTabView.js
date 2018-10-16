@@ -15,6 +15,7 @@ import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
 import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import Loader from '../shared/Loader';
 import axios from 'axios';
 
 class VideoEditTabView extends React.Component
@@ -33,7 +34,8 @@ class VideoEditTabView extends React.Component
       endTime: undefined,
       updateDate: undefined,
       album: undefined,
-      albums: undefined
+      albums: undefined,
+      loading: true
     };
 
     this.changeValue = this.changeValue.bind(this);
@@ -41,10 +43,13 @@ class VideoEditTabView extends React.Component
     this.saveVideo = this.saveVideo.bind(this);
   }
 
-  componentDidMount()
+  async componentDidMount()
   {
-    this.loadData();
-    this.loadAlbums();
+    //load api data
+    await Promise.all([this.loadData(), this.loadAlbums()]);
+    
+    //set loading state
+    this.setState({loading: false});
   }
 
   async loadData()
@@ -70,7 +75,8 @@ class VideoEditTabView extends React.Component
         startTime: data.startTime,
         endTime: data.endTime,
         updateDate: data.updateDate,
-        album: data.albumID
+        album: data.albumID,
+        loading: false
       });
     }
   }
@@ -180,6 +186,10 @@ class VideoEditTabView extends React.Component
       + (updateDate.getMonth() + 1)
       + '/'
       + updateDate.getDate();
+
+    //show loader while form is loading
+    if (this.state.loading)
+      return <Loader/>;
 
     return (
       <div>

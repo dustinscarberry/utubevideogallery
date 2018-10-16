@@ -15,6 +15,7 @@ import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
 import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import Loader from '../shared/Loader';
 import axios from 'axios';
 
 class AlbumEditTabView extends React.Component
@@ -29,7 +30,8 @@ class AlbumEditTabView extends React.Component
       videoSorting: undefined,
       updateDate: undefined,
       gallery: undefined,
-      galleries: undefined
+      galleries: undefined,
+      loading: true
     };
 
     this.changeValue = this.changeValue.bind(this);
@@ -37,10 +39,13 @@ class AlbumEditTabView extends React.Component
     this.saveAlbum = this.saveAlbum.bind(this);
   }
 
-  componentDidMount()
+  async componentDidMount()
   {
-    this.loadData();
-    this.loadGalleries();
+    //load api data
+    await Promise.all([this.loadData(), this.loadGalleries()]);
+
+    //set loading state
+    this.setState({loading: false});
   }
 
   async loadData()
@@ -105,6 +110,9 @@ class AlbumEditTabView extends React.Component
       + (updateDate.getMonth() + 1)
       + '/'
       + updateDate.getDate();
+
+    if (this.state.loading)
+      return <Loader/>;
 
     return (
       <div>

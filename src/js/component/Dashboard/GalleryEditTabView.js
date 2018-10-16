@@ -15,6 +15,7 @@ import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
 import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import Loader from '../shared/Loader';
 import axios from 'axios';
 
 class GalleryEditTabView extends React.Component
@@ -28,7 +29,8 @@ class GalleryEditTabView extends React.Component
       albumSorting: undefined,
       thumbnailType: undefined,
       displayType: undefined,
-      updateDate: undefined
+      updateDate: undefined,
+      loading: true
     };
 
     this.changeValue = this.changeValue.bind(this);
@@ -36,9 +38,13 @@ class GalleryEditTabView extends React.Component
     this.saveGallery = this.saveGallery.bind(this);
   }
 
-  componentDidMount()
+  async componentDidMount()
   {
-    this.loadData();
+    //load api data
+    await this.loadData();
+
+    //set loading state
+    this.setState({loading: false});
   }
 
   async loadData()
@@ -87,6 +93,9 @@ class GalleryEditTabView extends React.Component
       + (updateDate.getMonth() + 1)
       + '/'
       + updateDate.getDate();
+
+    if (this.state.loading)
+      return <Loader/>;
 
     return (
       <div>
