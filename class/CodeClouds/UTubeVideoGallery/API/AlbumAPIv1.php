@@ -182,7 +182,7 @@ class AlbumAPIv1 extends APIv1
 
     foreach ($albums as $album)
     {
-      $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VIDEO_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $req['galleryID']);
+      $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VIDEO_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $album->ALB_ID);
 
       if ($videoCount)
         $videoCount = $videoCount[0]->VIDEO_COUNT;
