@@ -12,7 +12,7 @@ class Griddle extends React.Component
     super(props);
     this.state = {
       page: 1,
-      pageSize: 10,
+      pageSize: 25,
       sort: '',
       sortOrder: '',
       loading: true,
@@ -147,13 +147,22 @@ class Griddle extends React.Component
 
   render()
   {
+    let bulkActions = null;
+
+    //if (this.props.bulkActions)
+      //bulkActions = <BulkActions actions={this.props.bulkActions}/>
+
+/*
+
+  <PageRecords
+    pageSize={this.state.pageSize}
+    updatePageSize={this.updatePageSize}
+    recordLabel={this.props.recordLabel}
+  />*/
+
+
     return (
       <div>
-        <PageRecords
-          pageSize={this.state.pageSize}
-          updatePageSize={this.updatePageSize}
-          recordLabel={this.props.recordLabel}
-        />
         <Table
           headers={this.props.headers}
           data={this.state.data}

@@ -204,6 +204,53 @@
   padding: .3rem .5rem;
 }
 
+.ccgriddle-table-pagination-first,
+.ccgriddle-table-pagination-previous,
+.ccgriddle-table-pagination-next,
+.ccgriddle-table-pagination-last{
+  font-weight: 900;
+  font-family: "Font Awesome 5 Free";
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  padding: 5px;
+  border: 1px solid #ccc;
+  background-color: #e5e5e5;
+  color: #0073aa;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.ccgriddle-table-pagination-first:before{
+  content: "\f053\f053";
+}
+
+.ccgriddle-table-pagination-previous:before{
+  content: "\f053";
+}
+
+.ccgriddle-table-pagination-next:before{
+  content: "\f054";
+}
+
+.ccgriddle-table-pagination-last:before{
+  content: "\f054\f054";
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 

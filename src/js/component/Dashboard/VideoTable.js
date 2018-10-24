@@ -96,6 +96,18 @@ class VideoTable extends React.Component
     ];
   }
 
+  getBulkActions()
+  {
+    return [
+      {
+        title: 'DeleteME',
+        callback: () => {
+          alert('why u do that?');
+        }
+      }
+    ];
+  }
+
   getDataMapping(data)
   {
     let newData = [];
@@ -137,6 +149,7 @@ class VideoTable extends React.Component
       recordLabel="videos"
       apiLoadPath={'/wp-json/utubevideogallery/v1/albums/' + this.props.selectedAlbum + '/videos'}
       dataMapper={this.getDataMapping}
+      bulkActions={this.getBulkActions()}
     />
   }
 }
