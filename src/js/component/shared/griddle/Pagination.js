@@ -2,43 +2,51 @@ import React from 'react';
 
 const Pagination = (props) =>
 {
-  let prevButton = undefined;
+  let previousButton = undefined;
   let nextButton = undefined;
-  let totalPages = Math.ceil(props.recordCount / props.pageSize) || undefined;
+  let firstButton = undefined;
+  let lastButton = undefined;
+
+  let maxPage = Math.ceil(props.recordCount / props.pageSize) || undefined;
 
   if (props.page == 1)
-    prevButton = <button className="btn btn-secondary" disabled>Previous</button>
+  {
+    previousButton = <button className="ccgriddle-table-pagination-previous" disabled></button>
+    firstButton = <button className="ccgriddle-table-pagination-first" disabled></button>
+  }
   else
-    prevButton = <button className="btn btn-secondary" onClick={props.updatePagePrevious}>Previous</button>
+  {
+    previousButton = <button className="ccgriddle-table-pagination-previous" onClick={() => props.updatePage(props.page - 1)}></button>
+    firstButton = <button className="ccgriddle-table-pagination-first" onClick={() => props.updatePage(1)}></button>
+  }
 
-  if (props.page == totalPages)
-    nextButton = <button className="btn btn-secondary" disabled>Next</button>
+  if (props.page == maxPage)
+  {
+    nextButton = <button className="ccgriddle-table-pagination-next" disabled></button>
+    lastButton = <button className="ccgriddle-table-pagination-last" disabled></button>
+  }
   else
-    nextButton = <button className="btn btn-secondary" onClick={props.updatePageNext}>Next</button>
-
-    prevButton = null;
-    nextButton = null;
+  {
+    nextButton = <button className="ccgriddle-table-pagination-next" onClick={() => props.updatePage(props.page + 1)}></button>
+    lastButton = <button className="ccgriddle-table-pagination-last" onClick={() => props.updatePage(maxPage)}></button>
+  }
 
   return (
     <div className="ccgriddle-table-pagination">
-
-
-
-
-
-      <span className="ccgriddle-table-pagination-first"></span>
-      <span className="ccgriddle-table-pagination-previous"></span>
-      <input type="number" className="form-control" min="1" max={totalPages} value={props.pageLabel} onChange={props.updatePageLabel} onBlur={props.blurPageLabel}/>
-      <span>of {totalPages}</span>
-      <span className="ccgriddle-table-pagination-next"></span>
-      <span className="ccgriddle-table-pagination-last"></span>
-
-
-
-      {prevButton}
-
-
+      {firstButton}
+      {previousButton}
+      <input
+        type="number"
+        className="form-control"
+        min="1"
+        max={maxPage}
+        value={props.page}
+        onChange={props.updatePageLabel}
+        onBlur={props.blurPageLabel}
+      />
+      <span>of {maxPage}</span>
       {nextButton}
+      {lastButton}
     </div>
   );
 }

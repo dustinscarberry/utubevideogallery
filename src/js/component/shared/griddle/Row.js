@@ -1,5 +1,6 @@
 import React from 'react';
 import Cell from './Cell';
+import CheckboxCell from './CheckboxCell';
 
 const Row = (props) =>
 {
@@ -12,6 +13,9 @@ const Row = (props) =>
 
     return (<Cell key={x.key} data={cellData}/>);
   });
+
+  if (props.useBulkActions)
+    cells.unshift(<CheckboxCell key={props.index} idKey={props.rowData['id']}/>);
 
   return (
     <tr>

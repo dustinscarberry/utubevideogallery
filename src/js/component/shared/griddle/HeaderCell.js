@@ -9,7 +9,7 @@ const HeaderCell = (props) =>
       style={props.styles}
       onClick={props.updateColumnSort}
     >
-      {props.text}
+      {props.data}
     </th>
   );
 }

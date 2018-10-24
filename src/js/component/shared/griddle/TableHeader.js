@@ -1,9 +1,12 @@
 import React from 'react';
 import HeaderCell from './HeaderCell';
+import HeaderCheckboxCell from './HeaderCheckboxCell';
 
 const TableHeader = (props) =>
 {
-  const headers = props.headers.map(x =>
+  let headers = [];
+
+  headers = props.headers.map(x =>
   {
     let classes = '';
     let styles = {};
@@ -18,11 +21,14 @@ const TableHeader = (props) =>
       else
         classes = 'sortable';
 
-      return (<HeaderCell key={x.key} text={x.title} classes={classes} styles={styles} updateColumnSort={props.updateColumnSort} indexKey={x.key}/>);
+      return (<HeaderCell key={x.key} data={x.title} classes={classes} styles={styles} updateColumnSort={props.updateColumnSort} indexKey={x.key}/>);
     }
     else
-      return (<HeaderCell key={x.key} styles={styles} text={x.title}/>);
+      return (<HeaderCell key={x.key} styles={styles} data={x.title}/>);
   });
+
+  if (props.useBulkActions)
+    headers.unshift(<HeaderCheckboxCell key="header-checkbox" styles={{}}/>);
 
   return (
     <thead>

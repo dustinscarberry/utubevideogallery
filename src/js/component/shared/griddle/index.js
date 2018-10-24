@@ -4,6 +4,7 @@ import Table from './Table';
 import PageRecords from './PageRecords';
 import TableStatus from './TableStatus';
 import Pagination from './Pagination';
+import BulkActions from './BulkActions';
 
 class Griddle extends React.Component
 {
@@ -22,10 +23,7 @@ class Griddle extends React.Component
     };
 
     //bind functions
-    this.updatePageSize = this.updatePageSize.bind(this);
     this.updatePage = this.updatePage.bind(this);
-    this.updatePagePrevious = this.updatePagePrevious.bind(this);
-    this.updatePageNext = this.updatePageNext.bind(this);
     this.updatePageLabel = this.updatePageLabel.bind(this);
     this.blurPageLabel = this.blurPageLabel.bind(this);
     this.updateColumnSort = this.updateColumnSort.bind(this);
@@ -52,14 +50,10 @@ class Griddle extends React.Component
    // this.setState({headers: this.props.headers});
   //}
 
-  async updatePageSize(e)
-  {
-    await this.setState({pageSize: e.target.value, page: 1, pageLabel: 1});
-  }
-
   async updatePage(page)
   {
-    await this.setState({page: page, pageLabel: page});
+    if (page > 0)
+      await this.setState({page: page, pageLabel: page});
   }
 
   async loadData()
@@ -99,22 +93,6 @@ class Griddle extends React.Component
       this.setState({pageLabel: this.state.page});
   }
 
-  updatePageNext()
-  {
-    let page = this.state.page + 1;
-
-    if (page >= 1)
-      this.updatePage(page);
-  }
-
-  updatePagePrevious()
-  {
-    let page = this.state.page - 1;
-
-    if (page >= 1)
-      this.updatePage(page);
-  }
-
   async updateColumnSort(e)
   {
     /*let key = e.target.getAttribute('data-key');
@@ -147,22 +125,37 @@ class Griddle extends React.Component
 
   render()
   {
-    let bulkActions = null;
+    let bulkActions = undefined;
+    let useBulkActions = false;
 
-    //if (this.props.bulkActions)
-      //bulkActions = <BulkActions actions={this.props.bulkActions}/>
+    if (this.props.bulkActions)
+    {
+      bulkActions = <BulkActions actionData={this.props.bulkActions}/>
+      useBulkActions = true;
+    }
 
-/*
 
-  <PageRecords
-    pageSize={this.state.pageSize}
-    updatePageSize={this.updatePageSize}
-    recordLabel={this.props.recordLabel}
-  />*/
+
+
+    /*<PageRecords
+      pageSize={this.state.pageSize}
+      updatePageSize={this.updatePageSize}
+      recordLabel={this.props.recordLabel}
+    />*/
 
 
     return (
       <div>
+        {bulkActions}
+        <Pagination
+          page={this.state.page}
+          pageSize={this.state.pageSize}
+          recordCount={this.state.data.length}
+          pageLabel={this.state.pageLabel}
+          updatePage={this.updatePage}
+          updatePageLabel={this.updatePageLabel}
+          blurPageLabel={this.blurPageLabel}
+        />
         <Table
           headers={this.props.headers}
           data={this.state.data}
@@ -170,6 +163,7 @@ class Griddle extends React.Component
           loading={this.state.loading}
           page={this.state.page}
           pageSize={this.state.pageSize}
+          useBulkActions={useBulkActions}
         />
         <TableStatus
           page={this.state.page}
@@ -182,8 +176,7 @@ class Griddle extends React.Component
           pageSize={this.state.pageSize}
           recordCount={this.state.data.length}
           pageLabel={this.state.pageLabel}
-          updatePagePrevious={this.updatePagePrevious}
-          updatePageNext={this.updatePageNext}
+          updatePage={this.updatePage}
           updatePageLabel={this.updatePageLabel}
           blurPageLabel={this.blurPageLabel}
         />
@@ -191,5 +184,10 @@ class Griddle extends React.Component
     );
   }
 }
+
+Griddle.defaultProps = {
+  key: 'id',
+  bulkActions: undefined
+};
 
 export default Griddle;

@@ -15,12 +15,14 @@ const Table = (props) =>
       <TableHeader
         headers={props.headers}
         updateColumnSort={props.updateColumnSort}
+        useBulkActions={props.useBulkActions}
       />
       <TableBody
         headers={props.headers}
         data={props.data}
         page={props.page}
         pageSize={props.pageSize}
+        useBulkActions={props.useBulkActions}
       />
     </table>
   );

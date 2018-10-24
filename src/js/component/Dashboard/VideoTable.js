@@ -17,13 +17,6 @@ class VideoTable extends React.Component
   {
     return [
       {
-        key: 'id',
-        title: 'ID',
-        sortable: true,
-        sortDirection: 'desc',
-        width: '75px'
-      },
-      {
         key: 'thumbnail',
         title: 'Thumbnail',
         sortable: false,
@@ -98,14 +91,26 @@ class VideoTable extends React.Component
 
   getBulkActions()
   {
-    return [
-      {
-        title: 'DeleteME',
-        callback: () => {
-          alert('why u do that?');
+    return {
+      options: [
+        {
+          name: 'Delete',
+          key: 'delete'
+        },
+        {
+          name: 'Publish',
+          key: 'publish'
+        },
+        {
+          name: 'Un-Publish',
+          key: 'unpublish'
         }
+      ],
+      callback: (key, items) =>
+      {
+        alert('why u do that?');
       }
-    ];
+    };
   }
 
   getDataMapping(data)
@@ -115,7 +120,7 @@ class VideoTable extends React.Component
     for (let item of data)
     {
       let record = {};
-      record.id =  item.id;
+      record.id = item.id;
       record.thumbnail = item.thumbnail;
       record.titleActions = {title: item.title, url: item.url};
       record.published = item.published;
@@ -146,6 +151,7 @@ class VideoTable extends React.Component
   {
     return <Griddle
       headers={this.getHeaders()}
+      key="id"//this is the key value from the mapped data to use for row ids, bulk actions / reordering, defaults to id
       recordLabel="videos"
       apiLoadPath={'/wp-json/utubevideogallery/v1/albums/' + this.props.selectedAlbum + '/videos'}
       dataMapper={this.getDataMapping}

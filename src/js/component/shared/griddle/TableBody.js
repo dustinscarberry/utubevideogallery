@@ -12,8 +12,10 @@ const TableBody = (props) =>
   let rows = data.map((x, index) =>
     <Row
       key={index}
+      index={index}
       rowData={x}
       headers={props.headers}
+      useBulkActions={props.useBulkActions}
     />
   );
 
