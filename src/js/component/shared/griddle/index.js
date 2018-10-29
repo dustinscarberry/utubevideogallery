@@ -19,7 +19,11 @@ class Griddle extends React.Component
       loading: true,
       //headers: undefined,
       data: [],
-      pageLabel: 1
+      pageLabel: 1,
+
+
+
+      bulkAction: undefined
     };
 
     //bind functions
@@ -28,6 +32,10 @@ class Griddle extends React.Component
     this.blurPageLabel = this.blurPageLabel.bind(this);
     this.updateColumnSort = this.updateColumnSort.bind(this);
     this.loadData = this.loadData.bind(this);
+    this.toggleRowCheckbox = this.toggleRowCheckbox.bind(this);
+    this.toggleAllRowCheckboxes = this.toggleAllRowCheckboxes.bind(this);
+    this.runBulkAction = this.runBulkAction.bind(this);
+    this.updateBulkAction = this.updateBulkAction.bind(this);
     //this.setHeaders = this.setHeaders.bind(this);
   }
 
@@ -58,18 +66,67 @@ class Griddle extends React.Component
 
   async loadData()
   {
+    //set loading status and fetch data
     await this.setState({loading: true});
     let apiData = await axios.get(this.props.apiLoadPath);
 
+    //if api responds add data to state
     if (apiData.status == 200)
     {
+      //run data through user defined mapper function
       let data = this.props.dataMapper(apiData.data.data);
+
+      //if bulk actions enabled, add rowSelected property
+      if (this.props.enableBulkActions)
+      {
+        data = data.map((item) => {
+          item.rowSelected = false;
+          return item;
+        });
+      }
 
       this.setState({
         data: data,
         loading: false
       });
     }
+  }
+
+  toggleRowCheckbox(dataIndex)
+  {
+    //flip state of row selected
+    let data = this.state.data;
+    data[dataIndex].rowSelected = !data[dataIndex].rowSelected;
+
+    this.setState({data: data});
+  }
+
+  toggleAllRowCheckboxes(e)
+  {
+    let data = this.state.data;
+
+    let startIndex = (this.state.page - 1) * this.state.pageSize;
+    let endIndex = startIndex + this.state.pageSize;
+
+    if (data.length < endIndex)
+      endIndex = data.length;
+
+    for (let i = startIndex; i < endIndex; i++)
+      data[i].rowSelected = e.target.checked;
+
+    this.setState({data: data});
+  }
+
+  runBulkAction()
+  {
+    let selectedData = this.state.data.filter(x => x.rowSelected);
+
+    this.props.bulkActionsData.callback(this.state.bulkAction, selectedData);
+  }
+
+  updateBulkAction(e)
+  {
+    this.setState({bulkAction: e.target.value})
   }
 
   updatePageLabel(e)
@@ -126,15 +183,14 @@ class Griddle extends React.Component
   render()
   {
     let bulkActions = undefined;
-    let useBulkActions = false;
 
-    if (this.props.bulkActions)
-    {
-      bulkActions = <BulkActions actionData={this.props.bulkActions}/>
-      useBulkActions = true;
-    }
-
-
+    if (this.props.enableBulkActions && this.props.bulkActionsData)
+      bulkActions = <BulkActions
+        actionData={this.props.bulkActionsData}
+        runBulkAction={this.runBulkAction}
+        updateBulkAction={this.updateBulkAction}
+        bulkAction={this.state.bulkAction}
+      />
 
 
     /*<PageRecords
@@ -163,7 +219,10 @@ class Griddle extends React.Component
           loading={this.state.loading}
           page={this.state.page}
           pageSize={this.state.pageSize}
-          useBulkActions={useBulkActions}
+          toggleRowCheckbox={this.toggleRowCheckbox}
+          toggleAllRowCheckboxes={this.toggleAllRowCheckboxes}
+          enableBulkActions={this.props.enableBulkActions}
+          rowKey={this.props.rowKey}
         />
         <TableStatus
           page={this.state.page}
@@ -186,8 +245,9 @@ class Griddle extends React.Component
 }
 
 Griddle.defaultProps = {
-  key: 'id',
-  bulkActions: undefined
+  rowKey: 'id',
+  enableBulkActions: true,
+  bulkActionsData: undefined
 };
 
 export default Griddle;

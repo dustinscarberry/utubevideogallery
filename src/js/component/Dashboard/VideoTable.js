@@ -95,22 +95,42 @@ class VideoTable extends React.Component
       options: [
         {
           name: 'Delete',
-          key: 'delete'
+          value: 'delete'
         },
         {
           name: 'Publish',
-          key: 'publish'
+          value: 'publish'
         },
         {
           name: 'Un-Publish',
-          key: 'unpublish'
+          value: 'unpublish'
         }
       ],
       callback: (key, items) =>
       {
-        alert('why u do that?');
+        if (key == 'delete')
+          this.deleteItems(items);
+        else if (key == 'publish')
+          this.publishItems(items);
+        else if (key == 'unpublish')
+          this.unpublishItems(items);
       }
     };
+  }
+
+  deleteItems()
+  {
+
+  }
+
+  publishItems()
+  {
+
+  }
+
+  unpublishItems()
+  {
+    
   }
 
   getDataMapping(data)
@@ -155,7 +175,7 @@ class VideoTable extends React.Component
       recordLabel="videos"
       apiLoadPath={'/wp-json/utubevideogallery/v1/albums/' + this.props.selectedAlbum + '/videos'}
       dataMapper={this.getDataMapping}
-      bulkActions={this.getBulkActions()}
+      bulkActionsData={this.getBulkActions()}
     />
   }
 }

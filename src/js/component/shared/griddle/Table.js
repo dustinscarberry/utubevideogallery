@@ -16,6 +16,8 @@ const Table = (props) =>
         headers={props.headers}
         updateColumnSort={props.updateColumnSort}
         useBulkActions={props.useBulkActions}
+        toggleAllRowCheckboxes={props.toggleAllRowCheckboxes}
+        enableBulkActions={props.enableBulkActions}
       />
       <TableBody
         headers={props.headers}
@@ -23,6 +25,9 @@ const Table = (props) =>
         page={props.page}
         pageSize={props.pageSize}
         useBulkActions={props.useBulkActions}
+        toggleRowCheckbox={props.toggleRowCheckbox}
+        enableBulkActions={props.enableBulkActions}
+        rowKey={props.rowKey}
       />
     </table>
   );

@@ -6,7 +6,8 @@ const CheckboxCell = (props) =>
     <td>
       <input
         type="checkbox"
-        onClick={() => console.log(props.idKey)}
+        checked={props.isChecked}
+        onClick={() => props.toggleRowCheckbox(props.dataIndex)}
       />
     </td>
   );

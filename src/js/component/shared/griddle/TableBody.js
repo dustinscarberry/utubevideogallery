@@ -16,6 +16,9 @@ const TableBody = (props) =>
       rowData={x}
       headers={props.headers}
       useBulkActions={props.useBulkActions}
+      enableBulkActions={props.enableBulkActions}
+      toggleRowCheckbox={props.toggleRowCheckbox}
+      rowKey={props.rowKey}
     />
   );
 

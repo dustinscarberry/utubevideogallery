@@ -27,8 +27,8 @@ const TableHeader = (props) =>
       return (<HeaderCell key={x.key} styles={styles} data={x.title}/>);
   });
 
-  if (props.useBulkActions)
-    headers.unshift(<HeaderCheckboxCell key="header-checkbox" styles={{}}/>);
+  if (props.enableBulkActions)
+    headers.unshift(<HeaderCheckboxCell key="header-checkbox" toggleAllRowCheckboxes={props.toggleAllRowCheckboxes}/>);
 
   return (
     <thead>

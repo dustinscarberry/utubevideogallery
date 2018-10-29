@@ -4,7 +4,7 @@ const HeaderCheckboxCell = (props) =>
 {
   return (
     <th className="ccgriddle-checkbox-header">
-      <input type="checkbox"/>
+      <input type="checkbox" onClick={props.toggleAllRowCheckboxes}/>
     </th>
   );
 }

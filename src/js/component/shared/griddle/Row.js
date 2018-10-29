@@ -4,6 +4,7 @@ import CheckboxCell from './CheckboxCell';
 
 const Row = (props) =>
 {
+  //build array of cells for row
   const cells = props.headers.map(x =>
   {
     let cellData = props.rowData[x.key];
@@ -14,8 +15,18 @@ const Row = (props) =>
     return (<Cell key={x.key} data={cellData}/>);
   });
 
-  if (props.useBulkActions)
-    cells.unshift(<CheckboxCell key={props.index} idKey={props.rowData['id']}/>);
+  //add checkbox cell if bulk actions enabled
+  if (props.enableBulkActions)
+    cells.unshift(
+      <CheckboxCell
+        key={props.index}
+
+        isChecked={props.rowData.rowSelected}
+        dataIndex={props.index}
+
+        toggleRowCheckbox={props.toggleRowCheckbox}
+      />
+    );
 
   return (
     <tr>
