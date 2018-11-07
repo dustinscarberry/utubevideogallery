@@ -19,7 +19,6 @@ class GriddleDND extends React.Component
 
     //bind functions
     this.updateColumnSort = this.updateColumnSort.bind(this);
-    this.loadData = this.loadData.bind(this);
     this.toggleRowCheckbox = this.toggleRowCheckbox.bind(this);
     this.toggleAllRowCheckboxes = this.toggleAllRowCheckboxes.bind(this);
     this.runBulkAction = this.runBulkAction.bind(this);
@@ -30,6 +29,7 @@ class GriddleDND extends React.Component
   componentDidMount()
   {
     this.loadData();
+    this.initializeBulkActions();
   }
 
   componentWillReceiveProps(nextProps)
@@ -101,6 +101,21 @@ class GriddleDND extends React.Component
       data[i].rowSelected = e.target.checked;
 
     this.setState({data});
+  }
+
+  //initialize starting bulk action into state
+  initializeBulkActions()
+  {
+    const {
+      enableBulkActions,
+      bulkActionsData
+    } = this.props;
+
+    if (enableBulkActions && bulkActionsData.options.length > 0)
+    {
+      const defaultBulkAction = bulkActionsData.options[0].value;
+      this.setState({bulkAction: defaultBulkAction});
+    }
   }
 
   //run outside bulkaction
@@ -216,7 +231,7 @@ class GriddleDND extends React.Component
 }
 
 GriddleDND.defaultProps = {
-  enableBulkActions: true,
+  enableBulkActions: false,
   bulkActionsData: undefined,
   enableDragNDrop: true,
   recordLabel: 'items'

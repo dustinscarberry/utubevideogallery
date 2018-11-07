@@ -14,7 +14,8 @@ class VideoTable extends React.Component
 
     this.togglePublishStatus = this.togglePublishStatus.bind(this);
     this.deleteVideo = this.deleteVideo.bind(this);
-    this.deleteVideos = this.deleteVideos.bind(this);
+    this.deleteVideoPrompt = this.deleteVideoPrompt.bind(this);
+    this.deleteVideosPrompt = this.deleteVideosPrompt.bind(this);
     this.publishVideos = this.publishVideos.bind(this);
     this.unpublishVideos = this.unpublishVideos.bind(this);
   }
@@ -115,7 +116,7 @@ class VideoTable extends React.Component
       callback: (key, items) =>
       {
         if (key == 'delete')
-          this.deleteVideos(items);
+          this.deleteVideosPrompt(items);
         else if (key == 'publish')
           this.publishVideos(items);
         else if (key == 'unpublish')
@@ -124,10 +125,13 @@ class VideoTable extends React.Component
     };
   }
 
-  deleteVideos(items)
+  deleteVideosPrompt(items)
   {
-    for (let item of items)
-      this.deleteVideo(item.id);
+    if (confirm('Are you sure you want to delete these videos?'))
+    {
+      for (let item of items)
+        this.deleteVideo(item.id);
+    }
   }
 
   publishVideos()
@@ -164,23 +168,23 @@ class VideoTable extends React.Component
 
   }
 
-  
+  deleteVideoPrompt(videoID)
+  {
+    if (confirm('Are you sure you want to delete this video?'))
+      this.deleteVideo(videoID);
+  }
 
   async deleteVideo(videoID)
   {
-    if (confirm('Are you sure you want to delete this?'))
-    {
-      //fire ajax request
-      const rsp = await axios.delete(
-        '/wp-json/utubevideogallery/v1/videos/' + videoID,
-        {
-          headers: {'X-WP-Nonce': utvJSData.restNonce}
-        }
-      );
+    const rsp = await axios.delete(
+      '/wp-json/utubevideogallery/v1/videos/' + videoID,
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
 
-      if (rsp.status == 200)
-        this.setState({rand: Math.random()});
-    }
+    if (rsp.status == 200)
+      this.setState({rand: Math.random()});
   }
 
   render()
@@ -190,6 +194,7 @@ class VideoTable extends React.Component
       recordLabel="videos"
       apiLoadPath={'/wp-json/utubevideogallery/v1/albums/' + this.props.selectedAlbum + '/videos?' + this.state.rand}
       dataMapper={this.getDataMapping}
+      enableBulkActions={true}
       bulkActionsData={this.getBulkActions()}
     />
   }
