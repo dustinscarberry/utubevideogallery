@@ -1,5 +1,6 @@
 import React from 'react';
 import Griddle from '../shared/Griddle';
+import GriddleDND from '../shared/GriddleDND';
 import TableRowActions from '../shared/TableRowActions';
 import axios from 'axios';
 
@@ -33,7 +34,7 @@ class VideoTable extends React.Component
         }
       },
       {
-        key: 'titleActions',
+        key: 'title',
         title: 'Title',
         sortable: true,
         sortDirection: '',
@@ -41,12 +42,12 @@ class VideoTable extends React.Component
         {
           return (
             <div>
-              <span className="utv-row-title">{cellData.title}</span>
+              <span className="utv-row-title">{cellData}</span>
               <TableRowActions
                 actions={[
                   {text: 'Edit', onClick: () => this.props.changeView('editVideo', row.id)},
-                  {text: 'Watch', link: 'https://youtu.be/' + cellData.url},
-                  {text: 'Delete', onClick: () => this.deleteVideo(row.id)}
+                  {text: 'Watch', link: 'https://youtu.be/' + row.url},
+                  {text: 'Delete', onClick: () => this.deleteVideo([row.id])}
                 ]}
               />
             </div>
@@ -118,7 +119,7 @@ class VideoTable extends React.Component
     };
   }
 
-  deleteItems()
+  deleteItems(itemIDs)
   {
 
   }
@@ -130,7 +131,7 @@ class VideoTable extends React.Component
 
   unpublishItems()
   {
-    
+
   }
 
   getDataMapping(data)
@@ -142,7 +143,8 @@ class VideoTable extends React.Component
       let record = {};
       record.id = item.id;
       record.thumbnail = item.thumbnail;
-      record.titleActions = {title: item.title, url: item.url};
+      record.title = item.title;
+      record.url = item.url;
       record.published = item.published;
       record.dateAdded = item.updateDate;
       newData.push(record);
@@ -161,7 +163,8 @@ class VideoTable extends React.Component
     if (confirm('Are you sure you want to delete this?'))
     {
       //fire ajax request
-
+      this.forceUpdate();
+      console.log('deleteme');
 
 
     }
@@ -169,7 +172,7 @@ class VideoTable extends React.Component
 
   render()
   {
-    return <Griddle
+    return <GriddleDND
       headers={this.getHeaders()}
       key="id"//this is the key value from the mapped data to use for row ids, bulk actions / reordering, defaults to id
       recordLabel="videos"
