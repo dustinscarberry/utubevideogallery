@@ -1,5 +1,5 @@
 import React from 'react';
-import Griddle from '../shared/Griddle';
+import GriddleDND from '../shared/GriddleDND';
 import TableRowActions from '../shared/TableRowActions';
 
 class GalleryTable extends React.Component
@@ -22,7 +22,7 @@ class GalleryTable extends React.Component
         width: '75px'
       },
       {
-        key: 'titleActions',
+        key: 'title',
         title: 'Title',
         sortable: true,
         sortDirection: '',
@@ -34,7 +34,7 @@ class GalleryTable extends React.Component
                 onClick={() => this.props.changeGallery(row.id)}
                 href="javascript:void(0)"
                 className="utv-row-title">
-                  {cellData.title}
+                  {cellData}
               </a>
               <TableRowActions
                 actions={[
@@ -95,7 +95,7 @@ class GalleryTable extends React.Component
     {
       let record = {};
       record.id = item.id;
-      record.titleActions = {title: item.title};
+      record.title = item.title;
       record.shortcode = '[utubevideo id="' + item.id + '"]';
       record.dateAdded = item.updateDate;
       record.albumCount = item.albumCount;
@@ -107,7 +107,7 @@ class GalleryTable extends React.Component
 
   render()
   {
-    return <Griddle
+    return <GriddleDND
       headers={this.getHeaders()}
       recordLabel="galleries"
       apiLoadPath="/wp-json/utubevideogallery/v1/galleries"

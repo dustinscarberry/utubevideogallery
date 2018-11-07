@@ -1,5 +1,4 @@
 import React from 'react';
-import Griddle from '../shared/Griddle';
 import GriddleDND from '../shared/GriddleDND';
 import TableRowActions from '../shared/TableRowActions';
 import axios from 'axios';
@@ -9,9 +8,15 @@ class VideoTable extends React.Component
   constructor(props)
   {
     super(props);
+    this.state = {
+      rand: undefined
+    };
 
     this.togglePublishStatus = this.togglePublishStatus.bind(this);
     this.deleteVideo = this.deleteVideo.bind(this);
+    this.deleteVideos = this.deleteVideos.bind(this);
+    this.publishVideos = this.publishVideos.bind(this);
+    this.unpublishVideos = this.unpublishVideos.bind(this);
   }
 
   getHeaders()
@@ -110,26 +115,27 @@ class VideoTable extends React.Component
       callback: (key, items) =>
       {
         if (key == 'delete')
-          this.deleteItems(items);
+          this.deleteVideos(items);
         else if (key == 'publish')
-          this.publishItems(items);
+          this.publishVideos(items);
         else if (key == 'unpublish')
-          this.unpublishItems(items);
+          this.unpublishVideos(items);
       }
     };
   }
 
-  deleteItems(itemIDs)
+  deleteVideos(items)
+  {
+    for (let item of items)
+      this.deleteVideo(item.id);
+  }
+
+  publishVideos()
   {
 
   }
 
-  publishItems()
-  {
-
-  }
-
-  unpublishItems()
+  unpublishVideos()
   {
 
   }
@@ -158,15 +164,22 @@ class VideoTable extends React.Component
 
   }
 
+  
+
   async deleteVideo(videoID)
   {
     if (confirm('Are you sure you want to delete this?'))
     {
       //fire ajax request
-      this.forceUpdate();
-      console.log('deleteme');
+      const rsp = await axios.delete(
+        '/wp-json/utubevideogallery/v1/videos/' + videoID,
+        {
+          headers: {'X-WP-Nonce': utvJSData.restNonce}
+        }
+      );
 
-
+      if (rsp.status == 200)
+        this.setState({rand: Math.random()});
     }
   }
 
@@ -174,9 +187,8 @@ class VideoTable extends React.Component
   {
     return <GriddleDND
       headers={this.getHeaders()}
-      key="id"//this is the key value from the mapped data to use for row ids, bulk actions / reordering, defaults to id
       recordLabel="videos"
-      apiLoadPath={'/wp-json/utubevideogallery/v1/albums/' + this.props.selectedAlbum + '/videos'}
+      apiLoadPath={'/wp-json/utubevideogallery/v1/albums/' + this.props.selectedAlbum + '/videos?' + this.state.rand}
       dataMapper={this.getDataMapping}
       bulkActionsData={this.getBulkActions()}
     />
