@@ -177,16 +177,25 @@ class VideoAPIv1 extends APIv1
 
   public function deleteItem(WP_REST_Request $req)
   {
+    global $wpdb;
 
+    //check for valid videoID
+    if (!$req['videoID'])
+      return $this->errorResponse('Invalid Video ID');
 
+    //gather fields
+    $ID = sanitize_key($req['videoID']);
 
-
-
-
-
-
-
-
+    //update database entry
+    if ($wpdb->delete(
+      $wpdb->prefix . 'utubevideo_video',
+      ['VID_ID' => $ID]
+    ))
+    {
+      //if successfull delete video thumbnail
+    }
+    else
+      return $this->errorResponse('A database error has occurred');
   }
 
   public function updateItem(WP_REST_Request $req)
