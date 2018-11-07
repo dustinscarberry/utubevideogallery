@@ -28,8 +28,7 @@ const TableHeader = (props) =>
     {
       classArray.push('sortable');
       updateColumnSortFunc = () => updateColumnSort(header.key);
-
-console.log(sortKey + ' ' + header.key);
+      
       if (sortKey == header.key)
         classArray.push('sortable-' + sortOrder)
     }
