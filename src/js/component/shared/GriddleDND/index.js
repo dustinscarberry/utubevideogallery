@@ -28,8 +28,11 @@ class GriddleDND extends React.Component
 
   componentDidMount()
   {
+    //set loading and load initial table data
+    this.setState({loading: true});
     this.loadData();
     this.initializeBulkActions();
+    this.setState({loading: false});
   }
 
   componentWillReceiveProps(nextProps)
@@ -40,8 +43,7 @@ class GriddleDND extends React.Component
 
   async loadData()
   {
-    //set loading status and fetch data
-    await this.setState({loading: true});
+    //fetch data
     let apiData = await axios.get(this.props.apiLoadPath);
 
     //if api responds add data to state
@@ -61,8 +63,7 @@ class GriddleDND extends React.Component
 
       //add items to table
       this.setState({
-        data: data,
-        loading: false
+        data: data
       });
     }
   }

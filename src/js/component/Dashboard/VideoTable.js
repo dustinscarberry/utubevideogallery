@@ -67,6 +67,7 @@ class VideoTable extends React.Component
         sortDirection: '',
         formatter: (row, cellData) =>
         {
+          console.log(cellData);
           if (cellData == 1)
             return <i
               onClick={() => this.togglePublishStatus(row.id, 0)}
@@ -134,15 +135,18 @@ class VideoTable extends React.Component
     }
   }
 
-  publishVideos()
+  publishVideos(items)
   {
-
+    for (let item of items)
+      this.togglePublishStatus(item.id, 1);
   }
 
-  unpublishVideos()
+  unpublishVideos(items)
   {
-
+    for (let item of items)
+      this.togglePublishStatus(item.id, 0);
   }
+
 
   getDataMapping(data)
   {
@@ -165,7 +169,20 @@ class VideoTable extends React.Component
 
   async togglePublishStatus(videoID, changeTo)
   {
+    const rsp = await axios.patch(
+      '/wp-json/utubevideogallery/v1/videos/'
+      + videoID,
+      {
+        published: changeTo,
+        skipThumbnailRender: true
+      },
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
 
+    if (rsp.status == 200)
+      this.setState({rand: Math.random()});
   }
 
   deleteVideoPrompt(videoID)

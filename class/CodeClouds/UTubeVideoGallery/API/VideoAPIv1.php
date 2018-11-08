@@ -213,11 +213,13 @@ class VideoAPIv1 extends APIv1
     //gather data fields
     $title = sanitize_text_field($req['title']);
     $quality = sanitize_text_field($req['quality']);
-    $controls = ($req['controls'] ? 0 : 1);
+    $controls = $req['controls'] ? 0 : 1;
     $startTime = sanitize_text_field($req['startTime']);
     $endTime = sanitize_text_field($req['endTime']);
+    $published = $req['published'] ? 1 : 0;
     $albumID = sanitize_key($req['albumID']);
     $updateDate = current_time('timestamp');
+    $skipThumbnailRender = $req['skipThumbnailRender'] ? true : false;
 
     //create updatedFields array
     $updatedFields = [];
@@ -238,6 +240,8 @@ class VideoAPIv1 extends APIv1
     if ($endTime != null)
       $updatedFields['VID_ENDTIME'] = $endTime;
 
+    $updatedFields['VID_PUBLISH'] = $published;
+
     if ($albumID != null)
       $updatedFields['ALB_ID'] = $albumID;
 
@@ -252,11 +256,14 @@ class VideoAPIv1 extends APIv1
       ['VID_ID' => $req['videoID']]
     ) >= 0)
     {
-      $thumbnail = new Thumbnail($req['videoID']);
+      if (!$skipThumbnailRender)
+      {
+        $thumbnail = new Thumbnail($req['videoID']);
 
-      if (!$thumbnail->save())
-        return $this->errorResponse('Video thumbnail refresh failed');
-
+        if ($skipThumbnailRender && !$thumbnail->save())
+          return $this->errorResponse('Video thumbnail refresh failed');
+      }
+      
       return $this->response(null);
     }
     else
