@@ -202,6 +202,24 @@ class VideoTable extends React.Component
       this.setState({rand: Math.random()});
   }
 
+  async reorderRows(tableData)
+  {
+    if (!tableData)
+      return;
+
+    const videoIDs = tableData.map(item => item.id);
+
+    const rsp = await axios.patch(
+      '/wp-json/utubevideogallery/v1/videosorder',
+      {
+        videoids: videoIDs
+      },
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+  }
+
   render()
   {
     return <GriddleDND
@@ -216,6 +234,7 @@ class VideoTable extends React.Component
       dataMapper={this.getDataMapping}
       enableBulkActions={true}
       bulkActionsData={this.getBulkActions()}
+      reorderRows={this.reorderRows}
     />
   }
 }

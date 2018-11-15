@@ -80,7 +80,11 @@ class GriddleDND extends React.Component
     data.splice(hoverIndex, 0, dragRow);
 
     //update state
-		this.setState({data: data});
+		this.setState({data});
+
+    //call external reorder function
+    if (this.props.reorderRows)
+      this.props.reorderRows(data);
   }
 
   //check or uncheck row checkbox
@@ -235,7 +239,8 @@ GriddleDND.defaultProps = {
   enableBulkActions: false,
   bulkActionsData: undefined,
   enableDragNDrop: true,
-  recordLabel: 'items'
+  recordLabel: 'items',
+  reorderRows: undefined
 };
 
 export default GriddleDND;

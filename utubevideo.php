@@ -33,6 +33,8 @@ use CodeClouds\UTubeVideoGallery\API\GalleryAPIv1;
 use CodeClouds\UTubeVideoGallery\API\AlbumAPIv1;
 use CodeClouds\UTubeVideoGallery\API\VideoAPIv1;
 use CodeClouds\UTubeVideoGallery\API\GalleryDataAPIv1;
+use CodeClouds\UTubeVideoGallery\API\VideoOrderAPIv1;
+use CodeClouds\UTubeVideoGallery\API\AlbumOrderAPIv1;
 
 if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 {
@@ -64,19 +66,6 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       register_activation_hook(__FILE__, [$this, 'activate']);
 
       add_filter('query_vars', [$this, 'insert_query_vars']);
-
-
-
-      /////////////////////////
-      /////////////////////////
-      /////////////////////////
-      /////////////////////////
-      //FORCE UPGRADE DEVELOPER
-      //$this->maintenance();
-      /////////////////////////
-      /////////////////////////
-      /////////////////////////
-      /////////////////////////
     }
 
     //activate plugin
@@ -109,10 +98,12 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
     public function hookAPIs()
     {
       //hook APIs
-      $galleryAPI = new GalleryAPIv1($this->_options);
-      $albumAPI = new AlbumAPIv1($this->_options);
-      $videoAPI = new VideoAPIv1();
-      $galleryDataAPI = new GalleryDataAPIv1($this->_options);
+      new GalleryAPIv1();
+      new AlbumAPIv1();
+      new VideoAPIv1();
+      new GalleryDataAPIv1();
+      new VideoOrderAPIv1();
+      new AlbumOrderAPIv1();
     }
 
     //rewrite rules setup function

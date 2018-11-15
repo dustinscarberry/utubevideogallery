@@ -218,6 +218,27 @@ class AlbumTable extends React.Component
       this.setState({rand: Math.random()});
   }
 
+  async reorderRows(tableData)
+  {
+    if (!tableData)
+      return;
+
+    const albumIDs = tableData.map(item => item.id);
+
+    const rsp = await axios.patch(
+      '/wp-json/utubevideogallery/v1/albumsorder',
+      {
+        albumids: albumIDs
+      },
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+
+    console.log(rsp);
+    console.log(albumIDs);
+  }
+
   render()
   {
     return <GriddleDND
@@ -232,6 +253,7 @@ class AlbumTable extends React.Component
       dataMapper={this.getDataMapping}
       enableBulkActions={true}
       bulkActionsData={this.getBulkActions()}
+      reorderRows={this.reorderRows}
     />
   }
 }
