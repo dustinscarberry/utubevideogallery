@@ -70,7 +70,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
       $dir = $dir['baseurl'];
 
       $jsdata = [
-        'thumbCacheDirectory' => $dir . '/utubevideo-cache/',
+        'thumbnailCacheDirectory' => $dir . '/utubevideo-cache/',
         'translations' => [
           'confirmGalleryDelete' => __('Are you sure you want to delete this gallery?', 'utvg'),
           'confirmAlbumDelete' => __('Are you sure you want to delete this album?', 'utvg'),

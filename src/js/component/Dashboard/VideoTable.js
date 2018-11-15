@@ -33,7 +33,7 @@ class VideoTable extends React.Component
         {
           return <img
             onClick={() => this.props.changeView('editVideo', row.id)}
-            src={cellData}
+            src={utvJSData.thumbnailCacheDirectory + cellData + '.jpg'}
             className="utv-preview-thumb utv-is-clickable"
             data-rjs="2"
           />
@@ -67,7 +67,6 @@ class VideoTable extends React.Component
         sortDirection: '',
         formatter: (row, cellData) =>
         {
-          console.log(cellData);
           if (cellData == 1)
             return <i
               onClick={() => this.togglePublishStatus(row.id, 0)}
@@ -87,7 +86,7 @@ class VideoTable extends React.Component
         sortDirection: '',
         formatter: (row, cellData) =>
         {
-          let dateAdded = new Date(cellData * 1000);
+          const dateAdded = new Date(cellData * 1000);
 
           return dateAdded.getFullYear()
             + '/' + (dateAdded.getMonth() + 1)
@@ -146,7 +145,6 @@ class VideoTable extends React.Component
     for (let item of items)
       this.togglePublishStatus(item.id, 0);
   }
-
 
   getDataMapping(data)
   {
@@ -209,7 +207,12 @@ class VideoTable extends React.Component
     return <GriddleDND
       headers={this.getHeaders()}
       recordLabel="videos"
-      apiLoadPath={'/wp-json/utubevideogallery/v1/albums/' + this.props.selectedAlbum + '/videos?' + this.state.rand}
+      apiLoadPath={
+        '/wp-json/utubevideogallery/v1/albums/'
+        + this.props.selectedAlbum
+        + '/videos?'
+        + this.state.rand
+      }
       dataMapper={this.getDataMapping}
       enableBulkActions={true}
       bulkActionsData={this.getBulkActions()}

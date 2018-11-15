@@ -42,7 +42,8 @@ class VideoAPIv1 extends APIv1
       [
         'methods' => WP_REST_Server::CREATABLE,
         'callback' => [$this, 'createItem'],
-        'permission_callback' => function() {
+        'permission_callback' => function()
+        {
           return current_user_can('edit_others_posts');
         }
       ]
@@ -59,7 +60,8 @@ class VideoAPIv1 extends APIv1
           'args' => [
             'videoID'
           ],
-          'permission_callback' => function() {
+          'permission_callback' => function()
+          {
             return current_user_can('edit_others_posts');
           }
         ],
@@ -69,7 +71,8 @@ class VideoAPIv1 extends APIv1
           'args' => [
             'videoID'
           ],
-          'permission_callback' => function() {
+          'permission_callback' => function()
+          {
             return current_user_can('edit_others_posts');
           }
         ],
@@ -79,7 +82,8 @@ class VideoAPIv1 extends APIv1
           'args' => [
             'videoID'
           ],
-          'permission_callback' => function() {
+          'permission_callback' => function()
+          {
             return current_user_can('edit_others_posts');
           }
         ]
@@ -90,7 +94,6 @@ class VideoAPIv1 extends APIv1
   public function getItem(WP_REST_Request $req)
   {
     $videoData = new stdClass();
-    $thumbnailDirectory = wp_upload_dir()['baseurl'];
 
     global $wpdb;
     $video = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_video WHERE VID_ID = ' . $req['videoID']);
@@ -102,7 +105,7 @@ class VideoAPIv1 extends APIv1
     $videoData->id = $video->VID_ID;
     $videoData->title = $video->VID_NAME;
     $videoData->source = $video->VID_SOURCE;
-    $videoData->thumbnail = $thumbnailDirectory . '/utubevideo-cache/' . $video->VID_URL . $video->VID_ID . '.jpg';
+    $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
     $videoData->url = $video->VID_URL;
     $videoData->quality = $video->VID_QUALITY;
     $videoData->showChrome = $video->VID_CHROME;
@@ -181,44 +184,59 @@ class VideoAPIv1 extends APIv1
 
     //check for valid videoID
     if (!$req['videoID'])
-      return $this->errorResponse('Invalid Video ID');
+      return $this->errorResponse('Invalid video ID');
 
-    //gather fields
-    $ID = sanitize_key($req['videoID']);
+    //sanitize data
+    $videoID = sanitize_key($req['videoID']);
+
+    //get all videos in album
+    $video = $wpdb->get_results('SELECT VID_ID, VID_URL FROM ' . $wpdb->prefix . 'utubevideo_video WHERE VID_ID = ' . $videoID);
+
+    //check if video exists
+    if ($video)
+      $video = $video[0];
 
     //update database entry
-    if ($wpdb->delete(
+    if (!$wpdb->delete(
       $wpdb->prefix . 'utubevideo_video',
-      ['VID_ID' => $ID]
+      ['VID_ID' => $videoID]
     ))
-    {
-      //if successfull delete video thumbnail
-    }
-    else
       return $this->errorResponse('A database error has occurred');
+
+    //delete video thumbnail
+    $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
+    unlink($thumbnailPath . $video->VID_URL . $video->VID_ID . '.jpg');
+
+    return $this->response(null);
   }
 
   public function updateItem(WP_REST_Request $req)
   {
-    //require helper classes
-    //require_once(dirname(__FILE__) . '/../../../utvAdminGen.php');
-    //utvAdminGen::initialize([]);
-
     global $wpdb;
 
     //check for valid videoID
     if (!$req['videoID'])
-      return $this->errorResponse('Invalid Video ID');
+      return $this->errorResponse('Invalid video ID');
 
     //gather data fields
+    $videoID = sanitize_key($req['videoID']);
     $title = sanitize_text_field($req['title']);
     $quality = sanitize_text_field($req['quality']);
-    $controls = $req['controls'] ? 0 : 1;
     $startTime = sanitize_text_field($req['startTime']);
     $endTime = sanitize_text_field($req['endTime']);
-    $published = $req['published'] ? 1 : 0;
+
+    if (isset($req['controls']))
+      $controls = $req['controls'] ? 0 : 1;
+    else
+      $controls = null;
+
+    if (isset($req['published']))
+      $published = $req['published'] ? 1 : 0;
+    else
+      $published = null;
+
     $albumID = sanitize_key($req['albumID']);
-    $updateDate = current_time('timestamp');
+    $currentTime = current_time('timestamp');
     $skipThumbnailRender = $req['skipThumbnailRender'] ? true : false;
 
     //create updatedFields array
@@ -240,30 +258,31 @@ class VideoAPIv1 extends APIv1
     if ($endTime != null)
       $updatedFields['VID_ENDTIME'] = $endTime;
 
-    $updatedFields['VID_PUBLISH'] = $published;
+    if ($published !== null)
+      $updatedFields['VID_PUBLISH'] = $published;
 
     if ($albumID != null)
       $updatedFields['ALB_ID'] = $albumID;
 
     //set required update fields
-    $updatedFields['VID_UPDATEDATE'] = $updateDate;
+    $updatedFields['VID_UPDATEDATE'] = $currentTime;
     $updatedFields['VID_THUMBTYPE'] = 'default';
 
     //update database entry
     if ($wpdb->update(
       $wpdb->prefix . 'utubevideo_video',
       $updatedFields,
-      ['VID_ID' => $req['videoID']]
+      ['VID_ID' => $videoID]
     ) >= 0)
     {
       if (!$skipThumbnailRender)
       {
-        $thumbnail = new Thumbnail($req['videoID']);
+        $thumbnail = new Thumbnail($videoID);
 
         if ($skipThumbnailRender && !$thumbnail->save())
           return $this->errorResponse('Video thumbnail refresh failed');
       }
-      
+
       return $this->response(null);
     }
     else
@@ -273,7 +292,6 @@ class VideoAPIv1 extends APIv1
   public function getAllItems(WP_REST_Request $req)
   {
     $data = [];
-    $thumbnailDirectory = wp_upload_dir()['baseurl'];
     global $wpdb;
 
     $videos = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $req['albumID'] . ' ORDER BY VID_POS');
@@ -284,7 +302,7 @@ class VideoAPIv1 extends APIv1
       $videoData->id = $video->VID_ID;
       $videoData->title = $video->VID_NAME;
       $videoData->source = $video->VID_SOURCE;
-      $videoData->thumbnail = $thumbnailDirectory . '/utubevideo-cache/' . $video->VID_URL . $video->VID_ID . '.jpg';
+      $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
       $videoData->url = $video->VID_URL;
       $videoData->quality = $video->VID_QUALITY;
       $videoData->showChrome = $video->VID_CHROME;

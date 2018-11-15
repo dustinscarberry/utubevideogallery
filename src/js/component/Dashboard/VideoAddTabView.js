@@ -80,7 +80,7 @@ class VideoAddTabView extends React.Component
 
   async addVideo()
   {
-    let apiData = await axios.post(
+    const rsp = await axios.post(
       '/wp-json/utubevideogallery/v1/videos/',
       {
         urlKey: this.state.urlKey,
@@ -97,12 +97,8 @@ class VideoAddTabView extends React.Component
       }
     );
 
-    console.log(apiData.data);
-
-    if (apiData.status == 201)
-    {
+    if (rsp.status == 201)
       this.props.changeView(undefined);
-    }
   }
 
   getVideoPreview()

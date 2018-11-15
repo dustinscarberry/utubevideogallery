@@ -113,7 +113,7 @@ class VideoEditTabView extends React.Component
 
   async saveVideo()
   {
-    let apiData = await axios.patch(
+    const rsp = await axios.patch(
       '/wp-json/utubevideogallery/v1/videos/'
       + this.props.currentViewID,
       {
@@ -129,12 +129,8 @@ class VideoEditTabView extends React.Component
       }
     );
 
-    console.log(apiData);
-
-    if (apiData.status == 200)
-    {
+    if (rsp.status == 200)
       this.props.changeView(undefined);
-    }
   }
 
   getVideoPreview()

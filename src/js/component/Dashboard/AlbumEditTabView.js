@@ -3,19 +3,17 @@ import Card from '../shared/Card';
 import Columns from '../shared/Columns';
 import Column from '../shared/Column';
 import SectionHeader from '../shared/SectionHeader';
-import ResponsiveIframe from '../shared/ResponsiveIframe';
 import Breadcrumbs from '../shared/Breadcrumbs';
 import Form from '../shared/Form';
 import FormField from '../shared/FormField';
 import Label from '../shared/Label';
 import FieldHint from '../shared/FieldHint';
 import TextInput from '../shared/TextInput';
-import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
-import NumberInput from '../shared/NumberInput';
 import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
 import Loader from '../shared/Loader';
+import AlbumThumbnailSelection from '../shared/AlbumThumbnailSelection';
 import axios from 'axios';
 
 class AlbumEditTabView extends React.Component
@@ -31,18 +29,24 @@ class AlbumEditTabView extends React.Component
       updateDate: undefined,
       gallery: undefined,
       galleries: undefined,
+      thumbnails: undefined,
       loading: true
     };
 
     this.changeValue = this.changeValue.bind(this);
     this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
+    this.updateThumbnailValue = this.updateThumbnailValue.bind(this);
     this.saveAlbum = this.saveAlbum.bind(this);
   }
 
   async componentDidMount()
   {
     //load api data
-    await Promise.all([this.loadData(), this.loadGalleries()]);
+    await Promise.all([
+      this.loadData(),
+      this.loadGalleries(),
+      this.loadThumbnails()
+    ]);
 
     //set loading state
     this.setState({loading: false});
@@ -50,7 +54,7 @@ class AlbumEditTabView extends React.Component
 
   async loadData()
   {
-    let apiData = await axios.get(
+    const apiData = await axios.get(
       '/wp-json/utubevideogallery/v1/albums/' + this.props.currentViewID,
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
@@ -59,7 +63,7 @@ class AlbumEditTabView extends React.Component
 
     if (apiData.status == 200)
     {
-      let data = apiData.data.data;
+      const data = apiData.data.data;
 
       this.setState({
         thumbnail: data.thumbnail,
@@ -73,17 +77,37 @@ class AlbumEditTabView extends React.Component
 
   async loadGalleries()
   {
-    let apiData = await axios.get('/wp-json/utubevideogallery/v1/galleries/');
+    const apiData = await axios.get('/wp-json/utubevideogallery/v1/galleries/');
 
     if (apiData.status == 200)
     {
-      let data = apiData.data.data;
+      const data = apiData.data.data;
       let galleries = [];
 
       for (let gallery of data)
         galleries.push({name: gallery.title, value: gallery.id});
 
-      this.setState({galleries: galleries});
+      this.setState({galleries});
+    }
+  }
+
+  async loadThumbnails()
+  {
+    const apiData = await axios.get(
+      '/wp-json/utubevideogallery/v1/albums/'
+      + this.props.currentViewID
+      + '/videos'
+    );
+
+    if (apiData.status == 200)
+    {
+      const data = apiData.data.data;
+      let thumbnails = [];
+
+      for (let video of data)
+        thumbnails.push({thumbnail: video.thumbnail});
+
+      this.setState({thumbnails});
     }
   }
 
@@ -97,15 +121,40 @@ class AlbumEditTabView extends React.Component
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  saveAlbum()
+  updateThumbnailValue(thumbnail)
   {
-    console.log('savealbum');
+    if (thumbnail)
+      this.setState({thumbnail});
+  }
+
+  async saveAlbum()
+  {
+    //clean thumbnail url before sending
+    let cleanedThumbnail = this.state.thumbnail.replace(utvJSData.thumbnailCacheDirectory, '');
+    cleanedThumbnail = cleanedThumbnail.replace('.jpg', '');
+
+    const rsp = await axios.patch(
+      '/wp-json/utubevideogallery/v1/albums/'
+      + this.props.currentViewID,
+      {
+        title: this.state.title,
+        thumbnail: cleanedThumbnail,
+        videoSorting: this.state.videoSorting,
+        galleryID: this.state.gallery
+      },
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+
+    if (rsp.status == 200)
+      this.props.changeView(undefined);
   }
 
   render()
   {
-    let updateDate = new Date(this.state.updateDate * 1000);
-    let updateDateFormatted = updateDate.getFullYear()
+    const updateDate = new Date(this.state.updateDate * 1000);
+    const updateDateFormatted = updateDate.getFullYear()
       + '/'
       + (updateDate.getMonth() + 1)
       + '/'
@@ -184,7 +233,12 @@ class AlbumEditTabView extends React.Component
           </Column>
           <Column className="utv-right-two-thirds-column">
             <Card>
-              album thumbnails here
+              <FieldHint text="ex: choose the thumbnail for the album"/>
+              <AlbumThumbnailSelection
+                currentThumbnail={this.state.thumbnail}
+                thumbnails={this.state.thumbnails}
+                updateThumbnail={this.updateThumbnailValue}
+              />
             </Card>
           </Column>
         </Columns>

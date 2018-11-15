@@ -38,6 +38,8 @@ class Dashboard extends React.Component
       selectedAlbum: undefined,
       currentView: undefined
     });
+
+    scroll(0, 0);
   }
 
   changeAlbum(value)
@@ -46,6 +48,8 @@ class Dashboard extends React.Component
       selectedAlbum: value,
       currentView: undefined
     });
+
+    scroll(0, 0);
   }
 
   changeView(view, id = undefined)
@@ -54,6 +58,8 @@ class Dashboard extends React.Component
       currentView: view,
       currentViewID: id
     });
+
+    scroll(0, 0);
   }
 
   getGalleriesTab()

@@ -49,7 +49,7 @@ class GalleryEditTabView extends React.Component
 
   async loadData()
   {
-    let apiData = await axios.get(
+    const apiData = await axios.get(
       '/wp-json/utubevideogallery/v1/galleries/' + this.props.currentViewID,
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
@@ -58,7 +58,7 @@ class GalleryEditTabView extends React.Component
 
     if (apiData.status == 200)
     {
-      let data = apiData.data.data;
+      const data = apiData.data.data;
 
       this.setState({
         title: data.title,
@@ -80,15 +80,30 @@ class GalleryEditTabView extends React.Component
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  saveGallery()
+  async saveGallery()
   {
-    console.log('savegallery');
+    const rsp = await axios.patch(
+      '/wp-json/utubevideogallery/v1/galleries/'
+      + this.props.currentViewID,
+      {
+        title: this.state.title,
+        albumSorting: this.state.albumSorting,
+        thumbnailType: this.state.thumbnailType,
+        displayType: this.state.displayType
+      },
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+
+    if (rsp.status == 200)
+      this.props.changeView(undefined);
   }
 
   render()
   {
-    let updateDate = new Date(this.state.updateDate * 1000);
-    let updateDateFormatted = updateDate.getFullYear()
+    const updateDate = new Date(this.state.updateDate * 1000);
+    const updateDateFormatted = updateDate.getFullYear()
       + '/'
       + (updateDate.getMonth() + 1)
       + '/'

@@ -1,13 +1,21 @@
 import React from 'react';
 import GriddleDND from '../shared/GriddleDND';
 import TableRowActions from '../shared/TableRowActions';
+import axios from 'axios';
 
 class AlbumTable extends React.Component
 {
   constructor(props)
   {
     super(props);
+    this.state = {
+      rand: undefined
+    };
 
+    this.deleteAlbumsPrompt = this.deleteAlbumsPrompt.bind(this);
+    this.deleteAlbumPrompt = this.deleteAlbumPrompt.bind(this);
+    this.publishAlbums = this.publishAlbums.bind(this);
+    this.unpublishAlbums = this.unpublishAlbums.bind(this);
     this.togglePublishStatus = this.togglePublishStatus.bind(this);
     this.deleteAlbum = this.deleteAlbum.bind(this);
   }
@@ -32,7 +40,7 @@ class AlbumTable extends React.Component
         {
           return <img
             onClick={() => this.props.changeAlbum(row.id)}
-            src={cellData}
+            src={utvJSData.thumbnailCacheDirectory + cellData + '.jpg'}
             className="utv-preview-thumb utv-is-clickable"
             data-rjs="2"
           />
@@ -57,7 +65,7 @@ class AlbumTable extends React.Component
                 actions={[
                   {text: 'Edit', onClick: () => this.props.changeView('editAlbum', row.id)},
                   {text: 'View', onClick: () => this.props.changeAlbum(row.id)},
-                  {text: 'Delete', onClick: () => this.deleteAlbum(row.id)}
+                  {text: 'Delete', onClick: () => this.deleteAlbumPrompt(row.id)}
                 ]}
               />
             </div>
@@ -73,10 +81,12 @@ class AlbumTable extends React.Component
         {
           if (cellData == 1)
             return <i
+              onClick={() => this.togglePublishStatus(row.id, 0)}
               className="utv-published-icon far fa-check-circle"
             ></i>
           else
             return <i
+              onClick={() => this.togglePublishStatus(row.id, 1)}
               className="utv-unpublished-icon far fa-times-circle"
             ></i>
         }
@@ -104,20 +114,33 @@ class AlbumTable extends React.Component
     ];
   }
 
-  async togglePublishStatus(videoID, changeTo)
+  getBulkActions()
   {
-
-  }
-
-  async deleteAlbum(albumID)
-  {
-    if (confirm('Are you sure you want to delete this?'))
-    {
-      //fire ajax request
-
-
-
-    }
+    return {
+      options: [
+        {
+          name: 'Delete',
+          value: 'delete'
+        },
+        {
+          name: 'Publish',
+          value: 'publish'
+        },
+        {
+          name: 'Un-Publish',
+          value: 'unpublish'
+        }
+      ],
+      callback: (key, items) =>
+      {
+        if (key == 'delete')
+          this.deleteAlbumsPrompt(items);
+        else if (key == 'publish')
+          this.publishAlbums(items);
+        else if (key == 'unpublish')
+          this.unpublishAlbums(items);
+      }
+    };
   }
 
   getDataMapping(data)
@@ -139,13 +162,76 @@ class AlbumTable extends React.Component
     return newData;
   }
 
+  deleteAlbumsPrompt(items)
+  {
+    if (confirm('Are you sure you want to delete these albums?'))
+    {
+      for (let item of items)
+        this.deleteAlbum(item.id);
+    }
+  }
+
+  publishAlbums(items)
+  {
+    for (let item of items)
+      this.togglePublishStatus(item.id, 1);
+  }
+
+  unpublishAlbums(items)
+  {
+    for (let item of items)
+      this.togglePublishStatus(item.id, 0);
+  }
+
+  deleteAlbumPrompt(albumID)
+  {
+    if (confirm('Are you sure you want to delete this album?'))
+      this.deleteAlbum(albumID);
+  }
+
+  async togglePublishStatus(albumID, changeTo)
+  {
+    const rsp = await axios.patch(
+      '/wp-json/utubevideogallery/v1/albums/' + albumID,
+      {
+        published: changeTo
+      },
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+
+    if (rsp.status == 200)
+      this.setState({rand: Math.random()});
+  }
+
+  async deleteAlbum(albumID)
+  {
+    const rsp = await axios.delete(
+      '/wp-json/utubevideogallery/v1/albums/' + albumID,
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+
+    if (rsp.status == 200)
+      this.setState({rand: Math.random()});
+  }
+
   render()
   {
     return <GriddleDND
       headers={this.getHeaders()}
       recordLabel="albums"
-      apiLoadPath={'/wp-json/utubevideogallery/v1/galleries/' + this.props.selectedGallery + '/albums'}
+      apiLoadPath={
+        '/wp-json/utubevideogallery/v1/galleries/'
+        + this.props.selectedGallery
+        + '/albums?'
+        + this.state.rand
+      }
       dataMapper={this.getDataMapping}
+      enableBulkActions={true}
+      bulkActionsData={this.getBulkActions()}
     />
   }
 }

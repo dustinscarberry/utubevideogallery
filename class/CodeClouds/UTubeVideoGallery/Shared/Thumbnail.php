@@ -45,12 +45,14 @@ class Thumbnail
     $image = wp_get_image_editor($this->_sourceURL);
     $baseFilename = $this->_videoSlug . $this->_videoID;
 
+    var_dump($image);
+
     if (is_wp_error($image))
     {
       $image = wp_get_image_editor(plugins_url('missing.jpg', dirname(__FILE__)));
 
       if (is_wp_error($image))
-        return false;//image magick or gd is required
+        return false;//image magick or gd is required or bad api key
     }
 
     if ($this->_thumbnailType == 'square')
