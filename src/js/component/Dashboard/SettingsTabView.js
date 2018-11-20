@@ -19,6 +19,23 @@ class SettingsTabView extends React.Component
   {
     return (
       <Columns>
+        <Column className="utv-right-one-third-column">
+          <Card>
+            <SectionHeader text="Status"/>
+            <div>
+              <i className="fas fa-check" style={{'color': '#2d8034', 'fontSize': '20px', 'marginRight': '10px'}}></i>
+              ImageMagick
+            </div>
+            <div>
+              <i className="fas fa-check" style={{'color': '#2d8034', 'fontSize': '20px', 'marginRight': '10px'}}></i>
+              GD
+            </div>
+            <SectionHeader text="Server Information"/>
+            <div>
+              PHP Version: 7.2.1
+            </div>
+          </Card>
+        </Column>
         <Column className="utv-left-two-thirds-column">
           <Card>
             <SectionHeader text="General"/>
@@ -77,23 +94,6 @@ class SettingsTabView extends React.Component
             <FormField>
               <input type="submit" name="utSaveOptsGeneral" value="Update Settings" className="button-primary"/>
             </FormField>
-          </Card>
-        </Column>
-        <Column className="utv-right-one-third-column">
-          <Card>
-            <SectionHeader text="Status"/>
-            <div>
-              <i className="fas fa-check" style={{'color': '#2d8034', 'fontSize': '20px', 'marginRight': '10px'}}></i>
-              ImageMagick
-            </div>
-            <div>
-              <i className="fas fa-check" style={{'color': '#2d8034', 'fontSize': '20px', 'marginRight': '10px'}}></i>
-              GD
-            </div>
-            <SectionHeader text="Server Information"/>
-            <div>
-              PHP Version: 7.2.1
-            </div>
           </Card>
         </Column>
       </Columns>
