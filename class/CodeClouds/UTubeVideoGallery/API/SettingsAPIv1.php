@@ -65,7 +65,7 @@ class SettingsAPIv1 extends APIv1
     $settingData->youtubeHideDetails = $options['youtubeDetailsHide'] ? true : false;
     $settingData->vimeoAutoplay = $options['vimeoAutoplay'] ? true : false;
     $settingData->vimeoHideDetails = $options['vimeoDetailsHide'] ? true : false;
-    $settingData->removeVideoPopupScript = $options['skipMagnificPopup'];
+    $settingData->removeVideoPopupScript = $options['skipMagnificPopup'] == 'yes' ? true : false;
 
     return $this->response($settingData);
   }
