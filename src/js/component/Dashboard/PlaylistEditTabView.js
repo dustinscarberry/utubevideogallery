@@ -10,104 +10,99 @@ import Label from '../shared/Label';
 import FieldHint from '../shared/FieldHint';
 import TextInput from '../shared/TextInput';
 import SelectBox from '../shared/SelectBox';
+import Toggle from '../shared/Toggle';
 import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import PlaylistVideoSelection from '../shared/PlaylistVideoSelection';
 import Loader from '../shared/Loader';
-import AlbumThumbnailSelection from '../shared/AlbumThumbnailSelection';
 import axios from 'axios';
 
-class AlbumEditTabView extends React.Component
+class PlaylistEditTabView extends React.Component
 {
   constructor(props)
   {
     super(props);
 
     this.state = {
-      thumbnail: undefined,
-      title: '',
-      videoSorting: undefined,
+      title: undefined,
+      source: undefined,
+      sourceID: undefined,
+      videoQuality: undefined,
+      showControls: undefined,
       updateDate: undefined,
-      gallery: undefined,
-      galleries: undefined,
-      thumbnails: undefined,
+      albumName: undefined,
+      playlistTitle: undefined,
+      playlistVideos: [],
+      playlistLoading: true,
       loading: true
     };
 
     this.changeValue = this.changeValue.bind(this);
     this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
-    this.updateThumbnailValue = this.updateThumbnailValue.bind(this);
-    this.saveAlbum = this.saveAlbum.bind(this);
+    this.toggleVideoSelection = this.toggleVideoSelection.bind(this);
+    this.savePlaylist = this.savePlaylist.bind(this);
   }
 
   async componentDidMount()
   {
     //load api data
-    await Promise.all([
-      this.loadData(),
-      this.loadGalleries(),
-      this.loadThumbnails()
-    ]);
+    await this.loadPlaylist();
+    this.loadPlaylistVideos();
 
     //set loading state
     this.setState({loading: false});
   }
 
-  async loadData()
+  async loadPlaylist()
   {
-    const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/albums/' + this.props.currentViewID,
+    const rsp = await axios.get(
+      '/wp-json/utubevideogallery/v1/playlists/'
+      + this.props.currentViewID,
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
     );
 
-    if (apiData.status == 200)
+    if (rsp.status == 200 && !rsp.data.error)
     {
-      const data = apiData.data.data;
+      const data = rsp.data.data;
 
       this.setState({
-        thumbnail: data.thumbnail,
         title: data.title,
-        videoSorting: data.sortDirection,
+        source: data.source,
+        sourceID: data.sourceID,
+        videoQuality: data.videoQuality,
+        showControls: data.showControls,
         updateDate: data.updateDate,
-        gallery: data.galleryID
+        albumName: data.albumName
       });
     }
   }
 
-  async loadGalleries()
+  async loadPlaylistVideos()
   {
-    const apiData = await axios.get('/wp-json/utubevideogallery/v1/galleries/');
-
-    if (apiData.status == 200)
-    {
-      const data = apiData.data.data;
-      let galleries = [];
-
-      for (let gallery of data)
-        galleries.push({name: gallery.title, value: gallery.id});
-
-      this.setState({galleries});
-    }
-  }
-
-  async loadThumbnails()
-  {
-    const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/albums/'
-      + this.props.currentViewID
-      + '/videos'
+    const rsp = await axios.get(
+      '/wp-json/utubevideogallery/v1/youtubeplaylists/'
+      + this.state.sourceID,
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
     );
 
-    if (apiData.status == 200)
+    if (rsp.status == 200 && !rsp.data.error)
     {
-      const data = apiData.data.data;
-      let thumbnails = [];
+      let data = rsp.data.data;
 
-      for (let video of data)
-        thumbnails.push({thumbnail: video.thumbnail});
+      data.videos = data.videos.map((video) => {
+        video.selected = true;
+        return video;
+      });
 
-      this.setState({thumbnails});
+      this.setState({
+        playlistTitle: data.title,
+        playlistVideos: data.videos,
+        playlistLoading: false
+      });
     }
   }
 
@@ -121,13 +116,16 @@ class AlbumEditTabView extends React.Component
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  updateThumbnailValue(thumbnail)
+  toggleVideoSelection(dataIndex)
   {
-    if (thumbnail)
-      this.setState({thumbnail});
+    //flip state of video selected
+    let { playlistVideos } = this.state;
+    playlistVideos[dataIndex].selected = !playlistVideos[dataIndex].selected;
+
+    this.setState({playlistVideos});
   }
 
-  async saveAlbum()
+  async savePlaylist()
   {
     //clean thumbnail url before sending
     let cleanedThumbnail = this.state.thumbnail.replace(utvJSData.thumbnailCacheDirectory, '');
@@ -158,6 +156,18 @@ class AlbumEditTabView extends React.Component
 
   render()
   {
+    if (this.state.loading)
+      return <Loader/>;
+
+    let playlistNode = undefined;
+    if (this.state.playlistLoading)
+      playlistNode = <Loader/>;
+    else
+      playlistNode = <PlaylistVideoSelection
+        videos={this.state.playlistVideos}
+        toggleVideoSelection={this.toggleVideoSelection}
+      />
+
     const updateDate = new Date(this.state.updateDate * 1000);
     const updateDateFormatted = updateDate.getFullYear()
       + '/'
@@ -165,23 +175,20 @@ class AlbumEditTabView extends React.Component
       + '/'
       + updateDate.getDate();
 
-    if (this.state.loading)
-      return <Loader/>;
-
     return (
       <div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
-            {text: 'Master', onClick: () => this.props.changeAlbum(undefined)}
+            {text: 'Playlists', onClick: () => this.props.changeView(undefined)},
+            {text: 'Playlist Name'}
           ]}
         />
         <Columns>
           <Column className="utv-left-one-thirds-column">
             <Card>
-              <SectionHeader text="Edit Album"/>
+              <SectionHeader text="Edit / Sync Playlist"/>
               <Form
-                submit={this.saveAlbum}
+                submit={this.savePlaylist}
                 errorclass="utv-invalid-feedback"
               >
                 <FormField>
@@ -189,30 +196,54 @@ class AlbumEditTabView extends React.Component
                   <TextInput
                     name="title"
                     value={this.state.title}
-                    onChange={this.changeValue}
-                    required={true}
+                    disabled={true}
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Gallery"/>
-                  <SelectBox
-                    name="gallery"
-                    value={this.state.gallery}
-                    onChange={this.changeValue}
-                    data={this.state.galleries}
+                  <Label text="Source"/>
+                  <TextInput
+                    name="source"
+                    value={this.state.source}
+                    disabled={true}
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Video Sorting"/>
+                  <Label text="Source ID"/>
+                  <TextInput
+                    name="sourceID"
+                    value={this.state.sourceID}
+                    disabled={true}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Album"/>
+                  <TextInput
+                    name="albumName"
+                    value={this.state.albumName}
+                    disabled={true}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Video Quality"/>
                   <SelectBox
-                    name="videoSorting"
-                    value={this.state.videoSorting}
+                    name="videoQuality"
+                    value={this.state.videoQuality}
                     onChange={this.changeValue}
                     data={[
-                      {name: 'First to Last', value: 'asc'},
-                      {name: 'Last to First', value: 'desc'}
+                      {name: '480p', value: 'large'},
+                      {name: '720p', value: 'hd720'},
+                      {name: '1080p', value: 'hd1080'}
                     ]}
                   />
+                </FormField>
+                <FormField>
+                  <Label text="Controls"/>
+                  <Toggle
+                    name="controls"
+                    value={this.state.showControls}
+                    onChange={this.changeCheckboxValue}
+                  />
+                  <FieldHint text="Visible player controls"/>
                 </FormField>
                 <FormField>
                   <Label text="Last Updated"/>
@@ -224,7 +255,7 @@ class AlbumEditTabView extends React.Component
                 </FormField>
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
-                    title="Save Album"
+                    title="Sync / Save Changes"
                     classes="button-primary"
                   />
                   <Button
@@ -238,12 +269,8 @@ class AlbumEditTabView extends React.Component
           </Column>
           <Column className="utv-right-two-thirds-column">
             <Card>
-              <FieldHint text="ex: choose the thumbnail for the album"/>
-              <AlbumThumbnailSelection
-                currentThumbnail={this.state.thumbnail}
-                thumbnails={this.state.thumbnails}
-                updateThumbnail={this.updateThumbnailValue}
-              />
+              <SectionHeader text="Playlist Items"/>
+              {playlistNode}
             </Card>
           </Column>
         </Columns>
@@ -252,4 +279,4 @@ class AlbumEditTabView extends React.Component
   }
 }
 
-export default AlbumEditTabView;
+export default PlaylistEditTabView;

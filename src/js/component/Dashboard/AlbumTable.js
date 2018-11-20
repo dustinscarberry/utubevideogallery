@@ -24,13 +24,6 @@ class AlbumTable extends React.Component
   {
     return [
       {
-        key: 'id',
-        title: 'ID',
-        sortable: true,
-        sortDirection: 'desc',
-        width: '75px'
-      },
-      {
         key: 'thumbnail',
         title: 'Thumbnail',
         sortable: false,
@@ -234,9 +227,6 @@ class AlbumTable extends React.Component
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
     );
-
-    console.log(rsp);
-    console.log(albumIDs);
   }
 
   render()

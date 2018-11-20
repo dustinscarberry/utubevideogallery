@@ -42,7 +42,7 @@ class GalleryAddTabView extends React.Component
 
   async addGallery()
   {
-    let apiData = await axios.post(
+    const rsp = await axios.post(
       '/wp-json/utubevideogallery/v1/galleries/',
       {
         title: this.state.title,
@@ -55,10 +55,13 @@ class GalleryAddTabView extends React.Component
       }
     );
 
-    if (apiData.status == 201)
+    if (rsp.status == 201 && !rsp.data.error)
     {
       this.props.changeView(undefined);
+      this.props.setFeedbackMessage('Gallery created', 'success');
     }
+    else
+      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
   }
 
   render()

@@ -97,8 +97,13 @@ class VideoAddTabView extends React.Component
       }
     );
 
-    if (rsp.status == 201)
+    if (rsp.status == 201 && !rsp.data.error)
+    {
       this.props.changeView(undefined);
+      this.props.setFeedbackMessage('Video added', 'success');
+    }
+    else
+      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
   }
 
   getVideoPreview()

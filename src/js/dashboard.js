@@ -1,13 +1,4 @@
-import '../scss/dashboard.scss';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Dashboard from './component/Dashboard/Dashboard';
 
-let dashboard = document.getElementById('utv-dashboard-root');
-
-ReactDOM.render(
-  <Dashboard
-  />, dashboard);
 
 
 
@@ -1431,3 +1422,18 @@ utvAdmin.setupFunctions = function($)
 
 //document.ready
 (function($) { utvAdmin.initialize($); })(jQuery);
+
+
+
+
+
+import '../scss/dashboard.scss';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Dashboard from './component/Dashboard/Dashboard';
+
+let dashboard = document.getElementById('utv-dashboard-root');
+
+ReactDOM.render(
+  <Dashboard
+  />, dashboard);

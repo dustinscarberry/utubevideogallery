@@ -11,11 +11,8 @@ use utvAdminGen;
 
 class VideoAPIv1 extends APIv1
 {
-  private $_options;
-
   public function __construct()
   {
-    $this->_options = $options;
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
@@ -93,15 +90,27 @@ class VideoAPIv1 extends APIv1
 
   public function getItem(WP_REST_Request $req)
   {
-    $videoData = new stdClass();
-
     global $wpdb;
-    $video = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_video WHERE VID_ID = ' . $req['videoID']);
+
+    //check for valid videoID
+    if (!$req['videoID'])
+      return $this->errorResponse('Invalid video ID');
+
+    //gather data fields
+    $videoID = sanitize_key($req['videoID']);
+
+    $video = $wpdb->get_results(
+      'SELECT *
+      FROM ' . $wpdb->prefix . 'utubevideo_video
+      WHERE VID_ID = ' . $videoID
+    );
 
     if (!$video)
       return $this->errorResponse('The specified video resource was not found');
 
     $video = $video[0];
+
+    $videoData = new stdClass();
     $videoData->id = $video->VID_ID;
     $videoData->title = $video->VID_NAME;
     $videoData->source = $video->VID_SOURCE;

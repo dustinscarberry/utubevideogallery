@@ -21,13 +21,6 @@ class GalleryTable extends React.Component
   {
     return [
       {
-        key: 'id',
-        title: 'ID',
-        sortable: true,
-        sortDirection: 'desc',
-        width: '75px'
-      },
-      {
         key: 'title',
         title: 'Title',
         sortable: true,
@@ -157,6 +150,7 @@ class GalleryTable extends React.Component
       dataMapper={this.getDataMapping}
       enableBulkActions={true}
       bulkActionsData={this.getBulkActions()}
+      enableDragNDrop={false}
     />
   }
 }

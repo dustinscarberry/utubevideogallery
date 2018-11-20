@@ -10,8 +10,10 @@ import AlbumAddTabView from './AlbumAddTabView';
 import AlbumEditTabView from './AlbumEditTabView';
 import VideoAddTabView from './VideoAddTabView';
 import VideoEditTabView from './VideoEditTabView';
+import PlaylistEditTabView from './PlaylistEditTabView';
 import SettingsTabView from './SettingsTabView';
 import PlaylistTable from './PlaylistTable';
+import UserFeedback from '../shared/UserFeedback';
 
 class Dashboard extends React.Component
 {
@@ -23,12 +25,15 @@ class Dashboard extends React.Component
       selectedGallery: undefined,
       selectedAlbum: undefined,
       currentView: undefined,
-      currentViewID: undefined
+      currentViewID: undefined,
+      feedbackMessage: undefined,
+      feedbackType: undefined
     };
 
     this.changeGallery = this.changeGallery.bind(this);
     this.changeAlbum = this.changeAlbum.bind(this);
     this.changeView = this.changeView.bind(this);
+    this.setFeedbackMessage = this.setFeedbackMessage.bind(this);
   }
 
   changeGallery(value)
@@ -64,56 +69,69 @@ class Dashboard extends React.Component
 
   getGalleriesTab()
   {
-    if (this.state.currentView == 'addGallery')
+    const {
+      currentView,
+      currentViewID,
+      selectedGallery,
+      selectedAlbum
+    } = this.state;
+
+    if (currentView == 'addGallery')
       return <GalleryAddTabView
         changeView={this.changeView}
+        setFeedbackMessage={this.setFeedbackMessage}
       />
-    else if (this.state.currentView == 'editGallery')
+    else if (currentView == 'editGallery')
       return <GalleryEditTabView
         changeView={this.changeView}
-        currentViewID={this.state.currentViewID}
+        currentViewID={currentViewID}
+        setFeedbackMessage={this.setFeedbackMessage}
       />
-    else if (this.state.currentView == 'addAlbum')
+    else if (currentView == 'addAlbum')
       return <AlbumAddTabView
         changeView={this.changeView}
         changeGallery={this.changeGallery}
-        selectedGallery={this.state.selectedGallery}
+        selectedGallery={selectedGallery}
+        setFeedbackMessage={this.setFeedbackMessage}
       />
-    else if (this.state.currentView == 'editAlbum')
+    else if (currentView == 'editAlbum')
       return <AlbumEditTabView
         changeView={this.changeView}
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
-        currentViewID={this.state.currentViewID}
+        currentViewID={currentViewID}
+        setFeedbackMessage={this.setFeedbackMessage}
       />
-    else if (this.state.currentView == 'addVideo')
+    else if (currentView == 'addVideo')
       return <VideoAddTabView
         changeView={this.changeView}
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
-        selectedAlbum={this.state.selectedAlbum}
+        selectedAlbum={selectedAlbum}
+        setFeedbackMessage={this.setFeedbackMessage}
       />
-    else if (this.state.currentView == 'editVideo')
+    else if (currentView == 'editVideo')
       return <VideoEditTabView
         changeView={this.changeView}
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
-        currentViewID={this.state.currentViewID}
-        selectedGallery={this.state.selectedGallery}
+        currentViewID={currentViewID}
+        selectedGallery={selectedGallery}
+        setFeedbackMessage={this.setFeedbackMessage}
       />
-    else if (this.state.selectedAlbum != undefined)
+    else if (selectedAlbum != undefined)
       return <VideoTabView
-        selectedGallery={this.state.selectedGallery}
-        selectedAlbum={this.state.selectedAlbum}
+        selectedGallery={selectedGallery}
+        selectedAlbum={selectedAlbum}
         changeView={this.changeView}
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
       />
-    else if (this.state.selectedGallery != undefined)
+    else if (selectedGallery != undefined)
       return <AlbumTabView
         changeAlbum={this.changeAlbum}
         changeGallery={this.changeGallery}
-        selectedGallery={this.state.selectedGallery}
+        selectedGallery={selectedGallery}
         changeView={this.changeView}
       />
     else
@@ -125,9 +143,43 @@ class Dashboard extends React.Component
 
   getPlaylistsTab()
   {
-    return <PlaylistTable
-      changeGallery={this.changeGallery}
+    const {
+      currentView,
+      currentViewID,
+    } = this.state;
+
+    if (currentView == 'editPlaylist')
+      return <PlaylistEditTabView
+        changeView={this.changeView}
+        currentViewID={currentViewID}
+        setFeedbackMessage={this.setFeedbackMessage}
+      />
+    else
+      return <PlaylistTable
+      changeView={this.changeView}
     />
+  }
+
+  setFeedbackMessage(message, type, timeout = 5000)
+  {
+    //set message
+    this.setState(
+    {
+      feedbackMessage: message,
+      feedbackType: type
+    });
+
+    //timeout to remove message
+    setTimeout(
+      () => {
+        this.setState(
+        {
+          feedbackMessage: undefined,
+          feedbackType: undefined
+        });
+      },
+      timeout
+    );
   }
 
   render()
@@ -135,6 +187,10 @@ class Dashboard extends React.Component
     return (
       <div className="wrap utv-admin">
         <h2 id="utv-masthead">uTubeVideo Gallery</h2>
+        <UserFeedback
+          message={this.state.feedbackMessage}
+          type={this.state.feedbackType}
+        />
         <Tabs>
           <Pane label="Galleries" iconClass="fa-gear">
             {this.getGalleriesTab()}

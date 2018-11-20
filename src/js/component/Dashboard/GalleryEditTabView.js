@@ -49,14 +49,14 @@ class GalleryEditTabView extends React.Component
 
   async loadData()
   {
-    const apiData = await axios.get(
+    const rsp = await axios.get(
       '/wp-json/utubevideogallery/v1/galleries/' + this.props.currentViewID,
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
     );
 
-    if (apiData.status == 200)
+    if (rsp.status == 200 && !rsp.data.error)
     {
       const data = apiData.data.data;
 
@@ -96,8 +96,13 @@ class GalleryEditTabView extends React.Component
       }
     );
 
-    if (rsp.status == 200)
+    if (rsp.status == 200 && !rsp.data.error)
+    {
       this.props.changeView(undefined);
+      this.props.setFeedbackMessage('Gallery changes saved', 'success');
+    }
+    else
+      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
   }
 
   render()

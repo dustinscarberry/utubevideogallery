@@ -1,22 +1,21 @@
 import React from 'react';
-import Griddle from '../shared/Griddle';
+import GriddleDND from '../shared/GriddleDND';
+import TableRowActions from '../shared/TableRowActions';
+import axios from 'axios';
 
 class PlaylistTable extends React.Component
 {
   constructor(props)
   {
     super(props);
+    this.state = {
+      rand: undefined
+    };
   }
 
   getHeaders()
   {
     return [
-      {
-        key: 'id',
-        title: 'ID',
-        sortable: true,
-        sortDirection: 'desc'
-      },
       {
         key: 'title',
         title: 'Title',
@@ -24,61 +23,110 @@ class PlaylistTable extends React.Component
         sortDirection: '',
         formatter: (row, cellData) =>
         {
-          return <a
-            onClick={() => this.props.changeGallery(row.id)}
-            href="javascript:void(0)"
-            className="utv-row-title">
-              {cellData}
-          </a>
+          return (
+            <div>
+              <a
+                onClick={() => this.props.changeView('editPlaylist', row.id)}
+                href="javascript:void(0)"
+                className="utv-row-title">
+                  {cellData}
+              </a>
+              <TableRowActions
+                actions={[
+                  {text: 'Edit / Sync', onClick: () => this.props.changeView('editPlaylist', row.id)},
+                  {text: 'View', onClick: () => window.location = 'https://www.youtube.com/playlist?list=' + row.sourceID},
+                  {text: 'Delete', onClick: () => this.deletePlaylistPrompt(row.id)}
+                ]}
+              />
+            </div>
+          );
         }
       },
       {
-        key: 'shortcode',
-        title: 'Shortcode',
+        key: 'source',
+        title: 'Source',
+        sortable: true,
+        sortDirection: '',
+        formatter: (row, cellData) =>
+        {
+          if (cellData == 'youtube')
+            return 'YouTube';
+          else if (cellData == 'vimeo')
+            return 'Vimeo';
+        }
+      },
+      {
+        key: 'album',
+        title: 'Album',
         sortable: true,
         sortDirection: ''
       },
       {
-        key: 'dateAdded',
-        title: 'Date Added',
+        key: 'dateUpdated',
+        title: 'Date Updated',
         sortable: true,
-        sortDirection: ''
-      },
-      {
-        key: 'albumCount',
-        title: '# Albums',
-        sortable: true,
-        sortDirection: ''
+        sortDirection: '',
+        formatter: (row, cellData) =>
+        {
+          const dateAdded = new Date(cellData * 1000);
+
+          return dateAdded.getFullYear()
+            + '/' + (dateAdded.getMonth() + 1)
+            + '/' + dateAdded.getDate();
+        }
       }
     ];
   }
 
   getDataMapping(data)
   {
-    let newData = [];
+    let mappedData = [];
 
     for (let item of data)
     {
       let record = {};
-      let updateDate = new Date(item.updateDate * 1000);
       record.id = item.id;
       record.title = item.title;
-      record.shortcode = '[utubevideo id="' + item.id + '"]';
-      record.dateAdded = updateDate.getFullYear() + '/' + (updateDate.getMonth() + 1) + '/' + updateDate.getDate();
-      record.albumCount = item.albumCount;
-      newData.push(record);
+      record.source = item.source;
+      record.sourceID = item.sourceID;
+      record.album = item.albumName;
+      record.dateUpdated = item.updateDate;
+      mappedData.push(record);
     }
 
-    return newData;
+    return mappedData;
+  }
+
+  getBulkActions()
+  {
+    return {
+      options: [
+        {
+          name: 'Delete',
+          value: 'delete'
+        }
+      ],
+      callback: (key, items) =>
+      {
+        if (key == 'delete')
+          this.deletePlaylistsPrompt(items);
+      }
+    };
   }
 
   render()
   {
-    return <Griddle
+    return <GriddleDND
       headers={this.getHeaders()}
       recordLabel="playlists"
-      apiLoadPath="/wp-json/utubevideogallery/v1/galleries"
+      apiLoadPath={
+        '/wp-json/utubevideogallery/v1/playlists?'
+        + this.state.rand
+      }
       dataMapper={this.getDataMapping}
+      enableBulkActions={true}
+      bulkActionsData={this.getBulkActions()}
+      enableDragNDrop={false}
     />
   }
 }

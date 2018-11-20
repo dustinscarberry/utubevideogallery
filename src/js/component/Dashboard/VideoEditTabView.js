@@ -83,21 +83,21 @@ class VideoEditTabView extends React.Component
 
   async loadAlbums()
   {
-    let apiData = await axios.get(
+    const apiData = await axios.get(
       '/wp-json/utubevideogallery/v1/galleries/'
       + this.props.selectedGallery
       + '/albums'
     );
 
-    if (apiData.status == 200)
+    if (!apiData.data.error)
     {
-      let data = apiData.data.data;
+      const data = apiData.data.data;
       let albums = [];
 
       for (let album of data)
         albums.push({name: album.title, value: album.id});
 
-      this.setState({albums: albums});
+      this.setState({albums});
     }
   }
 
@@ -129,8 +129,13 @@ class VideoEditTabView extends React.Component
       }
     );
 
-    if (rsp.status == 200)
+    if (rsp.status == 200 && !rsp.data.error)
+    {
       this.props.changeView(undefined);
+      this.props.setFeedbackMessage('Video changes saved', 'success');
+    }
+    else
+      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
   }
 
   getVideoPreview()

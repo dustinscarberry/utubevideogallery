@@ -40,7 +40,7 @@ class AlbumAddTabView extends React.Component
 
   async addAlbum()
   {
-    let apiData = await axios.post(
+    const rsp = await axios.post(
       '/wp-json/utubevideogallery/v1/albums/',
       {
         title: this.state.title,
@@ -52,10 +52,13 @@ class AlbumAddTabView extends React.Component
       }
     );
 
-    if (apiData.status == 201)
+    if (!rsp.data.error)
     {
       this.props.changeView(undefined);
+      this.props.setFeedbackMessage('Album created', 'success');
     }
+    else
+      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
   }
 
   render()

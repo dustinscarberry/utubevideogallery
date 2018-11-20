@@ -33,8 +33,10 @@ use CodeClouds\UTubeVideoGallery\API\GalleryAPIv1;
 use CodeClouds\UTubeVideoGallery\API\AlbumAPIv1;
 use CodeClouds\UTubeVideoGallery\API\VideoAPIv1;
 use CodeClouds\UTubeVideoGallery\API\GalleryDataAPIv1;
+use CodeClouds\UTubeVideoGallery\API\PlaylistAPIv1;
 use CodeClouds\UTubeVideoGallery\API\VideoOrderAPIv1;
 use CodeClouds\UTubeVideoGallery\API\AlbumOrderAPIv1;
+use CodeClouds\UTubeVideoGallery\API\YouTubePlaylistAPIv1;
 
 if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 {
@@ -102,8 +104,10 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       new AlbumAPIv1();
       new VideoAPIv1();
       new GalleryDataAPIv1();
+      new PlaylistAPIv1();
       new VideoOrderAPIv1();
       new AlbumOrderAPIv1();
+      new YouTubePlaylistAPIv1();
     }
 
     //rewrite rules setup function
@@ -241,7 +245,14 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
         foreach ($albumIds as $value)
         {
-          $videoIds = $wpdb->get_results('SELECT VID_ID FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $value['ALB_ID'] . ' ORDER BY VID_POS', ARRAY_A);
+          $videoIds = $wpdb->get_results(
+            'SELECT VID_ID
+            FROM ' . $wpdb->prefix . 'utubevideo_video
+            WHERE ALB_ID = ' . $value['ALB_ID'] .
+            ' ORDER BY VID_POS',
+            ARRAY_A
+          );
+
           $posCounter = 0;
 
           foreach ($videoIds as $video)
@@ -261,11 +272,22 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       //album sort fix
       if (!isset($this->_options['albumSortFix']))
       {
-        $galleryIds = $wpdb->get_results('SELECT DATA_ID FROM ' . $wpdb->prefix . 'utubevideo_dataset', ARRAY_A);
+        $galleryIds = $wpdb->get_results(
+          'SELECT DATA_ID
+          FROM ' . $wpdb->prefix . 'utubevideo_dataset',
+          ARRAY_A
+        );
 
         foreach ($galleryIds as $value)
         {
-          $albumIds = $wpdb->get_results('SELECT ALB_ID FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $value['DATA_ID'] . ' ORDER BY ALB_POS', ARRAY_A);
+          $albumIds = $wpdb->get_results(
+            'SELECT ALB_ID
+            FROM ' . $wpdb->prefix . 'utubevideo_album
+            WHERE DATA_ID = ' . $value['DATA_ID'] .
+            ' ORDER BY ALB_POS',
+            ARRAY_A
+          );
+
           $posCounter = 0;
 
           foreach ($albumIds as $album)
@@ -332,7 +354,13 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
         }
 
         //update album thumbnails
-        $albumData = $wpdb->get_results('SELECT a.ALB_ID, ALB_THUMB, VID_ID FROM ' . $wpdb->prefix . 'utubevideo_album a LEFT JOIN ' . $wpdb->prefix . 'utubevideo_video v ON (ALB_THUMB=VID_URL) WHERE ALB_THUMB != "missing"', ARRAY_A);
+        $albumData = $wpdb->get_results(
+          'SELECT a.ALB_ID, ALB_THUMB, VID_ID
+          FROM ' . $wpdb->prefix . 'utubevideo_album a
+          LEFT JOIN ' . $wpdb->prefix . 'utubevideo_video v ON (ALB_THUMB=VID_URL)
+          WHERE ALB_THUMB != "missing"',
+          ARRAY_A
+        );
 
         foreach ($albumData as $val)
         {
@@ -357,7 +385,13 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
         $dir = $dir['basedir'] . '/utubevideo-cache/';
 
         //get video listing
-        $videoData = $wpdb->get_results('SELECT VID_ID, VID_URL, VID_SOURCE, VID_THUMBTYPE, DATA_THUMBTYPE FROM ' . $wpdb->prefix . 'utubevideo_video v INNER JOIN ' . $wpdb->prefix . 'utubevideo_album a ON a.ALB_ID = v.ALB_ID INNER JOIN ' . $wpdb->prefix . 'utubevideo_dataset d ON d.DATA_ID = a.DATA_ID', ARRAY_A);
+        $videoData = $wpdb->get_results(
+          'SELECT VID_ID, VID_URL, VID_SOURCE, VID_THUMBTYPE, DATA_THUMBTYPE
+          FROM ' . $wpdb->prefix . 'utubevideo_video v
+          INNER JOIN ' . $wpdb->prefix . 'utubevideo_album a ON a.ALB_ID = v.ALB_ID
+          INNER JOIN ' . $wpdb->prefix . 'utubevideo_dataset d ON d.DATA_ID = a.DATA_ID',
+          ARRAY_A
+        );
 
         //process each video thumbnail if not avaiable
         foreach($videoData as $val)
