@@ -46,7 +46,10 @@ class VideoEditTabView extends React.Component
   async componentDidMount()
   {
     //load api data
-    await Promise.all([this.loadData(), this.loadAlbums()]);
+    await Promise.all([
+      this.loadData(),
+      this.loadAlbums()
+    ]);
 
     //set loading state
     this.setState({loading: false});

@@ -199,7 +199,9 @@ class Dashboard extends React.Component
             {this.getPlaylistsTab()}
           </Pane>
           <Pane label="Settings" iconClass="fa-gear">
-            <SettingsTabView/>
+            <SettingsTabView
+              setFeedbackMessage={this.setFeedbackMessage}
+            />
           </Pane>
         </Tabs>
       </div>

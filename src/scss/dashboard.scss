@@ -1,5 +1,47 @@
 /*ADMIN CSS*/
 
+
+
+.utv-infoline{
+  margin: 10px 0;
+  display: block;
+}
+
+.utv-status:before{
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.utv-status-active:before{
+  content: "\f00c";
+  color: #2d8034;
+}
+
+.utv-status-inactive:before{
+  content: "\f05e";
+  color: #aa0114;
+}
+
+.utv-status-warning:before{
+  content: "\f071";
+  color: #ffa400;
+}
+
+
+
+
+
+
+
+
 .utv-loader{
   background: transparent url('../img/loader.gif') no-repeat 0 0;
   background-position: center;
