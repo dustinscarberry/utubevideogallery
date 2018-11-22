@@ -160,11 +160,11 @@ class SettingsTabView extends React.Component
               <SectionHeader text="Status"/>
               <InfoLine
                 text="ImageMagick"
-                icon="active"
+                icon={this.state.imageMagickEnabled ? 'active' : 'inactive'}
               />
               <InfoLine
                 text="GD"
-                icon="inactive"
+                icon={this.state.gdEnabled ? 'active' : 'inactive'}
               />
               <FormField classes="utv-formfield-action">
                 <SubmitButton

@@ -238,7 +238,7 @@ class AlbumEditTabView extends React.Component
           </Column>
           <Column className="utv-right-two-thirds-column">
             <Card>
-              <FieldHint text="ex: choose the thumbnail for the album"/>
+              <SectionHeader text="Album Thumbnail"/>
               <AlbumThumbnailSelection
                 currentThumbnail={this.state.thumbnail}
                 thumbnails={this.state.thumbnails}
