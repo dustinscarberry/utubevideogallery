@@ -57,7 +57,7 @@ class VideoAddTabView extends React.Component
 
     this.setState({source: undefined, url: url, urlKey: undefined});
 
-    if (url && url != '')
+    if (url)
     {
       let compareURL = url.toLowerCase();
 

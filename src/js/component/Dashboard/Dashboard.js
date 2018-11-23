@@ -10,9 +10,10 @@ import AlbumAddTabView from './AlbumAddTabView';
 import AlbumEditTabView from './AlbumEditTabView';
 import VideoAddTabView from './VideoAddTabView';
 import VideoEditTabView from './VideoEditTabView';
+import PlaylistTabView from './PlaylistTabView';
+import PlaylistAddTabView from './PlaylistAddTabView';
 import PlaylistEditTabView from './PlaylistEditTabView';
 import SettingsTabView from './SettingsTabView';
-import PlaylistTable from './PlaylistTable';
 import UserFeedback from '../shared/UserFeedback';
 
 class Dashboard extends React.Component
@@ -148,16 +149,21 @@ class Dashboard extends React.Component
       currentViewID,
     } = this.state;
 
-    if (currentView == 'editPlaylist')
+    if (currentView == 'addPlaylist')
+      return <PlaylistAddTabView
+        changeView={this.changeView}
+        setFeedbackMessage={this.setFeedbackMessage}
+      />
+    else if (currentView == 'editPlaylist')
       return <PlaylistEditTabView
         changeView={this.changeView}
         currentViewID={currentViewID}
         setFeedbackMessage={this.setFeedbackMessage}
       />
     else
-      return <PlaylistTable
-      changeView={this.changeView}
-    />
+      return <PlaylistTabView
+        changeView={this.changeView}
+      />
   }
 
   setFeedbackMessage(message, type, timeout = 5000)
@@ -195,7 +201,7 @@ class Dashboard extends React.Component
           <Pane label="Galleries" iconClass="fa-gear">
             {this.getGalleriesTab()}
           </Pane>
-          <Pane label="Playlists" iconClass="fa-gear">
+          <Pane label="Saved Playlists" iconClass="fa-gear">
             {this.getPlaylistsTab()}
           </Pane>
           <Pane label="Settings" iconClass="fa-gear">

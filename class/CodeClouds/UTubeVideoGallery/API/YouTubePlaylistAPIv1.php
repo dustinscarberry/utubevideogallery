@@ -58,10 +58,6 @@ class YouTubePlaylistAPIv1 extends APIv1
     //gather data fields
     $sourceID = sanitize_text_field($req['sourceID']);
 
-
-
-
-
     //retrieve playlist title
     $data = Utility::queryAPI(
       'https://www.googleapis.com/youtube/v3/playlists?key='
@@ -69,6 +65,8 @@ class YouTubePlaylistAPIv1 extends APIv1
       . '&part=snippet&id='
       . $sourceID
     );
+
+
 
     if ($data)
     {

@@ -33,12 +33,22 @@ class AlbumAPIv1 extends APIv1
       $this->_namespace . '/' . $this->_version,
       'albums',
       [
-        'methods' => WP_REST_Server::CREATABLE,
-        'callback' => [$this, 'createItem'],
-        'permission_callback' => function()
-        {
-          return current_user_can('edit_others_posts');
-        }
+        [
+          'methods' => WP_REST_Server::CREATABLE,
+          'callback' => [$this, 'createItem'],
+          'permission_callback' => function()
+          {
+            return current_user_can('edit_others_posts');
+          }
+        ],
+        [
+          'methods' => WP_REST_Server::READABLE,
+          'callback' => [$this, 'getAnyAllItems'],
+          'permission_callback' => function()
+          {
+            return current_user_can('edit_others_posts');
+          }
+        ]
       ]
     );
 
@@ -262,6 +272,40 @@ class AlbumAPIv1 extends APIv1
 
     global $wpdb;
     $albums = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $req['galleryID'] . ' ORDER BY ALB_POS');
+
+    foreach ($albums as $album)
+    {
+      $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VIDEO_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $album->ALB_ID);
+
+      if ($videoCount)
+        $videoCount = $videoCount[0]->VIDEO_COUNT;
+      else
+        $videoCount = 0;
+
+      $albumData = new stdClass();
+      $albumData->id = $album->ALB_ID;
+      $albumData->title = $album->ALB_NAME;
+      $albumData->slug = $album->ALB_SLUG;
+      $albumData->thumbnail = $album->ALB_THUMB;
+      $albumData->sortDirection = $album->ALB_SORT;
+      $albumData->position = $album->ALB_POS;
+      $albumData->published = $album->ALB_PUBLISH;
+      $albumData->updateDate = $album->ALB_UPDATEDATE;
+      $albumData->videoCount = $videoCount;
+      $albumData->galleryID = $album->DATA_ID;
+
+      $data[] = $albumData;
+    }
+
+    return $this->response($data);
+  }
+
+  public function getAnyAllItems(WP_REST_Request $req)
+  {
+    $data = [];
+
+    global $wpdb;
+    $albums = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_album ORDER BY ALB_POS');
 
     foreach ($albums as $album)
     {
