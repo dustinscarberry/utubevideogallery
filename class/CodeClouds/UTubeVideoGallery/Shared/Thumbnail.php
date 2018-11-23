@@ -45,8 +45,6 @@ class Thumbnail
     $image = wp_get_image_editor($this->_sourceURL);
     $baseFilename = $this->_videoSlug . $this->_videoID;
 
-    var_dump($image);
-
     if (is_wp_error($image))
     {
       $image = wp_get_image_editor(plugins_url('missing.jpg', dirname(__FILE__)));

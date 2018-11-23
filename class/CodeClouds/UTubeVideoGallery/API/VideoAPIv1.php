@@ -124,6 +124,7 @@ class VideoAPIv1 extends APIv1
     $videoData->published = $video->VID_PUBLISH;
     $videoData->updateDate = $video->VID_UPDATEDATE;
     $videoData->albumID = $video->ALB_ID;
+    $videoData->playlistData = $video->PLAY_ID;
 
     return $this->response($videoData);
   }
@@ -141,6 +142,7 @@ class VideoAPIv1 extends APIv1
     $endTime = sanitize_text_field($req['endTime']);
     $source = sanitize_text_field($req['source']);
     $albumID = sanitize_key($req['albumID']);
+    $playlistID = sanitize_key($req['playlistID']);
     $time = current_time('timestamp');
 
     //check for required fields
@@ -166,12 +168,15 @@ class VideoAPIv1 extends APIv1
         'VID_ENDTIME' => $endTime,
         'VID_POS' => $nextSortPos,
         'VID_UPDATEDATE' => $time,
-        'ALB_ID' => $albumID
+        'ALB_ID' => $albumID,
+        'PLAY_ID' => $playlistID
       ]
     ))
     {
       //get last insert id and save thumbnail
       $videoID = $wpdb->insert_id;
+
+      var_dump($videoID);
 
       $thumbnail = new Thumbnail($videoID);
 
@@ -303,7 +308,12 @@ class VideoAPIv1 extends APIv1
     $data = [];
     global $wpdb;
 
-    $videos = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $req['albumID'] . ' ORDER BY VID_POS');
+    $videos = $wpdb->get_results(
+      'SELECT *
+      FROM ' . $wpdb->prefix . 'utubevideo_video
+      WHERE ALB_ID = ' . $req['albumID']
+      . ' ORDER BY VID_POS'
+    );
 
     foreach ($videos as $video)
     {
@@ -321,6 +331,7 @@ class VideoAPIv1 extends APIv1
       $videoData->published = $video->VID_PUBLISH;
       $videoData->updateDate = $video->VID_UPDATEDATE;
       $videoData->albumID = $video->ALB_ID;
+      $videoData->playlistID = $video->PLAY_ID;
 
       $data[] = $videoData;
     }

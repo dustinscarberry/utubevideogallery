@@ -164,7 +164,49 @@ class PlaylistAPIv1 extends APIv1
 
   public function updateItem(WP_REST_Request $req)
   {
+    global $wpdb;
 
+    //check for valid playlistID
+    if (!$req['playlistID'])
+      return $this->errorResponse('Invalid playlist ID');
+
+    //gather data fields
+    $playlistID = sanitize_key($req['playlistID']);
+    $title = sanitize_text_field($req['title']);
+    $videoQuality = sanitize_text_field($req['videoQuality']);
+
+    if (isset($req['showControls']))
+      $showControls = $req['showControls'] ? 0 : 1;
+    else
+      $showControls = null;
+
+    $time = current_time('timestamp');
+
+    //create updatedFields array
+    $updatedFields = [];
+
+    //set optional update fields
+    if ($title != null)
+      $updatedFields['PLAY_TITLE'] = $title;
+
+    if ($videoQuality != null)
+      $updatedFields['PLAY_QUALITY'] = $videoQuality;
+
+    if ($showControls != null)
+      $updatedFields['PLAY_CHROME'] = $showControls;
+
+    //set required update fields
+    $updatedFields['PLAY_UPDATEDATE'] = $time;
+
+    //update database entry
+    if ($wpdb->update(
+      $wpdb->prefix . 'utubevideo_playlist',
+      $updatedFields,
+      ['PLAY_ID' => $playlistID]
+    ) >= 0)
+      return $this->response(null);
+    else
+      return $this->errorResponse('A database error has occurred');
   }
 
   public function getAllItems(WP_REST_Request $req)

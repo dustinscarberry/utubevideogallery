@@ -5,7 +5,7 @@ const PlaylistVideoSelection = (props) =>
   const {
     videos,
     toggleVideoSelection,
-    changePlaylistVideoTitle
+    changeVideoTitle
   } = props;
 
   let thumbnailNodes = videos.map((video, index) =>
@@ -16,16 +16,16 @@ const PlaylistVideoSelection = (props) =>
       thumbnailClasses.push('utv-playlist-choice-active');
 
     return (
-      <div id="utv-playlist-preview" onClick={() => toggleVideoSelection(index)}>
+      <div key={index} id="utv-playlist-preview">
         <div className="utv-playlist-preview-item">
-          <span className="utv-playlist-preview-item-num">{index})</span>
-          <div className={thumbnailClasses.join(' ')}>
+          <span className="utv-playlist-preview-item-num">{index + 1})</span>
+          <div className={thumbnailClasses.join(' ')} onClick={() => toggleVideoSelection(index)}>
             <img src={video.thumbnail}/>
             <span className="utv-playlist-choice-overlay"></span>
           </div>
-          <div class="utv-playlist-preview-form">
-            <input type="text" className="utv-playlist-item-title" value={video.title} onChange={changePlaylistVideoTitle}/>
-            <span class="utv-playlist-both"></span>
+          <div className="utv-playlist-preview-form">
+            <input type="text" className="utv-playlist-item-title" value={video.title} onChange={(e) => changeVideoTitle(index, e)}/>
+            <span className="utv-playlist-both"></span>
           </div>
         </div>
       </div>

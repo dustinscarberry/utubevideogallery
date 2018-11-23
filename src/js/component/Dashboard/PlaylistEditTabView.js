@@ -30,7 +30,9 @@ class PlaylistEditTabView extends React.Component
       videoQuality: undefined,
       showControls: undefined,
       updateDate: undefined,
+      albumID: undefined,
       albumName: undefined,
+      syncMethod: 'syncSelected',
       playlistTitle: undefined,
       playlistVideos: [],
       playlistLoading: true,
@@ -39,6 +41,7 @@ class PlaylistEditTabView extends React.Component
 
     this.changeValue = this.changeValue.bind(this);
     this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
+    this.changeVideoTitle = this.changeVideoTitle.bind(this);
     this.toggleVideoSelection = this.toggleVideoSelection.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
   }
@@ -74,6 +77,7 @@ class PlaylistEditTabView extends React.Component
         videoQuality: data.videoQuality,
         showControls: data.showControls,
         updateDate: data.updateDate,
+        albumID: data.albumID,
         albumName: data.albumName
       });
     }
@@ -81,7 +85,8 @@ class PlaylistEditTabView extends React.Component
 
   async loadPlaylistVideos()
   {
-    const rsp = await axios.get(
+    //load remote playlist data
+    const remoteVideos = await axios.get(
       '/wp-json/utubevideogallery/v1/youtubeplaylists/'
       + this.state.sourceID,
       {
@@ -89,18 +94,52 @@ class PlaylistEditTabView extends React.Component
       }
     );
 
-    if (rsp.status == 200 && !rsp.data.error)
-    {
-      let data = rsp.data.data;
+    //load local videos already in album
+    const localVideos = await axios.get(
+      '/wp-json/utubevideogallery/v1/albums/'
+      + this.state.albumID
+      + '/videos',
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
 
-      data.videos = data.videos.map((video) => {
-        video.selected = true;
-        return video;
+    if (
+      remoteVideos.status == 200
+      && !remoteVideos.data.error
+      && localVideos.status == 200
+      && !localVideos.data.error
+    )
+    {
+      let remoteData = remoteVideos.data.data;
+      let localData = localVideos.data.data;
+
+      //augment remote videos data
+      remoteData.videos = remoteData.videos.map((remoteVideo) =>
+      {
+        remoteVideo.selected = false;
+        remoteVideo.localID = undefined;
+
+        //determine if remote video already synced
+        for (let localVideo of localData)
+        {
+          if (
+            remoteVideo.sourceID == localVideo.url
+            && this.props.currentViewID == localVideo.playlistID
+          )
+          {
+            remoteVideo.selected = true;
+            remoteVideo.localID = localVideo.id;
+            break;
+          }
+        }
+
+        return remoteVideo;
       });
 
       this.setState({
-        playlistTitle: data.title,
-        playlistVideos: data.videos,
+        playlistTitle: remoteData.title,
+        playlistVideos: remoteData.videos,
         playlistLoading: false
       });
     }
@@ -116,6 +155,14 @@ class PlaylistEditTabView extends React.Component
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
+  changeVideoTitle(dataIndex, event)
+  {
+    let playlistVideos = this.state.playlistVideos;
+    playlistVideos[dataIndex].title = event.target.value;
+
+    this.setState({playlistVideos});
+  }
+
   toggleVideoSelection(dataIndex)
   {
     //flip state of video selected
@@ -127,31 +174,150 @@ class PlaylistEditTabView extends React.Component
 
   async savePlaylist()
   {
-    //clean thumbnail url before sending
-    let cleanedThumbnail = this.state.thumbnail.replace(utvJSData.thumbnailCacheDirectory, '');
-    cleanedThumbnail = cleanedThumbnail.replace('.jpg', '');
+    //set loading
+    this.setState({loading: true});
 
-    const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/albums/'
+    //save base playlist
+    await this.savePlaylistData();
+
+    //save playlist videos
+    await this.savePlaylistVideoData();
+
+    this.props.changeView(undefined);
+    this.props.setFeedbackMessage('Playlist synced / saved', 'success');
+  }
+
+  async savePlaylistData()
+  {
+    //save base playlist data
+    const playlistRsp = await axios.patch(
+      '/wp-json/utubevideogallery/v1/playlists/'
       + this.props.currentViewID,
       {
-        title: this.state.title,
-        thumbnail: cleanedThumbnail,
-        videoSorting: this.state.videoSorting,
-        galleryID: this.state.gallery
+        videoQuality: this.state.videoQuality,
+        showControls: this.state.showControls
       },
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
     );
+  }
 
-    if (rsp.status == 200 && !rsp.data.error)
+  async savePlaylistVideoData()
+  {
+    //create, update, or delete playlist videos based on sync method
+    for (let video of this.state.playlistVideos)
     {
-      this.props.changeView(undefined);
-      this.props.setFeedbackMessage('Album changes saved', 'success');
+      if (this.state.syncMethod == 'syncSelected')
+      {
+        //update video
+        if (video.selected && video.localID)
+        {
+          let rsp = await axios.patch(
+            '/wp-json/utubevideogallery/v1/videos/'
+            + video.localID,
+            {
+              title: video.title,
+              quality: this.state.videoQuality,
+              controls: this.state.showControls
+            },
+            {
+              headers: {'X-WP-Nonce': utvJSData.restNonce}
+            }
+          );
+        }
+        //create video
+        else if (video.selected && !video.localID)
+        {
+          let rsp = await axios.post(
+            '/wp-json/utubevideogallery/v1/videos',
+            {
+              urlKey: video.sourceID,
+              title: video.title,
+              quality: this.state.videoQuality,
+              controls: this.state.showControls,
+              source: this.state.source,
+              albumID: this.state.albumID,
+              playlistID: this.props.currentViewID
+            },
+            {
+              headers: {'X-WP-Nonce': utvJSData.restNonce}
+            }
+          );
+        }
+        //delete video
+        else if (!video.selected && video.localID)
+        {
+          let rsp = await axios.delete(
+            '/wp-json/utubevideogallery/v1/videos/'
+            + video.localID,
+            {
+              headers: {'X-WP-Nonce': utvJSData.restNonce}
+            }
+          );
+        }
+      }
+      else if (this.state.syncMethod == 'syncNew')
+      {
+        //create video
+        if (!video.localID)
+        {
+          let rsp = await axios.post(
+            '/wp-json/utubevideogallery/v1/videos',
+            {
+              urlKey: video.sourceID,
+              title: video.title,
+              quality: this.state.videoQuality,
+              controls: this.state.showControls,
+              source: this.state.source,
+              albumID: this.state.albumID,
+              playlistID: this.props.currentViewID
+            },
+            {
+              headers: {'X-WP-Nonce': utvJSData.restNonce}
+            }
+          );
+        }
+      }
+      else if (this.state.syncMethod == 'syncAll')
+      {
+        //update video
+        if (video.localID)
+        {
+          let rsp = await axios.patch(
+            '/wp-json/utubevideogallery/v1/videos/'
+            + video.localID,
+            {
+              title: video.title,
+              quality: this.state.videoQuality,
+              controls: this.state.showControls
+            },
+            {
+              headers: {'X-WP-Nonce': utvJSData.restNonce}
+            }
+          );
+        }
+        //create video
+        else
+        {
+          let rsp = await axios.post(
+            '/wp-json/utubevideogallery/v1/videos',
+            {
+              urlKey: video.sourceID,
+              title: video.title,
+              quality: this.state.videoQuality,
+              controls: this.state.showControls,
+              source: this.state.source,
+              albumID: this.state.albumID,
+              playlistID: this.props.currentViewID
+            },
+            {
+              headers: {'X-WP-Nonce': utvJSData.restNonce}
+            }
+          );
+        }
+      }
     }
-    else
-      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
   }
 
   render()
@@ -166,6 +332,7 @@ class PlaylistEditTabView extends React.Component
       playlistNode = <PlaylistVideoSelection
         videos={this.state.playlistVideos}
         toggleVideoSelection={this.toggleVideoSelection}
+        changeVideoTitle={this.changeVideoTitle}
       />
 
     const updateDate = new Date(this.state.updateDate * 1000);
@@ -175,11 +342,20 @@ class PlaylistEditTabView extends React.Component
       + '/'
       + updateDate.getDate();
 
+    let source = undefined;
+    if (this.state.source == 'youtube')
+      source = 'YouTube';
+    else if (source == 'vimeo')
+      source = 'Vimeo';
+
     return (
       <div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Playlists', onClick: () => this.props.changeView(undefined)},
+            {
+              text: 'Playlists',
+              onClick: () => this.props.changeView(undefined)
+            },
             {text: 'Playlist Name'}
           ]}
         />
@@ -203,7 +379,7 @@ class PlaylistEditTabView extends React.Component
                   <Label text="Source"/>
                   <TextInput
                     name="source"
-                    value={this.state.source}
+                    value={source}
                     disabled={true}
                   />
                 </FormField>
@@ -239,7 +415,7 @@ class PlaylistEditTabView extends React.Component
                 <FormField>
                   <Label text="Controls"/>
                   <Toggle
-                    name="controls"
+                    name="showControls"
                     value={this.state.showControls}
                     onChange={this.changeCheckboxValue}
                   />
@@ -251,6 +427,19 @@ class PlaylistEditTabView extends React.Component
                     name="updateDate"
                     value={updateDateFormatted}
                     disabled={true}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Sync Method"/>
+                  <SelectBox
+                    name="syncMethod"
+                    value={this.state.syncMethod}
+                    onChange={this.changeValue}
+                    data={[
+                      {name: 'Sync Selected', value: 'syncSelected'},
+                      {name: 'Sync New', value: 'syncNew'},
+                      {name: 'Sync All', value: 'syncAll'}
+                    ]}
                   />
                 </FormField>
                 <FormField classes="utv-formfield-action">
