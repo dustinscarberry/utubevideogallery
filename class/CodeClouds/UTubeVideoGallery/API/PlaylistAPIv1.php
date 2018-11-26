@@ -152,14 +152,52 @@ class PlaylistAPIv1 extends APIv1
         'ALB_ID' => $albumID
       ]
     ))
-      return $this->response(null, 201);
+    {
+      $data = new stdClass();
+      $data->id = $wpdb->insert_id;
+      return $this->response($data, 201);
+    }
     else
       return $this->errorResponse('A database error has occurred');
   }
 
   public function deleteItem(WP_REST_Request $req)
   {
+    global $wpdb;
 
+    //check for valid playlistID
+    if (!$req['playlistID'])
+      return $this->errorResponse('Invalid playlist ID');
+
+    //sanitize fields
+    $playlistID = sanitize_key($req['playlistID']);
+
+    //get all videos in playlist
+    $playlistVideos = $wpdb->get_results('SELECT VID_ID, VID_URL FROM ' . $wpdb->prefix . 'utubevideo_video WHERE PLAY_ID = ' . $playlistID);
+
+    //delete videos
+    foreach ($playlistVideos as $video)
+    {
+      //update database entry
+      if (!$wpdb->delete(
+        $wpdb->prefix . 'utubevideo_video',
+        ['VID_ID' => $video->VID_ID]
+      ))
+        return $this->errorResponse('A database error has occurred');
+
+      //delete video thumbnail
+      $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
+      unlink($thumbnailPath . $video->VID_URL . $video->VID_ID . '.jpg');
+    }
+
+    //delete playlist records
+    if ($wpdb->delete(
+      $wpdb->prefix . 'utubevideo_playlist',
+      ['PLAY_ID' => $playlistID]
+    ) === false)
+      return $this->errorResponse('A database error has occurred');
+
+    return $this->response(null);
   }
 
   public function updateItem(WP_REST_Request $req)

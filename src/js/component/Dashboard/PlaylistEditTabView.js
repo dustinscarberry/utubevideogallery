@@ -384,14 +384,6 @@ class PlaylistEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Source ID"/>
-                  <TextInput
-                    name="sourceID"
-                    value={this.state.sourceID}
-                    disabled={true}
-                  />
-                </FormField>
-                <FormField>
                   <Label text="Album"/>
                   <TextInput
                     name="albumName"

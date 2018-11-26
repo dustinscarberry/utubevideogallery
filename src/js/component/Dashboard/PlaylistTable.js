@@ -11,6 +11,10 @@ class PlaylistTable extends React.Component
     this.state = {
       rand: undefined
     };
+
+    this.deletePlaylist = this.deletePlaylist.bind(this);
+    this.deletePlaylistPrompt = this.deletePlaylistPrompt.bind(this);
+    this.deletePlaylistsPrompt = this.deletePlaylistsPrompt.bind(this);
   }
 
   getHeaders()
@@ -34,7 +38,7 @@ class PlaylistTable extends React.Component
               <TableRowActions
                 actions={[
                   {text: 'Edit / Sync', onClick: () => this.props.changeView('editPlaylist', row.id)},
-                  {text: 'View', onClick: () => window.location = 'https://www.youtube.com/playlist?list=' + row.sourceID},
+                  {text: 'View', link: 'https://www.youtube.com/playlist?list=' + row.sourceID},
                   {text: 'Delete', onClick: () => this.deletePlaylistPrompt(row.id)}
                 ]}
               />
@@ -112,6 +116,34 @@ class PlaylistTable extends React.Component
           this.deletePlaylistsPrompt(items);
       }
     };
+  }
+
+  deletePlaylistsPrompt(items)
+  {
+    if (confirm('Are you sure you want to delete these playlists?'))
+    {
+      for (let item of items)
+        this.deletePlaylist(item.id);
+    }
+  }
+
+  deletePlaylistPrompt(playlistID)
+  {
+    if (confirm('Are you sure you want to delete this video?'))
+      this.deletePlaylist(playlistID);
+  }
+
+  async deletePlaylist(playlistID)
+  {
+    const rsp = await axios.delete(
+      '/wp-json/utubevideogallery/v1/playlists/' + playlistID,
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+
+    if (rsp.status == 200 && !rsp.data.error)
+      this.setState({rand: Math.random()});
   }
 
   render()

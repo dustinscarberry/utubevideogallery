@@ -25,8 +25,8 @@ class PlaylistAddTabView extends React.Component
 
     this.state = {
       url: undefined,
-      videoQuality: undefined,
-      showControls: undefined,
+      videoQuality: 'hd1080 ',
+      showControls: true,
       source: undefined,
       sourceID: undefined,
       playlistTitle: undefined,
@@ -82,6 +82,9 @@ class PlaylistAddTabView extends React.Component
         };
       });
 
+      //add blank entry to list
+      albums.unshift({name: '', value: ''});
+
       this.setState({albums});
     }
   }
@@ -131,15 +134,15 @@ class PlaylistAddTabView extends React.Component
 
   changeVideoTitle(dataIndex, event)
   {
-    let playlistVideos = this.state.playlistVideos;
+    const { playlistVideos } = this.state;
     playlistVideos[dataIndex].title = event.target.value;
 
     this.setState({playlistVideos});
   }
 
-  async changePlaylistURL(event)
+  changePlaylistURL(event)
   {
-    let url = event.target.value;
+    const url = event.target.value;
     this.setState({url});
 
     if (url)
@@ -151,60 +154,55 @@ class PlaylistAddTabView extends React.Component
     }
   }
 
+  //toggle playlist video selection
   toggleVideoSelection(dataIndex)
   {
-    //flip state of video selected
     let { playlistVideos } = this.state;
     playlistVideos[dataIndex].selected = !playlistVideos[dataIndex].selected;
 
     this.setState({playlistVideos});
   }
 
-
-
-
-
-
-
-
-
+  //add new playlist to database
   async addPlaylist()
   {
     //set loading
     this.setState({loading: true});
 
     //save base playlist
-    await this.savePlaylistData();
+    const basePlaylist = await this.addPlaylistData();
 
-    //save playlist videos
-    await this.savePlaylistVideoData();
+    if (
+      basePlaylist.status == 201
+      && !basePlaylist.data.error
+    )
+    {
+      //get playlist id
+      const id = basePlaylist.data.data.id;
+
+      //save playlist videos
+      await this.addPlaylistVideoData(id);
+
+      this.props.setFeedbackMessage('Playlist added', 'success');
+    }
+    else
+      this.props.setFeedbackMessage('Playlist failed to add', 'error');
 
     this.props.changeView(undefined);
-    this.props.setFeedbackMessage('Playlist added', 'success');
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   async addPlaylistData()
   {
-    //save base playlist data
-    const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/playlists/'
-      + this.props.currentViewID,
+    //add base playlist data
+    return await axios.post(
+      '/wp-json/utubevideogallery/v1/playlists',
       {
+        title: this.state.playlistTitle,
+        source: this.state.source,
+        sourceID: this.state.sourceID,
         videoQuality: this.state.videoQuality,
-        showControls: this.state.showControls
+        showControls: this.state.showControls,
+        albumID: this.state.album
       },
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
@@ -212,79 +210,40 @@ class PlaylistAddTabView extends React.Component
     );
   }
 
-  async addPlaylistVideoData()
+  async addPlaylistVideoData(playlistID)
   {
     //create, update, or delete playlist videos based on sync method
     for (let video of this.state.playlistVideos)
     {
-      if (this.state.syncMethod == 'syncSelected')
+      //create video
+      if (video.selected)
       {
-        //update video
-        if (video.selected && video.localID)
-        {
-          let rsp = await axios.patch(
-            '/wp-json/utubevideogallery/v1/videos/'
-            + video.localID,
-            {
-              title: video.title,
-              quality: this.state.videoQuality,
-              controls: this.state.showControls
-            },
-            {
-              headers: {'X-WP-Nonce': utvJSData.restNonce}
-            }
-          );
-        }
-        //create video
-        else if (video.selected && !video.localID)
-        {
-          let rsp = await axios.post(
-            '/wp-json/utubevideogallery/v1/videos',
-            {
-              urlKey: video.sourceID,
-              title: video.title,
-              quality: this.state.videoQuality,
-              controls: this.state.showControls,
-              source: this.state.source,
-              albumID: this.state.albumID,
-              playlistID: this.props.currentViewID
-            },
-            {
-              headers: {'X-WP-Nonce': utvJSData.restNonce}
-            }
-          );
-        }
-        //delete video
-        else if (!video.selected && video.localID)
-        {
-          let rsp = await axios.delete(
-            '/wp-json/utubevideogallery/v1/videos/'
-            + video.localID,
-            {
-              headers: {'X-WP-Nonce': utvJSData.restNonce}
-            }
-          );
-        }
+        let rsp = await axios.post(
+          '/wp-json/utubevideogallery/v1/videos',
+          {
+            urlKey: video.sourceID,
+            title: video.title,
+            quality: this.state.videoQuality,
+            controls: this.state.showControls,
+            source: this.state.source,
+            albumID: this.state.album,
+            playlistID: playlistID
+          },
+          {
+            headers: {'X-WP-Nonce': utvJSData.restNonce}
+          }
+        );
       }
     }
   }
 
-
-
-
-
-
-
-
-
-
-
-
   render()
   {
+    //show view loader
     if (this.state.loading)
       return <Loader/>;
 
+    //show playlist videos or loader
     let playlistNode = undefined;
     if (this.state.playlistLoading
       && this.state.url
@@ -323,6 +282,7 @@ class PlaylistAddTabView extends React.Component
                     name="url"
                     value={this.state.url}
                     onChange={this.changePlaylistURL}
+                    required={true}
                   />
                 </FormField>
                 <FormField>
@@ -340,6 +300,7 @@ class PlaylistAddTabView extends React.Component
                     value={this.state.album}
                     onChange={this.changeValue}
                     data={this.state.albums}
+                    required={true}
                   />
                 </FormField>
                 <FormField>
@@ -353,6 +314,7 @@ class PlaylistAddTabView extends React.Component
                       {name: '720p', value: 'hd720'},
                       {name: '480p', value: 'large'}
                     ]}
+                    required={true}
                   />
                 </FormField>
                 <FormField>
