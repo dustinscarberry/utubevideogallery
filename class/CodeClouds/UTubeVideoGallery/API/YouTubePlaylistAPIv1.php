@@ -3,7 +3,6 @@
 namespace CodeClouds\UTubeVideoGallery\API;
 
 use CodeClouds\UTubeVideoGallery\API\APIv1;
-use CodeClouds\UTubeVideoGallery\Shared\Thumbnail;
 use CodeClouds\UTubeVideoGallery\Shared\Utility;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -40,8 +39,6 @@ class YouTubePlaylistAPIv1 extends APIv1
 
   public function getAllItems(WP_REST_Request $req)
   {
-    global $wpdb;
-
     //initialize return object
     $returnData = new stdClass();
     $returnData->title = '';

@@ -37,6 +37,7 @@ use CodeClouds\UTubeVideoGallery\API\PlaylistAPIv1;
 use CodeClouds\UTubeVideoGallery\API\VideoOrderAPIv1;
 use CodeClouds\UTubeVideoGallery\API\AlbumOrderAPIv1;
 use CodeClouds\UTubeVideoGallery\API\YouTubePlaylistAPIv1;
+use CodeClouds\UTubeVideoGallery\API\VimeoPlaylistAPIv1;
 use CodeClouds\UTubeVideoGallery\API\SettingsAPIv1;
 
 if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
@@ -109,6 +110,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       new VideoOrderAPIv1();
       new AlbumOrderAPIv1();
       new YouTubePlaylistAPIv1();
+      new VimeoPlaylistAPIv1();
       new SettingsAPIv1();
     }
 
