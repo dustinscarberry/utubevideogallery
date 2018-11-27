@@ -61,7 +61,10 @@ class AlbumEditTabView extends React.Component
       }
     );
 
-    if (apiData.status == 200)
+    if (
+      apiData.status == 200
+      && !apiData.data.error
+    )
     {
       const data = apiData.data.data;
 
@@ -147,9 +150,12 @@ class AlbumEditTabView extends React.Component
       }
     );
 
-    if (rsp.status == 200 && !rsp.data.error)
+    if (
+      rsp.status == 200
+      && !rsp.data.error
+    )
     {
-      this.props.changeView(undefined);
+      this.props.changeView();
       this.props.setFeedbackMessage('Album changes saved', 'success');
     }
     else
@@ -159,11 +165,17 @@ class AlbumEditTabView extends React.Component
   render()
   {
     const updateDate = new Date(this.state.updateDate * 1000);
-    const updateDateFormatted = updateDate.getFullYear()
-      + '/'
-      + (updateDate.getMonth() + 1)
-      + '/'
-      + updateDate.getDate();
+    const updateDateFormatted = updateDate.toLocaleString(
+      'en-US',
+      {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+      }
+    );
 
     if (this.state.loading)
       return <Loader/>;
@@ -172,8 +184,14 @@ class AlbumEditTabView extends React.Component
       <div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
-            {text: 'Master', onClick: () => this.props.changeAlbum(undefined)}
+            {
+              text: 'Galleries',
+              onClick: () => this.props.changeGallery()
+            },
+            {
+              text: this.props.selectedGalleryTitle,
+              onClick: () => this.props.changeAlbum()
+            }
           ]}
         />
         <Columns>
@@ -230,7 +248,7 @@ class AlbumEditTabView extends React.Component
                   <Button
                     title="Cancel"
                     classes="utv-cancel"
-                    onClick={() => this.props.changeView(undefined)}
+                    onClick={() => this.props.changeView()}
                   />
                 </FormField>
               </Form>

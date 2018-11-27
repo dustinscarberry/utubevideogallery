@@ -9,14 +9,16 @@ const BulkActions = (props) =>
     runBulkAction
   } = props;
 
-  let options = actionData.options.map((option) => {
+  const optionNodes = actionData.options.map((option) => {
     return <option key={option.value} value={option.value}>{option.name}</option>;
   });
+
+  optionNodes.unshift(<option key={-1} value="">Bulk Actions</option>);
 
   return (
     <div className="ccgriddle-table-page-actions">
       <select className="form-control" value={bulkAction} onChange={updateBulkAction}>
-        {options}
+        {optionNodes}
       </select>
       <button onClick={runBulkAction}>Apply</button>
     </div>

@@ -66,7 +66,10 @@ class PlaylistEditTabView extends React.Component
       }
     );
 
-    if (rsp.status == 200 && !rsp.data.error)
+    if (
+      rsp.status == 200
+      && !rsp.data.error
+    )
     {
       const data = rsp.data.data;
 
@@ -86,13 +89,24 @@ class PlaylistEditTabView extends React.Component
   async loadPlaylistVideos()
   {
     //load remote playlist data
-    const remoteVideos = await axios.get(
-      '/wp-json/utubevideogallery/v1/youtubeplaylists/'
-      + this.state.sourceID,
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    let remoteVideos = undefined;
+
+    if (this.state.source == 'youtube')
+      remoteVideos = await axios.get(
+        '/wp-json/utubevideogallery/v1/youtubeplaylists/'
+        + this.state.sourceID,
+        {
+          headers: {'X-WP-Nonce': utvJSData.restNonce}
+        }
+      );
+    else if (this.state.source == 'vimeo')
+      remoteVideos = await axios.get(
+        '/wp-json/utubevideogallery/v1/vimeoplaylists/'
+        + this.state.sourceID,
+        {
+          headers: {'X-WP-Nonce': utvJSData.restNonce}
+        }
+      );
 
     //load local videos already in album
     const localVideos = await axios.get(
@@ -183,7 +197,7 @@ class PlaylistEditTabView extends React.Component
     //save playlist videos
     await this.savePlaylistVideoData();
 
-    this.props.changeView(undefined);
+    this.props.changeView();
     this.props.setFeedbackMessage('Playlist synced / saved', 'success');
   }
 
@@ -336,16 +350,22 @@ class PlaylistEditTabView extends React.Component
       />
 
     const updateDate = new Date(this.state.updateDate * 1000);
-    const updateDateFormatted = updateDate.getFullYear()
-      + '/'
-      + (updateDate.getMonth() + 1)
-      + '/'
-      + updateDate.getDate();
+    const updateDateFormatted = updateDate.toLocaleString(
+      'en-US',
+      {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+      }
+    );
 
     let source = undefined;
     if (this.state.source == 'youtube')
       source = 'YouTube';
-    else if (source == 'vimeo')
+    else if (this.state.source == 'vimeo')
       source = 'Vimeo';
 
     return (
@@ -353,10 +373,9 @@ class PlaylistEditTabView extends React.Component
         <Breadcrumbs
           crumbs={[
             {
-              text: 'Playlists',
-              onClick: () => this.props.changeView(undefined)
-            },
-            {text: 'Playlist Name'}
+              text: 'Saved Playlists',
+              onClick: () => this.props.changeView()
+            }
           ]}
         />
         <Columns>
@@ -442,7 +461,7 @@ class PlaylistEditTabView extends React.Component
                   <Button
                     title="Cancel"
                     classes="utv-cancel"
-                    onClick={() => this.props.changeView(undefined)}
+                    onClick={() => this.props.changeView()}
                   />
                 </FormField>
               </Form>

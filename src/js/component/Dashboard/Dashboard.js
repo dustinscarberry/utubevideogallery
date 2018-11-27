@@ -24,7 +24,9 @@ class Dashboard extends React.Component
 
     this.state = {
       selectedGallery: undefined,
+      selectedGalleryTitle: undefined,
       selectedAlbum: undefined,
+      selectedAlbumTitle: undefined,
       currentView: undefined,
       currentViewID: undefined,
       feedbackMessage: undefined,
@@ -37,10 +39,11 @@ class Dashboard extends React.Component
     this.setFeedbackMessage = this.setFeedbackMessage.bind(this);
   }
 
-  changeGallery(value)
+  changeGallery(id = undefined, title = undefined)
   {
     this.setState({
-      selectedGallery: value,
+      selectedGallery: id,
+      selectedGalleryTitle: title,
       selectedAlbum: undefined,
       currentView: undefined
     });
@@ -48,17 +51,18 @@ class Dashboard extends React.Component
     scroll(0, 0);
   }
 
-  changeAlbum(value)
+  changeAlbum(id = undefined, title = undefined)
   {
     this.setState({
-      selectedAlbum: value,
+      selectedAlbum: id,
+      selectedAlbumTitle: title,
       currentView: undefined
     });
 
     scroll(0, 0);
   }
 
-  changeView(view, id = undefined)
+  changeView(view = undefined, id = undefined)
   {
     this.setState({
       currentView: view,
@@ -74,7 +78,9 @@ class Dashboard extends React.Component
       currentView,
       currentViewID,
       selectedGallery,
-      selectedAlbum
+      selectedGalleryTitle,
+      selectedAlbum,
+      selectedAlbumTitle
     } = this.state;
 
     if (currentView == 'addGallery')
@@ -93,6 +99,7 @@ class Dashboard extends React.Component
         changeView={this.changeView}
         changeGallery={this.changeGallery}
         selectedGallery={selectedGallery}
+        selectedGalleryTitle={selectedGalleryTitle}
         setFeedbackMessage={this.setFeedbackMessage}
       />
     else if (currentView == 'editAlbum')
@@ -101,6 +108,7 @@ class Dashboard extends React.Component
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
         currentViewID={currentViewID}
+        selectedGalleryTitle={selectedGalleryTitle}
         setFeedbackMessage={this.setFeedbackMessage}
       />
     else if (currentView == 'addVideo')
@@ -108,7 +116,9 @@ class Dashboard extends React.Component
         changeView={this.changeView}
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
+        selectedGalleryTitle={selectedGalleryTitle}
         selectedAlbum={selectedAlbum}
+        selectedAlbumTitle={selectedAlbumTitle}
         setFeedbackMessage={this.setFeedbackMessage}
       />
     else if (currentView == 'editVideo')
@@ -118,12 +128,16 @@ class Dashboard extends React.Component
         changeAlbum={this.changeAlbum}
         currentViewID={currentViewID}
         selectedGallery={selectedGallery}
+        selectedGalleryTitle={selectedGalleryTitle}
+        selectedAlbumTitle={selectedAlbumTitle}
         setFeedbackMessage={this.setFeedbackMessage}
       />
     else if (selectedAlbum != undefined)
       return <VideoTabView
         selectedGallery={selectedGallery}
+        selectedGalleryTitle={selectedGalleryTitle}
         selectedAlbum={selectedAlbum}
+        selectedAlbumTitle={selectedAlbumTitle}
         changeView={this.changeView}
         changeGallery={this.changeGallery}
         changeAlbum={this.changeAlbum}
@@ -133,6 +147,7 @@ class Dashboard extends React.Component
         changeAlbum={this.changeAlbum}
         changeGallery={this.changeGallery}
         selectedGallery={selectedGallery}
+        selectedGalleryTitle={selectedGalleryTitle}
         changeView={this.changeView}
       />
     else

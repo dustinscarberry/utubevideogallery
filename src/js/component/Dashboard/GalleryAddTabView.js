@@ -57,7 +57,7 @@ class GalleryAddTabView extends React.Component
 
     if (rsp.status == 201 && !rsp.data.error)
     {
-      this.props.changeView(undefined);
+      this.props.changeView();
       this.props.setFeedbackMessage('Gallery created', 'success');
     }
     else
@@ -70,7 +70,7 @@ class GalleryAddTabView extends React.Component
       <div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeView(undefined)}
+            {text: 'Galleries', onClick: () => this.props.changeView()}
           ]}
         />
         <Columns>
@@ -137,7 +137,7 @@ class GalleryAddTabView extends React.Component
                   <Button
                     title="Cancel"
                     classes="utv-cancel"
-                    onClick={() => this.props.changeView(undefined)}
+                    onClick={() => this.props.changeView()}
                   />
                 </FormField>
               </Form>

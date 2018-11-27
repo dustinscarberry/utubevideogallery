@@ -30,7 +30,7 @@ class GalleryTable extends React.Component
           return (
             <div>
               <a
-                onClick={() => this.props.changeGallery(row.id)}
+                onClick={() => this.props.changeGallery(row.id, cellData)}
                 href="javascript:void(0)"
                 className="utv-row-title">
                   {cellData}
@@ -38,7 +38,7 @@ class GalleryTable extends React.Component
               <TableRowActions
                 actions={[
                   {text: 'Edit', onClick: () => this.props.changeView('editGallery', row.id)},
-                  {text: 'View', onClick: () => this.props.changeGallery(row.id)},
+                  {text: 'View', onClick: () => this.props.changeGallery(row.id, cellData)},
                   {text: 'Delete', onClick: () => this.deleteGalleryPrompt(row.id)}
                 ]}
               />

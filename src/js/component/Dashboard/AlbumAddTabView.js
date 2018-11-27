@@ -52,9 +52,12 @@ class AlbumAddTabView extends React.Component
       }
     );
 
-    if (!rsp.data.error)
+    if (
+      rsp.status == 201
+      && !rsp.data.error
+    )
     {
-      this.props.changeView(undefined);
+      this.props.changeView();
       this.props.setFeedbackMessage('Album created', 'success');
     }
     else
@@ -67,8 +70,14 @@ class AlbumAddTabView extends React.Component
       <div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
-            {text: 'Master', onClick: () => this.props.changeView(undefined)}
+            {
+              text: 'Galleries',
+              onClick: () => this.props.changeGallery()
+            },
+            {
+              text: this.props.selectedGalleryTitle,
+              onClick: () => this.props.changeView()
+            }
           ]}
         />
         <Columns>
@@ -109,7 +118,7 @@ class AlbumAddTabView extends React.Component
                   <Button
                     title="Cancel"
                     classes="utv-cancel"
-                    onClick={() => this.props.changeView(undefined)}
+                    onClick={() => this.props.changeView()}
                   />
                 </FormField>
               </Form>

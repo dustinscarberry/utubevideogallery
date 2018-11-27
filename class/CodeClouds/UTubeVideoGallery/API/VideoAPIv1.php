@@ -105,6 +105,7 @@ class VideoAPIv1 extends APIv1
       WHERE VID_ID = ' . $videoID
     );
 
+    //check if video exists
     if (!$video)
       return $this->errorResponse('The specified video resource was not found');
 
@@ -137,7 +138,7 @@ class VideoAPIv1 extends APIv1
     $urlKey = sanitize_text_field($req['urlKey']);
     $title = sanitize_text_field($req['title']);
     $quality = sanitize_text_field($req['quality']);
-    $controls = ($req['controls'] ? 0 : 1);
+    $controls = ($req['controls'] ? 1 : 0);
     $startTime = sanitize_text_field($req['startTime']);
     $endTime = sanitize_text_field($req['endTime']);
     $source = sanitize_text_field($req['source']);
@@ -150,7 +151,18 @@ class VideoAPIv1 extends APIv1
       return $this->errorResponse('Invalid parameters');
 
     //get current video count for album
-    $videoCount = $wpdb->get_results('SELECT COUNT(VID_ID) AS VID_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $albumID)[0];
+    $videoCount = $wpdb->get_results(
+      'SELECT COUNT(VID_ID) AS VID_COUNT
+      FROM ' . $wpdb->prefix . 'utubevideo_video
+      WHERE ALB_ID = ' . $albumID
+    );
+
+    //check if value exists
+    if (!$videoCount)
+      return $this->errorResponse('A database error has occured during lookup');
+
+    $videoCount = $videoCount[0];
+
     $gallery = $wpdb->get_results('SELECT DATA_THUMBTYPE FROM ' . $wpdb->prefix . 'utubevideo_album a INNER JOIN ' . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID WHERE a.ALB_ID = ' . $albumID)[0];
     $nextSortPos = $videoCount->VID_COUNT;
 
@@ -176,13 +188,18 @@ class VideoAPIv1 extends APIv1
       //get last insert id and save thumbnail
       $videoID = $wpdb->insert_id;
 
-      var_dump($videoID);
-
       $thumbnail = new Thumbnail($videoID);
 
       if (!$thumbnail->save())
       {
-        $wpdb->query('DELETE FROM ' . $wpdb->prefix . 'utubevideo_video WHERE VID_ID ="' . $videoID . '"');
+        //delete video from database
+        if (!$wpdb->delete(
+          $wpdb->prefix . 'utubevideo_video',
+          ['VID_ID' => $videoID]
+        ))
+          return $this->errorResponse('A database error has occurred');
+
+        //return error message
         return $this->errorResponse('Video thumbnail failed to save');
       }
 
@@ -204,11 +221,17 @@ class VideoAPIv1 extends APIv1
     $videoID = sanitize_key($req['videoID']);
 
     //get all videos in album
-    $video = $wpdb->get_results('SELECT VID_ID, VID_URL FROM ' . $wpdb->prefix . 'utubevideo_video WHERE VID_ID = ' . $videoID);
+    $video = $wpdb->get_results(
+      'SELECT VID_ID, VID_URL
+      FROM ' . $wpdb->prefix . 'utubevideo_video
+      WHERE VID_ID = ' . $videoID
+    );
 
     //check if video exists
-    if ($video)
-      $video = $video[0];
+    if (!$video)
+      return $this->errorResponse('Video does not exist');
+
+    $video = $video[0];
 
     //update database entry
     if (!$wpdb->delete(
@@ -240,7 +263,7 @@ class VideoAPIv1 extends APIv1
     $endTime = sanitize_text_field($req['endTime']);
 
     if (isset($req['controls']))
-      $controls = $req['controls'] ? 0 : 1;
+      $controls = $req['controls'] ? 1 : 0;
     else
       $controls = null;
 
@@ -263,7 +286,7 @@ class VideoAPIv1 extends APIv1
     if ($quality != null)
       $updatedFields['VID_QUALITY'] = $quality;
 
-    if ($controls != null)
+    if ($controls !== null)
       $updatedFields['VID_CHROME'] = $controls;
 
     if ($startTime != null)

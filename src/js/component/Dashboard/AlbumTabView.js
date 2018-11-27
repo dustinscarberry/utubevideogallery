@@ -18,8 +18,8 @@ class AlbumTabView extends React.Component
         </div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
-            {text: 'Gallery Name'}
+            {text: 'Galleries', onClick: () => this.props.changeGallery()},
+            {text: this.props.selectedGalleryTitle}
           ]}
         />
         <AlbumTable

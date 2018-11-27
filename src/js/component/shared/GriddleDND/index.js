@@ -31,7 +31,6 @@ class GriddleDND extends React.Component
     //set loading and load initial table data
     this.setState({loading: true});
     this.loadData();
-    this.initializeBulkActions();
     this.setState({loading: false});
   }
 
@@ -106,21 +105,6 @@ class GriddleDND extends React.Component
       data[i].rowSelected = e.target.checked;
 
     this.setState({data});
-  }
-
-  //initialize starting bulk action into state
-  initializeBulkActions()
-  {
-    const {
-      enableBulkActions,
-      bulkActionsData
-    } = this.props;
-
-    if (enableBulkActions && bulkActionsData.options.length > 0)
-    {
-      const defaultBulkAction = bulkActionsData.options[0].value;
-      this.setState({bulkAction: defaultBulkAction});
-    }
   }
 
   //run outside bulkaction

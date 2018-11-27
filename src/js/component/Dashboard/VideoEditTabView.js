@@ -29,7 +29,7 @@ class VideoEditTabView extends React.Component
       source: undefined,
       title: '',
       quality: undefined,
-      controls: true,
+      controls: undefined,
       startTime: undefined,
       endTime: undefined,
       updateDate: undefined,
@@ -57,16 +57,20 @@ class VideoEditTabView extends React.Component
 
   async loadData()
   {
-    let apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/videos/' + this.props.currentViewID,
+    const apiData = await axios.get(
+      '/wp-json/utubevideogallery/v1/videos/'
+      + this.props.currentViewID,
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
     );
 
-    if (apiData.status == 200)
+    if (
+      apiData.status == 200
+      && !apiData.data.error
+    )
     {
-      let data = apiData.data.data;
+      const data = apiData.data.data;
 
       this.setState({
         thumbnail: data.thumbnail,
@@ -74,7 +78,7 @@ class VideoEditTabView extends React.Component
         urlKey: data.url,
         title: data.title,
         quality: data.quality,
-        controls: data.showChrome,
+        controls: data.showChrome == 1 ? true : false,
         startTime: data.startTime,
         endTime: data.endTime,
         updateDate: data.updateDate,
@@ -92,13 +96,19 @@ class VideoEditTabView extends React.Component
       + '/albums'
     );
 
-    if (!apiData.data.error)
+    if (
+      apiData.status == 200
+      && !apiData.data.error
+    )
     {
       const data = apiData.data.data;
-      let albums = [];
+      const albums = [];
 
-      for (let album of data)
-        albums.push({name: album.title, value: album.id});
+      for (const album of data)
+        albums.push({
+          name: album.title,
+          value: album.id
+        });
 
       this.setState({albums});
     }
@@ -132,9 +142,12 @@ class VideoEditTabView extends React.Component
       }
     );
 
-    if (rsp.status == 200 && !rsp.data.error)
+    if (
+      rsp.status == 200
+      && !rsp.data.error
+    )
     {
-      this.props.changeView(undefined);
+      this.props.changeView();
       this.props.setFeedbackMessage('Video changes saved', 'success');
     }
     else
@@ -177,19 +190,25 @@ class VideoEditTabView extends React.Component
 
   render()
   {
-    let source = undefined;
+    let sourceFormatted = undefined;
 
     if (this.state.source == 'youtube')
-      source = 'YouTube';
+      sourceFormatted = 'YouTube';
     else if (this.state.source == 'vimeo')
-      source = 'Vimeo';
+      sourceFormatted = 'Vimeo';
 
-    let updateDate = new Date(this.state.updateDate * 1000);
-    let updateDateFormatted = updateDate.getFullYear()
-      + '/'
-      + (updateDate.getMonth() + 1)
-      + '/'
-      + updateDate.getDate();
+    const updateDate = new Date(this.state.updateDate * 1000);
+    const updateDateFormatted = updateDate.toLocaleString(
+      'en-US',
+      {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+      }
+    );
 
     //show loader while form is loading
     if (this.state.loading)
@@ -199,9 +218,9 @@ class VideoEditTabView extends React.Component
       <div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
-            {text: 'Master', onClick: () => this.props.changeAlbum(undefined)},
-            {text: 'Disney', onClick: () => this.props.changeView(undefined)}
+            {text: 'Galleries', onClick: () => this.props.changeGallery()},
+            {text: this.props.selectedGalleryTitle, onClick: () => this.props.changeAlbum()},
+            {text: this.props.selectedAlbumTitle, onClick: () => this.props.changeView()}
           ]}
         />
         <Columns>
@@ -216,7 +235,7 @@ class VideoEditTabView extends React.Component
                   <Label text="Source"/>
                   <TextInput
                     name="source"
-                    value={source}
+                    value={sourceFormatted}
                     disabled={true}
                   />
                 </FormField>
@@ -245,20 +264,20 @@ class VideoEditTabView extends React.Component
                     value={this.state.quality}
                     onChange={this.changeValue}
                     data={[
-                      {name: '480p', value: 'large'},
+                      {name: '1080p', value: 'hd1080'},
                       {name: '720p', value: 'hd720'},
-                      {name: '1080p', value: 'hd1080'}
+                      {name: '480p', value: 'large'}
                     ]}
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Controls"/>
+                  <Label text="Show Controls"/>
                   <Toggle
                     name="controls"
                     value={this.state.controls}
                     onChange={this.changeCheckboxValue}
                   />
-                  <FieldHint text="Visible player controls"/>
+                  <FieldHint text="Show player controls"/>
                 </FormField>
                 <FormField>
                   <Label text="Start Time"/>
@@ -294,7 +313,7 @@ class VideoEditTabView extends React.Component
                   <Button
                     title="Cancel"
                     classes="utv-cancel"
-                    onClick={() => this.props.changeView(undefined)}
+                    onClick={() => this.props.changeView()}
                   />
                 </FormField>
               </Form>

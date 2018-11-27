@@ -49,14 +49,17 @@ class GalleryEditTabView extends React.Component
 
   async loadData()
   {
-    const rsp = await axios.get(
+    const apiData = await axios.get(
       '/wp-json/utubevideogallery/v1/galleries/' + this.props.currentViewID,
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
     );
 
-    if (rsp.status == 200 && !rsp.data.error)
+    if (
+      apiData.status == 200
+      && !apiData.data.error
+    )
     {
       const data = apiData.data.data;
 
@@ -96,9 +99,12 @@ class GalleryEditTabView extends React.Component
       }
     );
 
-    if (rsp.status == 200 && !rsp.data.error)
+    if (
+      rsp.status == 200
+      && !rsp.data.error
+    )
     {
-      this.props.changeView(undefined);
+      this.props.changeView();
       this.props.setFeedbackMessage('Gallery changes saved', 'success');
     }
     else
@@ -108,11 +114,17 @@ class GalleryEditTabView extends React.Component
   render()
   {
     const updateDate = new Date(this.state.updateDate * 1000);
-    const updateDateFormatted = updateDate.getFullYear()
-      + '/'
-      + (updateDate.getMonth() + 1)
-      + '/'
-      + updateDate.getDate();
+    const updateDateFormatted = updateDate.toLocaleString(
+      'en-US',
+      {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true
+      }
+    );
 
     if (this.state.loading)
       return <Loader/>;
@@ -121,8 +133,10 @@ class GalleryEditTabView extends React.Component
       <div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeView(undefined)},
-            {text: 'Master'}
+            {
+              text: 'Galleries',
+              onClick: () => this.props.changeView()
+            }
           ]}
         />
         <Columns>
@@ -194,7 +208,7 @@ class GalleryEditTabView extends React.Component
                   <Button
                     title="Cancel"
                     classes="utv-cancel"
-                    onClick={() => this.props.changeView(undefined)}
+                    onClick={() => this.props.changeView()}
                   />
                 </FormField>
               </Form>

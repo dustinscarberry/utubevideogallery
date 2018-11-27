@@ -97,9 +97,12 @@ class VideoAddTabView extends React.Component
       }
     );
 
-    if (rsp.status == 201 && !rsp.data.error)
+    if (
+      rsp.status == 201
+      && !rsp.data.error
+    )
     {
-      this.props.changeView(undefined);
+      this.props.changeView();
       this.props.setFeedbackMessage('Video added', 'success');
     }
     else
@@ -146,9 +149,9 @@ class VideoAddTabView extends React.Component
       <div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
-            {text: 'Master', onClick: () => this.props.changeAlbum(undefined)},
-            {text: 'Disney'}
+            {text: 'Galleries', onClick: () => this.props.changeGallery()},
+            {text: this.props.selectedGalleryTitle, onClick: () => this.props.changeAlbum()},
+            {text: this.props.selectedAlbumTitle}
           ]}
         />
         <Columns>
@@ -224,7 +227,7 @@ class VideoAddTabView extends React.Component
                   <Button
                     title="Cancel"
                     classes="utv-cancel"
-                    onClick={() => this.props.changeView(undefined)}
+                    onClick={() => this.props.changeView()}
                   />
                 </FormField>
               </Form>

@@ -18,9 +18,9 @@ class VideoTabView extends React.Component
         </div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeGallery(undefined)},
-            {text: 'Master', onClick: () => this.props.changeAlbum(undefined)},
-            {text: 'Disney'}
+            {text: 'Galleries', onClick: () => this.props.changeGallery()},
+            {text: this.props.selectedGalleryTitle, onClick: () => this.props.changeAlbum()},
+            {text: this.props.selectedAlbumTitle}
           ]}
         />
         <VideoTable

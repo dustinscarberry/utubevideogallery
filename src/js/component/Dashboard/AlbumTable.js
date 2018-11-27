@@ -32,7 +32,7 @@ class AlbumTable extends React.Component
         formatter: (row, cellData) =>
         {
           return <img
-            onClick={() => this.props.changeAlbum(row.id)}
+            onClick={() => this.props.changeAlbum(row.id, row.title)}
             src={utvJSData.thumbnailCacheDirectory + cellData + '.jpg'}
             className="utv-preview-thumb utv-is-clickable"
             data-rjs="2"
@@ -49,7 +49,7 @@ class AlbumTable extends React.Component
           return (
             <div>
               <a
-                onClick={() => this.props.changeAlbum(row.id)}
+                onClick={() => this.props.changeAlbum(row.id, cellData)}
                 href="javascript:void(0)"
                 className="utv-row-title">
                   {cellData}
@@ -57,7 +57,7 @@ class AlbumTable extends React.Component
               <TableRowActions
                 actions={[
                   {text: 'Edit', onClick: () => this.props.changeView('editAlbum', row.id)},
-                  {text: 'View', onClick: () => this.props.changeAlbum(row.id)},
+                  {text: 'View', onClick: () => this.props.changeAlbum(row.id, cellData)},
                   {text: 'Delete', onClick: () => this.deleteAlbumPrompt(row.id)}
                 ]}
               />

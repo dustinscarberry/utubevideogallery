@@ -26,7 +26,7 @@ class PlaylistAddTabView extends React.Component
     this.state = {
       url: undefined,
       videoQuality: 'hd1080 ',
-      showControls: true,
+      showControls: false,
       source: undefined,
       sourceID: undefined,
       playlistTitle: undefined,
@@ -70,7 +70,10 @@ class PlaylistAddTabView extends React.Component
       }
     );
 
-    if (rsp.status == 200 && !rsp.data.error)
+    if (
+      rsp.status == 200
+      && !rsp.data.error
+    )
     {
       const data = rsp.data.data;
 
@@ -92,13 +95,24 @@ class PlaylistAddTabView extends React.Component
   async loadPlaylistVideos()
   {
     //load remote playlist data
-    const remoteVideos = await axios.get(
-      '/wp-json/utubevideogallery/v1/youtubeplaylists/'
-      + this.state.sourceID,
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    let remoteVideos = undefined;
+
+    if (this.state.source == 'youtube')
+      remoteVideos = await axios.get(
+        '/wp-json/utubevideogallery/v1/youtubeplaylists/'
+        + this.state.sourceID,
+        {
+          headers: {'X-WP-Nonce': utvJSData.restNonce}
+        }
+      );
+    else if (this.state.source == 'vimeo')
+      remoteVideos = await axios.get(
+        '/wp-json/utubevideogallery/v1/vimeoplaylists/'
+        + this.state.sourceID,
+        {
+          headers: {'X-WP-Nonce': utvJSData.restNonce}
+        }
+      );
 
     if (
       remoteVideos.status == 200
@@ -150,7 +164,10 @@ class PlaylistAddTabView extends React.Component
       const matches = url.match(/^.*?(youtube|vimeo).*?(?:list=|album\/)(.*?)(?:&|$)/);
 
       if (matches && matches.length == 3)
-        this.setState({source: matches[1], sourceID: matches[2]});
+        this.setState({
+          source: matches[1],
+          sourceID: matches[2]
+        });
     }
   }
 
@@ -188,7 +205,7 @@ class PlaylistAddTabView extends React.Component
     else
       this.props.setFeedbackMessage('Playlist failed to add', 'error');
 
-    this.props.changeView(undefined);
+    this.props.changeView();
   }
 
   async addPlaylistData()
@@ -263,9 +280,8 @@ class PlaylistAddTabView extends React.Component
           crumbs={[
             {
               text: 'Saved Playlists',
-              onClick: () => this.props.changeView(undefined)
-            },
-            {text: 'Add Playlist'}
+              onClick: () => this.props.changeView()
+            }
           ]}
         />
         <Columns>
@@ -334,7 +350,7 @@ class PlaylistAddTabView extends React.Component
                   <Button
                     title="Cancel"
                     classes="utv-cancel"
-                    onClick={() => this.props.changeView(undefined)}
+                    onClick={() => this.props.changeView()}
                   />
                 </FormField>
               </Form>
