@@ -37,13 +37,24 @@ class VideoAPIv1 extends APIv1
       $this->_namespace . '/' . $this->_version,
       'videos',
       [
-        'methods' => WP_REST_Server::CREATABLE,
-        'callback' => [$this, 'createItem'],
-        'permission_callback' => function()
-        {
-          return current_user_can('edit_others_posts');
-        }
+        [
+          'methods' => WP_REST_Server::CREATABLE,
+          'callback' => [$this, 'createItem'],
+          'permission_callback' => function()
+          {
+            return current_user_can('edit_others_posts');
+          }
+        ],
+        [
+          'methods' => WP_REST_Server::READABLE,
+          'callback' => [$this, 'getAnyAllItems'],
+          'permission_callback' => function()
+          {
+            return current_user_can('edit_others_posts');
+          }
+        ]
       ]
+
     );
 
     //get, update, delete video endpoints
@@ -319,7 +330,7 @@ class VideoAPIv1 extends APIv1
         if ($skipThumbnailRender && !$thumbnail->save())
           return $this->errorResponse('Video thumbnail refresh failed');
       }
-
+      
       return $this->response(null);
     }
     else
@@ -336,6 +347,41 @@ class VideoAPIv1 extends APIv1
       FROM ' . $wpdb->prefix . 'utubevideo_video
       WHERE ALB_ID = ' . $req['albumID']
       . ' ORDER BY VID_POS'
+    );
+
+    foreach ($videos as $video)
+    {
+      $videoData = new stdClass();
+      $videoData->id = $video->VID_ID;
+      $videoData->title = $video->VID_NAME;
+      $videoData->source = $video->VID_SOURCE;
+      $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
+      $videoData->url = $video->VID_URL;
+      $videoData->quality = $video->VID_QUALITY;
+      $videoData->showChrome = $video->VID_CHROME;
+      $videoData->startTime = $video->VID_STARTTIME;
+      $videoData->endTime = $video->VID_ENDTIME;
+      $videoData->position = $video->VID_POS;
+      $videoData->published = $video->VID_PUBLISH;
+      $videoData->updateDate = $video->VID_UPDATEDATE;
+      $videoData->albumID = $video->ALB_ID;
+      $videoData->playlistID = $video->PLAY_ID;
+
+      $data[] = $videoData;
+    }
+
+    return $this->response($data);
+  }
+
+  public function getAnyAllItems(WP_REST_Request $req)
+  {
+    $data = [];
+    global $wpdb;
+
+    $videos = $wpdb->get_results(
+      'SELECT *
+      FROM ' . $wpdb->prefix . 'utubevideo_video
+      ORDER BY VID_ID'
     );
 
     foreach ($videos as $video)

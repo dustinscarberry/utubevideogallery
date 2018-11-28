@@ -48,6 +48,7 @@ class SettingsTabView extends React.Component
     this.changeValue = this.changeValue.bind(this);
     this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
     this.saveSettings = this.saveSettings.bind(this);
+    //this.rebuildThumbnails = this.rebuildThumbnails.bind(this);
   }
 
   async componentDidMount()
@@ -66,7 +67,10 @@ class SettingsTabView extends React.Component
       }
     );
 
-    if (apiData.status == 200 && !apiData.data.error)
+    if (
+      apiData.status == 200
+      && !apiData.data.error
+    )
     {
       const data = apiData.data.data;
 
@@ -97,6 +101,22 @@ class SettingsTabView extends React.Component
 
   async saveSettings()
   {
+    const rsp = await this.saveBaseSettings();
+
+    if (this.state.thumbnailWidth != this.state.originalThumbnailWidth)
+      await this.rebuildThumbnails();
+
+    if (
+      rsp.status == 200
+      && !rsp.data.error
+    )
+      this.props.setFeedbackMessage('Settings saved', 'success');
+    else
+      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
+  }
+
+  async saveBaseSettings()
+  {
     const rsp = await axios.patch(
       '/wp-json/utubevideogallery/v1/settings',
       {
@@ -121,10 +141,37 @@ class SettingsTabView extends React.Component
       }
     );
 
-    if (rsp.status == 200 && !rsp.data.error)
-      this.props.setFeedbackMessage('Settings saved', 'success');
-    else
-      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
+    return rsp;
+  }
+
+  async rebuildThumbnails()
+  {
+    const videosData = await axios.get(
+      '/wp-json/utubevideogallery/v1/videos',
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+
+    if (
+      videosData.status == 200
+      && !videosData.data.error
+    )
+    {
+      const videos = videosData.data.data;
+
+      for (let video of videos)
+      {
+        const rsp = await axios.patch(
+          '/wp-json/utubevideogallery/v1/videos/'
+          + video.id,
+          {},
+          {
+            headers: {'X-WP-Nonce': utvJSData.restNonce}
+          }
+        );
+      }
+    }
   }
 
   changeValue(event)
