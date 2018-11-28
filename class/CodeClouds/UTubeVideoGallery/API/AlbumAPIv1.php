@@ -133,8 +133,8 @@ class AlbumAPIv1 extends APIv1
   public function createItem(WP_REST_Request $req)
   {
     //require helper classes
-    require_once(dirname(__FILE__) . '/../../../utvAdminGen.php');
-    utvAdminGen::initialize([]);
+    //require_once(dirname(__FILE__) . '/../../../utvAdminGen.php');
+    //utvAdminGen::initialize([]);
 
     global $wpdb;
 
@@ -157,7 +157,7 @@ class AlbumAPIv1 extends APIv1
       $nextAlbumPosition = 0;
 
     //generate slug and store for possible use in future
-    $slug = utvAdminGen::generateSlug($title, $wpdb);
+    $slug = $this->generateSlug($title, $wpdb);
 
     //insert new album
     if ($wpdb->insert(
@@ -332,5 +332,38 @@ class AlbumAPIv1 extends APIv1
     }
 
     return $this->response($data);
+  }
+
+  //generate album permalink slug
+  public function generateSlug($albumName, $wpdb)
+  {
+    $rawslugs = $wpdb->get_results('SELECT ALB_SLUG FROM ' . $wpdb->prefix . 'utubevideo_album', ARRAY_N);
+
+    foreach ($rawslugs as $item)
+      $sluglist[] = $item[0];
+
+    $mark = 1;
+    $slug = strtolower($albumName);
+    $slug = str_replace(' ', '-', $slug);
+    $slug = html_entity_decode($slug, ENT_QUOTES, 'UTF-8');
+    $slug = preg_replace("/[^a-zA-Z0-9-]+/", '', $slug);
+
+    if (!empty($sluglist))
+      $this->checkslug($slug, $sluglist, $mark);
+
+    return $slug;
+  }
+
+  //recursive function for making sure slugs are unique
+  private function checkslug($slug, $sluglist, $mark)
+  {
+    if (in_array($slug, $sluglist))
+    {
+      $slug = $slug . '-' . $mark;
+      $mark++;
+      self::checkslug($slug, $sluglist, $mark);
+    }
+    else
+      return;
   }
 }
