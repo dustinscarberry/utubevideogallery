@@ -48,7 +48,6 @@ class SettingsTabView extends React.Component
     this.changeValue = this.changeValue.bind(this);
     this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
     this.saveSettings = this.saveSettings.bind(this);
-    //this.rebuildThumbnails = this.rebuildThumbnails.bind(this);
   }
 
   async componentDidMount()
@@ -101,11 +100,18 @@ class SettingsTabView extends React.Component
 
   async saveSettings()
   {
+    this.setState({loading: true});
+
     const rsp = await this.saveBaseSettings();
 
+    //update thumbnails if width changed
     if (this.state.thumbnailWidth != this.state.originalThumbnailWidth)
+    {
       await this.rebuildThumbnails();
+      this.setState({originalThumbnailWidth: this.state.thumbnailWidth});
+    }
 
+    //final user feedback
     if (
       rsp.status == 200
       && !rsp.data.error
@@ -113,6 +119,8 @@ class SettingsTabView extends React.Component
       this.props.setFeedbackMessage('Settings saved', 'success');
     else
       this.props.setFeedbackMessage(rsp.data.error.message, 'error');
+
+    this.setState({loading: false});
   }
 
   async saveBaseSettings()
@@ -169,6 +177,14 @@ class SettingsTabView extends React.Component
           {
             headers: {'X-WP-Nonce': utvJSData.restNonce}
           }
+        );
+
+        //update status about what video is being rebuilt
+        this.props.setFeedbackMessage(
+          'Video ['
+          + video.title
+          + '] thumbnail updated',
+          'success'
         );
       }
     }

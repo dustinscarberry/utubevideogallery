@@ -44,21 +44,20 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 {
   class App
   {
-    private $_options, $_dirpath;
+    private $_options;
     const CURRENT_VERSION = '1.9.8';
 
     public function __construct()
     {
+      //register autoloader
       spl_autoload_register([$this, 'autoloader']);
-
-      //set dirpath
-      $this->_dirpath = dirname(__FILE__);
 
       //load options
       $this->_options = get_option('utubevideo_main_opts');
 
-      //call upgrade check
-      $this->upgrade_check();
+      //call upgrade check if in dashboard
+      if (is_admin())
+        $this->upgrade_check();
 
       //load external files
       $this->load_dependencies();
@@ -68,37 +67,36 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
       //activation hook
       register_activation_hook(__FILE__, [$this, 'activate']);
-
-      add_filter('query_vars', [$this, 'insert_query_vars']);
     }
 
     //activate plugin
     public function activate($network)
     {
-      //multisite call
-      /*if(function_exists('is_multisite') && is_multisite() && $network){
-
+      //multisite activation
+      if (
+        function_exists('is_multisite')
+        && is_multisite()
+        && $network)
+      {
         global $wpdb;
-               $old_blog =  $wpdb->blogid;
 
-                 //Get all blog ids
-                 $blogids =  $wpdb->get_col('SELECT blog_id FROM ' .  $wpdb->blogs);
+        $old_blog =  $wpdb->blogid;
+        $blogids =  $wpdb->get_col('SELECT blog_id FROM ' .  $wpdb->blogs);
 
-                 foreach($blogids as $blog_id){
+        foreach ($blogids as $blog_id)
+        {
+          switch_to_blog($blog_id);
+          $this->maintenance();
+        }
 
-                    switch_to_blog($blog_id);
-               $this->maintenance();
+        switch_to_blog($old_blog);
+      }
 
-                 }
-
-                 switch_to_blog($old_blog);
-
-         }*/
-
-      //regular call
+      //single site activation
       $this->maintenance();
     }
 
+    //hook apis
     public function hookAPIs()
     {
       //hook APIs
@@ -114,20 +112,13 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       new SettingsAPIv1();
     }
 
-    //rewrite rules setup function
-    public function setup_rewrite_rules()
-    {
-      //setup rewrite rule for video albums
-      add_rewrite_rule('([^/]+)/album/([^/]+)$', 'index.php?pagename=$matches[1]&albumid=$matches[2]', 'top');
-
-      global $wp_rewrite;
-      $wp_rewrite->flush_rules();
-    }
-
     //version check for updates
     private function upgrade_check()
     {
-      if (!isset($this->_options['version']) || $this->_options['version'] < self::CURRENT_VERSION)
+      if (
+        !isset($this->_options['version'])
+        || $this->_options['version'] < self::CURRENT_VERSION
+      )
       {
         $this->maintenance();
         $this->_options['version'] = self::CURRENT_VERSION;
@@ -140,7 +131,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
     {
       load_plugin_textdomain('utvg', false, 'utubevideo-gallery/language');
 
-      //load backend or frontend dependencies
+      //load app or dashboard
       if (is_admin())
         new Dashboard(self::CURRENT_VERSION);
       else
@@ -149,22 +140,15 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
     private function maintenance()
     {
-      /*//php version check - implement down the road
-      $requiredPHPVersion = '5.5';
-
-      if(version_compare(PHP_VERSION, $requiredPHPVersion, '<')){
-
-        deactivate_plugins( basename( __FILE__ ) );
-        wp_die('<p><strong>uTubeVideo Gallery</strong> requires PHP version ' . $requiredPHPVersion . ' or greater.</p>', 'Plugin Activation Error');
-
-      }*/
-
       //set up globals
       global $wpdb;
 
+      //get directory path
+      $dirpath = dirname(__FILE__);
+
       //require helper classes
-        require_once($this->_dirpath . '/class/utvAdminGen.php');
-        utvAdminGen::initialize($this->_options);
+      require_once($dirpath . '/class/utvAdminGen.php');
+      utvAdminGen::initialize($this->_options);
 
       //extra include due to libaries not being loaded at this hook point
       if (!function_exists('wp_get_current_user'))
@@ -467,12 +451,18 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
         return;
     }
 
-    //insert custom query vars into array
-    public function insert_query_vars($vars)
-    {
-      array_push($vars, 'albumid');
-      return $vars;
-    }
+
+
+
+
+
+
+
+
+
+
+
+    
 
     public function autoloader($className)
     {

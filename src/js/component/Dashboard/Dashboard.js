@@ -33,6 +33,8 @@ class Dashboard extends React.Component
       feedbackType: undefined
     };
 
+    this.feedbackTimeout = undefined;
+
     this.changeGallery = this.changeGallery.bind(this);
     this.changeAlbum = this.changeAlbum.bind(this);
     this.changeView = this.changeView.bind(this);
@@ -190,8 +192,11 @@ class Dashboard extends React.Component
       feedbackType: type
     });
 
+    //clear past timeout if need be
+    clearTimeout(this.feedbackTimeout);
+
     //timeout to remove message
-    setTimeout(
+    this.feedbackTimeout = setTimeout(
       () => {
         this.setState(
         {

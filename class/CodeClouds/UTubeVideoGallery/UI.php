@@ -38,8 +38,16 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\UI'))
     public function loadCSS()
     {
       //load frontend styles
-      wp_enqueue_style('utv_style', plugins_url('../../../public/css/app.min.css', __FILE__), false, $this->_version);
-      wp_enqueue_style('font-awesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css');
+      wp_enqueue_style(
+        'utv-app-css',
+        plugins_url('../../../public/css/app.min.css', __FILE__),
+        false,
+        $this->_version
+      );
+      wp_enqueue_style(
+        'font-awesome',
+        'https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css'
+      );
 
       //add embedded thumbnail sizing css
       $css = '.utv-thumb,.utv-thumb>a{width:' . $this->_options['thumbnailWidth'] . 'px!important}.utv-thumb{margin:' . $this->_options['thumbnailVerticalPadding'] . 'px ' . $this->_options['thumbnailPadding'] . 'px!important}.utv-thumb>a{position:relative}';
@@ -52,13 +60,13 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\UI'))
       if ($this->_options['thumbnailBorderRadius'] > 0)
         $css .= '.utv-thumb>a, .utv-thumb img{border-radius:' . $this->_options['thumbnailBorderRadius'] . 'px!important;-moz-border-radius:' . $this->_options['thumbnailBorderRadius'] . 'px!important;-webkit-border-radius:' . $this->_options['thumbnailBorderRadius'] . 'px!important}';
 
-      wp_add_inline_style('utv_style', $css);
+      wp_add_inline_style('utv-app-css', $css);
     }
 
     //insert javascript for galleries
     public function loadJS()
     {
-      $jsdata = [
+      $embeddedJS = [
         'thumbnailWidth' => $this->_options['thumbnailWidth'],
         'thumbnailPadding' => $this->_options['thumbnailPadding'],
         'playerWidth' => $this->_options['playerWidth'],
@@ -75,33 +83,49 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\UI'))
 
       wp_enqueue_script('retina-js', 'https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.2/retina.min.js', null, null, true);
       wp_enqueue_script('utv-frontend', plugins_url('../../../public/js/app.min.js', __FILE__), ['jquery'], $this->_version, true);
-      wp_localize_script('utv-frontend', 'utvJSData', $jsdata);
+      wp_localize_script('utv-frontend', 'utvJSData', $embeddedJS);
     }
 
     public function addLightboxScripts()
     {
       //load jquery and lightbox js / css
       wp_enqueue_script('jquery');
-      wp_enqueue_script('codeclouds-mp-js', 'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js', ['jquery'], null, true);
-      wp_enqueue_style('codeclouds-mp-css', 'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css', false, null);
+      wp_enqueue_script(
+        'codeclouds-mp-js',
+        'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js',
+        ['jquery'],
+        null,
+        true
+      );
+      wp_enqueue_style(
+        'codeclouds-mp-css',
+        'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css',
+        false,
+        null
+      );
     }
 
     public function shortcode($atts)
     {
-      //require_once '../../../utvVideoGen.php';
-
       //panel view
-      if (isset($atts['view']) && $atts['view'] == 'panel')
-      {
-        //$utvVideoGen = new \utvVideoGen($atts, $this->_options);
-        return '<div class="utv-panel-root" data-id="' . $atts['id'] . '" data-controls="true" data-videos-per-page="12" data-theme="light" data-icon="red"></div>';
-      }
+      if (
+        isset($atts['view'])
+        && $atts['view'] == 'panel'
+      )
+        return '<div
+          class="utv-panel-root"
+          data-id="' . $atts['id'] . '"
+          data-controls="true"
+          data-videos-per-page="12"
+          data-theme="light"
+          data-icon="red"
+        ></div>';
       //regular gallery view
       else
-      {
-        //$utvVideoGen = new \utvVideoGen($atts, $this->_options);*/
-        return '<div class="utv-gallery-root" data-id="' . $atts['id'] . '"></div>';
-      }
+        return '<div
+          class="utv-gallery-root"
+          data-id="' . $atts['id'] . '"
+        ></div>';
     }
   }
 }

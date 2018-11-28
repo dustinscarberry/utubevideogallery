@@ -133,16 +133,16 @@ class SettingsAPIv1 extends APIv1
     if ($popupPlayerOverlayOpacity)
       $pluginSettings['fancyboxOverlayOpacity'] = $popupPlayerOverlayOpacity;
 
-    if ($thumbnailBorderRadius)
+    if ($thumbnailBorderRadius != null)
       $pluginSettings['thumbnailBorderRadius'] = $thumbnailBorderRadius;
 
     if ($thumbnailWidth)
       $pluginSettings['thumbnailWidth'] = $thumbnailWidth;
 
-    if ($thumbnailHorizontalPadding)
+    if ($thumbnailHorizontalPadding !== null)
       $pluginSettings['thumbnailPadding'] = $thumbnailHorizontalPadding;
 
-    if ($thumbnailVerticalPadding)
+    if ($thumbnailVerticalPadding != null)
       $pluginSettings['thumbnailVerticalPadding'] = $thumbnailVerticalPadding;
 
     if ($youtubeAPIKey != null)
@@ -151,16 +151,16 @@ class SettingsAPIv1 extends APIv1
     if ($removeVideoPopupScript)
       $pluginSettings['skipMagnificPopup'] = $removeVideoPopupScript;
 
-    if ($vimeoAutoplay)
+    if ($vimeoAutoplay !== null)
       $pluginSettings['vimeoAutoplay'] = $vimeoAutoplay;
 
-    if ($vimeoHideDetails)
+    if ($vimeoHideDetails !== null)
       $pluginSettings['vimeoDetailsHide'] = $vimeoHideDetails;
 
-    if ($youtubeAutoplay)
+    if ($youtubeAutoplay !== null)
       $pluginSettings['youtubeAutoplay'] = $youtubeAutoplay;
 
-    if ($youtubeHideDetails)
+    if ($youtubeHideDetails !== null)
       $pluginSettings['youtubeDetailsHide'] = $youtubeHideDetails;
 
     update_option('utubevideo_main_opts', $pluginSettings);

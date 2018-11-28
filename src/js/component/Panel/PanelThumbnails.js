@@ -2,18 +2,26 @@ import React from 'react';
 import Thumbnails from '../shared/Thumbnails';
 import Thumbnail from './Thumbnail';
 
-const PanelThumbnails = ({videos, selectedVideo, currentPage, videosPerPage, onChangeVideo}) =>
+const PanelThumbnails = (props) =>
 {
-  let startIndex = (currentPage - 1) * videosPerPage;
-  let endIndex = startIndex + videosPerPage;
+  const {
+    videos,
+    selectedVideo,
+    currentPage,
+    videosPerPage,
+    onChangeVideo
+  } = props;
 
-  let thumbnails = videos.map((e, i) =>
+  const startIndex = (currentPage - 1) * parseInt(videosPerPage);
+  const endIndex = startIndex + parseInt(videosPerPage);
+
+  const thumbnailNodes = videos.map((video, i) =>
   {
     if (i >= startIndex && i < endIndex)
       return (<Thumbnail
         key={i}
-        title={e.title}
-        image={e.thumbnail}
+        title={video.title}
+        image={video.thumbnail}
         value={i}
         selected={i == selectedVideo ? true : false}
         onChangeVideo={onChangeVideo}
@@ -22,7 +30,7 @@ const PanelThumbnails = ({videos, selectedVideo, currentPage, videosPerPage, onC
 
   return (
     <Thumbnails className="utv-video-panel-thumbnails utv-align-center">
-      {thumbnails}
+      {thumbnailNodes}
     </Thumbnails>
   );
 }

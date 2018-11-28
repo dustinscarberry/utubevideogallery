@@ -327,10 +327,10 @@ class VideoAPIv1 extends APIv1
       {
         $thumbnail = new Thumbnail($videoID);
 
-        if ($skipThumbnailRender && !$thumbnail->save())
+        if (!$thumbnail->save())
           return $this->errorResponse('Video thumbnail refresh failed');
       }
-      
+
       return $this->response(null);
     }
     else

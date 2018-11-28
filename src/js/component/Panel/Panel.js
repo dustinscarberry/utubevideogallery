@@ -91,14 +91,20 @@ class Panel extends React.Component
 
   async loadAPIData()
   {
-    let videos = [];
-    let results = await axios.get('/wp-json/utubevideogallery/v1/galleriesdata/' + this.props.id);
+    const videos = [];
+    const apiData = await axios.get(
+      '/wp-json/utubevideogallery/v1/galleriesdata/'
+      + this.props.id
+    );
 
-    if (results.status == 200)
+    if (
+      apiData.status == 200
+      && !apiData.data.error
+    )
     {
-      for (let album of results.data.albums)
+      for (const album of apiData.data.albums)
       {
-        for (let video of album.videos)
+        for (const video of album.videos)
           videos.push(video);
       }
 
@@ -106,7 +112,7 @@ class Panel extends React.Component
 
       this.setState({
         videos: videos,
-        thumbnailType: results.data.thumbtype,
+        thumbnailType: apiData.data.thumbtype,
         totalPages: totalPages
       });
     }

@@ -1,12 +1,18 @@
 import React from 'react';
 import PageHandle from './PageHandle';
 
-const Paging = ({currentPage, totalPages, onChangePage}) =>
+const Paging = (props) =>
 {
-  let pageHandles = [];
+  const {
+    currentPage,
+    totalPages,
+    onChangePage
+  } = props;
+
+  const pageHandleNodes = [];
 
   for (let i = 1; i <= totalPages; i++)
-    pageHandles.push(
+    pageHandleNodes.push(
       <PageHandle
         key={i}
         page={i}
@@ -17,7 +23,7 @@ const Paging = ({currentPage, totalPages, onChangePage}) =>
 
   return (
     <div className="utv-video-panel-paging">
-      {pageHandles}
+      {pageHandleNodes}
     </div>
   );
 }
