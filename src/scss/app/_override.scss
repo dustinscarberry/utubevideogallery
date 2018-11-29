@@ -1,0 +1,31 @@
+/* Popup Box */
+.utv-mfp-bottom-bar{
+  margin-top: 10px;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  cursor: auto;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+.utv-mfp-iframe-scaler button.mfp-close{
+  background-color: transparent!important;
+  background-image: none!important;
+  outline: none!important;
+}
+
+.utv-mfp-iframe-scaler button.mfp-close:hover{
+  background-color: transparent!important;
+  background-image: none!important;
+  border-radius: 0!important;
+  -webkit-border-radius: 0!important;
+  -moz-border-radius: 0!important;
+  outline: none!important;
+}
+
+.utv-mfp-iframe-scaler button.mfp-close:focus,
+.ut-mft-iframe-scaler button.mfp-close{
+  outline: none!important;
+}

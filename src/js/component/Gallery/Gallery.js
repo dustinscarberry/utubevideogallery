@@ -113,33 +113,6 @@ class Gallery extends React.Component
           bg.style.opacity = utvJSData.lightboxOverlayOpacity;
         }
       }
-
-      /*jQuery.magnificPopup.open(
-      {
-        items: {
-          src: url
-        },
-        type: 'iframe',
-        iframe: {
-          patterns: [],
-          markup: '<div class="utv-mfp-iframe-scaler mfp-iframe-scaler">' +
-            '<div class="mfp-close"></div>' +
-            '<iframe class="mfp-iframe" frameborder="0" width="' + utvJSData.playerWidth + '" height="' + utvJSData.playerHeight + '" allowfullscreen></iframe>' +
-            '</div><div class="utv-mfp-bottom-bar">'+
-            '<div class="mfp-title"></div></div>'
-        },
-        key: 'utvid',
-        callbacks: {
-          open: function() {
-            let popup = document.querySelector('.mfp-container');
-            popup.querySelector('.mfp-content').style.maxWidth = utvJSData.playerWidth + 'px';
-            popup.querySelector('.mfp-title').innerText = title;
-            let bg = popup.querySelector('.mfp-bg');
-            bg.style.background = utvJSData.lightboxOverlayColor;
-            bg.style.opacity = utvJSData.lightboxOverlayOpacity;
-          }
-        }
-      });*/
     });
   }
 

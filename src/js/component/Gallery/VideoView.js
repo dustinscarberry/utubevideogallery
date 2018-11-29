@@ -21,7 +21,7 @@ class VideoView extends React.Component
   render()
   {
     return (
-      <div className="utv-container utv-albums utv-icon-red">
+      <div className="utv-gallery utv-icon-red">
         <VideoThumbnails
           videos={this.props.videos}
           onOpenVideo={this.openVideo}

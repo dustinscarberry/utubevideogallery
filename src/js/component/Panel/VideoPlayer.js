@@ -19,7 +19,7 @@ const VideoPlayer = ({videoData, controls, forceNoAutoplay}) =>
     />;
 
   return (
-    <div className="utv-video-panel-wrapper">
+    <div className="utv-video-panel-player">
       {video}
     </div>
   );

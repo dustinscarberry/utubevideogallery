@@ -40,6 +40,12 @@ class AlbumView extends React.Component
   {
     let thumbnails = undefined;
     let albumName = undefined;
+    let containerClasses = ['utv-gallery'];
+
+    if (true)
+      containerClasses.push('utv-icon-red');
+
+
 
     let album = this.props.albums[this.state.selectedAlbum] || undefined;
     if (album)
@@ -50,15 +56,18 @@ class AlbumView extends React.Component
         videos={album.videos}
         onOpenVideo={this.openVideo}
       />;
-    else {
+    else
+    {
       thumbnails = <AlbumThumbnails
         albums={this.props.albums}
         onChangeAlbum={this.changeAlbum}
       />;
+
+      containerClasses.push(['utv-albums']);
     }
 
     return (
-      <div className="utv-container utv-albums utv-icon-red">
+      <div className={containerClasses.join(' ')}>
         <BreadCrumb
           albumName={albumName}
           onResetAlbum={this.resetAlbum}
