@@ -183,7 +183,7 @@ class SettingsTabView extends React.Component
         this.props.setFeedbackMessage(
           'Video ['
           + video.title
-          + '] thumbnail updated',
+          + '] updated',
           'success'
         );
       }

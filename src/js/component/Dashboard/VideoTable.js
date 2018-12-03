@@ -34,7 +34,7 @@ class VideoTable extends React.Component
           return <img
             onClick={() => this.props.changeView('editVideo', row.id)}
             src={utvJSData.thumbnailCacheDirectory + cellData + '.jpg'}
-            className="utv-preview-thumb utv-is-clickable"
+            className="utv-preview-thumbnail utv-is-clickable"
             data-rjs="2"
           />
         }
@@ -70,12 +70,12 @@ class VideoTable extends React.Component
           if (cellData == 1)
             return <i
               onClick={() => this.togglePublishStatus(row.id, 0)}
-              className="utv-published-icon far fa-check-circle"
+              className="utv-published-icon utv-is-clickable far fa-check-circle"
             ></i>
           else
             return <i
               onClick={() => this.togglePublishStatus(row.id, 1)}
-              className="utv-unpublished-icon far fa-times-circle"
+              className="utv-unpublished-icon utv-is-clickable far fa-times-circle"
             ></i>
         }
       },

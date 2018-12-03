@@ -39,6 +39,15 @@
     .utv-right-two-thirds-column{
       margin-left: 0;
     }
+
+    .utv-left-two-thirds-column{
+      margin-right: 0;
+    }
+
+    .utv-right-one-third-column{
+      float: none;
+      width: 100%;
+    }
   }
 
   @media screen and (max-width: 1000px)

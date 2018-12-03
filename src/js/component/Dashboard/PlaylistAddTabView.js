@@ -250,6 +250,14 @@ class PlaylistAddTabView extends React.Component
             headers: {'X-WP-Nonce': utvJSData.restNonce}
           }
         );
+
+        //update status about what video is being saved
+        this.props.setFeedbackMessage(
+          'Video ['
+          + video.title
+          + '] added',
+          'success'
+        );
       }
     }
   }

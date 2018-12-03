@@ -8,20 +8,20 @@ const AlbumThumbnailSelection = (props) =>
     updateThumbnail
   } = props;
 
-  let thumbnailNodes = thumbnails.map(thumbnail =>
+  const thumbnailNodes = thumbnails.map(thumbnail =>
   {
-    let thumbnailClasses = ['utv-album-thumb-choice'];
+    const thumbnailClasses = ['utv-album-thumbnail-choice'];
 
     if (thumbnail.thumbnail == currentThumbnail)
-      thumbnailClasses.push('utv-album-thumb-choice-active');
+      thumbnailClasses.push('utv-album-thumbnail-choice-active');
 
     return <div
       className={thumbnailClasses.join(' ')}
       key={thumbnail.thumbnail}
       onClick={() => updateThumbnail(thumbnail.thumbnail)}
     >
-      <img src={utvJSData.thumbnailCacheDirectory + thumbnail.thumbnail + '.jpg'}/>
-      <span className="utv-album-thumb-overlay"></span>
+      <img src={utvJSData.thumbnailCacheDirectory + thumbnail.thumbnail + '.jpg'} className="utv-preview-thumbnail"/>
+      <span className="utv-album-thumbnail-selected-overlay"></span>
     </div>
   });
 

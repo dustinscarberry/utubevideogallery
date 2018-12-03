@@ -12,11 +12,11 @@ class Row extends React.Component
   render()
   {
     const {
-       headers,
-       rowData,
-       enableBulkActions,
-       dataIndex,
-       toggleRowCheckbox
+      headers,
+      rowData,
+      enableBulkActions,
+      dataIndex,
+      toggleRowCheckbox
     } = this.props;
 
     //build array of cells for row

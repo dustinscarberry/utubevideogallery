@@ -14,6 +14,7 @@ import Toggle from '../shared/Toggle';
 import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
 import PlaylistLegend from '../shared/PlaylistLegend';
+import PlaylistMultiSelect from '../shared/PlaylistMultiSelect';
 import PlaylistVideoSelection from '../shared/PlaylistVideoSelection';
 import Loader from '../shared/Loader';
 import axios from 'axios';
@@ -44,6 +45,7 @@ class PlaylistEditTabView extends React.Component
     this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
     this.changeVideoTitle = this.changeVideoTitle.bind(this);
     this.toggleVideoSelection = this.toggleVideoSelection.bind(this);
+    this.toggleAllVideosSelection = this.toggleAllVideosSelection.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
   }
 
@@ -143,7 +145,7 @@ class PlaylistEditTabView extends React.Component
 
         combinedData[source] = {};
         combinedData[source].title = localVideo.title;
-        combinedData[source].thumbnail = localVideo.thumbnail;
+        combinedData[source].thumbnail = utvJSData.thumbnailCacheDirectory + localVideo.thumbnail + '.jpg';
         combinedData[source].sourceID = localVideo.url;
         combinedData[source].localID = localVideo.id;
         combinedData[source].selected = true;
@@ -175,7 +177,7 @@ class PlaylistEditTabView extends React.Component
 
       //convert object to array
       combinedData = Object.keys(combinedData).map(key => combinedData[key]);
-      
+
       this.setState({
         playlistTitle: remoteData.title,
         playlistVideos: combinedData,
@@ -202,11 +204,25 @@ class PlaylistEditTabView extends React.Component
     this.setState({playlistVideos});
   }
 
+  //flip state of video selected
   toggleVideoSelection(dataIndex)
   {
-    //flip state of video selected
-    let { playlistVideos } = this.state;
+    const { playlistVideos } = this.state;
     playlistVideos[dataIndex].selected = !playlistVideos[dataIndex].selected;
+
+    this.setState({playlistVideos});
+  }
+
+  //flip state of all videos to selected or not selected
+  toggleAllVideosSelection(toggleAll)
+  {
+    let { playlistVideos } = this.state;
+    const selected = toggleAll ? true : false;
+
+    playlistVideos = playlistVideos.map(video => {
+      video.selected = selected;
+      return video;
+    });
 
     this.setState({playlistVideos});
   }
@@ -356,6 +372,14 @@ class PlaylistEditTabView extends React.Component
           );
         }
       }
+
+      //update status about what video is being saved
+      this.props.setFeedbackMessage(
+        'Video ['
+        + video.title
+        + '] updated',
+        'success'
+      );
     }
   }
 
@@ -368,7 +392,7 @@ class PlaylistEditTabView extends React.Component
     if (this.state.playlistLoading)
       playlistNode = <Loader/>;
     else
-      playlistNode = <div><PlaylistLegend/><PlaylistVideoSelection
+      playlistNode = <div><PlaylistVideoSelection
         videos={this.state.playlistVideos}
         toggleVideoSelection={this.toggleVideoSelection}
         changeVideoTitle={this.changeVideoTitle}
@@ -495,6 +519,11 @@ class PlaylistEditTabView extends React.Component
           <Column className="utv-right-two-thirds-column">
             <Card>
               <SectionHeader text="Playlist Items"/>
+              <PlaylistMultiSelect
+                toggleAllVideosSelection={this.toggleAllVideosSelection}
+                videos={this.state.playlistVideos}
+              />
+              <PlaylistLegend/>
               {playlistNode}
             </Card>
           </Column>
