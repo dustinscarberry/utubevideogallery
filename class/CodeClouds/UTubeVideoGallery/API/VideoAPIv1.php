@@ -125,6 +125,7 @@ class VideoAPIv1 extends APIv1
     $videoData = new stdClass();
     $videoData->id = $video->VID_ID;
     $videoData->title = $video->VID_NAME;
+    $videoData->description = $video->VID_DESCRIPTION;
     $videoData->source = $video->VID_SOURCE;
     $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
     $videoData->url = $video->VID_URL;
@@ -148,6 +149,7 @@ class VideoAPIv1 extends APIv1
     //gather data fields
     $urlKey = sanitize_text_field($req['urlKey']);
     $title = sanitize_text_field($req['title']);
+    $description = sanitize_text_field($req['description']);
     $quality = sanitize_text_field($req['quality']);
     $controls = ($req['controls'] ? 1 : 0);
     $startTime = sanitize_text_field($req['startTime']);
@@ -183,6 +185,7 @@ class VideoAPIv1 extends APIv1
       [
         'VID_SOURCE' => $source,
         'VID_NAME' => $title,
+        'VID_DESCRIPTION' => $description,
         'VID_URL' => $urlKey,
         'VID_THUMBTYPE' => $gallery->DATA_THUMBTYPE,
         'VID_QUALITY' => $quality,
@@ -269,6 +272,7 @@ class VideoAPIv1 extends APIv1
     //gather data fields
     $videoID = sanitize_key($req['videoID']);
     $title = sanitize_text_field($req['title']);
+    $description = sanitize_text_field($req['description']);
     $quality = sanitize_text_field($req['quality']);
     $startTime = sanitize_text_field($req['startTime']);
     $endTime = sanitize_text_field($req['endTime']);
@@ -293,6 +297,9 @@ class VideoAPIv1 extends APIv1
     //set optional update fields
     if ($title != null)
       $updatedFields['VID_NAME'] = $title;
+
+    if ($description != null)
+      $updatedFields['VID_DESCRIPTION'] = $description;
 
     if ($quality != null)
       $updatedFields['VID_QUALITY'] = $quality;
@@ -354,6 +361,7 @@ class VideoAPIv1 extends APIv1
       $videoData = new stdClass();
       $videoData->id = $video->VID_ID;
       $videoData->title = $video->VID_NAME;
+      $videoData->description = $video->VID_DESCRIPTION;
       $videoData->source = $video->VID_SOURCE;
       $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
       $videoData->url = $video->VID_URL;
@@ -389,6 +397,7 @@ class VideoAPIv1 extends APIv1
       $videoData = new stdClass();
       $videoData->id = $video->VID_ID;
       $videoData->title = $video->VID_NAME;
+      $videoData->description = $video->VID_DESCRIPTION;
       $videoData->source = $video->VID_SOURCE;
       $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
       $videoData->url = $video->VID_URL;

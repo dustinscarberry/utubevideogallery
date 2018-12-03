@@ -67,12 +67,6 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
       //activation hook
       register_activation_hook(__FILE__, [$this, 'activate']);
-
-
-
-
-
-      $this->maintenance();
     }
 
     //activate plugin
@@ -168,12 +162,12 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       //create database tables for plugin
       require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
-      $tbname[0] = $wpdb->prefix . 'utubevideo_dataset';
-      $tbname[1] = $wpdb->prefix . 'utubevideo_album';
-      $tbname[2] = $wpdb->prefix . 'utubevideo_video';
-      $tbname[3] = $wpdb->prefix . 'utubevideo_playlist';
+      $galleryTable = $wpdb->prefix . 'utubevideo_dataset';
+      $albumTable = $wpdb->prefix . 'utubevideo_album';
+      $videoTable = $wpdb->prefix . 'utubevideo_video';
+      $playlistTable = $wpdb->prefix . 'utubevideo_playlist';
 
-      $sql = "CREATE TABLE $tbname[0] (
+      $sql = "CREATE TABLE $galleryTable (
         DATA_ID int(11) NOT NULL AUTO_INCREMENT,
         DATA_NAME varchar(150) NOT NULL,
         DATA_SORT varchar(4) DEFAULT 'desc' NOT NULL,
@@ -183,7 +177,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
         DATA_THUMBTYPE varchar(9) DEFAULT 'rectangle' NOT NULL,
         UNIQUE KEY DATA_ID (DATA_ID)
       );
-      CREATE TABLE $tbname[1] (
+      CREATE TABLE $albumTable (
         ALB_ID int(11) NOT NULL AUTO_INCREMENT,
         ALB_NAME varchar(150) NOT NULL,
         ALB_SLUG varchar(50) DEFAULT '--empty--' NOT NULL,
@@ -196,10 +190,11 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
         DATA_ID int(11) NOT NULL,
         UNIQUE KEY ALB_ID (ALB_ID)
       );
-      CREATE TABLE $tbname[2] (
+      CREATE TABLE $videoTable (
         VID_ID int(11) NOT NULL AUTO_INCREMENT,
         VID_SOURCE varchar(15) NOT NULL,
         VID_NAME varchar(150) NOT NULL,
+        VID_DESCRIPTION text,
         VID_URL varchar(40) NOT NULL,
         VID_THUMBTYPE varchar(9) DEFAULT 'rectangle' NOT NULL,
         VID_QUALITY varchar(6) DEFAULT 'large' NOT NULL,
@@ -213,7 +208,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
         PLAY_ID int(11),
         UNIQUE KEY VID_ID (VID_ID)
       );
-      CREATE TABLE $tbname[3] (
+      CREATE TABLE $playlistTable (
         PLAY_ID int(11) NOT NULL AUTO_INCREMENT,
         PLAY_TITLE varchar(150) NOT NULL,
         PLAY_SOURCE varchar(15) NOT NULL,
