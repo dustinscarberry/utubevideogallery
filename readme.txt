@@ -4,8 +4,8 @@ Donate link: http://www.codeclouds.net/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
 Requires at least: 4.4.0
 Requires PHP: 5.6
-Tested up to: 4.8.2
-Stable tag: 1.9.8
+Tested up to: 4.9.9
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
