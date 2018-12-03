@@ -67,6 +67,12 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
       //activation hook
       register_activation_hook(__FILE__, [$this, 'activate']);
+
+
+
+
+
+      $this->maintenance();
     }
 
     //activate plugin
@@ -138,6 +144,15 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
         new UI(self::CURRENT_VERSION);
     }
 
+    public function autoloader($className)
+    {
+      if (strpos($className, 'CodeClouds\UTubeVideoGallery') !== false)
+      {
+        $className = str_replace('\\', '/', $className);
+        include_once('class/' . $className . '.php');
+      }
+    }
+
     private function maintenance()
     {
       //set up globals
@@ -145,10 +160,6 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
       //get directory path
       $dirpath = dirname(__FILE__);
-
-      //require helper classes
-      require_once($dirpath . '/class/utvAdminGen.php');
-      utvAdminGen::initialize($this->_options);
 
       //extra include due to libaries not being loaded at this hook point
       if (!function_exists('wp_get_current_user'))
@@ -229,7 +240,11 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       //fix video sorting if not done yet
       if (!isset($this->_options['sortFix']))
       {
-        $albumIds = $wpdb->get_results('SELECT ALB_ID FROM ' . $wpdb->prefix . 'utubevideo_album', ARRAY_A);
+        $albumIds = $wpdb->get_results(
+          'SELECT ALB_ID
+          FROM ' . $wpdb->prefix . 'utubevideo_album',
+          ARRAY_A
+        );
 
         foreach ($albumIds as $value)
         {
@@ -298,7 +313,11 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
         $mark = 1;
         $sluglist = [];
 
-        $data = $wpdb->get_results('SELECT ALB_ID, ALB_NAME FROM ' . $wpdb->prefix . 'utubevideo_album', ARRAY_A);
+        $data = $wpdb->get_results(
+          'SELECT ALB_ID, ALB_NAME
+          FROM ' . $wpdb->prefix . 'utubevideo_album',
+          ARRAY_A
+        );
 
         foreach ($data as $value)
         {
@@ -331,7 +350,11 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
         //rename thumbnails
         $dir = wp_upload_dir();
         $dir = $dir['basedir'] . '/utubevideo-cache/';
-        $data = $wpdb->get_results('SELECT VID_ID, VID_URL FROM ' . $wpdb->prefix . 'utubevideo_video', ARRAY_A);
+        $data = $wpdb->get_results(
+          'SELECT VID_ID, VID_URL
+          FROM ' . $wpdb->prefix . 'utubevideo_video',
+          ARRAY_A
+        );
 
         foreach ($data as $val)
         {
@@ -392,11 +415,11 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
               $sourceURL = 'http://img.youtube.com/vi/' . $val['VID_URL'] . '/0.jpg';
             elseif ($val['VID_SOURCE'] == 'vimeo')
             {
-              $data = utvAdminGen::queryAPI('https://vimeo.com/api/v2/video/' . $val['VID_URL'] . '.json');
+              $data = $this->queryAPI('https://vimeo.com/api/v2/video/' . $val['VID_URL'] . '.json');
               $sourceURL = $data[0]['thumbnail_large'];
             }
 
-            utvAdminGen::saveThumbnail($sourceURL, $filename, $val['DATA_THUMBTYPE'], true);
+            $this->saveThumbnail($sourceURL, $filename, $val['DATA_THUMBTYPE'], true);
           }
         }
 
@@ -438,6 +461,8 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       add_action('init', [$this, 'setup_rewrite_rules']);
     }
 
+    /* Extra Functions For Backwards Compatibility */
+
     //recursive function for making sure slugs are unique
     private function checkslug($slug, $sluglist, $mark)
     {
@@ -451,28 +476,76 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
         return;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-    
-
-    public function autoloader($className)
+    public function saveThumbnail($sourceURL, $destFilename, $thumbType, $suppressErrors = false)
     {
-      if (strpos($className, 'CodeClouds\UTubeVideoGallery') !== false)
+      $basePath = wp_upload_dir();
+      $basePath = $basePath['basedir'] . '/utubevideo-cache/';
+
+      $image = wp_get_image_editor($sourceURL);
+      //valid video thumbnail image
+      if (!is_wp_error($image))
       {
-        $className = str_replace('\\', '/', $className);
-        include_once('class/' . $className . '.php');
+        if ($thumbType == 'square')
+        {
+          $image->resize($this->_options['thumbnailWidth'] * 2, $this->_options['thumbnailWidth'] * 2, true);
+          $image->set_quality(65);
+          $image->save($basePath . $destFilename . '@2x.jpg');
+          $image->resize($this->_options['thumbnailWidth'], $this->_options['thumbnailWidth'], true);
+          $image->set_quality(95);
+          $image->save($basePath . $destFilename . '.jpg');
+        }
+        else
+        {
+          $image->resize($this->_options['thumbnailWidth'] * 2, $this->_options['thumbnailWidth'] * 2);
+          $image->set_quality(65);
+          $image->save($basePath . $destFilename . '@2x.jpg');
+          $image->resize($this->_options['thumbnailWidth'], $this->_options['thumbnailWidth']);
+          $image->set_quality(95);
+          $image->save($basePath . $destFilename . '.jpg');
+        }
+        return true;
       }
+      //invalid video thumbnail image or blank
+      elseif (is_wp_error($image))
+      {
+        //reload missing image into editor
+        $image = wp_get_image_editor(plugins_url('missing.jpg', dirname(__FILE__)));
+        if (!is_wp_error($image))
+        {
+          if ($thumbType == 'square')
+          {
+            $image->resize($this->_options['thumbnailWidth'] * 2, $this->_options['thumbnailWidth'] * 2, true);
+            $image->set_quality(65);
+            $image->save($basePath . $destFilename . '@2x.jpg');
+            $image->resize($this->_options['thumbnailWidth'], $this->_options['thumbnailWidth'], true);
+            $image->set_quality(95);
+            $image->save($basePath . $destFilename . '.jpg');
+          }
+          else
+          {
+            $image->resize($this->_options['thumbnailWidth'] * 2, $this->_options['thumbnailWidth'] * 2);
+            $image->set_quality(65);
+            $image->save($basePath . $destFilename . '@2x.jpg');
+            $image->resize($this->_options['thumbnailWidth'], $this->_options['thumbnailWidth']);
+            $image->set_quality(95);
+            $image->save($basePath . $destFilename . '.jpg');
+          }
+          return true;
+        }
+        else
+          return true;
+      }
+      else
+        return true;
+    }
+
+    public function queryAPI($query)
+    {
+      $data = wp_remote_get($query);
+      return json_decode($data['body'], true);
     }
   }
 
+  //bootrap
   new App();
 }
