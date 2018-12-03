@@ -14,7 +14,7 @@ class GalleryTabView extends React.Component
     return (
       <div>
         <div className="utv-actionbar" style={{'margin': '20px 0'}}>
-          <button className="utv-link-submit-button" onClick={() => this.props.changeView('addGallery')}>Add Gallery</button>
+          <button className="button-secondary" onClick={() => this.props.changeView('addGallery')}>Add Gallery</button>
         </div>
         <Breadcrumbs
           crumbs={[

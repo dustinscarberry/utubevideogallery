@@ -1,0 +1,457 @@
+
+#utv-masthead{
+  margin-bottom: 10px;
+}
+
+.utv-dashboard a{
+  font-weight: bold;
+  font-size: 13px;
+  outline: 0;
+}
+
+.utv-dashboard table a{
+  font-weight: normal;
+}
+
+.utv-dashboard th a{
+  font-weight: normal!important;
+  font-size: inherit!important;
+}
+
+.utv-dashboard a:hover{
+  color: #d54e21;
+}
+
+.utv-dashboard .button-primary,
+.utv-dashboard .button-secondary{
+  margin-right: 5px!important;
+}
+
+
+
+
+
+.utv-infoline{
+  margin: 10px 0;
+  display: block;
+}
+
+.utv-status:before{
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.utv-status-active:before{
+  content: "\f00c";
+  color: #2d8034;
+}
+
+.utv-status-inactive:before{
+  content: "\f05e";
+  color: #aa0114;
+}
+
+.utv-status-warning:before{
+  content: "\f071";
+  color: #ffa400;
+}
+
+
+
+.utv-loader{
+  background: transparent url('../img/loader.gif') no-repeat 0 0;
+  background-position: center;
+  display: inline-block;
+  width: 100%;
+  height: 600px;
+  background-size: 100px;
+}
+
+
+.utv-preview-thumb{
+  margin: 0;
+  border-radius: 3px;
+  border: 5px solid #eee;
+  max-width: 125px;
+  max-height: 125px;
+}
+
+
+.utv-breadcrumbs{
+  margin: 20px 0;
+  font-weight: 600;
+
+  .utv-breadcrumb-static{
+    font-size: 1.3em;
+  }
+
+  .utv-breadcrumb-link{
+    font-size: 1.3em;
+    cursor: pointer;
+  }
+
+  .utv-breadcrumb-divider{
+    font-size: 1.1em;
+    margin: 0 4px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Playlist Preview */
+.utv-playlist-preview{
+  min-height: 250px;
+}
+
+//legend overview
+.utv-playlist-legend{
+  margin: 30px 0;
+}
+
+.utv-playlist-legend li{
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.utv-playlist-legend li::before{
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 5px;
+  content: '';
+}
+
+.utv-playlist-legend-local::before{
+  background: #2a61d0;
+}
+
+.utv-playlist-legend-web::before{
+  background: #ea5532;
+}
+
+.utv-playlist-legend-both::before{
+  background: #34c556;
+}
+
+
+
+
+
+
+
+
+
+.utv-playlist-item-legend-local,
+.utv-playlist-item-legend-web,
+.utv-playlist-item-legend-both{
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.utv-playlist-item-legend-local{
+  background: #2a61d0;
+}
+
+.utv-playlist-item-legend-web{
+  background: #ea5532;
+}
+
+.utv-playlist-item-legend-both{
+  background: #34c556;
+}
+
+
+
+
+
+
+
+
+.utv-playlist-preview-count{
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.utv-playlist-item{
+  margin: 10px 0;
+  position: relative;
+}
+
+.utv-playlist-item-number{
+  font-size: 18px;
+  vertical-align: top;
+  width: 35px;
+  margin-top: 5px;
+  margin-right: 10px;
+  text-align: right;
+  display: inline-block;
+}
+
+.utv-playlist-item-thumbnail{
+  display: inline-block;
+}
+
+.utv-playlist-item-thumbnail img{
+  width: 100px;
+  height: auto;
+  margin: 0;
+  border: 5px solid #eee;
+  border-radius: 3px;
+}
+
+.utv-playlist-item-form{
+  position: absolute;
+  left: 170px;
+  top: 0;
+  right: 0;
+  vertical-align: top;
+  font-size: 14px;
+  display: block;
+  box-sizing: border-box;
+  margin: 0!important;
+}
+
+.utv-playlist-item-title{
+  display: block;
+  margin: 0 0 5px 0;
+  width: 100%;
+}
+
+
+
+
+#utv-playlist-sync-selectall,
+#utv-playlist-sync-selectnone{
+  display: inline-block;
+  margin: 0 5px;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+
+
+
+
+/* Album Thumbnail Preview */
+.utv-album-thumbnail-selection .utv-album-thumb-choice{
+  display: inline-block;
+  margin: 7px;
+  vertical-align: top;
+}
+
+.utv-album-thumbnail-selection .utv-album-thumb-choice img{
+  width: 100px;
+  height: auto;
+  margin: 0!important;
+}
+
+.utv-album-thumb-choice:hover img{
+  border-color: #397fdf;
+}
+
+.utv-album-thumb-choice:hover .utv-album-thumb-overlay{
+  opacity: 1.0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Playlist / Album Preview */
+.utv-album-thumbnail-selected-overlay,
+.utv-playlist-selected-overlay{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 0!important;
+  padding: 0!important;
+  opacity: 0;
+  display: block;
+  width: 48px;
+  height: 48px;
+  margin: -24px 0 0 -24px;
+  -webkit-transition: opacity .1s linear;
+  background: transparent url('../img/checkf.png') no-repeat 0 0;
+}
+
+.utv-album-item-thumbnail,
+.utv-playlist-item-thumbnail{
+  position: relative;
+  cursor: pointer;
+}
+
+.utv-album-thumb-choice-active img,
+.utv-playlist-item-thumbnail-active img{
+  border-color: #397fdf;
+}
+
+.utv-album-thumb-choice-active .utv-album-thumb-overlay,
+.utv-playlist-item-thumbnail-active .utv-playlist-selected-overlay{
+  opacity: 1.0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Table Cell Components */
+.utv-row-actions{
+  margin-top: 10px;
+  visibility: visible;
+}
+
+.utv-row-actions a{
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.utv-row-divider{
+  color: #ddd;
+  font-size: 13px;
+  margin: 0 2px;
+}
+
+.utv-row-title{
+  font-size: 14px!important;
+  font-weight: bold!important;
+  text-decoration: none;
+}
+
+@media screen and (min-width: 782px){
+  .utv-row-actions{
+    visibility: hidden;
+  }
+
+  table tbody tr:hover .utv-row-actions{
+    visibility: visible;
+  }
+}
+
+.utv-sortable-handle{
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  font-weight: bold;
+  color: #21759b;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 2px 8px 5px 8px;
+}
+
+.utv-sortable-handle:hover{
+  color: #d54e21;
+}
+
+.utv-sortable-handle-cont{
+  position: relative;
+}
+
+.utv-sortable-handle-cont img{
+  margin-left: 35px;
+}
+
+.utv-sortable-placeholder{
+  background-color: #e3e3e3!important;
+  height: 150px;
+}
+
+.utv-published-icon,
+.utv-unpublished-icon{
+  font-size: 20px;
+}
+
+.utv-published-icon{
+  color: #2d8034;
+}
+
+.utv-unpublished-icon{
+  color: #a92134;
+}
+
+
+
+
+
+
+
+/* Iframe */
+.utv-flexvideo{
+  position: relative;
+  display: block;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.utv-flexvideo-16x9{
+  padding-bottom: 56.25%;
+}
+
+.utv-flexvideo iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+}

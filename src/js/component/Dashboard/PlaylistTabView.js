@@ -15,7 +15,7 @@ class PlaylistTabView extends React.Component
     return (
       <div>
         <div className="utv-actionbar" style={{'margin': '20px 0'}}>
-          <button className="utv-link-submit-button" onClick={() => this.props.changeView('addPlaylist')}>Add Playlist</button>
+          <button className="button-secondary" onClick={() => this.props.changeView('addPlaylist')}>Add Playlist</button>
         </div>
         <Breadcrumbs
           crumbs={[

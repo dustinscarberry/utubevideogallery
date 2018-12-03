@@ -14,7 +14,7 @@ class VideoTabView extends React.Component
     return (
       <div>
         <div className="utv-actionbar" style={{'margin': '20px 0'}}>
-          <button className="utv-link-submit-button" onClick={() => this.props.changeView('addVideo')}>Add Video</button>
+          <button className="button-secondary" onClick={() => this.props.changeView('addVideo')}>Add Video</button>
         </div>
         <Breadcrumbs
           crumbs={[

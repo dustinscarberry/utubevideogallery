@@ -191,11 +191,17 @@ class GriddleDND extends React.Component
         runBulkAction={this.runBulkAction}
         updateBulkAction={this.updateBulkAction}
         bulkAction={this.state.bulkAction}
-      />
+      />;
+
+    const tableStatusNode = <TableStatus
+      recordCount={this.state.data.length}
+      recordLabel={recordLabel}
+    />;
 
     return (
       <div>
         {bulkActionNode}
+        {tableStatusNode}
         <Table
           headers={headers}
           data={this.state.data}
@@ -210,10 +216,7 @@ class GriddleDND extends React.Component
           sortOrder={sortOrder}
         />
         {bulkActionNode}
-        <TableStatus
-          recordCount={this.state.data.length}
-          recordLabel={recordLabel}
-        />
+        {tableStatusNode}
       </div>
     );
   }

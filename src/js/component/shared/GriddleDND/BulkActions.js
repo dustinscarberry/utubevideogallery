@@ -16,11 +16,11 @@ const BulkActions = (props) =>
   optionNodes.unshift(<option key={-1} value="">Bulk Actions</option>);
 
   return (
-    <div className="ccgriddle-table-page-actions">
+    <div className="ccgriddle-table-bulk-actions">
       <select className="form-control" value={bulkAction} onChange={updateBulkAction}>
         {optionNodes}
       </select>
-      <button onClick={runBulkAction}>Apply</button>
+      <button className="button-secondary" onClick={runBulkAction}>Apply</button>
     </div>
   );
 }

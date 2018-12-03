@@ -211,20 +211,20 @@ class Dashboard extends React.Component
   render()
   {
     return (
-      <div className="wrap utv-admin">
+      <div className="wrap utv-dashboard">
         <h2 id="utv-masthead">uTubeVideo Gallery</h2>
         <UserFeedback
           message={this.state.feedbackMessage}
           type={this.state.feedbackType}
         />
         <Tabs>
-          <Pane label="Galleries" iconClass="fa-gear">
+          <Pane label="Galleries" iconClass="tabs-icon-photos">
             {this.getGalleriesTab()}
           </Pane>
-          <Pane label="Saved Playlists" iconClass="fa-gear">
+          <Pane label="Saved Playlists" iconClass="tabs-icon-list">
             {this.getPlaylistsTab()}
           </Pane>
-          <Pane label="Settings" iconClass="fa-gear">
+          <Pane label="Settings" iconClass="tabs-icon-cog">
             <SettingsTabView
               setFeedbackMessage={this.setFeedbackMessage}
             />

@@ -7,7 +7,7 @@ const BulkActions = (props) =>
   });
 
   return (
-    <div className="ccgriddle-table-page-actions">
+    <div className="ccgriddle-table-bulk-actions">
       <select className="form-control" value={props.bulkAction} onChange={props.updateBulkAction}>
         {options}
       </select>

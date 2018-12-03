@@ -1,4 +1,5 @@
 import React from 'react';
+import PlaylistPreviewItem from '../shared/PlaylistPreviewItem';
 
 const PlaylistVideoSelection = (props) =>
 {
@@ -8,33 +9,20 @@ const PlaylistVideoSelection = (props) =>
     changeVideoTitle
   } = props;
 
-  let thumbnailNodes = videos.map((video, index) =>
+  const previewItemNodes = videos.map((video, index) =>
   {
-    let thumbnailClasses = ['utv-playlist-choice'];
-
-    if (video.selected)
-      thumbnailClasses.push('utv-playlist-choice-active');
-
-    return (
-      <div key={index} id="utv-playlist-preview">
-        <div className="utv-playlist-preview-item">
-          <span className="utv-playlist-preview-item-num">{index + 1})</span>
-          <div className={thumbnailClasses.join(' ')} onClick={() => toggleVideoSelection(index)}>
-            <img src={video.thumbnail}/>
-            <span className="utv-playlist-choice-overlay"></span>
-          </div>
-          <div className="utv-playlist-preview-form">
-            <input type="text" className="utv-playlist-item-title" value={video.title} onChange={(e) => changeVideoTitle(index, e)}/>
-            <span className="utv-playlist-both"></span>
-          </div>
-        </div>
-      </div>
-    );
+    return <PlaylistPreviewItem
+      key={index}
+      video={video}
+      index={index}
+      toggleVideoSelection={toggleVideoSelection}
+      changeVideoTitle={changeVideoTitle}
+    />;
   });
 
   return (
-    <div>
-      {thumbnailNodes}
+    <div className="utv-playlist-preview">
+      {previewItemNodes}
     </div>
   );
 }

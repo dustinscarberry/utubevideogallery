@@ -1,0 +1,200 @@
+/* Core */
+.ccgriddle-table{
+  border-collapse: collapse !important;
+  background: #fff;
+  font-size: 13px;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.ccgriddle-table tbody{
+  position: relative;
+}
+
+.ccgriddle-table th{
+  vertical-align: bottom;
+  text-overflow: ellipsis;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0;
+  font-size: 12px;
+  color: rgba(0,0,0,0.54);
+  padding-bottom: 8px;
+  text-align: left;
+  position: relative;
+  height: 48px;
+  box-sizing: border-box !important;
+  border-bottom: 0 !important;
+}
+
+.ccgriddle-table td,
+.ccgriddle-table th{
+  padding: 12px 18px 12px;
+}
+
+.ccgriddle-table td{
+  border-top: 1px solid rgba(0,0,0,0.12);
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  padding-top: 12px;
+  vertical-align: middle;
+  height: 48px;
+  box-sizing: border-box !important;
+  vertical-align: top;
+}
+
+.ccgriddle-table tbody tr:hover,
+.ccgriddle-table tbody tr:hover {
+  background-color: #f6f6f6;
+}
+
+.ccgriddle-table.is-loading td,
+.ccgriddle-table.is-loading a{
+  color: transparent;
+}
+
+.ccgriddle-table.is-loading{
+  background-image: url('../img/block-loader.gif');
+  background-repeat: no-repeat;
+  background-size: 100px;
+  background-position: center;
+}
+
+.ccgriddle-checkbox-header{
+  width: 50px;
+}
+
+/* Sorting */
+.ccgriddle-table th.sortable{
+  cursor: pointer;
+}
+
+.ccgriddle-table th.sortable:before,
+.ccgriddle-table th.sortable:after{
+  position: absolute;
+  bottom: 11px;
+  display: block;
+  opacity: 0.3;
+  font-size: 1.3em;
+}
+
+.ccgriddle-table th.sortable:before{
+  right: 1em;
+  content: "\2191";
+}
+
+.ccgriddle-table th.sortable:after{
+  right: 0.5em;
+  content: "\2193";
+}
+
+.ccgriddle-table th.sortable-desc:after,
+.ccgriddle-table th.sortable-asc:before{
+  opacity: 1;
+}
+
+/* Status */
+.ccgriddle-table-status{
+  float: right;
+  line-height: 30px;
+}
+
+/* Bulk Actions */
+.ccgriddle-table-bulk-actions{
+  float: left;
+}
+
+/* Filter */
+.ccgriddle-table-filter{
+  float: right;
+  margin: 10px 0;
+}
+
+.ccgriddle-table-filter input{
+  display: inline-block;
+  width: 200px;
+  margin-right: 5px;
+  padding: .3rem .5rem;
+}
+
+.ccgriddle-table-filter button{
+  padding: .3rem .5rem;
+}
+
+/* Pagination */
+.ccgriddle-table-pagination{
+  float: right;
+  margin-top: 10px;
+}
+
+.ccgriddle-table-pagination span{
+  display: inline-block;
+  margin: 0 5px;
+}
+
+.ccgriddle-table-pagination input{
+  width: 40px;
+  display: inline-block;
+  padding: .3rem .5rem;
+}
+
+.ccgriddle-table-pagination-first,
+.ccgriddle-table-pagination-previous,
+.ccgriddle-table-pagination-next,
+.ccgriddle-table-pagination-last{
+  font-weight: 900;
+  font-family: "Font Awesome 5 Free";
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  padding: 5px;
+  border: 1px solid #ccc;
+  background-color: #e5e5e5;
+  color: #0073aa;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  box-sizing: content-box;
+  margin: 0 4px;
+  cursor: pointer;
+}
+
+.ccgriddle-table-pagination button:disabled{
+  cursor: default;
+  opacity: .6;
+}
+
+.ccgriddle-table-pagination-first:before{
+  content: "\f053\f053";
+}
+
+.ccgriddle-table-pagination-previous:before{
+  content: "\f053";
+}
+
+.ccgriddle-table-pagination-next:before{
+  content: "\f054";
+}
+
+.ccgriddle-table-pagination-last:before{
+  content: "\f054\f054";
+}
+
+.ccgriddle-table-page-records{
+  float: left;
+  margin: 10px 0;
+}
+
+.ccgriddle-table-page-records span{
+  display: inline-block;
+}
+
+.ccgriddle-table-page-records select{
+  width: 70px;
+  display: inline-block;
+  margin: 0 5px;
+  padding: 0 .3rem;
+}

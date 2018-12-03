@@ -26,7 +26,7 @@ const AlbumThumbnailSelection = (props) =>
   });
 
   return (
-    <div id="utv-album-thumb-select">
+    <div className="utv-album-thumbnail-selection">
       {thumbnailNodes}
     </div>
   );

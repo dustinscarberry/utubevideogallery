@@ -13,6 +13,7 @@ import SelectBox from '../shared/SelectBox';
 import Toggle from '../shared/Toggle';
 import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import PlaylistLegend from '../shared/PlaylistLegend';
 import PlaylistVideoSelection from '../shared/PlaylistVideoSelection';
 import Loader from '../shared/Loader';
 import axios from 'axios';
@@ -127,33 +128,57 @@ class PlaylistEditTabView extends React.Component
     {
       let remoteData = remoteVideos.data.data;
       let localData = localVideos.data.data;
+      let combinedData = {};
 
-      //augment remote videos data
-      remoteData.videos = remoteData.videos.map((remoteVideo) =>
+      //filter local album videos to just playlist
+      localData = localData.filter(localVideo =>
       {
-        remoteVideo.selected = false;
-        remoteVideo.localID = undefined;
-
-        //determine if remote video already synced
-        for (let localVideo of localData)
-        {
-          if (
-            remoteVideo.sourceID == localVideo.url
-            && this.props.currentViewID == localVideo.playlistID
-          )
-          {
-            remoteVideo.selected = true;
-            remoteVideo.localID = localVideo.id;
-            break;
-          }
-        }
-
-        return remoteVideo;
+        return localVideo.playlistID == this.props.currentViewID;
       });
 
+      //add local videos
+      for (let localVideo of localData)
+      {
+        const source = localVideo.url;
+
+        combinedData[source] = {};
+        combinedData[source].title = localVideo.title;
+        combinedData[source].thumbnail = localVideo.thumbnail;
+        combinedData[source].sourceID = localVideo.url;
+        combinedData[source].localID = localVideo.id;
+        combinedData[source].selected = true;
+        combinedData[source].legend = 'local';
+      }
+
+      //add remote videos
+      for (let remoteVideo of remoteData.videos)
+      {
+        const source = remoteVideo.sourceID;
+
+        if (source in combinedData)
+        {
+          combinedData[source].title = remoteVideo.title;
+          combinedData[source].legend = 'both';
+          combinedData[source].thumbnail = remoteVideo.thumbnail;
+        }
+        else
+        {
+          combinedData[source] = {};
+          combinedData[source].title = remoteVideo.title;
+          combinedData[source].thumbnail = remoteVideo.thumbnail;
+          combinedData[source].sourceID = remoteVideo.sourceID;
+          combinedData[source].localID = undefined;
+          combinedData[source].selected = false;
+          combinedData[source].legend = 'web';
+        }
+      }
+
+      //convert object to array
+      combinedData = Object.keys(combinedData).map(key => combinedData[key]);
+      
       this.setState({
         playlistTitle: remoteData.title,
-        playlistVideos: remoteData.videos,
+        playlistVideos: combinedData,
         playlistLoading: false
       });
     }
@@ -343,11 +368,11 @@ class PlaylistEditTabView extends React.Component
     if (this.state.playlistLoading)
       playlistNode = <Loader/>;
     else
-      playlistNode = <PlaylistVideoSelection
+      playlistNode = <div><PlaylistLegend/><PlaylistVideoSelection
         videos={this.state.playlistVideos}
         toggleVideoSelection={this.toggleVideoSelection}
         changeVideoTitle={this.changeVideoTitle}
-      />
+      /></div>
 
     const updateDate = new Date(this.state.updateDate * 1000);
     const updateDateFormatted = updateDate.toLocaleString(
