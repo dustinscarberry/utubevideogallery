@@ -146,6 +146,8 @@ class VideoEditTabView extends React.Component
       }
     );
 
+    console.log(rsp.data);
+
     if (
       rsp.status == 200
       && !rsp.data.error

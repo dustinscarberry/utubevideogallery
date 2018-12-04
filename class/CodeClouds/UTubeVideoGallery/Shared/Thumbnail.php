@@ -65,6 +65,20 @@ class Thumbnail
     }
     else
     {
+      //check image size and crop to 1.77 if needed
+      $imageSize = $image->get_size();
+
+      $ratio = round($imageSize['width'] / $imageSize['height'], 4);
+
+      if ($ratio != 1.7778)
+      {
+        $newHeight = round($imageSize['width'] / 1.7778);
+        $yPosition = ($imageSize['height'] - $newHeight) / 2;
+
+        $image->crop(0, $yPosition, $imageSize['width'], $newHeight);
+      }
+
+      //save two versions of thumbnail
       $image->resize($this->_pluginOptions['thumbnailWidth'] * 2, $this->_pluginOptions['thumbnailWidth'] * 2);
       $image->set_quality($this->_4kImageQuality);
       $image->save($this->_destinationPath . $baseFilename . '@2x.jpg');
@@ -108,8 +122,11 @@ class Thumbnail
       $this->_sourceURL = $this->getVimeoSource();
   }
 
-  private function getYouTubeSource()
+  private function getYouTubeSource($bypassAPI = false)
   {
+    if ($bypassAPI)
+      return 'https://img.youtube.com/vi/' . $this->_videoSlug . '/0.jpg';
+
     $data = $this->queryAPI('https://www.googleapis.com/youtube/v3/videos?part=id,snippet&id=' . $this->_videoSlug . '&key=' . $this->_pluginOptions['youtubeApiKey']);
 
     if (!$data)
