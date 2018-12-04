@@ -1,8 +1,4 @@
 /* Left and Right Columns */
-
-
-
-
 .utv-columns{
   box-sizing: border-box;
   overflow: auto;
@@ -58,72 +54,7 @@
   }
 }
 
-
-
-
-
-
-
-
-@media screen and (min-width: 1250px) {
-
-  .utv-left-column{
-    width: 585px;
-    float: left;
-  }
-
-  .utv-right-column{
-    margin-left: 605px;
-  }
-
-  .utv-options-column{
-    width: 645px;
-  }
-
-}
-
-
-
-
-
-
-
-.utv-left-column, .utv-fullwidth-column{
-  width: 100%;
-  display: block;
-  vertical-align: top;
-}
-
-.utv-left-column .card, .utv-fullwidth-column .card{
-  max-width: 100%!important;
-  box-sizing: border-box;
-}
-
-.utv-right-column{
-  display: block;
-  vertical-align: top;
-}
-
-.utv-right-column .card{
-  max-width: 100%!important;
-  width: 100%;
-  float: right;
-  box-sizing: border-box;
-}
-
-.utv-uniform-card{
-  padding: 2em!important;
-}
-
-
-
-
-
-
-.utv-section-header{
-  padding-bottom: 5px;
-}
-
+/* Cards */
 .utv-card{
   position: relative;
   padding: .7em 2em 1em;
@@ -137,95 +68,4 @@
   &.utv-even-padding{
     padding: 15px;
   }
-}
-
-
-
-
-
-//tabs component
-.tabs {
-  position: relative;
-}
-
-.tabs nav {
-  margin-bottom: -5px;
-  border-bottom: 1px solid #ccc;
-  margin: 0;
-  padding-top: 9px;
-  padding-bottom: 0;
-  line-height: inherit;
-}
-
-.tabs nav ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  display: inline-block;
-}
-
-.tabs nav ul li {
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-bottom: none;
-  margin-left: .5em;
-  margin-bottom: 0;
-}
-
-.tabs nav li.tab-current {
-
-}
-
-.tabs nav a {
-  display: block;
-  font-size: 1em;
-  white-space: nowrap;
-  text-decoration: none;
-  padding: 5px 10px;
-  font-size: 14px;
-  line-height: 24px;
-  background: #e5e5e5;
-  color: #555;
-}
-
-.tabs nav a:hover {
-  color: #d54e21;
-  background-color: #fff;
-}
-
-.tabs nav li.tab-current a {
-  color: #d54e21;
-  border-bottom: 1px solid #f1f1f1;
-  background: #f1f1f1;
-  margin-bottom: -1px;
-}
-
-.tabs nav a:before {
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  display: inline-block;
-  font-style: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  line-height: 1;
-  margin-right: 5px;
-}
-
-.tabs-icon-cog:before {
-  content: "\f013";
-  font-family: "Font Awesome 5 Free";
-}
-
-.tabs-icon-list:before{
-  content: "\f03a";
-  font-family: "Font Awesome 5 Free";
-}
-
-.tabs-icon-photos:before{
-  content: "\f302";
-  font-family: "Font Awesome 5 Free";
-}
-
-.tabs-content{
-  margin-top: 20px;
 }
