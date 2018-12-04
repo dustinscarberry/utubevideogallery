@@ -15,6 +15,7 @@ import URLInput from '../shared/URLInput';
 import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
+import TextBoxInput from '../shared/TextBoxInput';
 import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
 
@@ -29,6 +30,7 @@ class VideoAddTabView extends React.Component
       url: '',
       urlKey: undefined,
       title: '',
+      description: '',
       quality: 'hd1080',
       controls: true,
       startTime: undefined,
@@ -85,6 +87,7 @@ class VideoAddTabView extends React.Component
       {
         urlKey: this.state.urlKey,
         title: this.state.title,
+        description: this.state.description,
         quality: this.state.quality,
         controls: this.state.controls,
         startTime: this.state.startTime,
@@ -176,6 +179,14 @@ class VideoAddTabView extends React.Component
                   <TextInput
                     name="title"
                     value={this.state.title}
+                    onChange={this.changeValue}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Description"/>
+                  <TextBoxInput
+                    name="description"
+                    value={this.state.description}
                     onChange={this.changeValue}
                   />
                 </FormField>

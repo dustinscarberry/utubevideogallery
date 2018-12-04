@@ -13,6 +13,7 @@ import TextInput from '../shared/TextInput';
 import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
+import TextBoxInput from '../shared/TextBoxInput';
 import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
 import Loader from '../shared/Loader';
@@ -28,6 +29,7 @@ class VideoEditTabView extends React.Component
       thumbnail: undefined,
       source: undefined,
       title: '',
+      description: '',
       quality: undefined,
       controls: undefined,
       startTime: undefined,
@@ -77,6 +79,7 @@ class VideoEditTabView extends React.Component
         source: data.source,
         urlKey: data.url,
         title: data.title,
+        description: data.description,
         quality: data.quality,
         controls: data.showChrome == 1 ? true : false,
         startTime: data.startTime,
@@ -131,6 +134,7 @@ class VideoEditTabView extends React.Component
       + this.props.currentViewID,
       {
         title: this.state.title,
+        description: this.state.description,
         quality: this.state.quality,
         controls: this.state.controls,
         startTime: this.state.startTime,
@@ -246,6 +250,14 @@ class VideoEditTabView extends React.Component
                     value={this.state.title}
                     onChange={this.changeValue}
                     required={true}
+                  />
+                </FormField>
+                <FormField>
+                  <Label text="Description"/>
+                  <TextBoxInput
+                    name="description"
+                    value={this.state.description}
+                    onChange={this.changeValue}
                   />
                 </FormField>
                 <FormField>

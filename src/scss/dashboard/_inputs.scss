@@ -17,6 +17,13 @@
     padding: 6px;
   }
 
+  textarea{
+    width: 100%;
+    padding: 6px;
+    resize: vertical;
+    min-height: 70px;
+  }
+
   .utv-hint{
     display: block;
     font-style: italic;
