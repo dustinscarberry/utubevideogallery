@@ -32,7 +32,7 @@ class VideoAddTabView extends React.Component
       title: '',
       description: '',
       quality: 'hd1080',
-      controls: true,
+      controls: false,
       startTime: undefined,
       endTime: undefined
     };

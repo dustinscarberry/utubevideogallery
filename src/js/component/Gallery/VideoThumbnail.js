@@ -1,10 +1,17 @@
 import React from 'react';
 import RetinaImage from 'react-retina-image';
 
-const VideoThumbnail = ({title, image, value, onOpenVideo}) =>
+const VideoThumbnail = (props) =>
 {
+  const {
+    title,
+    image,
+    value,
+    onOpenVideo
+  } = props;
+
   return (
-    <div className='utv-thumb' onClick={() => onOpenVideo(value)}>
+    <div className="utv-thumbnail" onClick={() => onOpenVideo(value)}>
       <a>
         <span className="utv-play-btn"></span>
         <RetinaImage src={image}/>

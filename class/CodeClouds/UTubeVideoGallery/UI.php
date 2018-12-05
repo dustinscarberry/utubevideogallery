@@ -10,6 +10,9 @@
 
 namespace CodeClouds\UTubeVideoGallery;
 
+use CodeClouds\UTubeVideoGallery\UI\PanelView;
+use CodeClouds\UTubeVideoGallery\UI\GalleryView;
+
 if (!class_exists('CodeClouds\UTubeVideoGallery\UI'))
 {
   class UI
@@ -50,15 +53,14 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\UI'))
       );
 
       //add embedded thumbnail sizing css
-      $css = '.utv-thumb,.utv-thumb>a{width:' . $this->_options['thumbnailWidth'] . 'px!important}.utv-thumb{margin:' . $this->_options['thumbnailVerticalPadding'] . 'px ' . $this->_options['thumbnailPadding'] . 'px!important}.utv-thumb>a{position:relative}';
-      $css .= '.utv-vimeo-rt>a{height:' . round($this->_options['thumbnailWidth'] / 1.785) . 'px}';
-      $css .= '.utv-vimeo-sq>a{height:' . $this->_options['thumbnailWidth'] .'px}';
-      $css .= '.utv-youtube-rt>a{height:' . round($this->_options['thumbnailWidth'] / 1.339) . 'px}';
-      $css .= '.utv-youtube-sq>a{height:' . $this->_options['thumbnailWidth'] .'px}';
+      $css = '.utv-thumbnail,.utv-thumbnail>a{width:' . $this->_options['thumbnailWidth'] . 'px!important}';
+      $css .= '.utv-thumbnails-rectangle img{height:' . round($this->_options['thumbnailWidth'] / 1.7778) . 'px}';
+      $css .= '.utv-thumbnails-square img{height:' . $this->_options['thumbnailWidth'] . 'px}';
+      $css .= '.utv-thumbnail{margin:' . $this->_options['thumbnailVerticalPadding'] . 'px ' . $this->_options['thumbnailPadding'] . 'px!important}';
 
-      //add thumbnail border radius css if defined
+      //add thumbnail border radius if defined
       if ($this->_options['thumbnailBorderRadius'] > 0)
-        $css .= '.utv-thumb>a, .utv-thumb img{border-radius:' . $this->_options['thumbnailBorderRadius'] . 'px!important;-moz-border-radius:' . $this->_options['thumbnailBorderRadius'] . 'px!important;-webkit-border-radius:' . $this->_options['thumbnailBorderRadius'] . 'px!important}';
+        $css .= '.utv-thumb>a,.utv-thumb img{border-radius:' . $this->_options['thumbnailBorderRadius'] . 'px!important}';
 
       wp_add_inline_style('utv-app-css', $css);
     }
@@ -111,20 +113,16 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\UI'))
         isset($atts['view'])
         && $atts['view'] == 'panel'
       )
-        return '<div
-          class="utv-panel-root"
-          data-id="' . $atts['id'] . '"
-          data-controls="true"
-          data-videos-per-page="12"
-          data-theme="light"
-          data-icon="red"
-        ></div>';
-      //regular gallery view
+      {
+        $panelView = new PanelView($atts);
+        return $panelView->render();
+      }
+      //gallery view
       else
-        return '<div
-          class="utv-gallery-root"
-          data-id="' . $atts['id'] . '"
-        ></div>';
+      {
+        $galleryView = new GalleryView($atts);
+        return $galleryView->render();
+      }
     }
   }
 }

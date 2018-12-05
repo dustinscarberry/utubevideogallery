@@ -2,21 +2,34 @@ import React from 'react';
 import Thumbnails from '../shared/Thumbnails';
 import AlbumThumbnail from './AlbumThumbnail';
 
-const AlbumThumbnails = ({albums, onChangeAlbum}) =>
+const AlbumThumbnails = (props) =>
 {
-  let albumThumbnails = albums.map((e, i) =>
+  const {
+    albums,
+    onChangeAlbum,
+    thumbnailType
+  } = props;
+
+  const thumbnailsClasses = ['utv-video-panel-thumbnails', 'utv-align-center'];
+
+  if (thumbnailType == 'square')
+    thumbnailsClasses.push('utv-thumbnails-square');
+  else
+    thumbnailsClasses.push('utv-thumbnails-rectangle');
+
+  const albumThumbnails = albums.map((album, i) =>
   {
     return (<AlbumThumbnail
       key={i}
-      title={e.title}
-      image={e.thumbnail}
+      title={album.title}
+      image={album.thumbnail}
       value={i}
       onChangeAlbum={onChangeAlbum}
     />);
   });
 
   return (
-    <Thumbnails className="utv-video-panel-thumbnails utv-align-center">
+    <Thumbnails className={thumbnailsClasses.join(' ')}>
       {albumThumbnails}
     </Thumbnails>
   );

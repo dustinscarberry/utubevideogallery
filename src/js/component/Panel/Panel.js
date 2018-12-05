@@ -117,7 +117,7 @@ class Panel extends React.Component
 
       this.setState({
         videos: videos,
-        thumbnailType: apiData.data.thumbtype,
+        thumbnailType: apiData.data.thumbnailType,
         totalPages: totalPages
       });
     }
@@ -130,7 +130,8 @@ class Panel extends React.Component
       forceNoAutoplay,
       selectedVideo,
       currentPage,
-      totalPages
+      totalPages,
+      thumbnailType
     } = this.state;
 
     if (videos.length == 0)
@@ -154,6 +155,7 @@ class Panel extends React.Component
           onChangeVideo={this.changeVideo}
           currentPage={currentPage}
           videosPerPage={this.props.videosPerPage}
+          thumbnailType={thumbnailType}
         />
         <Paging
           currentPage={currentPage}

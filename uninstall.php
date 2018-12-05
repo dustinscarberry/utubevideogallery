@@ -3,24 +3,22 @@
 if (defined('WP_UNINSTALL_PLUGIN'))
 {
   //multisite call
-  /*if(function_exists('is_multisite') && is_multisite()){
-
+  if (function_exists('is_multisite') && is_multisite())
+  {
     global $wpdb;
     $old_blog =  $wpdb->blogid;
 
     //Get all blog ids
     $blogids =  $wpdb->get_col('SELECT blog_id FROM ' .  $wpdb->blogs);
 
-    foreach($blogids as $blog_id){
-
+    foreach ($blogids as $blog_id)
+    {
       switch_to_blog($blog_id);
       removePlugin();
-
     }
 
     switch_to_blog($old_blog);
-
-  }*/
+  }
 
   //regular call
   removePlugin();
@@ -54,5 +52,3 @@ function rrmdir($dir)
 
   rmdir($dir);
 }
-
-?>

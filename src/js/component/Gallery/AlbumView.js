@@ -55,12 +55,14 @@ class AlbumView extends React.Component
       thumbnails = <VideoThumbnails
         videos={album.videos}
         onOpenVideo={this.openVideo}
+        thumbnailType={this.props.thumbnailType}
       />;
     else
     {
       thumbnails = <AlbumThumbnails
         albums={this.props.albums}
         onChangeAlbum={this.changeAlbum}
+        thumbnailType={this.props.thumbnailType}
       />;
 
       containerClasses.push(['utv-albums']);

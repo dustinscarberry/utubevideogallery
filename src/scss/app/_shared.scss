@@ -7,33 +7,24 @@
   display: block;
 }
 
-.utv-gallery .utv-thumb,
-.utv-panel .utv-thumb{
+.utv-gallery .utv-thumbnail,
+.utv-panel .utv-thumbnail{
   display: inline-block;
   margin: 10px 10px;
   vertical-align: top;
   padding: 0;
 }
 
-.utv-gallery .utv-thumb a,
-.utv-panel .utv-thumb a{
+.utv-gallery .utv-thumbnail a,
+.utv-panel .utv-thumbnail a{
   background-color: #000;
   display: block;
   cursor: pointer;
-}
-
-.utv-gallery .utv-thumb a.utv-square,
-.utv-panel .utv-thumb a.utv-square{
   position: relative;
 }
 
-.utv-gallery .utv-thumb a.utv-rect,
-.utv-panel .utv-thumb a.utv-rect{
-  position: relative;
-}
-
-.utv-gallery .utv-thumb span,
-.utv-panel .utv-thumb span{
+.utv-gallery .utv-thumbnail span,
+.utv-panel .utv-thumbnail span{
   font-size: 16px;
   display: block;
   line-height: 1.6em;
@@ -56,26 +47,26 @@
   transition: opacity .1s linear;
 }
 
-.utv-gallery .utv-thumb:hover .utv-play-btn,
-.utv-panel .utv-thumb:hover .utv-play-btn{
+.utv-gallery .utv-thumbnail:hover .utv-play-btn,
+.utv-panel .utv-thumbnail:hover .utv-play-btn{
   opacity: .85;
 }
 
-.utv-icon-default .utv-thumb .utv-play-btn{
+.utv-icon-default .utv-thumbnail .utv-play-btn{
   width: 48px;
   height: 48px;
   margin: -24px 0 0 -24px;
   background: transparent url('../img/play_icon.png') no-repeat 0 0;
 }
 
-.utv-icon-blue .utv-thumb .utv-play-btn{
+.utv-icon-blue .utv-thumbnail .utv-play-btn{
   width: 48px;
   height: 34px;
   margin: -17px 0 0 -24px;
   background: transparent url('../img/play_icon_blue.png') no-repeat 0 0;
 }
 
-.utv-icon-red .utv-thumb .utv-play-btn{
+.utv-icon-red .utv-thumbnail .utv-play-btn{
   width: 48px;
   height: 34px;
   margin: -17px 0 0 -24px;

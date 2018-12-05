@@ -11,7 +11,7 @@ const Thumbnail = (props) =>
     onChangeVideo
   } = props;
 
-  const thumbnailClasses = ['utv-thumb'];
+  const thumbnailClasses = ['utv-thumbnail'];
 
   if (selected)
     thumbnailClasses.push('utv-panel-video-active');

@@ -27,23 +27,29 @@ class Gallery extends React.Component
 
   async loadAPIData()
   {
-    let results = await axios.get('/wp-json/utubevideogallery/v1/galleriesdata/' + this.props.id);
+    const apiData = await axios.get(
+      '/wp-json/utubevideogallery/v1/galleriesdata/'
+      + this.props.id
+    );
 
-    if (results.status == 200)
+    if (
+      apiData.status == 200
+      && !apiData.data.error
+    )
     {
-      let videos = [];
+      const videos = [];
 
-      for (let album of results.data.albums)
+      for (const album of apiData.data.albums)
       {
-        for (let video of album.videos)
+        for (const video of album.videos)
           videos.push(video);
       }
 
       this.setState({
-        albums: results.data.albums || [],
+        albums: apiData.data.albums || [],
         videos: videos,
-        thumbnailType: results.data.thumbtype || undefined,
-        displayType: (results.data.displaytype == 'album' ? 'albums' : 'videos') || undefined
+        thumbnailType: apiData.data.thumbnailType || undefined,
+        displayType: (apiData.data.displaytype == 'album' ? 'albums' : 'videos') || undefined
       });
     }
   }
@@ -108,7 +114,7 @@ class Gallery extends React.Component
           let popup = document.querySelector('.mfp-container');
           popup.querySelector('.mfp-content').style.maxWidth = utvJSData.playerWidth + 'px';
           popup.querySelector('.mfp-title').innerText = title;
-          let bg = popup.querySelector('.mfp-bg');
+          let bg = document.querySelector('.mfp-bg');
           bg.style.background = utvJSData.lightboxOverlayColor;
           bg.style.opacity = utvJSData.lightboxOverlayOpacity;
         }
@@ -125,17 +131,21 @@ class Gallery extends React.Component
       return <AlbumView
         albums={this.state.albums}
         onOpenVideoPopup={this.openVideoPopup}
+        thumbnailType={this.state.thumbnailType}
       />;
     else if (this.state.displayType == 'videos')
       return <VideoView
         videos={this.state.videos}
         onOpenVideoPopup={this.openVideoPopup}
+        thumbnailType={this.thumbnailType}
       />;
     else
       return null;
   }
 }
 
-Gallery.defaultProps = {};
+Gallery.defaultProps = {
+  icon: 'red'
+};
 
 export default Gallery;

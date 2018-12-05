@@ -541,6 +541,6 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
     }
   }
 
-  //bootrap
+  //bootstrap
   new App();
 }

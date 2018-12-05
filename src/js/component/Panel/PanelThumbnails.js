@@ -9,11 +9,19 @@ const PanelThumbnails = (props) =>
     selectedVideo,
     currentPage,
     videosPerPage,
-    onChangeVideo
+    onChangeVideo,
+    thumbnailType
   } = props;
 
   const startIndex = (currentPage - 1) * parseInt(videosPerPage);
   const endIndex = startIndex + parseInt(videosPerPage);
+
+  const thumbnailsClasses = ['utv-video-panel-thumbnails', 'utv-align-center'];
+
+  if (thumbnailType == 'square')
+    thumbnailsClasses.push('utv-thumbnails-square');
+  else
+    thumbnailsClasses.push('utv-thumbnails-rectangle');
 
   const thumbnailNodes = videos.map((video, i) =>
   {
@@ -29,7 +37,7 @@ const PanelThumbnails = (props) =>
   });
 
   return (
-    <Thumbnails className="utv-video-panel-thumbnails utv-align-center">
+    <Thumbnails className={thumbnailsClasses.join(' ')}>
       {thumbnailNodes}
     </Thumbnails>
   );

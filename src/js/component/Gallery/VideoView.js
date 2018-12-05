@@ -25,6 +25,7 @@ class VideoView extends React.Component
         <VideoThumbnails
           videos={this.props.videos}
           onOpenVideo={this.openVideo}
+          thumbnailType={this.props.thumbnailType}
         />
       </div>
     );

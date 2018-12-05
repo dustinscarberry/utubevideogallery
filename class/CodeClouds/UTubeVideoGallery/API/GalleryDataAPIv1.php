@@ -43,7 +43,7 @@ class GalleryDataAPIv1
     $data->ID = $gallery->DATA_ID;
     $data->name = $gallery->DATA_NAME;
     $data->displaytype = $gallery->DATA_DISPLAYTYPE;
-    $data->thumbtype = $gallery->DATA_THUMBTYPE;
+    $data->thumbnailType = $gallery->DATA_THUMBTYPE;
     $data->albumsort = $gallery->DATA_SORT;
     $data->albums = [];
 

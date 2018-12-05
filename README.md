@@ -92,7 +92,7 @@ There are a few options you can use with your shortcodes to modify / over-ride s
 
 ### Gallery Options
 
-- align - Set the alignment of your gallery [left, center, right] (default: align="left")
+- align - Removed in version 2.0
 - videocount - Set the max number of videos displayed (default: n/a)
 - albumcount - Set the max number of albums displayed (default: n/a)
 

@@ -203,7 +203,7 @@ class VideoAPIv1 extends APIv1
         'VID_SOURCE' => $source,
         'VID_NAME' => $title,
         'VID_DESCRIPTION' => $description,
-        'VID_URL' => $urlKey,
+        'VID_URL' => $sourceID,
         'VID_THUMBTYPE' => $gallery->DATA_THUMBTYPE,
         'VID_QUALITY' => $quality,
         'VID_CHROME' => $controls,

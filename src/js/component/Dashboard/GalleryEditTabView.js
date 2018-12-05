@@ -28,6 +28,7 @@ class GalleryEditTabView extends React.Component
       title: '',
       albumSorting: undefined,
       thumbnailType: undefined,
+      originalThumbnailType: undefined,
       displayType: undefined,
       updateDate: undefined,
       loading: true
@@ -50,7 +51,8 @@ class GalleryEditTabView extends React.Component
   async loadData()
   {
     const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/galleries/' + this.props.currentViewID,
+      '/wp-json/utubevideogallery/v1/galleries/'
+      + this.props.currentViewID,
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
@@ -67,6 +69,7 @@ class GalleryEditTabView extends React.Component
         title: data.title,
         albumSorting: data.sortDirection,
         thumbnailType: data.thumbnailType,
+        originalThumbnailType: data.thumbnailType,
         displayType: data.displayType,
         updateDate: data.updateDate
       });
@@ -85,6 +88,34 @@ class GalleryEditTabView extends React.Component
 
   async saveGallery()
   {
+    this.setState({loading: true});
+
+    const rsp = await this.saveBaseGallery();
+
+    //update thumbnails if type changed
+    if (this.state.thumbnailType != this.state.originalThumbnailType)
+    {
+      await this.rebuildThumbnails();
+      this.setState({originalThumbnailType: this.state.thumbnailType});
+    }
+
+    //final user feedback
+    if (
+      rsp.status == 200
+      && !rsp.data.error
+    )
+    {
+      this.props.changeView();
+      this.props.setFeedbackMessage('Gallery changes saved', 'success');
+    }
+    else
+      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
+
+    this.setState({loading: false});
+  }
+
+  async saveBaseGallery()
+  {
     const rsp = await axios.patch(
       '/wp-json/utubevideogallery/v1/galleries/'
       + this.props.currentViewID,
@@ -99,16 +130,45 @@ class GalleryEditTabView extends React.Component
       }
     );
 
+    return rsp;
+  }
+
+  async rebuildThumbnails()
+  {
+    const videosData = await axios.get(
+      '/wp-json/utubevideogallery/v1/videos',
+      {
+        headers: {'X-WP-Nonce': utvJSData.restNonce}
+      }
+    );
+
     if (
-      rsp.status == 200
-      && !rsp.data.error
+      videosData.status == 200
+      && !videosData.data.error
     )
     {
-      this.props.changeView();
-      this.props.setFeedbackMessage('Gallery changes saved', 'success');
+      const videos = videosData.data.data;
+
+      for (let video of videos)
+      {
+        const rsp = await axios.patch(
+          '/wp-json/utubevideogallery/v1/videos/'
+          + video.id,
+          {},
+          {
+            headers: {'X-WP-Nonce': utvJSData.restNonce}
+          }
+        );
+
+        //update status about what video is being rebuilt
+        this.props.setFeedbackMessage(
+          'Video ['
+          + video.title
+          + '] updated',
+          'success'
+        );
+      }
     }
-    else
-      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
   }
 
   render()
