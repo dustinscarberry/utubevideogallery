@@ -35,7 +35,6 @@ class AlbumTable extends React.Component
             onClick={() => this.props.changeAlbum(row.id, row.title)}
             src={utvJSData.thumbnailCacheDirectory + cellData + '.jpg'}
             className="utv-preview-thumbnail utv-is-clickable"
-            data-rjs="2"
           />
         }
       },

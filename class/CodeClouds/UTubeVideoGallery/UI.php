@@ -81,7 +81,6 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\UI'))
         'vimeoDetailsHide' => $this->_options['vimeoDetailsHide']
       ];
 
-      wp_enqueue_script('retina-js', 'https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.2/retina.min.js', null, null, true);
       wp_enqueue_script('utv-frontend', plugins_url('../../../public/js/app.min.js', __FILE__), ['jquery'], $this->_version, true);
       wp_localize_script('utv-frontend', 'utvJSData', $embeddedJS);
     }

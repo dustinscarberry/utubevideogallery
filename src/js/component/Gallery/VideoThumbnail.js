@@ -1,4 +1,5 @@
 import React from 'react';
+import RetinaImage from 'react-retina-image';
 
 const VideoThumbnail = ({title, image, value, onOpenVideo}) =>
 {
@@ -6,7 +7,7 @@ const VideoThumbnail = ({title, image, value, onOpenVideo}) =>
     <div className='utv-thumb' onClick={() => onOpenVideo(value)}>
       <a>
         <span className="utv-play-btn"></span>
-        <img src={image} data-rjs="2"/>
+        <RetinaImage src={image}/>
       </a>
       <span>{title}</span>
     </div>
