@@ -39,6 +39,9 @@
   line-height: 1.6em;
   margin-top: 4px;
   margin-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .utv-gallery .utv-play-btn,
