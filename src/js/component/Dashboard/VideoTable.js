@@ -52,7 +52,7 @@ class VideoTable extends React.Component
               <TableRowActions
                 actions={[
                   {text: 'Edit', onClick: () => this.props.changeView('editVideo', row.id)},
-                  {text: 'Watch', link: 'https://youtu.be/' + row.url},
+                  {text: 'Watch', link: 'https://youtu.be/' + row.sourceID},
                   {text: 'Delete', onClick: () => this.deleteVideo([row.id])}
                 ]}
               />
@@ -156,7 +156,7 @@ class VideoTable extends React.Component
       record.id = item.id;
       record.thumbnail = item.thumbnail;
       record.title = item.title;
-      record.url = item.url;
+      record.sourceID = item.sourceID;
       record.published = item.published;
       record.dateAdded = item.updateDate;
       newData.push(record);

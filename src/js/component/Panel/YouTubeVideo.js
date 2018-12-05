@@ -1,7 +1,13 @@
 import React from 'react';
 
-const YouTubeVideo = ({videoData, controls, forceNoAutoplay}) =>
+const YouTubeVideo = (props) =>
 {
+  const {
+    videoData,
+    controls,
+    forceNoAutoplay
+  } = props;
+
   let source = 'https://www.youtube.com/embed/';
   source += videoData.slugID;
   source += '?modestbranding=1';

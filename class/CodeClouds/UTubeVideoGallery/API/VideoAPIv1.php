@@ -128,7 +128,7 @@ class VideoAPIv1 extends APIv1
     $videoData->description = $video->VID_DESCRIPTION;
     $videoData->source = $video->VID_SOURCE;
     $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
-    $videoData->url = $video->VID_URL;
+    $videoData->sourceID = $video->VID_URL;
     $videoData->quality = $video->VID_QUALITY;
     $videoData->showChrome = $video->VID_CHROME;
     $videoData->startTime = $video->VID_STARTTIME;
@@ -147,7 +147,7 @@ class VideoAPIv1 extends APIv1
     global $wpdb;
 
     //gather data fields
-    $urlKey = sanitize_text_field($req['urlKey']);
+    $sourceID = sanitize_text_field($req['sourceID']);
     $title = sanitize_text_field($req['title']);
     $description = sanitize_text_field($req['description']);
     $quality = sanitize_text_field($req['quality']);
@@ -160,7 +160,13 @@ class VideoAPIv1 extends APIv1
     $time = current_time('timestamp');
 
     //check for required fields
-    if (empty($urlKey) || empty($quality) || !isset($controls) || empty($source) || !isset($albumID))
+    if (
+      empty($sourceID)
+      || empty($quality)
+      || !isset($controls)
+      || empty($source)
+      || !isset($albumID)
+    )
       return $this->errorResponse('Invalid parameters');
 
     //get current video count for album
@@ -176,7 +182,18 @@ class VideoAPIv1 extends APIv1
 
     $videoCount = $videoCount[0];
 
-    $gallery = $wpdb->get_results('SELECT DATA_THUMBTYPE FROM ' . $wpdb->prefix . 'utubevideo_album a INNER JOIN ' . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID WHERE a.ALB_ID = ' . $albumID)[0];
+    $gallery = $wpdb->get_results(
+      'SELECT DATA_THUMBTYPE
+      FROM ' . $wpdb->prefix . 'utubevideo_album a
+      INNER JOIN ' . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID
+      WHERE a.ALB_ID = ' . $albumID
+    );
+
+    if (!$gallery)
+      return $this->errorResponse('A database error has occured during lookup');
+
+    $gallery = $gallery[0];
+
     $nextSortPos = $videoCount->VID_COUNT;
 
     //insert new video
@@ -364,7 +381,7 @@ class VideoAPIv1 extends APIv1
       $videoData->description = $video->VID_DESCRIPTION;
       $videoData->source = $video->VID_SOURCE;
       $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
-      $videoData->url = $video->VID_URL;
+      $videoData->sourceID = $video->VID_URL;
       $videoData->quality = $video->VID_QUALITY;
       $videoData->showChrome = $video->VID_CHROME;
       $videoData->startTime = $video->VID_STARTTIME;
@@ -400,7 +417,7 @@ class VideoAPIv1 extends APIv1
       $videoData->description = $video->VID_DESCRIPTION;
       $videoData->source = $video->VID_SOURCE;
       $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
-      $videoData->url = $video->VID_URL;
+      $videoData->sourceID = $video->VID_URL;
       $videoData->quality = $video->VID_QUALITY;
       $videoData->showChrome = $video->VID_CHROME;
       $videoData->startTime = $video->VID_STARTTIME;

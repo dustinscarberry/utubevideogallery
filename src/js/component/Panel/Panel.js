@@ -70,20 +70,25 @@ class Panel extends React.Component
 
   getPanelClasses()
   {
-    var panelClasses = ['utv-panel'];
+    const {
+      theme,
+      icon
+    } = this.props;
 
-    if (this.props.theme == 'light')
+    const panelClasses = ['utv-panel'];
+
+    if (theme == 'light')
       panelClasses.push('utv-panel-light');
-    else if (this.props.theme == 'dark')
+    else if (theme == 'dark')
       panelClasses.push('utv-panel-dark');
-    else if (this.props.theme == 'transparent')
+    else if (theme == 'transparent')
       panelClasses.push('utv-panel-transparent');
 
-    if (this.props.icon == 'red')
+    if (icon == 'red')
       panelClasses.push('utv-icon-red');
-    else if (this.props.icon == 'blue')
+    else if (icon == 'blue')
       panelClasses.push('utv-icon-blue');
-    else if (this.props.icon == 'default')
+    else if (icon == 'default')
       panelClasses.push('utv-icon-default');
 
     return panelClasses.join(' ');
@@ -108,7 +113,7 @@ class Panel extends React.Component
           videos.push(video);
       }
 
-      let totalPages = Math.ceil(videos.length / this.props.videosPerPage);
+      const totalPages = Math.ceil(videos.length / this.props.videosPerPage);
 
       this.setState({
         videos: videos,
@@ -120,31 +125,39 @@ class Panel extends React.Component
 
   render()
   {
-    if (this.state.videos.length == 0)
+    const {
+      videos,
+      forceNoAutoplay,
+      selectedVideo,
+      currentPage,
+      totalPages
+    } = this.state;
+
+    if (videos.length == 0)
       return null;
 
     return (
       <div className={this.getPanelClasses()}>
         <VideoPlayer
-          videoData={this.state.videos[this.state.selectedVideo]}
+          videoData={videos[selectedVideo]}
           controls={this.props.controls}
-          forceNoAutoplay={this.state.forceNoAutoplay}
+          forceNoAutoplay={forceNoAutoplay}
         />
         <Controls
-          videoData={this.state.videos[this.state.selectedVideo]}
+          videoData={videos[selectedVideo]}
           onPreviousVideo={this.previousVideo}
           onNextVideo={this.nextVideo}
         />
         <PanelThumbnails
-          videos={this.state.videos}
-          selectedVideo={this.state.selectedVideo}
+          videos={videos}
+          selectedVideo={selectedVideo}
           onChangeVideo={this.changeVideo}
-          currentPage={this.state.currentPage}
+          currentPage={currentPage}
           videosPerPage={this.props.videosPerPage}
         />
         <Paging
-          currentPage={this.state.currentPage}
-          totalPages={this.state.totalPages}
+          currentPage={currentPage}
+          totalPages={totalPages}
           onChangePage={this.changePage}
         />
       </div>
@@ -153,7 +166,7 @@ class Panel extends React.Component
 }
 
 Panel.defaultProps = {
-  videosPerPage: 12,
+  videosPerPage: 14,
   controls: false,
   theme: 'light',
   icon: 'red'

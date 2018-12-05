@@ -1,8 +1,16 @@
 import React from 'react';
 
-const Thumbnail = ({title, image, value, selected, onChangeVideo}) =>
+const Thumbnail = (props) =>
 {
-  let thumbnailClasses = ['utv-thumb'];
+  const {
+    title,
+    image,
+    value,
+    selected,
+    onChangeVideo
+  } = props;
+
+  const thumbnailClasses = ['utv-thumb'];
 
   if (selected)
     thumbnailClasses.push('utv-panel-video-active');

@@ -2,25 +2,31 @@ import React from 'react';
 import YouTubeVideo from './YouTubeVideo';
 import VimeoVideo from './VimeoVideo';
 
-const VideoPlayer = ({videoData, controls, forceNoAutoplay}) =>
+const VideoPlayer = (props) =>
 {
-  let video = undefined;
+  const {
+    videoData,
+    controls,
+    forceNoAutoplay
+  } = props;
+
+  let videoNode = undefined;
 
   if (videoData.source == 'youtube')
-    video = <YouTubeVideo
+    videoNode = <YouTubeVideo
       videoData={videoData}
       controls={controls}
       forceNoAutoplay={forceNoAutoplay}
     />;
   else if (videoData.source == 'vimeo')
-    video = <VimeoVideo
+    videoNode = <VimeoVideo
       videoData={videoData}
       forceNoAutoplay={forceNoAutoplay}
     />;
 
   return (
     <div className="utv-video-panel-player">
-      {video}
+      {videoNode}
     </div>
   );
 }

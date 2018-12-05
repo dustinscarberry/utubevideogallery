@@ -28,6 +28,7 @@ class VideoEditTabView extends React.Component
     this.state = {
       thumbnail: undefined,
       source: undefined,
+      sourceID: undefined,
       title: '',
       description: '',
       quality: undefined,
@@ -77,7 +78,7 @@ class VideoEditTabView extends React.Component
       this.setState({
         thumbnail: data.thumbnail,
         source: data.source,
-        urlKey: data.url,
+        sourceID: data.sourceID,
         title: data.title,
         description: data.description,
         quality: data.quality,
@@ -146,8 +147,6 @@ class VideoEditTabView extends React.Component
       }
     );
 
-    console.log(rsp.data);
-
     if (
       rsp.status == 200
       && !rsp.data.error
@@ -167,7 +166,7 @@ class VideoEditTabView extends React.Component
     if (this.state.source == 'youtube')
     {
       src = 'https://www.youtube.com/embed/';
-      src += this.state.urlKey;
+      src += this.state.sourceID;
       src += '?modestbranding=1';
       src += '&rel=0';
       src += '&showinfo=0';
@@ -182,7 +181,7 @@ class VideoEditTabView extends React.Component
     else if (this.state.source == 'vimeo')
     {
       src = 'https://player.vimeo.com/video/';
-      src += this.state.urlKey;
+      src += this.state.sourceID;
       src += '?title=0';
       src += '&portrait=0';
       src += '&byline=0';

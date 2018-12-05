@@ -146,7 +146,7 @@ class PlaylistEditTabView extends React.Component
         combinedData[source] = {};
         combinedData[source].title = localVideo.title;
         combinedData[source].thumbnail = utvJSData.thumbnailCacheDirectory + localVideo.thumbnail + '.jpg';
-        combinedData[source].sourceID = localVideo.url;
+        combinedData[source].sourceID = localVideo.sourceID;
         combinedData[source].localID = localVideo.id;
         combinedData[source].selected = true;
         combinedData[source].legend = 'local';
@@ -287,7 +287,7 @@ class PlaylistEditTabView extends React.Component
           let rsp = await axios.post(
             '/wp-json/utubevideogallery/v1/videos',
             {
-              urlKey: video.sourceID,
+              sourceID: video.sourceID,
               title: video.title,
               quality: this.state.videoQuality,
               controls: this.state.showControls,
@@ -320,7 +320,7 @@ class PlaylistEditTabView extends React.Component
           let rsp = await axios.post(
             '/wp-json/utubevideogallery/v1/videos',
             {
-              urlKey: video.sourceID,
+              sourceID: video.sourceID,
               title: video.title,
               quality: this.state.videoQuality,
               controls: this.state.showControls,
@@ -358,7 +358,7 @@ class PlaylistEditTabView extends React.Component
           let rsp = await axios.post(
             '/wp-json/utubevideogallery/v1/videos',
             {
-              urlKey: video.sourceID,
+              sourceID: video.sourceID,
               title: video.title,
               quality: this.state.videoQuality,
               controls: this.state.showControls,

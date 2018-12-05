@@ -238,7 +238,7 @@ class PlaylistAddTabView extends React.Component
         let rsp = await axios.post(
           '/wp-json/utubevideogallery/v1/videos',
           {
-            urlKey: video.sourceID,
+            sourceID: video.sourceID,
             title: video.title,
             quality: this.state.videoQuality,
             controls: this.state.showControls,

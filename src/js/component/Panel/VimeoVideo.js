@@ -1,7 +1,12 @@
 import React from 'react';
 
-const VimeoVideo = ({videoData, forceNoAutoplay}) =>
+const VimeoVideo = (props) =>
 {
+  const {
+    videoData,
+    forceNoAutoplay
+  } = props;
+
   let source = 'https://player.vimeo.com/video/';
   source += videoData.slugID;
   source += '?autoplay=' + (forceNoAutoplay ? '0' : utvJSData.vimeoAutoplay);

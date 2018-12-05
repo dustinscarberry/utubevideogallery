@@ -28,7 +28,7 @@ class VideoAddTabView extends React.Component
     this.state = {
       source: undefined,
       url: '',
-      urlKey: undefined,
+      sourceID: undefined,
       title: '',
       description: '',
       quality: 'hd1080',
@@ -57,25 +57,28 @@ class VideoAddTabView extends React.Component
   {
     let url = event.target.value.trim();
 
-    this.setState({source: undefined, url: url, urlKey: undefined});
+    this.setState({source: undefined, url: url, sourceID: undefined});
 
     if (url)
     {
       let compareURL = url.toLowerCase();
 
-      if (compareURL.indexOf('youtube') !== -1)
+      if (
+        compareURL.indexOf('youtube') !== -1
+        || compareURL.indexOf('youtu.be') !== -1
+      )
       {
         let matches = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
 
         if (matches)
-          this.setState({source: 'youtube', urlKey: matches[1]});
+          this.setState({source: 'youtube', sourceID: matches[1]});
       }
       else if (compareURL.indexOf('vimeo') !== -1)
       {
         let matches = url.match(/https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/);
 
         if (matches)
-          this.setState({source: 'vimeo', urlKey: matches[2]})
+          this.setState({source: 'vimeo', sourceID: matches[2]})
       }
     }
   }
@@ -85,7 +88,7 @@ class VideoAddTabView extends React.Component
     const rsp = await axios.post(
       '/wp-json/utubevideogallery/v1/videos/',
       {
-        urlKey: this.state.urlKey,
+        sourceID: this.state.sourceID,
         title: this.state.title,
         description: this.state.description,
         quality: this.state.quality,
@@ -119,7 +122,7 @@ class VideoAddTabView extends React.Component
     if (this.state.source == 'youtube')
     {
       src = 'https://www.youtube.com/embed/';
-      src += this.state.urlKey;
+      src += this.state.sourceID;
       src += '?modestbranding=1';
       src += '&rel=0';
       src += '&showinfo=0';
@@ -134,7 +137,7 @@ class VideoAddTabView extends React.Component
     else if (this.state.source == 'vimeo')
     {
       src = 'https://player.vimeo.com/video/';
-      src += this.state.urlKey;
+      src += this.state.sourceID;
       src += '?title=0';
       src += '&portrait=0';
       src += '&byline=0';
