@@ -3,10 +3,10 @@
 namespace CodeClouds\UTubeVideoGallery\API;
 
 use CodeClouds\UTubeVideoGallery\API\APIv1;
+use CodeClouds\UTubeVideoGallery\Repository\AlbumRepository;
+use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
 use WP_REST_Request;
 use WP_REST_Server;
-use stdClass;
-use utvAdminGen;
 
 class AlbumAPIv1 extends APIv1
 {
@@ -93,94 +93,67 @@ class AlbumAPIv1 extends APIv1
     );
   }
 
+  //get single album
   public function getItem(WP_REST_Request $req)
   {
     //check for valid albumID
     if (!$req['albumID'])
       return $this->errorResponse('Invalid album ID');
 
-    $albumData = new stdClass();
+    //sanitize data
     $albumID = sanitize_key($req['albumID']);
 
-    global $wpdb;
-    $album = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_album WHERE ALB_ID = ' . $albumID);
+    //get album
+    $albumRepository = new AlbumRepository();
+    $album = $albumRepository->getItem($albumID);
 
+    //check if album exists
     if (!$album)
       return $this->errorResponse('The specified album resource was not found');
 
-    $album = $album[0];
-    $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VIDEO_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $albumID);
-
-    if ($videoCount)
-      $videoCount = $videoCount[0]->VIDEO_COUNT;
-    else
-      $videoCount = 0;
-
-    $albumData->id = $album->ALB_ID;
-    $albumData->title = $album->ALB_NAME;
-    $albumData->slug = $album->ALB_SLUG;
-    $albumData->thumbnail = $album->ALB_THUMB;
-    $albumData->sortDirection = $album->ALB_SORT;
-    $albumData->position = $album->ALB_POS;
-    $albumData->published = $album->ALB_PUBLISH;
-    $albumData->updateDate = $album->ALB_UPDATEDATE;
-    $albumData->videoCount = $videoCount;
-    $albumData->galleryID = $album->DATA_ID;
-
-    return $this->response($albumData);
+    return $this->response($album);
   }
 
+  //create album
   public function createItem(WP_REST_Request $req)
   {
-    //require helper classes
-    //require_once(dirname(__FILE__) . '/../../../utvAdminGen.php');
-    //utvAdminGen::initialize([]);
-
-    global $wpdb;
+    //create repository
+    $albumRepository = new AlbumRepository();
 
     //gather data fields
     $title = sanitize_text_field($req['title']);
     $videoSorting = ($req['videoSorting'] == 'desc' ? 'desc' : 'asc');
     $galleryID = sanitize_key($req['galleryID']);
-    $time = current_time('timestamp');
 
     //check for required fields
     if (empty($title) || empty($videoSorting) || !isset($galleryID))
       return $this->errorResponse('Invalid parameters');
 
-    //get next album sorting position
-    $nextAlbumPosition = $wpdb->get_results('SELECT COUNT(ALB_ID) AS ALBUM_COUNT FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $galleryID);
-
-    if ($nextAlbumPosition)
-      $nextAlbumPosition = $nextAlbumPosition[0]->ALBUM_COUNT;
-    else
-      $nextAlbumPosition = 0;
+    //get next album sort position
+    $nextSortPosition = $albumRepository->getNextSortPositionByGallery($galleryID);
 
     //generate slug and store for possible use in future
     $slug = $this->generateSlug($title, $wpdb);
 
     //insert new album
-    if ($wpdb->insert(
-      $wpdb->prefix . 'utubevideo_album',
-      [
-        'ALB_NAME' => $title,
-        'ALB_SLUG' => $slug,
-        'ALB_THUMB' => 'missing',
-        'ALB_SORT' => $videoSorting,
-        'ALB_UPDATEDATE' => $time,
-        'ALB_POS' => $nextAlbumPosition,
-        'DATA_ID' => $galleryID
-      ]
-    ))
+    $albumID = $albumRepository->createItem(
+      $title,
+      $slug,
+      $videoSorting,
+      $nextSortPosition,
+      $galleryID
+    );
+
+    //if successfull album creation..
+    if ($albumID)
       return $this->response(null, 201);
     else
       return $this->errorResponse('A database error has occurred');
   }
 
+  //delete album
   public function deleteItem(WP_REST_Request $req)
   {
-    global $wpdb;
-
     //check for valid albumID
     if (!$req['albumID'])
       return $this->errorResponse('Invalid album ID');
@@ -189,29 +162,35 @@ class AlbumAPIv1 extends APIv1
     $albumID = sanitize_key($req['albumID']);
 
     //get all videos in album
-    $videos = $wpdb->get_results('SELECT VID_ID, VID_URL FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $albumID);
+    $videoRepository = new VideoRepository();
+    $albumVideos = $videoRepository->getItemsByAlbum($albumID);
 
-    //delete album and video data
+    //delete album and videos from database
+    $albumRepository = new AlbumRepository();
+
     if (
-      $wpdb->query('DELETE FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $albumID) === false
-      || $wpdb->query('DELETE FROM ' . $wpdb->prefix . 'utubevideo_album WHERE ALB_ID =' . $albumID) === false
+      !$videoRepository->deleteItemsByAlbum($albumID)
+      || !$albumRepository->deleteItem($albumID)
     )
       return $this->errorResponse('A database error has occurred');
 
+    //delete thumbnails
     $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
 
     //delete video thumbnails
     foreach ($videos as $video)
-      unlink($thumbnailPath . $video->VID_URL . $video->VID_ID . '.jpg');
+    {
+      unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
+      unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
+    }
 
     return $this->response(null);
   }
 
+  //update album
   public function updateItem(WP_REST_Request $req)
   {
-    global $wpdb;
-
-    //check for valid videoID
+    //check for valid albumID
     if (!$req['albumID'])
       return $this->errorResponse('Invalid album ID');
 
@@ -255,88 +234,47 @@ class AlbumAPIv1 extends APIv1
     //set required update fields
     $updatedFields['ALB_UPDATEDATE'] = $currentTime;
 
-    //update database entry
-    if ($wpdb->update(
-      $wpdb->prefix . 'utubevideo_album',
-      $updatedFields,
-      ['ALB_ID' => $albumID]
-    ) >= 0)
+    //update album
+    $albumRepository = new AlbumRepository();
+
+    if ($albumRepository->updateItem($albumID, $updatedFields))
       return $this->response(null);
     else
       return $this->errorResponse('A database error has occurred');
   }
 
+  //get list of albums within gallery
   public function getAllItems(WP_REST_Request $req)
   {
-    $data = [];
+    //check for valid gallery id
+    if (!$req['galleryID'])
+      return $this->errorResponse('Invalid gallery ID');
 
-    global $wpdb;
-    $albums = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $req['galleryID'] . ' ORDER BY ALB_POS');
+    //sanitize data
+    $galleryID = sanitize_key($req['galleryID']);
 
-    foreach ($albums as $album)
-    {
-      $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VIDEO_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $album->ALB_ID);
+    //get albums
+    $albumRepository = new AlbumRepository();
+    $albums = $albumRepository->getItemsByGallery($galleryID);
 
-      if ($videoCount)
-        $videoCount = $videoCount[0]->VIDEO_COUNT;
-      else
-        $videoCount = 0;
-
-      $albumData = new stdClass();
-      $albumData->id = $album->ALB_ID;
-      $albumData->title = $album->ALB_NAME;
-      $albumData->slug = $album->ALB_SLUG;
-      $albumData->thumbnail = $album->ALB_THUMB;
-      $albumData->sortDirection = $album->ALB_SORT;
-      $albumData->position = $album->ALB_POS;
-      $albumData->published = $album->ALB_PUBLISH;
-      $albumData->updateDate = $album->ALB_UPDATEDATE;
-      $albumData->videoCount = $videoCount;
-      $albumData->galleryID = $album->DATA_ID;
-
-      $data[] = $albumData;
-    }
-
-    return $this->response($data);
+    return $this->response($albums);
   }
 
+  //get list of all albums
   public function getAnyAllItems(WP_REST_Request $req)
   {
-    $data = [];
+    //get albums
+    $albumRepository = new AlbumRepository();
+    $albums = $albumRepository->getItems();
 
-    global $wpdb;
-    $albums = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_album ORDER BY ALB_POS');
-
-    foreach ($albums as $album)
-    {
-      $videoCount = $wpdb->get_results('SELECT count(VID_ID) as VIDEO_COUNT FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID = ' . $album->ALB_ID);
-
-      if ($videoCount)
-        $videoCount = $videoCount[0]->VIDEO_COUNT;
-      else
-        $videoCount = 0;
-
-      $albumData = new stdClass();
-      $albumData->id = $album->ALB_ID;
-      $albumData->title = $album->ALB_NAME;
-      $albumData->slug = $album->ALB_SLUG;
-      $albumData->thumbnail = $album->ALB_THUMB;
-      $albumData->sortDirection = $album->ALB_SORT;
-      $albumData->position = $album->ALB_POS;
-      $albumData->published = $album->ALB_PUBLISH;
-      $albumData->updateDate = $album->ALB_UPDATEDATE;
-      $albumData->videoCount = $videoCount;
-      $albumData->galleryID = $album->DATA_ID;
-
-      $data[] = $albumData;
-    }
-
-    return $this->response($data);
+    return $this->response($albums);
   }
 
   //generate album permalink slug
   public function generateSlug($albumName, $wpdb)
   {
+    global $wpdb;
+
     $rawslugs = $wpdb->get_results('SELECT ALB_SLUG FROM ' . $wpdb->prefix . 'utubevideo_album', ARRAY_N);
 
     foreach ($rawslugs as $item)

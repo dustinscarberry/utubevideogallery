@@ -3,11 +3,10 @@
 namespace CodeClouds\UTubeVideoGallery\API;
 
 use CodeClouds\UTubeVideoGallery\API\APIv1;
-use CodeClouds\UTubeVideoGallery\Shared\Thumbnail;
+use CodeClouds\UTubeVideoGallery\Service\Thumbnail;
+use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
 use WP_REST_Request;
 use WP_REST_Server;
-use stdClass;
-use utvAdminGen;
 
 class VideoAPIv1 extends APIv1
 {
@@ -99,135 +98,93 @@ class VideoAPIv1 extends APIv1
     );
   }
 
+  //get single video
   public function getItem(WP_REST_Request $req)
   {
-    global $wpdb;
-
     //check for valid videoID
     if (!$req['videoID'])
       return $this->errorResponse('Invalid video ID');
 
-    //gather data fields
+    //sanitize data
     $videoID = sanitize_key($req['videoID']);
 
-    $video = $wpdb->get_results(
-      'SELECT *
-      FROM ' . $wpdb->prefix . 'utubevideo_video
-      WHERE VID_ID = ' . $videoID
-    );
+    //get video
+    $videoRepository = new VideoRepository();
+    $video = $videoRepository->getItem($videoID);
 
     //check if video exists
     if (!$video)
       return $this->errorResponse('The specified video resource was not found');
 
-    $video = $video[0];
-
-    $videoData = new stdClass();
-    $videoData->id = $video->VID_ID;
-    $videoData->title = $video->VID_NAME;
-    $videoData->description = $video->VID_DESCRIPTION;
-    $videoData->source = $video->VID_SOURCE;
-    $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
-    $videoData->sourceID = $video->VID_URL;
-    $videoData->quality = $video->VID_QUALITY;
-    $videoData->showChrome = $video->VID_CHROME;
-    $videoData->startTime = $video->VID_STARTTIME;
-    $videoData->endTime = $video->VID_ENDTIME;
-    $videoData->position = $video->VID_POS;
-    $videoData->published = $video->VID_PUBLISH;
-    $videoData->updateDate = $video->VID_UPDATEDATE;
-    $videoData->albumID = $video->ALB_ID;
-    $videoData->playlistData = $video->PLAY_ID;
-
-    return $this->response($videoData);
+    return $this->response($video);
   }
 
+  //create video
   public function createItem(WP_REST_Request $req)
   {
-    global $wpdb;
+    //create repository
+    $videoRepository = new VideoRepository();
 
     //gather data fields
     $sourceID = sanitize_text_field($req['sourceID']);
     $title = sanitize_text_field($req['title']);
     $description = sanitize_text_field($req['description']);
     $quality = sanitize_text_field($req['quality']);
-    $controls = ($req['controls'] ? 1 : 0);
+    $showControls = ($req['controls'] ? 1 : 0);
     $startTime = sanitize_text_field($req['startTime']);
     $endTime = sanitize_text_field($req['endTime']);
     $source = sanitize_text_field($req['source']);
     $albumID = sanitize_key($req['albumID']);
     $playlistID = sanitize_key($req['playlistID']);
-    $time = current_time('timestamp');
 
     //check for required fields
     if (
       empty($sourceID)
       || empty($quality)
-      || !isset($controls)
+      || !isset($showControls)
       || empty($source)
       || !isset($albumID)
     )
       return $this->errorResponse('Invalid parameters');
 
-    //get current video count for album
-    $videoCount = $wpdb->get_results(
-      'SELECT COUNT(VID_ID) AS VID_COUNT
-      FROM ' . $wpdb->prefix . 'utubevideo_video
-      WHERE ALB_ID = ' . $albumID
-    );
+    //get next video sort position
+    $nextSortPosition = $videoRepository->getNextSortPositionByAlbum($albumID);
 
     //check if value exists
-    if (!$videoCount)
-      return $this->errorResponse('A database error has occured during lookup');
+    if ($nextSortPosition === false)
+      return $this->errorResponse('A database error has occured');
 
-    $videoCount = $videoCount[0];
+    //get video thumbnail type
+    $thumbnailType = $videoRepository->getThumbnailTypeByAlbum($albumID);
 
-    $gallery = $wpdb->get_results(
-      'SELECT DATA_THUMBTYPE
-      FROM ' . $wpdb->prefix . 'utubevideo_album a
-      INNER JOIN ' . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID
-      WHERE a.ALB_ID = ' . $albumID
-    );
-
-    if (!$gallery)
-      return $this->errorResponse('A database error has occured during lookup');
-
-    $gallery = $gallery[0];
-
-    $nextSortPos = $videoCount->VID_COUNT;
+    if (!$thumbnailType)
+      return $this->errorResponse('A database error has occured');
 
     //insert new video
-    if ($wpdb->insert(
-      $wpdb->prefix . 'utubevideo_video',
-      [
-        'VID_SOURCE' => $source,
-        'VID_NAME' => $title,
-        'VID_DESCRIPTION' => $description,
-        'VID_URL' => $sourceID,
-        'VID_THUMBTYPE' => $gallery->DATA_THUMBTYPE,
-        'VID_QUALITY' => $quality,
-        'VID_CHROME' => $controls,
-        'VID_STARTTIME' => $startTime,
-        'VID_ENDTIME' => $endTime,
-        'VID_POS' => $nextSortPos,
-        'VID_UPDATEDATE' => $time,
-        'ALB_ID' => $albumID,
-        'PLAY_ID' => $playlistID
-      ]
-    ))
-    {
-      //get last insert id and save thumbnail
-      $videoID = $wpdb->insert_id;
+    $videoID = $videoRepository->createItem(
+      $source,
+      $title,
+      $description,
+      $sourceID,
+      $thumbnailType,
+      $quality,
+      $showControls,
+      $startTime,
+      $endTime,
+      $nextSortPosition,
+      $albumID,
+      $playlistID
+    );
 
+    //if successfull video creation..
+    if ($videoID)
+    {
       $thumbnail = new Thumbnail($videoID);
 
       if (!$thumbnail->save())
       {
-        //delete video from database
-        if (!$wpdb->delete(
-          $wpdb->prefix . 'utubevideo_video',
-          ['VID_ID' => $videoID]
-        ))
+        //delete video on failure
+        if (!$videoRepository->deleteItem($videoID))
           return $this->errorResponse('A database error has occurred');
 
         //return error message
@@ -240,10 +197,9 @@ class VideoAPIv1 extends APIv1
       return $this->errorResponse('A database error has occurred');
   }
 
+  //delete video
   public function deleteItem(WP_REST_Request $req)
   {
-    global $wpdb;
-
     //check for valid videoID
     if (!$req['videoID'])
       return $this->errorResponse('Invalid video ID');
@@ -251,37 +207,29 @@ class VideoAPIv1 extends APIv1
     //sanitize data
     $videoID = sanitize_key($req['videoID']);
 
-    //get all videos in album
-    $video = $wpdb->get_results(
-      'SELECT VID_ID, VID_URL
-      FROM ' . $wpdb->prefix . 'utubevideo_video
-      WHERE VID_ID = ' . $videoID
-    );
+    //get video
+    $videoRepository = new VideoRepository();
+    $video = $videoRepository->getItem($videoID);
 
     //check if video exists
     if (!$video)
       return $this->errorResponse('Video does not exist');
 
-    $video = $video[0];
-
-    //update database entry
-    if (!$wpdb->delete(
-      $wpdb->prefix . 'utubevideo_video',
-      ['VID_ID' => $videoID]
-    ))
+    //delete video
+    if (!$videoRepository->deleteItem($videoID))
       return $this->errorResponse('A database error has occurred');
 
     //delete video thumbnail
     $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
-    unlink($thumbnailPath . $video->VID_URL . $video->VID_ID . '.jpg');
+    unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
+    unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
 
     return $this->response(null);
   }
 
+  //update video
   public function updateItem(WP_REST_Request $req)
   {
-    global $wpdb;
-
     //check for valid videoID
     if (!$req['videoID'])
       return $this->errorResponse('Invalid video ID');
@@ -340,15 +288,14 @@ class VideoAPIv1 extends APIv1
     $updatedFields['VID_UPDATEDATE'] = $currentTime;
     $updatedFields['VID_THUMBTYPE'] = 'default';
 
-    //update database entry
-    if ($wpdb->update(
-      $wpdb->prefix . 'utubevideo_video',
-      $updatedFields,
-      ['VID_ID' => $videoID]
-    ) >= 0)
+    //update video
+    $videoRepository = new VideoRepository();
+
+    if ($videoRepository->updateItem($videoID, $updatedFields))
     {
       if (!$skipThumbnailRender)
       {
+        //resave thumbnail
         $thumbnail = new Thumbnail($videoID);
 
         if (!$thumbnail->save())
@@ -361,76 +308,30 @@ class VideoAPIv1 extends APIv1
       return $this->errorResponse('A database error has occurred');
   }
 
+  //get list of videos within album
   public function getAllItems(WP_REST_Request $req)
   {
-    $data = [];
-    global $wpdb;
+    //check for valid videoID
+    if (!$req['albumID'])
+      return $this->errorResponse('Invalid album ID');
 
-    $videos = $wpdb->get_results(
-      'SELECT *
-      FROM ' . $wpdb->prefix . 'utubevideo_video
-      WHERE ALB_ID = ' . $req['albumID']
-      . ' ORDER BY VID_POS'
-    );
+    //sanitize data
+    $albumID = sanitize_key($req['albumID']);
 
-    foreach ($videos as $video)
-    {
-      $videoData = new stdClass();
-      $videoData->id = $video->VID_ID;
-      $videoData->title = $video->VID_NAME;
-      $videoData->description = $video->VID_DESCRIPTION;
-      $videoData->source = $video->VID_SOURCE;
-      $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
-      $videoData->sourceID = $video->VID_URL;
-      $videoData->quality = $video->VID_QUALITY;
-      $videoData->showChrome = $video->VID_CHROME;
-      $videoData->startTime = $video->VID_STARTTIME;
-      $videoData->endTime = $video->VID_ENDTIME;
-      $videoData->position = $video->VID_POS;
-      $videoData->published = $video->VID_PUBLISH;
-      $videoData->updateDate = $video->VID_UPDATEDATE;
-      $videoData->albumID = $video->ALB_ID;
-      $videoData->playlistID = $video->PLAY_ID;
+    //get videos
+    $videoRepository = new VideoRepository();
+    $videos = $videoRepository->getItemsByAlbum($albumID);
 
-      $data[] = $videoData;
-    }
-
-    return $this->response($data);
+    return $this->response($videos);
   }
 
+  //get list of all videos
   public function getAnyAllItems(WP_REST_Request $req)
   {
-    $data = [];
-    global $wpdb;
+    //get videos
+    $videoRepository = new VideoRepository();
+    $videos = $videoRepository->getItems();
 
-    $videos = $wpdb->get_results(
-      'SELECT *
-      FROM ' . $wpdb->prefix . 'utubevideo_video
-      ORDER BY VID_ID'
-    );
-
-    foreach ($videos as $video)
-    {
-      $videoData = new stdClass();
-      $videoData->id = $video->VID_ID;
-      $videoData->title = $video->VID_NAME;
-      $videoData->description = $video->VID_DESCRIPTION;
-      $videoData->source = $video->VID_SOURCE;
-      $videoData->thumbnail = $video->VID_URL . $video->VID_ID;
-      $videoData->sourceID = $video->VID_URL;
-      $videoData->quality = $video->VID_QUALITY;
-      $videoData->showChrome = $video->VID_CHROME;
-      $videoData->startTime = $video->VID_STARTTIME;
-      $videoData->endTime = $video->VID_ENDTIME;
-      $videoData->position = $video->VID_POS;
-      $videoData->published = $video->VID_PUBLISH;
-      $videoData->updateDate = $video->VID_UPDATEDATE;
-      $videoData->albumID = $video->ALB_ID;
-      $videoData->playlistID = $video->PLAY_ID;
-
-      $data[] = $videoData;
-    }
-
-    return $this->response($data);
+    return $this->response($videos);
   }
 }

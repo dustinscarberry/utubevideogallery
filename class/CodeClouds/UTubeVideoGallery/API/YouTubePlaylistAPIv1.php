@@ -3,7 +3,7 @@
 namespace CodeClouds\UTubeVideoGallery\API;
 
 use CodeClouds\UTubeVideoGallery\API\APIv1;
-use CodeClouds\UTubeVideoGallery\Shared\Utility;
+use CodeClouds\UTubeVideoGallery\Service\Utility;
 use WP_REST_Request;
 use WP_REST_Server;
 use stdClass;

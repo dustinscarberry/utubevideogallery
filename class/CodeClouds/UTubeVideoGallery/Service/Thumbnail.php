@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Shared;
+namespace CodeClouds\UTubeVideoGallery\Service;
 
 class Thumbnail
 {

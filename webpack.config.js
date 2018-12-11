@@ -10,8 +10,10 @@ let sourceDir = path.resolve(__dirname, 'src/js');
 module.exports =
 {
   entry: {
-    app: ['babel-polyfill', sourceDir + '/app.js'],
-    dashboard: ['babel-polyfill', sourceDir + '/dashboard.js']
+    app: ['idempotent-babel-polyfill', sourceDir + '/app.js'],
+    dashboard: ['idempotent-babel-polyfill', sourceDir + '/dashboard.js']
+    //app: sourceDir + '/app.js',
+    //dashboard: sourceDir + '/dashboard.js'
   },
   output: {
     path: distDir,

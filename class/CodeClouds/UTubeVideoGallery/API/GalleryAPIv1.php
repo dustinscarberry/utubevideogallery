@@ -3,9 +3,11 @@
 namespace CodeClouds\UTubeVideoGallery\API;
 
 use CodeClouds\UTubeVideoGallery\API\APIv1;
+use CodeClouds\UTubeVideoGallery\Repository\GalleryRepository;
+use CodeClouds\UTubeVideoGallery\Repository\AlbumRepository;
+use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
 use WP_REST_Request;
 use WP_REST_Server;
-use stdClass;
 
 class GalleryAPIv1 extends APIv1
 {
@@ -78,8 +80,6 @@ class GalleryAPIv1 extends APIv1
 
   public function getItem(WP_REST_Request $req)
   {
-    $galleryData = new stdClass();
-
     //check for valid galleryID
     if (!$req['galleryID'])
       return $this->errorResponse('Invalid gallery ID');
@@ -87,66 +87,50 @@ class GalleryAPIv1 extends APIv1
     //sanitize data
     $galleryID = sanitize_key($req['galleryID']);
 
-    global $wpdb;
-    $gallery = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_dataset WHERE DATA_ID = ' . $galleryID);
+    //get gallery
+    $galleryRepository = new GalleryRepository();
+    $gallery = $galleryRepository->getItem($galleryID);
 
     if (!$gallery)
       return $this->errorResponse('The specified gallery resource was not found');
 
-    $gallery = $gallery[0];
-    $albumCount = $wpdb->get_results('SELECT COUNT(ALB_ID) AS ALBUM_COUNT FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $galleryID);
-
-    if ($albumCount)
-      $albumCount = $albumCount[0]->ALBUM_COUNT;
-    else
-      $albumCount = 0;
-
-    $galleryData->id = $gallery->DATA_ID;
-    $galleryData->title = $gallery->DATA_NAME;
-    $galleryData->sortDirection = $gallery->DATA_SORT;
-    $galleryData->displayType = $gallery->DATA_DISPLAYTYPE;
-    $galleryData->updateDate = $gallery->DATA_UPDATEDATE;
-    $galleryData->albumCount = $albumCount;
-    $galleryData->thumbnailType = $gallery->DATA_THUMBTYPE;
-
-    return $this->response($galleryData);
+    return $this->response($gallery);
   }
 
   public function createItem(WP_REST_Request $req)
   {
-    global $wpdb;
-
     //gather data fields
     $title = sanitize_text_field($req['title']);
     $albumSorting = sanitize_text_field($req['albumSorting'] == 'desc' ? 'desc' : 'asc');
     $thumbnailType = sanitize_text_field($req['thumbnailType'] == 'square' ? 'square' : 'rectangle');
     $displayType = sanitize_text_field($req['displayType'] == 'video' ? 'video' : 'album');
-    $time = current_time('timestamp');
 
     //check for required fields
-    if (empty($title) || empty($albumSorting) || empty($thumbnailType) || empty($displayType))
+    if (
+      empty($title)
+      || empty($albumSorting)
+      || empty($thumbnailType)
+      || empty($displayType)
+    )
       return $this->errorResponse('Invalid parameters');
 
     //insert new gallery
-    if ($wpdb->insert(
-      $wpdb->prefix . 'utubevideo_dataset',
-      [
-        'DATA_NAME' => $title,
-        'DATA_SORT' => $albumSorting,
-        'DATA_THUMBTYPE' => $thumbnailType,
-        'DATA_DISPLAYTYPE' => $displayType,
-        'DATA_UPDATEDATE' => $time
-      ]
-    ))
-      return $this->response(null, 201);
+    $galleryRepository = new GalleryRepository();
+    $galleryID = $galleryRepository->createItem(
+      $title,
+      $albumSorting,
+      $thumbnailType,
+      $displayType
+    );
+
+    if ($galleryID)
+      return $this->response($galleryID, 201);
     else
       return $this->errorResponse('A database error has occurred');
   }
 
   public function deleteItem(WP_REST_Request $req)
   {
-    global $wpdb;
-
     //check for valid galleryID
     if (!$req['galleryID'])
       return $this->errorResponse('Invalid gallery ID');
@@ -154,40 +138,36 @@ class GalleryAPIv1 extends APIv1
     //sanitize fields
     $galleryID = sanitize_key($req['galleryID']);
 
-    //get albums within gallery
-    $albums = $wpdb->get_results('SELECT ALB_ID FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID =' . $galleryID);
-    $albumIDs = [-1];
+    //create repositories
+    $galleryRepository = new GalleryRepository();
+    $albumRepository = new AlbumRepository();
+    $videoRepository = new VideoRepository();
 
-    foreach ($albums as $album)
-      $albumIDs[] = $album->ALB_ID;
+    //get videos for thumbnail deletion
+    $videos = $videoRepository->getItemsByGallery($galleryID);
 
-    $albumsQueryString = implode(', ', $albumIDs);
-
-    $videos = $wpdb->get_results('SELECT VID_ID, VID_URL FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID IN (' . $albumsQueryString . ')');
-
-    //delete video data and update album count
+    //delete gallery, albums, and videos from database
     if (
-      $wpdb->query('DELETE FROM ' . $wpdb->prefix . 'utubevideo_video WHERE ALB_ID IN (' . $albumsQueryString . ')') === false
-      || $wpdb->query('DELETE FROM ' . $wpdb->prefix . 'utubevideo_album WHERE ALB_ID IN (' . $albumsQueryString . ')') === false
-      || $wpdb->query('DELETE FROM ' . $wpdb->prefix . 'utubevideo_dataset WHERE DATA_ID = ' . $galleryID) === false
+      !$videoRepository->deleteItemsByGallery($galleryID)
+      || !$albumRepository->deleteItemsByGallery($galleryID)
+      || !$galleryRepository->deleteItem($galleryID)
     )
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse('A database error has occured');
 
     //delete video thumbnails
     $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
 
     foreach ($videos as $video)
-      unlink($thumbnailPath . $video->VID_URL . $video->VID_ID . '.jpg');
-
-      echo 'out';
+    {
+      unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
+      unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
+    }
 
     return $this->response(null);
   }
 
   public function updateItem(WP_REST_Request $req)
   {
-    global $wpdb;
-
     //check for valid galleryID
     if (!$req['galleryID'])
       return $this->errorResponse('Invalid gallery ID');
@@ -224,12 +204,10 @@ class GalleryAPIv1 extends APIv1
     //set required update fields
     $updatedFields['DATA_UPDATEDATE'] = $currentTime;
 
-    //update database entry
-    if ($wpdb->update(
-      $wpdb->prefix . 'utubevideo_dataset',
-      $updatedFields,
-      ['DATA_ID' => $galleryID]
-    ) >= 0)
+    //update gallery
+    $galleryRepository = new GalleryRepository();
+
+    if ($galleryRepository->updateItem($galleryID, $updatedFields))
       return $this->response(null);
     else
       return $this->errorResponse('A database error has occurred');
@@ -237,32 +215,10 @@ class GalleryAPIv1 extends APIv1
 
   public function getAllItems(WP_REST_Request $req)
   {
-    $data = [];
+    //get galleries
+    $galleryRepository = new GalleryRepository();
+    $galleries = $galleryRepository->getItems();
 
-    global $wpdb;
-    $galleries = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_dataset ORDER BY DATA_ID');
-
-    foreach ($galleries as $gallery)
-    {
-      $albumCount = $wpdb->get_results('SELECT COUNT(ALB_ID) AS ALBUM_COUNT FROM ' . $wpdb->prefix . 'utubevideo_album WHERE DATA_ID = ' . $gallery->DATA_ID);
-
-      if ($albumCount)
-        $albumCount = $albumCount[0]->ALBUM_COUNT;
-      else
-        $albumCount = 0;
-
-      $galleryData = new stdClass();
-      $galleryData->id = $gallery->DATA_ID;
-      $galleryData->title = $gallery->DATA_NAME;
-      $galleryData->sortDirection = $gallery->DATA_SORT;
-      $galleryData->displayType = $gallery->DATA_DISPLAYTYPE;
-      $galleryData->updateDate = $gallery->DATA_UPDATEDATE;
-      $galleryData->albumCount = $albumCount;
-      $galleryData->thumbnailType = $gallery->DATA_THUMBTYPE;
-
-      $data[] = $galleryData;
-    }
-
-    return $this->response($data);
+    return $this->response($galleries);
   }
 }
