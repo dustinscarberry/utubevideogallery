@@ -1,24 +1,23 @@
 import React from 'react';
 import HeaderCell from './HeaderCell';
-import HeaderCheckboxCell from './HeaderCheckboxCell';
+import ActionHeaderCell from './ActionHeaderCell';
 
 const TableHeader = (props) =>
 {
   const {
     headers,
     enableBulkActions,
+    enableDragNDrop,
     toggleAllRowCheckboxes,
     updateColumnSort,
     sortKey,
     sortOrder
   } = props;
 
-  let headerCells = [];
-
-  headerCells = headers.map(header =>
+  const headerCells = headers.map(header =>
   {
-    let classArray = [];
-    let styles = {};
+    const classes = [];
+    const styles = {};
     let updateColumnSortFunc = undefined;
 
     if (header.width)
@@ -26,27 +25,28 @@ const TableHeader = (props) =>
 
     if (header.sortable)
     {
-      classArray.push('sortable');
+      classes.push('sortable');
       updateColumnSortFunc = () => updateColumnSort(header.key);
-      
+
       if (sortKey == header.key)
-        classArray.push('sortable-' + sortOrder)
+        classes.push('sortable-' + sortOrder)
     }
 
     return (<HeaderCell
       key={header.key}
       data={header.title}
-      classArray={classArray}
+      classes={classes}
       styles={styles}
       updateColumnSort={updateColumnSortFunc}
     />);
   });
 
-  if (enableBulkActions)
-    headerCells.unshift(<HeaderCheckboxCell
-      key="header-checkbox"
-      toggleAllRowCheckboxes={toggleAllRowCheckboxes}
-    />);
+  headerCells.unshift(<ActionHeaderCell
+    key="header-checkbox"
+    toggleAllRowCheckboxes={toggleAllRowCheckboxes}
+    enableDragNDrop={enableDragNDrop}
+    enableBulkActions={enableBulkActions}
+  />);
 
   return (
     <thead>

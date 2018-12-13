@@ -4,14 +4,14 @@ const HeaderCell = (props) =>
 {
   const {
     data,
-    classArray,
+    classes,
     styles,
     updateColumnSort
   } = props;
 
   return (
     <th
-      className={classArray.join(' ')}
+      className={classes.join(' ')}
       style={styles}
       onClick={updateColumnSort}
     >

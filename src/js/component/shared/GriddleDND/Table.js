@@ -50,6 +50,7 @@ const Table = (props) =>
         sortOrder={sortOrder}
         toggleAllRowCheckboxes={toggleAllRowCheckboxes}
         enableBulkActions={enableBulkActions}
+        enableDragNDrop={enableDragNDrop}
       />
       {tableBody}
     </table>

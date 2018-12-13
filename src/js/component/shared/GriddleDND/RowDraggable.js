@@ -1,6 +1,6 @@
 import React from 'react';
 import Cell from './Cell';
-import CheckboxCell from './CheckboxCell';
+import ActionCell from './ActionCell';
 import { DragSource } from 'react-dnd';
 import { DropTarget } from 'react-dnd';
 import { findDOMNode } from 'react-dom';
@@ -109,16 +109,16 @@ class RowDraggable extends React.Component
       return (<Cell key={header.key} data={cellData}/>);
     });
 
-    //add checkbox cell if bulk actions enabled
-    if (enableBulkActions)
-      cells.unshift(
-        <CheckboxCell
-          key={dataIndex}
-          isChecked={rowData.rowSelected}
-          dataIndex={dataIndex}
-          toggleRowCheckbox={toggleRowCheckbox}
-        />
-      );
+    cells.unshift(
+      <ActionCell
+        key={dataIndex}
+        isChecked={rowData.rowSelected}
+        dataIndex={dataIndex}
+        toggleRowCheckbox={toggleRowCheckbox}
+        enableDragNDrop={true}
+        enableBulkActions={enableBulkActions}
+      />
+    );
 
 		const opacity = isDragging ? 0 : 1;
 

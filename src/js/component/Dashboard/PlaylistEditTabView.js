@@ -128,20 +128,19 @@ class PlaylistEditTabView extends React.Component
       && !localVideos.data.error
     )
     {
-      let remoteData = remoteVideos.data.data;
+      const remoteData = remoteVideos.data.data;
       let localData = localVideos.data.data;
       let combinedData = {};
 
       //filter local album videos to just playlist
       localData = localData.filter(localVideo =>
-      {
-        return localVideo.playlistID == this.props.currentViewID;
-      });
+        localVideo.playlistID == this.props.currentViewID
+      );
 
       //add local videos
       for (let localVideo of localData)
       {
-        const source = localVideo.url;
+        const source = localVideo.sourceID;
 
         combinedData[source] = {};
         combinedData[source].title = localVideo.title;

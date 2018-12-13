@@ -15,7 +15,7 @@ Array.prototype.forEach.call(panels, function(panel)
       videosPerPage={panel.getAttribute('data-videos-per-page')}
       controls={panel.getAttribute('data-controls')}
       theme={panel.getAttribute('data-theme')}
-      icon={panel.getAttribute('data-icon')}
+      iconType={panel.getAttribute('data-icon')}
     />, panel);
 });
 
@@ -24,6 +24,7 @@ Array.prototype.forEach.call(galleries, function(gallery)
   ReactDOM.render(
     <Gallery
       id={gallery.getAttribute('data-id')}
+      iconType={gallery.getAttribute('data-icontype')}
     />
   , gallery);
 });

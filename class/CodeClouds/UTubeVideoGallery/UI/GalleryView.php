@@ -18,7 +18,7 @@ class GalleryView
       'id' => null,
       'panelvideocount' => 14, //video count per panel view / page
       'theme' => 'light', //[light, dark, transparent]
-      'icon' => 'red', //[default, red, blue]
+      'icon' => 'red', //[original, red, blue]
       'controls' => 'false', //[true, false]
       'videocount' => null, //[any integer]
       'albumcount' => null //[any integer]
@@ -30,6 +30,7 @@ class GalleryView
     return '<div
       class="utv-gallery-root"
       data-id="' . $this->_atts['id'] . '"
+      data-icontype="' . $this->_atts['icon'] . '"
     ></div>';
   }
 }

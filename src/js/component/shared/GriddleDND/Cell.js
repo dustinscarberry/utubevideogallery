@@ -4,9 +4,7 @@ const Cell = (props) =>
 {
   const { data } = props;
 
-  return (
-    <td>{data}</td>
-  );
+  return <td>{data}</td>;
 }
 
 export default Cell;

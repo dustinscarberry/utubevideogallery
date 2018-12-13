@@ -1,8 +1,13 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const Iframe = ({src, classes}) =>
+const Iframe = (props) =>
 {
+  const {
+    src,
+    classes
+  } = props;
+
   return (
     <iframe
       src={src}

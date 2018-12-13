@@ -10,76 +10,80 @@
 
 namespace CodeClouds\UTubeVideoGallery;
 
-if (!class_exists('CodeClouds\UTubeVideoGallery\Dashboard'))
+class Dashboard
 {
-  class Dashboard
+  private $_options, $_version;
+
+  public function __construct($version)
   {
-    private $_options, $_version, $_dirpath;
+    //set version
+    $this->_version = $version;
 
-    public function __construct($version)
-    {
-      //set version
-      $this->_version = $version;
+    //get plugin options
+    $this->_options = get_option('utubevideo_main_opts');
 
-      //set dirpath
-      $this->_dirpath = dirname(__FILE__);
+    //main hooks
+    add_action('admin_menu', [$this, 'addMenus']);
+    add_action('admin_enqueue_scripts', [$this, 'loadCSS']);
+    add_action('admin_enqueue_scripts', [$this, 'loadJS']);
+  }
 
-      //get plugin options
-      $this->_options = get_option('utubevideo_main_opts');
+  public function addMenus()
+  {
+    add_menu_page(
+      __('uTubeVideo', 'utvg'),
+      'uTubeVideo',
+      'edit_pages',
+      'utubevideo',
+      [$this, 'dashboardPanel'],
+      'dashicons-video-alt3'
+    );
+  }
 
-      //main hooks
-      add_action('admin_menu', [$this, 'addMenus']);
-      add_action('admin_enqueue_scripts', [$this, 'addScripts']);
-    }
+  public function loadJS()
+  {
+    wp_enqueue_script('jquery');
+    
+    wp_enqueue_script(
+      'utv-admin-js',
+      plugins_url('../../../public/js/dashboard.min.js', __FILE__),
+      ['jquery', 'jquery-ui-core', 'jquery-ui-sortable'],
+      $this->_version,
+      true
+    );
 
-    public function addMenus()
-    {
-      add_menu_page(
-        __('uTubeVideo', 'utvg'),
-        'uTubeVideo',
-        'edit_pages',
-        'utubevideo',
-        [$this, 'dashboardPanel'],
-        'dashicons-video-alt3'
-      );
-    }
+    $thumbnailCacheDirectory = (wp_upload_dir())['baseurl'] . '/utubevideo-cache/';
 
-    public function addScripts()
-    {
-      wp_enqueue_script('jquery');
-      wp_enqueue_script('retina-js', 'https://cdnjs.cloudflare.com/ajax/libs/retina.js/2.1.2/retina.min.js', null, null, true);
-      wp_enqueue_script('utv-admin', plugins_url('../../../public/js/dashboard.min.js', __FILE__), ['jquery', 'jquery-ui-core', 'jquery-ui-sortable'], $this->_version, true);
-      wp_enqueue_style('utv-style', plugins_url('../../../public/css/dashboard.min.css', __FILE__), false, $this->_version);
-      wp_enqueue_style('utv-fontawesome5', 'https://use.fontawesome.com/releases/v5.3.1/css/all.css', false);
+    $embeddedJS = [
+      'thumbnailCacheDirectory' => $thumbnailCacheDirectory,
+      'translations' => [
+        'confirmGalleryDelete' => __('Are you sure you want to delete this gallery?', 'utvg')
+      ],
+      'restURL' => esc_url_raw(rest_url()),
+      'restNonce' => wp_create_nonce('wp_rest')
+    ];
 
-      $dir = wp_upload_dir();
-      $dir = $dir['baseurl'];
+    wp_localize_script('utv-admin-js', 'utvJSData', $embeddedJS);
+  }
 
-      $jsdata = [
-        'thumbnailCacheDirectory' => $dir . '/utubevideo-cache/',
-        'translations' => [
-          'confirmGalleryDelete' => __('Are you sure you want to delete this gallery?', 'utvg')
-        ],
-        'restURL' => esc_url_raw(rest_url()),
-        'restNonce' => wp_create_nonce('wp_rest')
-      ];
+  public function loadCSS()
+  {
+    wp_enqueue_style(
+      'utv-admin-css',
+      plugins_url('../../../public/css/dashboard.min.css', __FILE__),
+      false,
+      $this->_version
+    );
 
-      wp_localize_script('utv-admin', 'utvJSData', $jsdata);
-    }
+    wp_enqueue_style(
+      'utv-fontawesome5',
+      'https://use.fontawesome.com/releases/v5.3.1/css/all.css',
+      false
+    );
+  }
 
-    public function loadScripts()
-    {
-
-    }
-
-    public function loadStyles()
-    {
-
-    }
-
-    public function dashboardPanel()
-    {
-      echo '<div id="utv-dashboard-root"></div>';
-    }
+  public function dashboardPanel()
+  {
+    echo '<div id="utv-dashboard-root"></div>';
   }
 }

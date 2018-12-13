@@ -87,16 +87,16 @@
   font-weight: bold;
   background-color: #777;
   color: #fff;
-  border-radius: 16px;
+  border-radius: 50%;
+  min-width: 20px;
 }
 
 .utv-panel-paging-handle{
   font-size: 18px;
-  padding: 5px;
+  padding: 8px;
   cursor: pointer;
-  min-width: 18px;
-  height: 18px;
+  height: 20px;
   display: inline-block;
   text-align: center;
-  line-height: 18px;
+  line-height: 20px;
 }

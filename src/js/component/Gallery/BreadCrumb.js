@@ -1,20 +1,25 @@
 import React from 'react';
 
-const BreadCrumb = ({albumName, onResetAlbum}) =>
+const BreadCrumb = (props) =>
 {
-  let crumbs = undefined;
+  const {
+    albumName,
+    changeAlbum
+  } = props;
+
+  let crumbNodes = undefined;
 
   if (!albumName)
-    crumbs = <div className="utv-breadcrumb">
+    crumbNodes = <div className="utv-breadcrumb">
       <span className="utv-albumcrumb">Albums</span>
     </div>;
   else
-    crumbs = <div className="utv-breadcrumb">
-      <span onClick={onResetAlbum}>Albums</span>
+    crumbNodes = <div className="utv-breadcrumb">
+      <span className="utv-albumscrumb" onClick={() => changeAlbum(undefined)}>Albums</span>
       <span className="utv-albumcrumb"> | {albumName}</span>
     </div>;
 
-  return crumbs;
+  return crumbNodes;
 }
 
 export default BreadCrumb;

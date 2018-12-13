@@ -1,6 +1,6 @@
 import React from 'react';
 import Cell from './Cell';
-import CheckboxCell from './CheckboxCell';
+import ActionCell from './ActionCell';
 
 class Row extends React.Component
 {
@@ -30,16 +30,15 @@ class Row extends React.Component
       return (<Cell key={header.key} data={cellData}/>);
     });
 
-    //add checkbox cell if bulk actions enabled
-    if (enableBulkActions)
-      cells.unshift(
-        <CheckboxCell
-          key={dataIndex}
-          isChecked={rowData.rowSelected}
-          dataIndex={dataIndex}
-          toggleRowCheckbox={toggleRowCheckbox}
-        />
-      );
+    cells.unshift(
+      <ActionCell
+        key={dataIndex}
+        isChecked={rowData.rowSelected}
+        dataIndex={dataIndex}
+        toggleRowCheckbox={toggleRowCheckbox}
+        enableBulkActions={enableBulkActions}
+      />
+    );
 
     return (
       <tr>

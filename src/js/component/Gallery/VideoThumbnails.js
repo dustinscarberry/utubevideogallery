@@ -1,6 +1,7 @@
 import React from 'react';
 import Thumbnails from '../shared/Thumbnails';
 import VideoThumbnail from './VideoThumbnail';
+import galleryService from '../../service/GalleryService';
 
 const VideoThumbnails = (props) =>
 {
@@ -10,14 +11,9 @@ const VideoThumbnails = (props) =>
     thumbnailType
   } = props;
 
-  const thumbnailsClasses = ['utv-video-gallery-thumbnails', 'utv-align-center'];
+  const thumbnailsClasses = galleryService.getThumbnailsClasses(thumbnailType);
 
-  if (thumbnailType == 'square')
-    thumbnailsClasses.push('utv-thumbnails-square');
-  else
-    thumbnailsClasses.push('utv-thumbnails-rectangle');
-
-  const videoThumbnails = videos.map((video, i) =>
+  const videoThumbnailNodes = videos.map((video, i) =>
   {
     return (<VideoThumbnail
       key={i}
@@ -30,7 +26,7 @@ const VideoThumbnails = (props) =>
 
   return (
     <Thumbnails className={thumbnailsClasses.join(' ')}>
-      {videoThumbnails}
+      {videoThumbnailNodes}
     </Thumbnails>
   );
 }

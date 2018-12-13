@@ -1,4 +1,5 @@
 import React from 'react';
+import Iframe from '../shared/Iframe';
 
 const VimeoVideo = (props) =>
 {
@@ -15,12 +16,10 @@ const VimeoVideo = (props) =>
   source += '#t=' + videoData.startTime;
 
   return (
-    <iframe
-      className="utv-video-panel-iframe"
+    <Iframe
+      classes={['utv-video-panel-iframe']}
       src={source}
-      frameBorder="0"
-      allowFullScreen="">
-    </iframe>
+    />
   );
 }
 

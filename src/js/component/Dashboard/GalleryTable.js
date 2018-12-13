@@ -77,11 +77,11 @@ class GalleryTable extends React.Component
 
   getDataMapping(data)
   {
-    let newData = [];
+    const newData = [];
 
-    for (let item of data)
+    for (const item of data)
     {
-      let record = {};
+      const record = {};
       record.id = item.id;
       record.title = item.title;
       record.shortcode = '[utubevideo id="' + item.id + '"]';
@@ -114,7 +114,7 @@ class GalleryTable extends React.Component
   {
     if (confirm('Are you sure you want to delete these galleries?'))
     {
-      for (let item of items)
+      for (const item of items)
         this.deleteGallery(item.id);
     }
   }
@@ -128,13 +128,14 @@ class GalleryTable extends React.Component
   async deleteGallery(galleryID)
   {
     const rsp = await axios.delete(
-      '/wp-json/utubevideogallery/v1/galleries/' + galleryID,
+      '/wp-json/utubevideogallery/v1/galleries/'
+      + galleryID,
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
     );
 
-    if (rsp.status == 200)
+    if (rsp.status == 200 && !rsp.data.error)
       this.setState({rand: Math.random()});
   }
 

@@ -32,10 +32,7 @@ class Gallery extends React.Component
       + this.props.id
     );
 
-    if (
-      apiData.status == 200
-      && !apiData.data.error
-    )
+    if (apiData.status == 200 && !apiData.data.error)
     {
       const videos = [];
 
@@ -49,7 +46,7 @@ class Gallery extends React.Component
         albums: apiData.data.albums || [],
         videos: videos,
         thumbnailType: apiData.data.thumbnailType || undefined,
-        displayType: (apiData.data.displaytype == 'album' ? 'albums' : 'videos') || undefined
+        displayType: (apiData.data.displaytype == 'album' ? 'albums' : 'videos')
       });
     }
   }
@@ -92,8 +89,6 @@ class Gallery extends React.Component
     else if (video.source == 'vimeo')
       url = this.getVimeoURL(video);
 
-    let title = video.title || '';
-
     jQuery.magnificPopup.open(
     {
       items: {
@@ -111,12 +106,12 @@ class Gallery extends React.Component
       key: 'utvid',
       callbacks: {
         open: function() {
-          let popup = document.querySelector('.mfp-container');
+          const popup = document.querySelector('.mfp-container');
           popup.querySelector('.mfp-content').style.maxWidth = utvJSData.playerWidth + 'px';
-          popup.querySelector('.mfp-title').innerText = title;
-          let bg = document.querySelector('.mfp-bg');
-          bg.style.background = utvJSData.lightboxOverlayColor;
-          bg.style.opacity = utvJSData.lightboxOverlayOpacity;
+          popup.querySelector('.mfp-title').innerText = video.title;
+          const overlay = document.querySelector('.mfp-bg');
+          overlay.style.background = utvJSData.lightboxOverlayColor;
+          overlay.style.opacity = utvJSData.lightboxOverlayOpacity;
         }
       }
     });
@@ -124,20 +119,29 @@ class Gallery extends React.Component
 
   render()
   {
-    if (this.state.albums.length == 0)
+    const {
+      albums,
+      videos,
+      thumbnailType,
+      displayType
+    } = this.state;
+
+    if (albums.length == 0)
       return null;
 
-    if (this.state.displayType == 'albums')
+    if (displayType == 'albums')
       return <AlbumView
-        albums={this.state.albums}
+        albums={albums}
         onOpenVideoPopup={this.openVideoPopup}
-        thumbnailType={this.state.thumbnailType}
+        thumbnailType={thumbnailType}
+        iconType={this.props.iconType}
       />;
-    else if (this.state.displayType == 'videos')
+    else if (displayType == 'videos')
       return <VideoView
-        videos={this.state.videos}
+        videos={videos}
         onOpenVideoPopup={this.openVideoPopup}
-        thumbnailType={this.thumbnailType}
+        thumbnailType={thumbnailType}
+        iconType={this.props.iconType}
       />;
     else
       return null;
@@ -145,7 +149,7 @@ class Gallery extends React.Component
 }
 
 Gallery.defaultProps = {
-  icon: 'red'
+  iconType: 'red'
 };
 
 export default Gallery;

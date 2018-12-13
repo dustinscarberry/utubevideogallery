@@ -16,7 +16,7 @@ const Paging = (props) =>
       <PageHandle
         key={i}
         page={i}
-        selected={currentPage == i ? true : false}
+        selected={currentPage == i}
         onChangePage={onChangePage}
       />
     );

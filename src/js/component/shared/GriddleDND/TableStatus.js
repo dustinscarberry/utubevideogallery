@@ -3,13 +3,15 @@ import React from 'react';
 const TableStatus = (props) =>
 {
   const {
-    recordCount, 
+    recordCount,
     recordLabel
   } = props;
 
+  const statusLabel = recordCount + ' ' + recordLabel;
+
   return (
     <div className="ccgriddle-table-status">
-      <span>{recordCount + ' ' + recordLabel}</span>
+      <span>{statusLabel}</span>
     </div>
   );
 }

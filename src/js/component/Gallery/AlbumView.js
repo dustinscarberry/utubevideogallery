@@ -2,6 +2,7 @@ import React from 'react';
 import AlbumThumbnails from './AlbumThumbnails';
 import VideoThumbnails from './VideoThumbnails';
 import BreadCrumb from './BreadCrumb';
+import galleryService from '../../service/GalleryService';
 
 class AlbumView extends React.Component
 {
@@ -14,18 +15,12 @@ class AlbumView extends React.Component
     };
 
     this.changeAlbum = this.changeAlbum.bind(this);
-    this.resetAlbum = this.resetAlbum.bind(this);
     this.openVideo = this.openVideo.bind(this);
   }
 
   changeAlbum(albumIndex)
   {
     this.setState({selectedAlbum: albumIndex});
-  }
-
-  resetAlbum()
-  {
-    this.changeAlbum(undefined);
   }
 
   openVideo(value)
@@ -36,45 +31,58 @@ class AlbumView extends React.Component
       this.props.onOpenVideoPopup(selectedVideo);
   }
 
-  render()
+  getThumbnailsNode()
   {
-    let thumbnails = undefined;
-    let albumName = undefined;
-    let containerClasses = ['utv-gallery'];
+    const {
+      thumbnailType,
+      albums
+    } = this.props;
 
-    if (true)
-      containerClasses.push('utv-icon-red');
-
-
-
-    let album = this.props.albums[this.state.selectedAlbum] || undefined;
-    if (album)
-      albumName = album.title;
+    const album = albums[this.state.selectedAlbum];
 
     if (this.state.selectedAlbum != undefined)
-      thumbnails = <VideoThumbnails
+      return <VideoThumbnails
         videos={album.videos}
         onOpenVideo={this.openVideo}
-        thumbnailType={this.props.thumbnailType}
+        thumbnailType={thumbnailType}
       />;
     else
-    {
-      thumbnails = <AlbumThumbnails
-        albums={this.props.albums}
+      return <AlbumThumbnails
+        albums={albums}
         onChangeAlbum={this.changeAlbum}
-        thumbnailType={this.props.thumbnailType}
+        thumbnailType={thumbnailType}
       />;
+  }
 
-      containerClasses.push(['utv-albums']);
-    }
+  getSelectedAlbumName()
+  {
+    const album = this.props.albums[this.state.selectedAlbum];
+
+    if (album)
+      return album.title;
+
+    return undefined;
+  }
+
+  render()
+  {
+    const {
+      iconType,
+      thumbnailType,
+    } = this.props;
+
+    const galleryClasses = galleryService.getGalleryClasses(
+      iconType,
+      this.state.selectedAlbum
+    );
 
     return (
-      <div className={containerClasses.join(' ')}>
+      <div className={galleryClasses.join(' ')}>
         <BreadCrumb
-          albumName={albumName}
-          onResetAlbum={this.resetAlbum}
+          albumName={this.getSelectedAlbumName()}
+          changeAlbum={this.changeAlbum}
         />
-        {thumbnails}
+        {this.getThumbnailsNode()}
       </div>
     );
   }

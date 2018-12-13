@@ -2,7 +2,7 @@
 
 if (defined('WP_UNINSTALL_PLUGIN'))
 {
-  //multisite call
+  //uninstall from each multisite site
   if (function_exists('is_multisite') && is_multisite())
   {
     global $wpdb;
@@ -14,22 +14,20 @@ if (defined('WP_UNINSTALL_PLUGIN'))
     foreach ($blogids as $blog_id)
     {
       switch_to_blog($blog_id);
-      removePlugin();
+      removeDatabaseTables();
     }
 
     switch_to_blog($old_blog);
   }
 
-  //regular call
-  removePlugin();
+  //uninstall from regular site
+  removeDatabaseTables();
 
   //remove file directories
-  $uploaddir = wp_upload_dir();
-
-  rrmdir($uploaddir['basedir'] . '/utubevideo-cache');
+  removeFiles((wp_upload_dir())['basedir'] . '/utubevideo-cache');
 }
 
-function removePlugin()
+function removeDatabaseTables()
 {
   global $wpdb;
 
@@ -40,9 +38,9 @@ function removePlugin()
   delete_option('utubevideo_main_opts');
 }
 
-function rrmdir($dir)
+function removeFiles($dir)
 {
-  foreach(glob($dir . '/*') as $file)
+  foreach (glob($dir . '/*') as $file)
   {
     if (is_dir($file))
       rrmdir($file);

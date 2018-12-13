@@ -1,5 +1,6 @@
 import React from 'react';
 import VideoThumbnails from './VideoThumbnails';
+import galleryService from '../../service/GalleryService';
 
 class VideoView extends React.Component
 {
@@ -12,7 +13,7 @@ class VideoView extends React.Component
 
   openVideo(value)
   {
-    let selectedVideo = this.props.videos[value];
+    const selectedVideo = this.props.videos[value];
 
     if (selectedVideo)
       this.props.onOpenVideoPopup(selectedVideo);
@@ -20,12 +21,20 @@ class VideoView extends React.Component
 
   render()
   {
+    const {
+      iconType,
+      thumbnailType,
+      videos
+    } = this.props;
+
+    const galleryClasses = galleryService.getGalleryClasses(iconType);
+
     return (
-      <div className="utv-gallery utv-icon-red">
+      <div className={galleryClasses.join(' ')}>
         <VideoThumbnails
-          videos={this.props.videos}
+          videos={videos}
           onOpenVideo={this.openVideo}
-          thumbnailType={this.props.thumbnailType}
+          thumbnailType={thumbnailType}
         />
       </div>
     );

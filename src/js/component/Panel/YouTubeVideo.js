@@ -1,4 +1,5 @@
 import React from 'react';
+import Iframe from '../shared/Iframe';
 
 const YouTubeVideo = (props) =>
 {
@@ -23,12 +24,10 @@ const YouTubeVideo = (props) =>
   source += '&end=' + videoData.endTime;
 
   return (
-    <iframe
-      className="utv-video-panel-iframe"
+    <Iframe
+      classes={['utv-video-panel-iframe']}
       src={source}
-      frameBorder="0"
-      allowFullScreen="">
-    </iframe>
+    />
   );
 }
 

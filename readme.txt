@@ -103,6 +103,10 @@ A user must be an editor or above in order to manage video galleries and change 
 
 == Changelog ==
 
+= 2.0.0 =
+* Complete rewrite of most of the plugin code
+
+
 = 1.9.8 =
 * Corrected bug involving using query parameters to view galleries
 

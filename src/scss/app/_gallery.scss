@@ -4,22 +4,20 @@
   margin: 0 auto;
 }
 
-.utv-gallery .utv-breadcrumb{
+.utv-breadcrumb{
   margin-bottom: 10px;
 }
 
-.utv-gallery .utv-breadcrumb .utv-albumcrumb{
-  font-weight: bold;
-}
-
-.utv-gallery .utv-breadcrumb a{
-  font-size: 16px!important;
-  text-decoration: none!important;
-  font-weight: bold;
-}
-
-.utv-gallery .utv-breadcrumb span{
+.utv-breadcrumb span{
   font-size: 16px;
+}
+
+.utv-breadcrumb .utv-albumcrumb{
+  font-weight: bold;
+}
+
+.utv-breadcrumb .utv-albumscrumb{
+  cursor: pointer;
 }
 
 .utv-gallery .utv-album img{
