@@ -16,6 +16,7 @@ Array.prototype.forEach.call(panels, function(panel)
       controls={panel.getAttribute('data-controls')}
       theme={panel.getAttribute('data-theme')}
       iconType={panel.getAttribute('data-icon')}
+      maxVideos={panel.getAttribute('data-max-videos')}
     />, panel);
 });
 
@@ -25,6 +26,8 @@ Array.prototype.forEach.call(galleries, function(gallery)
     <Gallery
       id={gallery.getAttribute('data-id')}
       iconType={gallery.getAttribute('data-icontype')}
+      maxAlbums={gallery.getAttribute('data-max-albums')}
+      maxVideos={gallery.getAttribute('data-max-videos')}
     />
   , gallery);
 });

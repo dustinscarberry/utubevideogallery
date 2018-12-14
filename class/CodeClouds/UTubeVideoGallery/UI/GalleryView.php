@@ -20,8 +20,8 @@ class GalleryView
       'theme' => 'light', //[light, dark, transparent]
       'icon' => 'red', //[original, red, blue]
       'controls' => 'false', //[true, false]
-      'videocount' => null, //[any integer]
-      'albumcount' => null //[any integer]
+      'maxvideos' => null, //[any integer]
+      'maxalbums' => null //[any integer]
     ], $atts, 'utubevideo');
   }
 
@@ -31,6 +31,8 @@ class GalleryView
       class="utv-gallery-root"
       data-id="' . $this->_atts['id'] . '"
       data-icontype="' . $this->_atts['icon'] . '"
+      data-max-videos="' . $this->_atts['maxvideos'] . '"
+      data-max-albums="' . $this->_atts['maxalbums'] . '"
     ></div>';
   }
 }

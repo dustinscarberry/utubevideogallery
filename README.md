@@ -89,12 +89,13 @@ There are a few options you can use with your shortcodes to modify / over-ride s
 - panelvideocount - Set the number of videos per page to display (default: panelvideocount="14")
 - theme - Set theme of panel [light, dark, transparent] (default: theme="light")
 - controls - Set whether controls are displayed for videos, does not apply to Vimeo videos [true, false] (default: controls="false")
+- maxvideos - Set the max number of videos displayed (default: n/a)
 
 ### Gallery Options
 
 - align - Removed in version 2.0
-- videocount - Set the max number of videos displayed (default: n/a)
-- albumcount - Set the max number of albums displayed (default: n/a)
+- maxvideos - Set the max number of videos displayed (default: n/a) NOTE: changed from "videocount"
+- maxalbums - Set the max number of albums displayed (default: n/a) NOTE: change from "albumcount"
 
 ### Shared Options
 

@@ -232,7 +232,7 @@ class VideoTable extends React.Component
         + this.state.rand
       }
       dataMapper={this.getDataMapping}
-      enableBulkActions={false}
+      enableBulkActions={true}
       bulkActionsData={this.getBulkActions()}
       reorderRows={this.reorderRows}
     />

@@ -20,8 +20,7 @@ class PanelView
       'theme' => 'light', //[light, dark, transparent]
       'icon' => 'red', //[default, red, blue]
       'controls' => false, //[true, false]
-      'videocount' => null, //[any integer]
-      'albumcount' => null //[any integer]
+      'maxvideos' => null //[any integer]
     ], $atts, 'utubevideo');
   }
 
@@ -34,6 +33,7 @@ class PanelView
       data-videos-per-page="' . $this->_atts['panelvideocount'] . '"
       data-theme="' . $this->_atts['theme'] . '"
       data-icon="' . $this->_atts['icon'] . '"
+      data-max-videos="' . $this->_atts['maxvideos'] . '"
     ></div>';
   }
 }

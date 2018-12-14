@@ -25,10 +25,7 @@ class Panel extends React.Component
     this.nextVideo = this.nextVideo.bind(this);
     this.changeVideo = this.changeVideo.bind(this);
     this.changePage = this.changePage.bind(this);
-  }
 
-  componentWillMount()
-  {
     this.loadAPIData();
   }
 
@@ -96,28 +93,36 @@ class Panel extends React.Component
 
   async loadAPIData()
   {
-    const videos = [];
+    const {
+      id,
+      videosPerPage,
+      maxVideos
+    } = this.props;
+
     const apiData = await axios.get(
       '/wp-json/utubevideogallery/v1/galleriesdata/'
-      + this.props.id
+      + id
     );
 
-    if (
-      apiData.status == 200
-      && !apiData.data.error
-    )
+    if (apiData.status == 200 && !apiData.data.error)
     {
-      for (const album of apiData.data.albums)
+      const data = apiData.data;
+      let videos = [];
+
+      for (const album of data.albums)
       {
         for (const video of album.videos)
           videos.push(video);
       }
 
-      const totalPages = Math.ceil(videos.length / this.props.videosPerPage);
+      if (maxVideos)
+        videos = videos.slice(0, maxVideos);
+
+      const totalPages = Math.ceil(videos.length / videosPerPage);
 
       this.setState({
         videos: videos,
-        thumbnailType: apiData.data.thumbnailType,
+        thumbnailType: data.thumbnailType,
         totalPages: totalPages
       });
     }
@@ -171,7 +176,8 @@ Panel.defaultProps = {
   videosPerPage: 14,
   controls: false,
   theme: 'light',
-  icon: 'red'
+  icon: 'red',
+  maxVideos: undefined
 };
 
 export default Panel;

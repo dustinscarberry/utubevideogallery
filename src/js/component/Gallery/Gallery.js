@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import AlbumView from './AlbumView';
 import VideoView from './VideoView';
+import sharedService from '../../service/SharedService';
 
 class Gallery extends React.Component
 {
@@ -18,66 +19,88 @@ class Gallery extends React.Component
 
     this.loadAPIData = this.loadAPIData.bind(this);
     this.openVideoPopup = this.openVideoPopup.bind(this);
-  }
 
-  componentWillMount()
-  {
     this.loadAPIData();
   }
 
   async loadAPIData()
   {
+    const {
+      id,
+      maxAlbums,
+      maxVideos
+    } = this.props;
+
     const apiData = await axios.get(
       '/wp-json/utubevideogallery/v1/galleriesdata/'
-      + this.props.id
+      + id
     );
 
     if (apiData.status == 200 && !apiData.data.error)
     {
-      const videos = [];
+      const data = apiData.data;
+      let albums = [];
+      let videos = [];
 
-      for (const album of apiData.data.albums)
+      if (data.displaytype == 'video')
       {
-        for (const video of album.videos)
-          videos.push(video);
+        for (const album of data.albums)
+        {
+          for (const video of album.videos)
+            videos.push(video);
+        }
+
+        if (maxVideos);
+          videos = videos.slice(0, maxVideos);
+      }
+      else if (data.displaytype == 'album')
+      {
+        albums = data.albums;
+
+        //filter on maxalbums and maxvideos if specified
+        if (maxAlbums)
+          albums = albums.slice(0, maxAlbums);
+
+        if (maxVideos)
+        {
+          data.albums = data.albums.map(album => {
+            album.videos = album.videos.slice(0, maxVideos);
+            return album;
+          });
+        }
       }
 
       this.setState({
-        albums: apiData.data.albums || [],
+        albums: albums || [],
         videos: videos,
-        thumbnailType: apiData.data.thumbnailType || undefined,
-        displayType: (apiData.data.displaytype == 'album' ? 'albums' : 'videos')
+        thumbnailType: data.thumbnailType || undefined,
+        displayType: (data.displaytype == 'album' ? 'albums' : 'videos')
       });
     }
   }
 
   getYouTubeURL(video)
   {
-    let source = 'https://www.youtube.com/embed/';
-    source += video.slugID;
-    source += '?modestbranding=1';
-    source += '&rel=0';
-    source += '&showinfo=' + (utvJSData.youtubeDetailsHide == '1' ? '0' : '1');
-    source += '&autohide=1';
-    source += '&controls=' + (video.chrome == true ? '1' : '0');
-    source += '&theme=' + utvJSData.playerControlTheme;
-    source += '&color=' + utvJSData.playerProgressColor;
-    source += '&autoplay=' + utvJSData.youtubeAutoplay;
-    source += '&iv_load_policy=3';
-    source += '&start=' + video.startTime;
-    source += '&end=' + video.endTime;
-    return source;
+    return sharedService.getYouTubeEmbedURL(
+      video.slugID,
+      utvJSData.youtubeDetailsHide,
+      video.chrome,
+      utvJSData.playerControlTheme,
+      utvJSData.playerProgressColor,
+      utvJSData.youtubeAutoplay,
+      video.startTime,
+      video.endTime
+    );
   }
 
   getVimeoURL(video)
   {
-    let source = 'https://player.vimeo.com/video/';
-    source += video.slugID;
-    source += '?autoplay=' + utvJSData.vimeoAutoplay;
-    source += '&autopause=0';
-    source += (utvJSData.vimeoDetailsHide == '1' ? 'title=0&portrait=0&byline=0&badge=0' : 'title=1&portrait=1&byline=1&badge=1');
-    source += '#t=' + video.startTime;
-    return source;
+    return sharedService.getVimeoEmbedURL(
+      video.slugID,
+      utvJSData.vimeoAutoplay,
+      utvJSData.vimeoDetailsHide,
+      video.startTime
+    );
   }
 
   openVideoPopup(video)
@@ -149,7 +172,9 @@ class Gallery extends React.Component
 }
 
 Gallery.defaultProps = {
-  iconType: 'red'
+  iconType: 'red',
+  maxAlbums: undefined,
+  maxVideos: undefined
 };
 
 export default Gallery;

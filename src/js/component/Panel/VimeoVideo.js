@@ -1,5 +1,6 @@
 import React from 'react';
 import Iframe from '../shared/Iframe';
+import sharedService from '../../service/SharedService';
 
 const VimeoVideo = (props) =>
 {
@@ -8,12 +9,12 @@ const VimeoVideo = (props) =>
     forceNoAutoplay
   } = props;
 
-  let source = 'https://player.vimeo.com/video/';
-  source += videoData.slugID;
-  source += '?autoplay=' + (forceNoAutoplay ? '0' : utvJSData.vimeoAutoplay);
-  source += '&autopause=0';
-  source += (utvJSData.vimeoDetailsHide == '1' ? 'title=0&portrait=0&byline=0&badge=0' : 'title=1&portrait=1&byline=1&badge=1');
-  source += '#t=' + videoData.startTime;
+  const source = sharedService.getVimeoEmbedURL(
+    videoData.slugID,
+    (forceNoAutoplay ? '0' : utvJSData.vimeoAutoplay),
+    utvJSData.vimeoDetailsHide,
+    videoData.startTime
+  );
 
   return (
     <Iframe
