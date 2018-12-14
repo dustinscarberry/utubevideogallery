@@ -25,7 +25,7 @@ const VideoPlayer = (props) =>
     />;
 
   return (
-    <div className="utv-video-panel-player">
+    <div className="utv-panel-player">
       {videoNode}
     </div>
   );

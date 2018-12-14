@@ -69,6 +69,7 @@ class GalleryDataAPIv1
         $videoData = new stdClass();
         $videoData->ID = $video->VID_ID;
         $videoData->title = $video->VID_NAME;
+        $videoData->description = $video->VID_DESCRIPTION;
         $videoData->slugID = $video->VID_URL;
         $videoData->thumbnail = $thumbnailDirectory . '/utubevideo-cache/' . $video->VID_URL . $video->VID_ID . '.jpg';
         $videoData->source = $video->VID_SOURCE;

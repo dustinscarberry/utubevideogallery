@@ -23,7 +23,7 @@ const YouTubeVideo = (props) =>
 
   return (
     <Iframe
-      classes={['utv-video-panel-iframe']}
+      classes={['utv-panel-iframe']}
       src={source}
     />
   );

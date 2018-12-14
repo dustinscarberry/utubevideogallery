@@ -22,7 +22,7 @@ const Paging = (props) =>
     );
 
   return (
-    <div className="utv-video-panel-paging">
+    <div className="utv-panel-paging">
       {pageHandleNodes}
     </div>
   );

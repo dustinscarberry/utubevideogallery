@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import VideoPlayer from './VideoPlayer';
-import Controls from './Controls';
+import TitleControls from './TitleControls';
+import Description from './Description';
 import PanelThumbnails from './PanelThumbnails';
 import Paging from './Paging';
 
@@ -78,14 +79,14 @@ class Panel extends React.Component
       panelClasses.push('utv-panel-light');
     else if (theme == 'dark')
       panelClasses.push('utv-panel-dark');
-    else if (theme == 'transparent')
+    else
       panelClasses.push('utv-panel-transparent');
 
     if (icon == 'red')
       panelClasses.push('utv-icon-red');
     else if (icon == 'blue')
       panelClasses.push('utv-icon-blue');
-    else if (icon == 'default')
+    else
       panelClasses.push('utv-icon-default');
 
     return panelClasses.join(' ');
@@ -149,10 +150,13 @@ class Panel extends React.Component
           controls={this.props.controls}
           forceNoAutoplay={forceNoAutoplay}
         />
-        <Controls
+        <TitleControls
           videoData={videos[selectedVideo]}
           onPreviousVideo={this.previousVideo}
           onNextVideo={this.nextVideo}
+        />
+        <Description
+          text={videos[selectedVideo].description}
         />
         <PanelThumbnails
           videos={videos}

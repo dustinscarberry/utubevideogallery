@@ -1,13 +1,15 @@
 /* Popup Box */
 .utv-mfp-bottom-bar{
-  margin-top: 10px;
-  position: absolute;
-  top: 100%;
-  left: 0;
+  padding-top: 10px;
   width: 100%;
   cursor: auto;
   font-size: 16px;
   font-weight: normal;
+}
+
+.mfp-iframe-scaler{
+  overflow: inherit;
+  position: relative;
 }
 
 .utv-mfp-iframe-scaler button.mfp-close{
@@ -28,4 +30,21 @@
 .utv-mfp-iframe-scaler button.mfp-close:focus,
 .ut-mft-iframe-scaler button.mfp-close{
   outline: none!important;
+}
+
+.mfp-container.mfp-has-meta{
+  .utv-mfp-bottom-bar{
+    background: #ddd;
+    padding: 15px;
+  }
+
+  .mfp-title{
+    color: #111;
+    font-weight: bold;
+  }
+
+  .mfp-description{
+    line-height: 1.3;
+    margin-top: 10px;
+  }
 }

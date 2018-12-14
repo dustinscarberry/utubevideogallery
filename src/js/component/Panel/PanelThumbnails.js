@@ -16,7 +16,7 @@ const PanelThumbnails = (props) =>
   const startIndex = (currentPage - 1) * parseInt(videosPerPage);
   const endIndex = startIndex + parseInt(videosPerPage);
 
-  const thumbnailsClasses = ['utv-video-panel-thumbnails', 'utv-align-center'];
+  const thumbnailsClasses = ['utv-panel-thumbnails', 'utv-align-center'];
 
   if (thumbnailType == 'square')
     thumbnailsClasses.push('utv-thumbnails-square');

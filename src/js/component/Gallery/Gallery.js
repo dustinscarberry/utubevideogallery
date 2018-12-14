@@ -123,18 +123,28 @@ class Gallery extends React.Component
         markup: '<div class="utv-mfp-iframe-scaler mfp-iframe-scaler">' +
           '<div class="mfp-close"></div>' +
           '<iframe class="mfp-iframe" frameborder="0" allowfullscreen></iframe>' +
-          '</div><div class="utv-mfp-bottom-bar">'+
-          '<div class="mfp-title"></div></div>'
+          '</div><div class="utv-mfp-bottom-bar mfp-prevent-close">' +
+          '<div class="mfp-title mfp-prevent-close"></div>' +
+          '<div class="mfp-description mfp-prevent-close"></div></div>'
       },
       key: 'utvid',
       callbacks: {
-        open: function() {
+        open: () =>
+        {
           const popup = document.querySelector('.mfp-container');
           popup.querySelector('.mfp-content').style.maxWidth = utvJSData.playerWidth + 'px';
           popup.querySelector('.mfp-title').innerText = video.title;
           const overlay = document.querySelector('.mfp-bg');
           overlay.style.background = utvJSData.lightboxOverlayColor;
           overlay.style.opacity = utvJSData.lightboxOverlayOpacity;
+
+          if (video.description)
+          {
+            popup.querySelector('.mfp-description').innerText = video.description;
+            popup.classList.add('mfp-has-meta');
+          }
+          else
+            popup.querySelector('.mfp-description').innerText = '';
         }
       }
     });
@@ -149,7 +159,7 @@ class Gallery extends React.Component
       displayType
     } = this.state;
 
-    if (albums.length == 0)
+    if (!albums.length)
       return null;
 
     if (displayType == 'albums')
