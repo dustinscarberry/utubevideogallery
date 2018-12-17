@@ -58,7 +58,7 @@ class AlbumAddTabView extends React.Component
     )
     {
       this.props.changeView();
-      this.props.setFeedbackMessage('Album created', 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumCreated, 'success');
     }
     else
       this.props.setFeedbackMessage(rsp.data.error.message, 'error');
@@ -71,7 +71,7 @@ class AlbumAddTabView extends React.Component
         <Breadcrumbs
           crumbs={[
             {
-              text: 'Galleries',
+              text: utvJSData.localization.galleries,
               onClick: () => this.props.changeGallery()
             },
             {
@@ -89,7 +89,7 @@ class AlbumAddTabView extends React.Component
                 errorclass="utv-invalid-feedback"
               >
                 <FormField>
-                  <Label text="Title"/>
+                  <Label text={utvJSData.localization.title}/>
                   <TextInput
                     name="title"
                     value={this.state.title}
@@ -98,25 +98,25 @@ class AlbumAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Video Sorting"/>
+                  <Label text={utvJSData.localization.videoSorting}/>
                   <SelectBox
                     name="videoSorting"
                     value={this.state.videoSorting}
                     onChange={this.changeValue}
                     data={[
-                      {name: 'First to Last', value: 'asc'},
-                      {name: 'Last to First', value: 'desc'}
+                      {name: utvJSData.localization.firstToLast, value: 'asc'},
+                      {name: utvJSData.localization.lastToFirst, value: 'desc'}
                     ]}
                     required={true}
                   />
                 </FormField>
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
-                    title="Add Album"
+                    title={utvJSData.localization.addAlbum}
                     classes="button-primary"
                   />
                   <Button
-                    title="Cancel"
+                    title={utvJSData.localization.cancel}
                     classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />

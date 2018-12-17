@@ -23,8 +23,8 @@ class Thumbnails extends React.Component
     if (windowWidth < outerWidth)
       outerWidth = windowWidth;
 
-    let thumbnailWidth = parseInt(utvJSData.thumbnailWidth);
-    let thumbnailPadding = parseInt(utvJSData.thumbnailPadding);
+    let thumbnailWidth = parseInt(utvJSData.setting.thumbnailWidth);
+    let thumbnailPadding = parseInt(utvJSData.setting.thumbnailPadding);
     let thumbnailTotalWidth = thumbnailWidth + (thumbnailPadding * 2);
 
     let blocks = Math.floor(outerWidth / thumbnailTotalWidth);

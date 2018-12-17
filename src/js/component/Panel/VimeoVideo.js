@@ -11,8 +11,8 @@ const VimeoVideo = (props) =>
 
   const source = sharedService.getVimeoEmbedURL(
     videoData.slugID,
-    (forceNoAutoplay ? '0' : utvJSData.vimeoAutoplay),
-    utvJSData.vimeoDetailsHide,
+    (forceNoAutoplay ? '0' : utvJSData.setting.vimeoAutoplay),
+    utvJSData.setting.vimeoDetailsHide,
     videoData.startTime
   );
 

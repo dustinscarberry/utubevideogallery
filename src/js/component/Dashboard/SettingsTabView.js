@@ -116,7 +116,7 @@ class SettingsTabView extends React.Component
       rsp.status == 200
       && !rsp.data.error
     )
-      this.props.setFeedbackMessage('Settings saved', 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackSettingsSaved, 'success');
     else
       this.props.setFeedbackMessage(rsp.data.error.message, 'error');
 
@@ -181,9 +181,11 @@ class SettingsTabView extends React.Component
 
         //update status about what video is being rebuilt
         this.props.setFeedbackMessage(
-          'Video ['
+          utvJSData.localization.feedbackVideoPartial
+          + ' ['
           + video.title
-          + '] updated',
+          + '] '
+          + utvJSData.localization.feedbackUpdatedPartial,
           'success'
         );
       }
@@ -217,10 +219,10 @@ class SettingsTabView extends React.Component
         <Columns>
           <Column className="utv-right-one-third-column">
             <Card>
-              <SectionHeader text="Server Information"/>
-              <InfoLine text={'PHP Version: ' + this.state.phpVersion}/>
-              <InfoLine text={'Plugin Version: ' + this.state.version}/>
-              <SectionHeader text="Status"/>
+              <SectionHeader text={utvJSData.localization.serverInformation}/>
+              <InfoLine text={utvJSData.localization.phpVersion + ': ' + this.state.phpVersion}/>
+              <InfoLine text={utvJSData.localization.pluginVersion + ': ' + this.state.version}/>
+              <SectionHeader text={utvJSData.localization.status}/>
               <InfoLine
                 text="ImageMagick"
                 icon={this.state.imageMagickEnabled ? 'active' : 'inactive'}
@@ -231,7 +233,7 @@ class SettingsTabView extends React.Component
               />
               <FormField classes="utv-formfield-action">
                 <SubmitButton
-                  title="Update Settings"
+                  title={utvJSData.localization.updateSettings}
                   classes="button-primary"
                 />
               </FormField>
@@ -239,9 +241,9 @@ class SettingsTabView extends React.Component
           </Column>
           <Column className="utv-left-two-thirds-column">
             <Card>
-              <SectionHeader text="General"/>
+              <SectionHeader text={utvJSData.localization.general}/>
               <FormField>
-                <Label text="Max Player Width"/>
+                <Label text={utvJSData.localization.maxPlayerWidth}/>
                 <TextInput
                   name="popupPlayerWidth"
                   value={this.state.popupPlayerWidth}
@@ -249,7 +251,7 @@ class SettingsTabView extends React.Component
                 />
               </FormField>
               <FormField>
-                <Label text="Thumbnail Width"/>
+                <Label text={utvJSData.localization.thumbnailWidth}/>
                 <TextInput
                   name="thumbnailWidth"
                   value={this.state.thumbnailWidth}
@@ -257,7 +259,7 @@ class SettingsTabView extends React.Component
                 />
               <FormField>
               </FormField>
-                <Label text="Thumbnail Horizontal Padding"/>
+                <Label text={utvJSData.localization.thumbnailHorizontalPadding}/>
                 <TextInput
                   name="thumbnailHorizontalPadding"
                   value={this.state.thumbnailHorizontalPadding}
@@ -265,7 +267,7 @@ class SettingsTabView extends React.Component
                 />
               </FormField>
               <FormField>
-                <Label text="Thumbnail Vertical Padding"/>
+                <Label text={utvJSData.localization.thumbnailVerticalPadding}/>
                 <TextInput
                   name="thumbnailVerticalPadding"
                   value={this.state.thumbnailVerticalPadding}
@@ -273,7 +275,7 @@ class SettingsTabView extends React.Component
                 />
               </FormField>
               <FormField>
-                <Label text="Thumbnail Border Radius"/>
+                <Label text={utvJSData.localization.thumbnailBorderRadius}/>
                 <TextInput
                   name="thumbnailBorderRadius"
                   value={this.state.thumbnailBorderRadius}
@@ -281,7 +283,7 @@ class SettingsTabView extends React.Component
                 />
               </FormField>
               <FormField>
-                <Label text="Overlay Color"/>
+                <Label text={utvJSData.localization.overlayColor}/>
                 <TextInput
                   name="popupPlayerOverlayColor"
                   value={this.state.popupPlayerOverlayColor}
@@ -289,7 +291,7 @@ class SettingsTabView extends React.Component
                 />
               </FormField>
               <FormField>
-                <Label text="Overlay Opacity"/>
+                <Label text={utvJSData.localization.overlayOpactiy}/>
                 <TextInput
                   name="popupPlayerOverlayOpacity"
                   value={this.state.popupPlayerOverlayOpacity}
@@ -297,51 +299,51 @@ class SettingsTabView extends React.Component
                 />
               </FormField>
               <FormField>
-                <Label text="Remove Video Popup Scripts"/>
+                <Label text={utvJSData.localization.removeVideoPopupScripts}/>
                 <Toggle
                   name="removeVideoPopupScript"
                   value={this.state.removeVideoPopupScript}
                   onChange={this.changeCheckboxValue}
                 />
-                <FieldHint text="Remove scripts if provided via another plugin"/>
+                <FieldHint text={utvJSData.localization.removeVideoPopupScriptsHint}/>
               </FormField>
             </Card>
             <Card>
               <SectionHeader text="YouTube"/>
               <FormField>
-                <Label text="API Key"/>
+                <Label text={utvJSData.localization.apiKey}/>
                 <TextInput
                   name="youtubeAPIKey"
                   value={this.state.youtubeAPIKey}
                   onChange={this.changeValue}
                 />
-                <Label text="Controls Theme"/>
+                <Label text={utvJSData.localization.youtubeControlsTheme}/>
                 <SelectBox
                   name="playerControlsTheme"
                   value={this.state.playerControlsTheme}
                   onChange={this.changeValue}
                   data={[
-                    {name: 'Light', value: 'light'},
-                    {name: 'Dark', value: 'dark'}
+                    {name: utvJSData.localization.light, value: 'light'},
+                    {name: utvJSData.localization.dark, value: 'dark'}
                   ]}
                 />
-                <Label text="Controls Color"/>
+                <Label text={utvJSData.localization.youtubeControlsColor}/>
                 <SelectBox
                   name="playerControlsColor"
                   value={this.state.playerControlsColor}
                   onChange={this.changeValue}
                   data={[
-                    {name: 'Red', value: 'red'},
-                    {name: 'White', value: 'white'}
+                    {name: utvJSData.localization.red, value: 'red'},
+                    {name: utvJSData.localization.white, value: 'white'}
                   ]}
                 />
-                <Label text="Autoplay Videos"/>
+                <Label text={utvJSData.localization.autoplayVideos}/>
                 <Toggle
                   name="youtubeAutoplay"
                   value={this.state.youtubeAutoplay}
                   onChange={this.changeCheckboxValue}
                 />
-                <Label text="Hide Video Details"/>
+                <Label text={utvJSData.localization.hideVideoDetails}/>
                 <Toggle
                   name="youtubeHideDetails"
                   value={this.state.youtubeHideDetails}
@@ -352,13 +354,13 @@ class SettingsTabView extends React.Component
               <Card>
               <SectionHeader text="Vimeo"/>
               <FormField>
-                <Label text="Autoplay Videos"/>
+                <Label text={utvJSData.localization.autoplayVideos}/>
                 <Toggle
                   name="vimeoAutoplay"
                   value={this.state.vimeoAutoplay}
                   onChange={this.changeCheckboxValue}
                 />
-                <Label text="Hide Video Details"/>
+                <Label text={utvJSData.localization.hideVideoDetails}/>
                 <Toggle
                   name="vimeoHideDetails"
                   value={this.state.vimeoHideDetails}

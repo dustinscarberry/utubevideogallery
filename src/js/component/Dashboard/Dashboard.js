@@ -218,13 +218,13 @@ class Dashboard extends React.Component
           type={this.state.feedbackType}
         />
         <Tabs>
-          <Pane label="Galleries" iconClass="tabs-icon-photos">
+          <Pane label={utvJSData.localization.galleries} iconClass="tabs-icon-grid">
             {this.getGalleriesTab()}
           </Pane>
-          <Pane label="Saved Playlists" iconClass="tabs-icon-list">
+          <Pane label={utvJSData.localization.savedPlaylists} iconClass="tabs-icon-list">
             {this.getPlaylistsTab()}
           </Pane>
-          <Pane label="Settings" iconClass="tabs-icon-cog">
+          <Pane label={utvJSData.localization.settings} iconClass="tabs-icon-cog">
             <SettingsTabView
               setFeedbackMessage={this.setFeedbackMessage}
             />

@@ -50,7 +50,7 @@ class Gallery extends React.Component
             videos.push(video);
         }
 
-        if (maxVideos);
+        if (maxVideos)
           videos = videos.slice(0, maxVideos);
       }
       else if (data.displaytype == 'album')
@@ -83,11 +83,11 @@ class Gallery extends React.Component
   {
     return sharedService.getYouTubeEmbedURL(
       video.slugID,
-      utvJSData.youtubeDetailsHide,
+      utvJSData.setting.youtubeDetailsHide,
       video.chrome,
-      utvJSData.playerControlTheme,
-      utvJSData.playerProgressColor,
-      utvJSData.youtubeAutoplay,
+      utvJSData.setting.playerControlTheme,
+      utvJSData.setting.playerProgressColor,
+      utvJSData.setting.youtubeAutoplay,
       video.startTime,
       video.endTime
     );
@@ -97,8 +97,8 @@ class Gallery extends React.Component
   {
     return sharedService.getVimeoEmbedURL(
       video.slugID,
-      utvJSData.vimeoAutoplay,
-      utvJSData.vimeoDetailsHide,
+      utvJSData.setting.vimeoAutoplay,
+      utvJSData.setting.vimeoDetailsHide,
       video.startTime
     );
   }
@@ -132,11 +132,11 @@ class Gallery extends React.Component
         open: () =>
         {
           const popup = document.querySelector('.mfp-container');
-          popup.querySelector('.mfp-content').style.maxWidth = utvJSData.playerWidth + 'px';
+          popup.querySelector('.mfp-content').style.maxWidth = utvJSData.setting.playerWidth + 'px';
           popup.querySelector('.mfp-title').innerText = video.title;
           const overlay = document.querySelector('.mfp-bg');
-          overlay.style.background = utvJSData.lightboxOverlayColor;
-          overlay.style.opacity = utvJSData.lightboxOverlayOpacity;
+          overlay.style.background = utvJSData.setting.lightboxOverlayColor;
+          overlay.style.opacity = utvJSData.setting.lightboxOverlayOpacity;
 
           if (video.description)
           {
@@ -159,17 +159,14 @@ class Gallery extends React.Component
       displayType
     } = this.state;
 
-    if (!albums.length)
-      return null;
-
-    if (displayType == 'albums')
+    if (displayType == 'albums' && albums.length)
       return <AlbumView
         albums={albums}
         onOpenVideoPopup={this.openVideoPopup}
         thumbnailType={thumbnailType}
         iconType={this.props.iconType}
       />;
-    else if (displayType == 'videos')
+    else if (displayType == 'videos' && videos.length)
       return <VideoView
         videos={videos}
         onOpenVideoPopup={this.openVideoPopup}

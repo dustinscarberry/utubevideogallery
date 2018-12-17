@@ -238,7 +238,7 @@ class PlaylistEditTabView extends React.Component
     await this.savePlaylistVideoData();
 
     this.props.changeView();
-    this.props.setFeedbackMessage('Playlist synced / saved', 'success');
+    this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistSynced, 'success');
   }
 
   async savePlaylistData()
@@ -374,9 +374,11 @@ class PlaylistEditTabView extends React.Component
 
       //update status about what video is being saved
       this.props.setFeedbackMessage(
-        'Video ['
+        utvJSData.localization.feedbackVideoPartial
+        + ' ['
         + video.title
-        + '] updated',
+        + '] '
+        + utvJSData.localization.feedbackUpdatedPartial,
         'success'
       );
     }
@@ -391,11 +393,11 @@ class PlaylistEditTabView extends React.Component
     if (this.state.playlistLoading)
       playlistNode = <Loader/>;
     else
-      playlistNode = <div><PlaylistVideoSelection
+      playlistNode = <PlaylistVideoSelection
         videos={this.state.playlistVideos}
         toggleVideoSelection={this.toggleVideoSelection}
         changeVideoTitle={this.changeVideoTitle}
-      /></div>
+      />
 
     const updateDate = new Date(this.state.updateDate * 1000);
     const updateDateFormatted = updateDate.toLocaleString(
@@ -421,7 +423,7 @@ class PlaylistEditTabView extends React.Component
         <Breadcrumbs
           crumbs={[
             {
-              text: 'Saved Playlists',
+              text: utvJSData.localization.savedPlaylists,
               onClick: () => this.props.changeView()
             }
           ]}
@@ -429,13 +431,13 @@ class PlaylistEditTabView extends React.Component
         <Columns>
           <Column className="utv-left-one-thirds-column">
             <Card>
-              <SectionHeader text="Edit / Sync Playlist"/>
+              <SectionHeader text={utvJSData.localization.editSyncPlaylist}/>
               <Form
                 submit={this.savePlaylist}
                 errorclass="utv-invalid-feedback"
               >
                 <FormField>
-                  <Label text="Title"/>
+                  <Label text={utvJSData.localization.title}/>
                   <TextInput
                     name="title"
                     value={this.state.title}
@@ -443,7 +445,7 @@ class PlaylistEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Source"/>
+                  <Label text={utvJSData.localization.source}/>
                   <TextInput
                     name="source"
                     value={source}
@@ -451,7 +453,7 @@ class PlaylistEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Album"/>
+                  <Label text={utvJSData.localization.album}/>
                   <TextInput
                     name="albumName"
                     value={this.state.albumName}
@@ -459,7 +461,7 @@ class PlaylistEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Video Quality"/>
+                  <Label text={utvJSData.localization.videoQuality}/>
                   <SelectBox
                     name="videoQuality"
                     value={this.state.videoQuality}
@@ -472,16 +474,16 @@ class PlaylistEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Controls"/>
+                  <Label text={utvJSData.localization.controls}/>
                   <Toggle
                     name="showControls"
                     value={this.state.showControls}
                     onChange={this.changeCheckboxValue}
                   />
-                  <FieldHint text="Visible player controls"/>
+                  <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
                 </FormField>
                 <FormField>
-                  <Label text="Last Updated"/>
+                  <Label text={utvJSData.localization.lastUpdated}/>
                   <TextInput
                     name="updateDate"
                     value={updateDateFormatted}
@@ -489,25 +491,25 @@ class PlaylistEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Sync Method"/>
+                  <Label text={utvJSData.localization.syncMethod}/>
                   <SelectBox
                     name="syncMethod"
                     value={this.state.syncMethod}
                     onChange={this.changeValue}
                     data={[
-                      {name: 'Sync Selected', value: 'syncSelected'},
-                      {name: 'Sync New', value: 'syncNew'},
-                      {name: 'Sync All', value: 'syncAll'}
+                      {name: utvJSData.localization.syncSelected, value: 'syncSelected'},
+                      {name: utvJSData.localization.syncNew, value: 'syncNew'},
+                      {name: utvJSData.localization.syncAll, value: 'syncAll'}
                     ]}
                   />
                 </FormField>
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
-                    title="Sync / Save Changes"
+                    title={utvJSData.localization.syncSaveChanges}
                     classes="button-primary"
                   />
                   <Button
-                    title="Cancel"
+                    title={utvJSData.localization.cancel}
                     classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />
@@ -517,7 +519,7 @@ class PlaylistEditTabView extends React.Component
           </Column>
           <Column className="utv-right-two-thirds-column">
             <Card>
-              <SectionHeader text="Playlist Items"/>
+              <SectionHeader text={utvJSData.localization.playlistItems}/>
               <PlaylistMultiSelect
                 toggleAllVideosSelection={this.toggleAllVideosSelection}
                 videos={this.state.playlistVideos}

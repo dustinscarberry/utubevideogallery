@@ -25,7 +25,7 @@ class AlbumTable extends React.Component
     return [
       {
         key: 'thumbnail',
-        title: 'Thumbnail',
+        title: utvJSData.localization.thumbnail,
         sortable: false,
         sortDirection: '',
         width: '150px',
@@ -40,7 +40,7 @@ class AlbumTable extends React.Component
       },
       {
         key: 'title',
-        title: 'Title',
+        title: utvJSData.localization.title,
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) =>
@@ -55,9 +55,9 @@ class AlbumTable extends React.Component
               </a>
               <TableRowActions
                 actions={[
-                  {text: 'Edit', onClick: () => this.props.changeView('editAlbum', row.id)},
-                  {text: 'View', onClick: () => this.props.changeAlbum(row.id, cellData)},
-                  {text: 'Delete', onClick: () => this.deleteAlbumPrompt(row.id)}
+                  {text: utvJSData.localization.edit, onClick: () => this.props.changeView('editAlbum', row.id)},
+                  {text: utvJSData.localization.view, onClick: () => this.props.changeAlbum(row.id, cellData)},
+                  {text: utvJSData.localization.delete, onClick: () => this.deleteAlbumPrompt(row.id)}
                 ]}
               />
             </div>
@@ -66,7 +66,7 @@ class AlbumTable extends React.Component
       },
       {
         key: 'published',
-        title: 'Published',
+        title: utvJSData.localization.published,
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) =>
@@ -84,8 +84,8 @@ class AlbumTable extends React.Component
         }
       },
       {
-        key: 'dateAdded',
-        title: 'Date Added',
+        key: 'updateDate',
+        title: utvJSData.localization.lastUpdated,
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) =>
@@ -99,7 +99,7 @@ class AlbumTable extends React.Component
       },
       {
         key: 'videoCount',
-        title: '# Videos',
+        title: utvJSData.localization.numberOfVideos,
         sortable: true,
         sortDirection: ''
       }
@@ -111,15 +111,15 @@ class AlbumTable extends React.Component
     return {
       options: [
         {
-          name: 'Delete',
+          name: utvJSData.localization.delete,
           value: 'delete'
         },
         {
-          name: 'Publish',
+          name: utvJSData.localization.publish,
           value: 'publish'
         },
         {
-          name: 'Un-Publish',
+          name: utvJSData.localization.unPublish,
           value: 'unpublish'
         }
       ],
@@ -146,7 +146,7 @@ class AlbumTable extends React.Component
       record.thumbnail = item.thumbnail;
       record.title = item.title;
       record.published = item.published;
-      record.dateAdded = item.updateDate;
+      record.updateDate = item.updateDate;
       record.videoCount = item.videoCount;
       newData.push(record);
     }
@@ -156,7 +156,7 @@ class AlbumTable extends React.Component
 
   deleteAlbumsPrompt(items)
   {
-    if (confirm('Are you sure you want to delete these albums?'))
+    if (confirm(utvJSData.localization.confirmAlbumsDelete))
     {
       for (let item of items)
         this.deleteAlbum(item.id);
@@ -177,7 +177,7 @@ class AlbumTable extends React.Component
 
   deleteAlbumPrompt(albumID)
   {
-    if (confirm('Are you sure you want to delete this album?'))
+    if (confirm(utvJSData.localization.confirmAlbumDelete))
       this.deleteAlbum(albumID);
   }
 
@@ -232,7 +232,7 @@ class AlbumTable extends React.Component
   {
     return <GriddleDND
       headers={this.getHeaders()}
-      recordLabel="albums"
+      recordLabel={utvJSData.localization.albums}
       apiLoadPath={
         '/wp-json/utubevideogallery/v1/galleries/'
         + this.props.selectedGallery

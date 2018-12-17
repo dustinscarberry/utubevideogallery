@@ -58,7 +58,7 @@ class GalleryAddTabView extends React.Component
     if (rsp.status == 201 && !rsp.data.error)
     {
       this.props.changeView();
-      this.props.setFeedbackMessage('Gallery created', 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackGalleryCreated, 'success');
     }
     else
       this.props.setFeedbackMessage(rsp.data.error.message, 'error');
@@ -70,19 +70,19 @@ class GalleryAddTabView extends React.Component
       <div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeView()}
+            {text: utvJSData.localization.galleries, onClick: () => this.props.changeView()}
           ]}
         />
         <Columns>
           <Column className="utv-left-fixed-single-column">
             <Card>
-              <SectionHeader text="Add Gallery"/>
+              <SectionHeader text={utvJSData.localization.addGallery}/>
               <Form
                 submit={this.addGallery}
                 errorclass="utv-invalid-feedback"
               >
                 <FormField>
-                  <Label text="Title"/>
+                  <Label text={utvJSData.localization.title}/>
                   <TextInput
                     name="title"
                     value={this.state.title}
@@ -91,51 +91,51 @@ class GalleryAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Album Sorting"/>
+                  <Label text={utvJSData.localization.albumSorting}/>
                   <SelectBox
                     name="albumSorting"
                     value={this.state.albumSorting}
                     onChange={this.changeValue}
                     data={[
-                      {name: 'First to Last', value: 'asc'},
-                      {name: 'Last to First', value: 'desc'}
+                      {name: utvJSData.localization.firstToLast, value: 'asc'},
+                      {name: utvJSData.localization.lastToFirst, value: 'desc'}
                     ]}
                     required={true}
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Thumbnail Type"/>
+                  <Label text={utvJSData.localization.thumbnailType}/>
                   <SelectBox
                     name="thumbnailType"
                     value={this.state.thumbnailType}
                     onChange={this.changeValue}
                     data={[
-                      {name: 'Rectangle', value: 'rectangle'},
-                      {name: 'Square', value: 'square'}
+                      {name: utvJSData.localization.rectangle, value: 'rectangle'},
+                      {name: utvJSData.localization.square, value: 'square'}
                     ]}
                     required={true}
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Display Type"/>
+                  <Label text={utvJSData.localization.displayType}/>
                   <SelectBox
                     name="displayType"
                     value={this.state.displayType}
                     onChange={this.changeValue}
                     data={[
-                      {name: 'Albums', value: 'album'},
-                      {name: 'Just Videos', value: 'video'}
+                      {name: utvJSData.localization.albums, value: 'album'},
+                      {name: utvJSData.localization.justVideos, value: 'video'}
                     ]}
                     required={true}
                   />
                 </FormField>
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
-                    title="Add Gallery"
+                    title={utvJSData.localization.addGallery}
                     classes="button-primary"
                   />
                   <Button
-                    title="Cancel"
+                    title={utvJSData.localization.cancel}
                     classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />

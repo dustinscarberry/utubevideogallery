@@ -5,13 +5,13 @@ const PlaylistLegend = (props) =>
   return (
     <ul className="utv-playlist-legend">
       <li className="utv-playlist-legend-local">
-        Local
+        {utvJSData.localization.local}
       </li>
       <li className="utv-playlist-legend-web">
-        Web
+        {utvJSData.localization.web}
       </li>
       <li className="utv-playlist-legend-both">
-        Both
+        {utvJSData.localization.both}
       </li>
     </ul>
   );

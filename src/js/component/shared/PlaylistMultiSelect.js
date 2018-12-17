@@ -21,8 +21,8 @@ const PlaylistMultiSelect = (props) =>
   return (
     <div className="utv-playlist-multiselect">
       <span className="utv-playlist-preview-selection-count">{'( ' + selectedVideos + ' / ' + totalVideos + ' )'}</span>
-      <span className="utv-playlist-selection-toggle" onClick={() => toggleAllVideosSelection(true)}>All</span>
-      <span className="utv-playlist-selection-toggle" onClick={() => toggleAllVideosSelection(false)}>None</span>
+      <span className="utv-playlist-selection-toggle" onClick={() => toggleAllVideosSelection(true)}>{utvJSData.localization.all}</span>
+      <span className="utv-playlist-selection-toggle" onClick={() => toggleAllVideosSelection(false)}>{utvJSData.localization.none}</span>
     </div>
   );
 }

@@ -63,38 +63,43 @@ class UI
     wp_add_inline_style('utv-app-css', $css);
   }
 
-  //insert javascript for galleries
+  //insert javascript
   public function loadJS()
   {
     $embeddedJS = [
-      'thumbnailWidth' => $this->_options['thumbnailWidth'],
-      'thumbnailPadding' => $this->_options['thumbnailPadding'],
-      'playerWidth' => $this->_options['playerWidth'],
-      'playerHeight' => $this->_options['playerHeight'],
-      'lightboxOverlayColor' => $this->_options['fancyboxOverlayColor'],
-      'lightboxOverlayOpacity' => $this->_options['fancyboxOverlayOpacity'],
-      'playerControlTheme' => $this->_options['playerControlTheme'],
-      'playerProgressColor' => $this->_options['playerProgressColor'],
-      'youtubeAutoplay' => $this->_options['youtubeAutoplay'],
-      'vimeoAutoplay' => $this->_options['vimeoAutoplay'],
-      'youtubeDetailsHide' => $this->_options['youtubeDetailsHide'],
-      'vimeoDetailsHide' => $this->_options['vimeoDetailsHide']
+      'setting' => [
+        'thumbnailWidth' => $this->_options['thumbnailWidth'],
+        'thumbnailPadding' => $this->_options['thumbnailPadding'],
+        'playerWidth' => $this->_options['playerWidth'],
+        'playerHeight' => $this->_options['playerHeight'],
+        'lightboxOverlayColor' => $this->_options['fancyboxOverlayColor'],
+        'lightboxOverlayOpacity' => $this->_options['fancyboxOverlayOpacity'],
+        'playerControlTheme' => $this->_options['playerControlTheme'],
+        'playerProgressColor' => $this->_options['playerProgressColor'],
+        'youtubeAutoplay' => $this->_options['youtubeAutoplay'],
+        'vimeoAutoplay' => $this->_options['vimeoAutoplay'],
+        'youtubeDetailsHide' => $this->_options['youtubeDetailsHide'],
+        'vimeoDetailsHide' => $this->_options['vimeoDetailsHide']
+      ],
+      'localization' => [
+        'album' => __('Album', 'utvg')
+      ]
     ];
 
     wp_enqueue_script(
-      'utv-frontend',
+      'utv-app-js',
       plugins_url('../../../public/js/app.min.js', __FILE__),
       ['jquery'],
       $this->_version,
       true
     );
 
-    wp_localize_script('utv-frontend', 'utvJSData', $embeddedJS);
+    wp_localize_script('utv-app-js', 'utvJSData', $embeddedJS);
   }
 
+  //load jquery and lightbox js / css
   public function addLightboxScripts()
   {
-    //load jquery and lightbox js / css
     wp_enqueue_script('jquery');
     wp_enqueue_script(
       'codeclouds-mp-js',

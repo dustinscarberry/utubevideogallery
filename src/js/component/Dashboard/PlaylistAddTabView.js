@@ -25,7 +25,7 @@ class PlaylistAddTabView extends React.Component
 
     this.state = {
       url: undefined,
-      videoQuality: 'hd1080 ',
+      videoQuality: 'hd1080',
       showControls: false,
       source: undefined,
       sourceID: undefined,
@@ -200,10 +200,10 @@ class PlaylistAddTabView extends React.Component
       //save playlist videos
       await this.addPlaylistVideoData(id);
 
-      this.props.setFeedbackMessage('Playlist added', 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAdded, 'success');
     }
     else
-      this.props.setFeedbackMessage('Playlist failed to add', 'error');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAddFail, 'error');
 
     this.props.changeView();
   }
@@ -253,9 +253,11 @@ class PlaylistAddTabView extends React.Component
 
         //update status about what video is being saved
         this.props.setFeedbackMessage(
-          'Video ['
+          utvJSData.localization.feedbackVideoPartial
+          + ' ['
           + video.title
-          + '] added',
+          + '] '
+          + utvJSData.localization.feedbackAddedPartial,
           'success'
         );
       }
@@ -287,7 +289,7 @@ class PlaylistAddTabView extends React.Component
         <Breadcrumbs
           crumbs={[
             {
-              text: 'Saved Playlists',
+              text: utvJSData.localization.savedPlaylists,
               onClick: () => this.props.changeView()
             }
           ]}
@@ -295,13 +297,13 @@ class PlaylistAddTabView extends React.Component
         <Columns>
           <Column className="utv-left-one-thirds-column">
             <Card>
-              <SectionHeader text="Add Playlist"/>
+              <SectionHeader text={utvJSData.localization.addPlaylist}/>
               <Form
                 submit={this.addPlaylist}
                 errorclass="utv-invalid-feedback"
               >
                 <FormField>
-                  <Label text="URL"/>
+                  <Label text={utvJSData.localization.url}/>
                   <TextInput
                     name="url"
                     value={this.state.url}
@@ -310,7 +312,7 @@ class PlaylistAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Title"/>
+                  <Label text={utvJSData.localization.title}/>
                   <TextInput
                     name="title"
                     value={this.state.playlistTitle}
@@ -318,7 +320,7 @@ class PlaylistAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Album"/>
+                  <Label text={utvJSData.localization.album}/>
                   <SelectBox
                     name="album"
                     value={this.state.album}
@@ -328,7 +330,7 @@ class PlaylistAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Video Quality"/>
+                  <Label text={utvJSData.localization.videoQuality}/>
                   <SelectBox
                     name="videoQuality"
                     value={this.state.videoQuality}
@@ -342,21 +344,21 @@ class PlaylistAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Controls"/>
+                  <Label text={utvJSData.localization.controls}/>
                   <Toggle
                     name="showControls"
                     value={this.state.showControls}
                     onChange={this.changeCheckboxValue}
                   />
-                  <FieldHint text="Visible player controls"/>
+                  <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
                 </FormField>
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
-                    title="Add Playlist"
+                    title={utvJSData.localization.addPlaylist}
                     classes="button-primary"
                   />
                   <Button
-                    title="Cancel"
+                    title={utvJSData.localization.cancel}
                     classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />
@@ -366,7 +368,7 @@ class PlaylistAddTabView extends React.Component
           </Column>
           <Column className="utv-right-two-thirds-column">
             <Card>
-              <SectionHeader text="Playlist Items"/>
+              <SectionHeader text={utvJSData.localization.playlistItems}/>
               {playlistNode}
             </Card>
           </Column>

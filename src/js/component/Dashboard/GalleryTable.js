@@ -22,7 +22,7 @@ class GalleryTable extends React.Component
     return [
       {
         key: 'title',
-        title: 'Title',
+        title: utvJSData.localization.title,
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) =>
@@ -37,9 +37,9 @@ class GalleryTable extends React.Component
               </a>
               <TableRowActions
                 actions={[
-                  {text: 'Edit', onClick: () => this.props.changeView('editGallery', row.id)},
-                  {text: 'View', onClick: () => this.props.changeGallery(row.id, cellData)},
-                  {text: 'Delete', onClick: () => this.deleteGalleryPrompt(row.id)}
+                  {text: utvJSData.localization.edit, onClick: () => this.props.changeView('editGallery', row.id)},
+                  {text: utvJSData.localization.view, onClick: () => this.props.changeGallery(row.id, cellData)},
+                  {text: utvJSData.localization.delete, onClick: () => this.deleteGalleryPrompt(row.id)}
                 ]}
               />
             </div>
@@ -48,13 +48,13 @@ class GalleryTable extends React.Component
       },
       {
         key: 'shortcode',
-        title: 'Shortcode',
+        title: utvJSData.localization.shortcode,
         sortable: true,
         sortDirection: ''
       },
       {
         key: 'dateAdded',
-        title: 'Date Added',
+        title: utvJSData.localization.dateAdded,
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) =>
@@ -68,7 +68,7 @@ class GalleryTable extends React.Component
       },
       {
         key: 'albumCount',
-        title: '# Albums',
+        title: utvJSData.localization.numberOfAlbums,
         sortable: true,
         sortDirection: ''
       }
@@ -98,7 +98,7 @@ class GalleryTable extends React.Component
     return {
       options: [
         {
-          name: 'Delete',
+          name: utvJSData.localization.delete,
           value: 'delete'
         }
       ],
@@ -112,7 +112,7 @@ class GalleryTable extends React.Component
 
   deleteGalleriesPrompt(items)
   {
-    if (confirm('Are you sure you want to delete these galleries?'))
+    if (confirm(utvJSData.localization.confirmGalleriesDelete))
     {
       for (const item of items)
         this.deleteGallery(item.id);
@@ -121,7 +121,7 @@ class GalleryTable extends React.Component
 
   deleteGalleryPrompt(galleryID)
   {
-    if (confirm('Are you sure you want to delete this gallery?'))
+    if (confirm(utvJSData.localization.confirmGalleryDelete))
       this.deleteGallery(galleryID);
   }
 
@@ -143,7 +143,7 @@ class GalleryTable extends React.Component
   {
     return <GriddleDND
       headers={this.getHeaders()}
-      recordLabel="galleries"
+      recordLabel={utvJSData.localization.galleries}
       apiLoadPath={
         '/wp-json/utubevideogallery/v1/galleries?'
         + this.state.rand

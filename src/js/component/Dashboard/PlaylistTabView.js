@@ -15,11 +15,11 @@ class PlaylistTabView extends React.Component
     return (
       <div>
         <div className="utv-actionbar" style={{'margin': '20px 0'}}>
-          <button className="button-secondary" onClick={() => this.props.changeView('addPlaylist')}>Add Playlist</button>
+          <button className="button-secondary" onClick={() => this.props.changeView('addPlaylist')}>{utvJSData.localization.addPlaylist}</button>
         </div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Saved Playlists'}
+            {text: utvJSData.localization.savedPlaylists}
           ]}
         />
         <PlaylistTable

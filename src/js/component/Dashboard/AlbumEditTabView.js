@@ -156,7 +156,7 @@ class AlbumEditTabView extends React.Component
     )
     {
       this.props.changeView();
-      this.props.setFeedbackMessage('Album changes saved', 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumSaved, 'success');
     }
     else
       this.props.setFeedbackMessage(rsp.data.error.message, 'error');
@@ -185,7 +185,7 @@ class AlbumEditTabView extends React.Component
         <Breadcrumbs
           crumbs={[
             {
-              text: 'Galleries',
+              text: utvJSData.localization.galleries,
               onClick: () => this.props.changeGallery()
             },
             {
@@ -197,13 +197,13 @@ class AlbumEditTabView extends React.Component
         <Columns>
           <Column className="utv-left-one-thirds-column">
             <Card>
-              <SectionHeader text="Edit Album"/>
+              <SectionHeader text={utvJSData.localization.editAlbum}/>
               <Form
                 submit={this.saveAlbum}
                 errorclass="utv-invalid-feedback"
               >
                 <FormField>
-                  <Label text="Title"/>
+                  <Label text={utvJSData.localization.title}/>
                   <TextInput
                     name="title"
                     value={this.state.title}
@@ -212,7 +212,7 @@ class AlbumEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Gallery"/>
+                  <Label text={utvJSData.localization.gallery}/>
                   <SelectBox
                     name="gallery"
                     value={this.state.gallery}
@@ -221,19 +221,19 @@ class AlbumEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Video Sorting"/>
+                  <Label text={utvJSData.localization.videoSorting}/>
                   <SelectBox
                     name="videoSorting"
                     value={this.state.videoSorting}
                     onChange={this.changeValue}
                     data={[
-                      {name: 'First to Last', value: 'asc'},
-                      {name: 'Last to First', value: 'desc'}
+                      {name: utvJSData.localization.firstToLast, value: 'asc'},
+                      {name: utvJSData.localization.lastToFirst, value: 'desc'}
                     ]}
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Last Updated"/>
+                  <Label text={utvJSData.localization.lastUpdated}/>
                   <TextInput
                     name="updateDate"
                     value={updateDateFormatted}
@@ -242,11 +242,11 @@ class AlbumEditTabView extends React.Component
                 </FormField>
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
-                    title="Save Album"
+                    title={utvJSData.localization.saveAlbum}
                     classes="button-primary"
                   />
                   <Button
-                    title="Cancel"
+                    title={utvJSData.localization.cancel}
                     classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />
@@ -256,7 +256,7 @@ class AlbumEditTabView extends React.Component
           </Column>
           <Column className="utv-right-two-thirds-column">
             <Card>
-              <SectionHeader text="Album Thumbnail"/>
+              <SectionHeader text={utvJSData.localization.albumThumbnail}/>
               <AlbumThumbnailSelection
                 currentThumbnail={this.state.thumbnail}
                 thumbnails={this.state.thumbnails}

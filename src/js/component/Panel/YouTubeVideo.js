@@ -12,11 +12,11 @@ const YouTubeVideo = (props) =>
 
   const source = sharedService.getYouTubeEmbedURL(
     videoData.slugID,
-    utvJSData.youtubeDetailsHide,
+    utvJSData.setting.youtubeDetailsHide,
     controls,
-    utvJSData.playerControlTheme,
-    utvJSData.playerProgressColor,
-    (forceNoAutoplay ? '0' : utvJSData.youtubeAutoplay),
+    utvJSData.setting.playerControlTheme,
+    utvJSData.setting.playerProgressColor,
+    (forceNoAutoplay ? '0' : utvJSData.setting.youtubeAutoplay),
     videoData.startTime,
     videoData.endTime
   );

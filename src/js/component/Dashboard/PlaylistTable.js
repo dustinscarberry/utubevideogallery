@@ -129,7 +129,7 @@ class PlaylistTable extends React.Component
 
   deletePlaylistPrompt(playlistID)
   {
-    if (confirm('Are you sure you want to delete this video?'))
+    if (confirm('Are you sure you want to delete this playlist?'))
       this.deletePlaylist(playlistID);
   }
 

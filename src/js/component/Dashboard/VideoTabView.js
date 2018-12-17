@@ -14,11 +14,11 @@ class VideoTabView extends React.Component
     return (
       <div>
         <div className="utv-actionbar" style={{'margin': '20px 0'}}>
-          <button className="button-secondary" onClick={() => this.props.changeView('addVideo')}>Add Video</button>
+          <button className="button-secondary" onClick={() => this.props.changeView('addVideo')}>{utvJSData.localization.addVideo}</button>
         </div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeGallery()},
+            {text: utvJSData.localization.galleries, onClick: () => this.props.changeGallery()},
             {text: this.props.selectedGalleryTitle, onClick: () => this.props.changeAlbum()},
             {text: this.props.selectedAlbumTitle}
           ]}

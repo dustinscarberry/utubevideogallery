@@ -1,6 +1,7 @@
 import React from 'react';
 import GalleryTable from './GalleryTable';
 import Breadcrumbs from '../shared/Breadcrumbs';
+import Button from '../shared/Button';
 
 class GalleryTabView extends React.Component
 {
@@ -14,7 +15,11 @@ class GalleryTabView extends React.Component
     return (
       <div>
         <div className="utv-actionbar" style={{'margin': '20px 0'}}>
-          <button className="button-secondary" onClick={() => this.props.changeView('addGallery')}>Add Gallery</button>
+          <Button
+            classes={['button-secondary']}
+            title={utvJSData.localization.addGallery}
+            onClick={() => this.props.changeView('addGallery')}
+           />
         </div>
         <Breadcrumbs
           crumbs={[

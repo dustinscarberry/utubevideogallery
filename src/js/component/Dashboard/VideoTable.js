@@ -25,7 +25,7 @@ class VideoTable extends React.Component
     return [
       {
         key: 'thumbnail',
-        title: 'Thumbnail',
+        title: utvJSData.localization.thumbnail,
         sortable: false,
         sortDirection: '',
         width: '150px',
@@ -41,7 +41,7 @@ class VideoTable extends React.Component
       },
       {
         key: 'title',
-        title: 'Title',
+        title: utvJSData.localization.title,
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) =>
@@ -51,9 +51,9 @@ class VideoTable extends React.Component
               <span className="utv-row-title">{cellData}</span>
               <TableRowActions
                 actions={[
-                  {text: 'Edit', onClick: () => this.props.changeView('editVideo', row.id)},
-                  {text: 'Watch', link: 'https://youtu.be/' + row.sourceID},
-                  {text: 'Delete', onClick: () => this.deleteVideo([row.id])}
+                  {text: utvJSData.localization.edit, onClick: () => this.props.changeView('editVideo', row.id)},
+                  {text: utvJSData.localization.watch, link: 'https://youtu.be/' + row.sourceID},
+                  {text: utvJSData.localization.delete, onClick: () => this.deleteVideoPrompt([row.id])}
                 ]}
               />
             </div>
@@ -62,7 +62,7 @@ class VideoTable extends React.Component
       },
       {
         key: 'published',
-        title: 'Published',
+        title: utvJSData.localization.published,
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) =>
@@ -80,8 +80,8 @@ class VideoTable extends React.Component
         }
       },
       {
-        key: 'dateAdded',
-        title: 'Date Added',
+        key: 'updateDate',
+        title: utvJSData.localization.lastUpdated,
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) =>
@@ -101,15 +101,15 @@ class VideoTable extends React.Component
     return {
       options: [
         {
-          name: 'Delete',
+          name: utvJSData.localization.delete,
           value: 'delete'
         },
         {
-          name: 'Publish',
+          name: utvJSData.localization.publish,
           value: 'publish'
         },
         {
-          name: 'Un-Publish',
+          name: utvJSData.localization.unPublish,
           value: 'unpublish'
         }
       ],
@@ -127,7 +127,7 @@ class VideoTable extends React.Component
 
   deleteVideosPrompt(items)
   {
-    if (confirm('Are you sure you want to delete these videos?'))
+    if (confirm(utvJSData.localization.confirmVideosDelete))
     {
       for (let item of items)
         this.deleteVideo(item.id);
@@ -158,7 +158,7 @@ class VideoTable extends React.Component
       record.title = item.title;
       record.sourceID = item.sourceID;
       record.published = item.published;
-      record.dateAdded = item.updateDate;
+      record.updateDate = item.updateDate;
       newData.push(record);
     }
 
@@ -185,7 +185,7 @@ class VideoTable extends React.Component
 
   deleteVideoPrompt(videoID)
   {
-    if (confirm('Are you sure you want to delete this video?'))
+    if (confirm(utvJSData.localization.confirmVideoDelete))
       this.deleteVideo(videoID);
   }
 
@@ -224,7 +224,7 @@ class VideoTable extends React.Component
   {
     return <GriddleDND
       headers={this.getHeaders()}
-      recordLabel="videos"
+      recordLabel={utvJSData.localization.videos}
       apiLoadPath={
         '/wp-json/utubevideogallery/v1/albums/'
         + this.props.selectedAlbum

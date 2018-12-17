@@ -109,7 +109,7 @@ class VideoAddTabView extends React.Component
     )
     {
       this.props.changeView();
-      this.props.setFeedbackMessage('Video added', 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoAdded, 'success');
     }
     else
       this.props.setFeedbackMessage(rsp.data.error.message, 'error');
@@ -155,7 +155,7 @@ class VideoAddTabView extends React.Component
       <div>
         <Breadcrumbs
           crumbs={[
-            {text: 'Galleries', onClick: () => this.props.changeGallery()},
+            {text: utvJSData.localization.galleries, onClick: () => this.props.changeGallery()},
             {text: this.props.selectedGalleryTitle, onClick: () => this.props.changeAlbum()},
             {text: this.props.selectedAlbumTitle}
           ]}
@@ -163,13 +163,13 @@ class VideoAddTabView extends React.Component
         <Columns>
           <Column className="utv-left-one-thirds-column">
             <Card>
-              <SectionHeader text="Add Video"/>
+              <SectionHeader text={utvJSData.localization.addVideo}/>
               <Form
                 submit={this.addVideo}
                 errorclass="utv-invalid-feedback"
               >
                 <FormField>
-                  <Label text="URL"/>
+                  <Label text={utvJSData.localization.url}/>
                   <URLInput
                     name="url"
                     value={this.state.url}
@@ -178,7 +178,7 @@ class VideoAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Title"/>
+                  <Label text={utvJSData.localization.title}/>
                   <TextInput
                     name="title"
                     value={this.state.title}
@@ -186,7 +186,7 @@ class VideoAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Description"/>
+                  <Label text={utvJSData.localization.description}/>
                   <TextBoxInput
                     name="description"
                     value={this.state.description}
@@ -194,7 +194,7 @@ class VideoAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Quality"/>
+                  <Label text={utvJSData.localization.quality}/>
                   <SelectBox
                     name="quality"
                     value={this.state.quality}
@@ -207,39 +207,39 @@ class VideoAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text="Controls"/>
+                  <Label text={utvJSData.localization.controls}/>
                   <Toggle
                     name="controls"
                     value={this.state.controls}
                     onChange={this.changeCheckboxValue}
                   />
-                  <FieldHint text="Visible player controls"/>
+                  <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
                 </FormField>
                 <FormField>
-                  <Label text="Start Time"/>
+                  <Label text={utvJSData.localization.startTime}/>
                   <NumberInput
                     name="startTime"
                     value={this.state.startTime}
                     onChange={this.changeValue}
                   />
-                  <FieldHint text="Beginning timestamp (seconds)"/>
+                  <FieldHint text={utvJSData.localization.startTimeHint}/>
                 </FormField>
                 <FormField>
-                  <Label text="End Time"/>
+                  <Label text={utvJSData.localization.endTime}/>
                   <NumberInput
                     name="endTime"
                     value={this.state.endTime}
                     onChange={this.changeValue}
                   />
-                  <FieldHint text="Ending timestamp (seconds)"/>
+                  <FieldHint text={utvJSData.localization.endTimeHint}/>
                 </FormField>
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
-                    title="Add Video"
+                    title={utvJSData.localization.addVideo}
                     classes="button-primary"
                   />
                   <Button
-                    title="Cancel"
+                    title={utvJSData.localization.cancel}
                     classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />
