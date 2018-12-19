@@ -16,8 +16,8 @@ import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
 import TextBoxInput from '../shared/TextBoxInput';
-import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import CancelButton from '../shared/CancelButton';
 
 class VideoAddTabView extends React.Component
 {
@@ -57,11 +57,16 @@ class VideoAddTabView extends React.Component
   {
     let url = event.target.value.trim();
 
-    this.setState({source: undefined, url: url, sourceID: undefined});
+    this.setState(
+    {
+      source: undefined,
+      url: url,
+      sourceID: undefined
+    });
 
     if (url)
     {
-      let compareURL = url.toLowerCase();
+      const compareURL = url.toLowerCase();
 
       if (
         compareURL.indexOf('youtube') !== -1
@@ -98,15 +103,10 @@ class VideoAddTabView extends React.Component
         source: this.state.source,
         albumID: this.props.selectedAlbum
       },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
-    if (
-      rsp.status == 201
-      && !rsp.data.error
-    )
+    if (rsp.status == 201 && !rsp.data.error)
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoAdded, 'success');
@@ -236,11 +236,9 @@ class VideoAddTabView extends React.Component
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
                     title={utvJSData.localization.addVideo}
-                    classes="button-primary"
                   />
-                  <Button
+                  <CancelButton
                     title={utvJSData.localization.cancel}
-                    classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />
                 </FormField>

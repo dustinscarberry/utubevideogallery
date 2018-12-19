@@ -20,7 +20,7 @@ const BulkActions = (props) =>
       <select className="form-control" value={bulkAction} onChange={updateBulkAction}>
         {optionNodes}
       </select>
-      <button className="button-secondary" onClick={runBulkAction}>Apply</button>
+      <button className="button" onClick={runBulkAction}>Apply</button>
     </div>
   );
 }

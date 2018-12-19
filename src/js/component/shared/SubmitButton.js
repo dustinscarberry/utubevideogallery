@@ -1,11 +1,8 @@
 import React from 'react';
-import classnames from 'classnames';
 
-const SubmitButton = ({classes, title}) =>
+const SubmitButton = ({title}) =>
 {
-  return (
-    <input type="submit" value={title} className={classnames(classes)}/>
-  );
+  return <input type="submit" value={title} className="button-primary"/>;
 }
 
 export default SubmitButton;

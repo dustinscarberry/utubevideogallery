@@ -7,6 +7,16 @@ class Row extends React.Component
   constructor(props)
   {
     super(props);
+    this.state = {
+      expanded: false
+    };
+
+    this.toggleRow = this.toggleRow.bind(this);
+  }
+
+  toggleRow()
+  {
+    this.setState({expanded: !this.state.expanded});
   }
 
   render()
@@ -19,15 +29,32 @@ class Row extends React.Component
       toggleRowCheckbox
     } = this.props;
 
+    const rowClasses = [];
+
+    if (this.state.expanded)
+      rowClasses.push('ccgriddle-row-expanded');
+
     //build array of cells for row
     const cells = headers.map(header =>
     {
       let cellData = rowData[header.key];
 
+      let classes = [];
+
       if (header.formatter)
         cellData = header.formatter(rowData, cellData);
 
-      return (<Cell key={header.key} data={cellData}/>);
+      if (header.primary)
+      {
+        cellData = <div>
+          {cellData}
+          <button className="ccgriddle-toggle-row" onClick={this.toggleRow}></button>
+        </div>;
+
+        classes.push('ccgriddle-column-primary');
+      }
+
+      return (<Cell key={header.key} data={cellData} classes={classes} columnName={header.title}/>);
     });
 
     cells.unshift(
@@ -41,7 +68,7 @@ class Row extends React.Component
     );
 
     return (
-      <tr>
+      <tr className={rowClasses.join(' ')}>
         {cells}
       </tr>
     );

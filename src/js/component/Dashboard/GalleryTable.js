@@ -1,6 +1,8 @@
 import React from 'react';
 import GriddleDND from '../shared/GriddleDND';
 import TableRowActions from '../shared/TableRowActions';
+import BasicLink from '../shared/BasicLink';
+import sharedService from '../../service/SharedService';
 import axios from 'axios';
 
 class GalleryTable extends React.Component
@@ -25,21 +27,30 @@ class GalleryTable extends React.Component
         title: utvJSData.localization.title,
         sortable: true,
         sortDirection: '',
+        primary: true,
         formatter: (row, cellData) =>
         {
           return (
             <div>
-              <a
+              <BasicLink
                 onClick={() => this.props.changeGallery(row.id, cellData)}
-                href="javascript:void(0)"
-                className="utv-row-title">
-                  {cellData}
-              </a>
+                classes={['utv-row-title']}
+                text={cellData}
+              />
               <TableRowActions
                 actions={[
-                  {text: utvJSData.localization.edit, onClick: () => this.props.changeView('editGallery', row.id)},
-                  {text: utvJSData.localization.view, onClick: () => this.props.changeGallery(row.id, cellData)},
-                  {text: utvJSData.localization.delete, onClick: () => this.deleteGalleryPrompt(row.id)}
+                  {
+                    text: utvJSData.localization.edit,
+                    onClick: () => this.props.changeView('editGallery', row.id)
+                  },
+                  {
+                    text: utvJSData.localization.view,
+                    onClick: () => this.props.changeGallery(row.id, cellData)
+                  },
+                  {
+                    text: utvJSData.localization.delete,
+                    onClick: () => this.deleteGalleryPrompt(row.id)
+                  }
                 ]}
               />
             </div>
@@ -59,11 +70,7 @@ class GalleryTable extends React.Component
         sortDirection: '',
         formatter: (row, cellData) =>
         {
-          let dateAdded = new Date(cellData * 1000);
-
-          return dateAdded.getFullYear()
-            + '/' + (dateAdded.getMonth() + 1)
-            + '/' + dateAdded.getDate();
+          return sharedService.getFormattedDate(cellData);
         }
       },
       {

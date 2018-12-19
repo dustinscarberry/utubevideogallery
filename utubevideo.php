@@ -438,6 +438,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
       $dft['youtubeDetailsHide'] = 1;
       $dft['vimeoAutoplay'] = 1;
       $dft['vimeoDetailsHide'] = 1;
+      $dft['showVideoDescription'] = true;
       $dft['version'] = self::CURRENT_VERSION;
 
       $this->_options = $this->_options + $dft;

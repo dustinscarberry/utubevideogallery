@@ -5,10 +5,11 @@ const ActionHeaderCell = (props) =>
   const {
     toggleAllRowCheckboxes,
     enableDragNDrop,
-    enableBulkActions
+    enableBulkActions,
+    toggleAllCheckbox
   } = props;
 
-  const headerClasses = ['ccgriddle-action-header'];
+  const headerClasses = ['ccgriddle-action-header', 'ccgriddle-column-primary'];
   let checkboxNode = undefined;
 
   if (enableDragNDrop)
@@ -17,7 +18,11 @@ const ActionHeaderCell = (props) =>
   if (enableBulkActions)
   {
     headerClasses.push('ccgriddle-action-bulkaction');
-    checkboxNode = <input type="checkbox" onClick={toggleAllRowCheckboxes}/>;
+    checkboxNode = <input
+      type="checkbox"
+      checked={toggleAllCheckbox}
+      onClick={toggleAllRowCheckboxes}
+    />;
   }
 
   return (

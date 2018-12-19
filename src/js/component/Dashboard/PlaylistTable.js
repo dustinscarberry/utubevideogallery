@@ -1,6 +1,8 @@
 import React from 'react';
 import GriddleDND from '../shared/GriddleDND';
 import TableRowActions from '../shared/TableRowActions';
+import BasicLink from '../shared/BasicLink';
+import sharedService from '../../service/SharedService';
 import axios from 'axios';
 
 class PlaylistTable extends React.Component
@@ -25,16 +27,16 @@ class PlaylistTable extends React.Component
         title: 'Title',
         sortable: true,
         sortDirection: '',
+        primary: true,
         formatter: (row, cellData) =>
         {
           return (
             <div>
-              <a
+              <BasicLink
                 onClick={() => this.props.changeView('editPlaylist', row.id)}
-                href="javascript:void(0)"
-                className="utv-row-title">
-                  {cellData}
-              </a>
+                classes={['utv-row-title']}
+                text={cellData}
+              />
               <TableRowActions
                 actions={[
                   {text: 'Edit / Sync', onClick: () => this.props.changeView('editPlaylist', row.id)},
@@ -72,11 +74,7 @@ class PlaylistTable extends React.Component
         sortDirection: '',
         formatter: (row, cellData) =>
         {
-          const dateAdded = new Date(cellData * 1000);
-
-          return dateAdded.getFullYear()
-            + '/' + (dateAdded.getMonth() + 1)
-            + '/' + dateAdded.getDate();
+          return sharedService.getFormattedDate(cellData);
         }
       }
     ];

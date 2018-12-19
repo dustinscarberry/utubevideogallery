@@ -13,9 +13,10 @@ import TextInput from '../shared/TextInput';
 import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
-import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import CancelButton from '../shared/CancelButton';
 import Loader from '../shared/Loader';
+import sharedService from '../../service/SharedService';
 import axios from 'axios';
 
 class GalleryEditTabView extends React.Component
@@ -175,18 +176,7 @@ class GalleryEditTabView extends React.Component
 
   render()
   {
-    const updateDate = new Date(this.state.updateDate * 1000);
-    const updateDateFormatted = updateDate.toLocaleString(
-      'en-US',
-      {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true
-      }
-    );
+    const updateDateFormatted = sharedService.getFormattedDateTime(this.state.updateDate);
 
     if (this.state.loading)
       return <Loader/>;
@@ -265,11 +255,9 @@ class GalleryEditTabView extends React.Component
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
                     title={utvJSData.localization.saveGallery}
-                    classes="button-primary"
                   />
-                  <Button
+                  <CancelButton
                     title={utvJSData.localization.cancel}
-                    classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />
                 </FormField>

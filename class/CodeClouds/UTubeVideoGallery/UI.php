@@ -79,10 +79,11 @@ class UI
         'youtubeAutoplay' => $this->_options['youtubeAutoplay'],
         'vimeoAutoplay' => $this->_options['vimeoAutoplay'],
         'youtubeDetailsHide' => $this->_options['youtubeDetailsHide'],
-        'vimeoDetailsHide' => $this->_options['vimeoDetailsHide']
+        'vimeoDetailsHide' => $this->_options['vimeoDetailsHide'],
+        'showVideoDescription' => $this->_options['showVideoDescription']
       ],
       'localization' => [
-        'album' => __('Album', 'utvg')
+        'albums' => __('albums', 'utvg')
       ]
     ];
 

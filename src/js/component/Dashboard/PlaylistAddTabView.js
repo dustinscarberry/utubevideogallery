@@ -11,8 +11,9 @@ import FieldHint from '../shared/FieldHint';
 import TextInput from '../shared/TextInput';
 import SelectBox from '../shared/SelectBox';
 import Toggle from '../shared/Toggle';
-import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import CancelButton from '../shared/CancelButton';
+import PlaylistMultiSelect from '../shared/PlaylistMultiSelect';
 import PlaylistVideoSelection from '../shared/PlaylistVideoSelection';
 import Loader from '../shared/Loader';
 import axios from 'axios';
@@ -40,6 +41,7 @@ class PlaylistAddTabView extends React.Component
     this.changePlaylistURL = this.changePlaylistURL.bind(this);
     this.changeVideoTitle = this.changeVideoTitle.bind(this);
     this.toggleVideoSelection = this.toggleVideoSelection.bind(this);
+    this.toggleAllVideosSelection = this.toggleAllVideosSelection.bind(this);
     this.addPlaylist = this.addPlaylist.bind(this);
   }
 
@@ -176,6 +178,20 @@ class PlaylistAddTabView extends React.Component
   {
     let { playlistVideos } = this.state;
     playlistVideos[dataIndex].selected = !playlistVideos[dataIndex].selected;
+
+    this.setState({playlistVideos});
+  }
+
+  //flip state of all videos to selected or not selected
+  toggleAllVideosSelection(toggleAll)
+  {
+    let { playlistVideos } = this.state;
+    const selected = toggleAll ? true : false;
+
+    playlistVideos = playlistVideos.map(video => {
+      video.selected = selected;
+      return video;
+    });
 
     this.setState({playlistVideos});
   }
@@ -330,7 +346,7 @@ class PlaylistAddTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text={utvJSData.localization.videoQuality}/>
+                  <Label text={utvJSData.localization.quality}/>
                   <SelectBox
                     name="videoQuality"
                     value={this.state.videoQuality}
@@ -355,11 +371,9 @@ class PlaylistAddTabView extends React.Component
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
                     title={utvJSData.localization.addPlaylist}
-                    classes="button-primary"
                   />
-                  <Button
+                  <CancelButton
                     title={utvJSData.localization.cancel}
-                    classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />
                 </FormField>
@@ -369,6 +383,10 @@ class PlaylistAddTabView extends React.Component
           <Column className="utv-right-two-thirds-column">
             <Card>
               <SectionHeader text={utvJSData.localization.playlistItems}/>
+              <PlaylistMultiSelect
+                toggleAllVideosSelection={this.toggleAllVideosSelection}
+                videos={this.state.playlistVideos}
+              />
               {playlistNode}
             </Card>
           </Column>

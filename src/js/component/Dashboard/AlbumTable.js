@@ -1,6 +1,7 @@
 import React from 'react';
 import GriddleDND from '../shared/GriddleDND';
 import TableRowActions from '../shared/TableRowActions';
+import sharedService from '../../service/SharedService';
 import axios from 'axios';
 
 class AlbumTable extends React.Component
@@ -29,6 +30,7 @@ class AlbumTable extends React.Component
         sortable: false,
         sortDirection: '',
         width: '150px',
+        primary: true,
         formatter: (row, cellData) =>
         {
           return <img
@@ -90,11 +92,7 @@ class AlbumTable extends React.Component
         sortDirection: '',
         formatter: (row, cellData) =>
         {
-          let dateAdded = new Date(cellData * 1000);
-
-          return dateAdded.getFullYear()
-            + '/' + (dateAdded.getMonth() + 1)
-            + '/' + dateAdded.getDate();
+          return sharedService.getFormattedDate(cellData);
         }
       },
       {
@@ -137,9 +135,7 @@ class AlbumTable extends React.Component
 
   getDataMapping(data)
   {
-    let newData = [];
-
-    for (let item of data)
+    return data.map(item =>
     {
       let record = {};
       record.id =  item.id;
@@ -148,10 +144,8 @@ class AlbumTable extends React.Component
       record.published = item.published;
       record.updateDate = item.updateDate;
       record.videoCount = item.videoCount;
-      newData.push(record);
-    }
-
-    return newData;
+      return record;
+    });
   }
 
   deleteAlbumsPrompt(items)
@@ -184,16 +178,13 @@ class AlbumTable extends React.Component
   async togglePublishStatus(albumID, changeTo)
   {
     const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/albums/' + albumID,
-      {
-        published: changeTo
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+      '/wp-json/utubevideogallery/v1/albums/'
+      + albumID,
+      { published: changeTo },
+      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
-    if (rsp.status == 200)
+    if (rsp.status == 200 && !rsp.data.error)
       this.setState({rand: Math.random()});
   }
 
@@ -201,12 +192,10 @@ class AlbumTable extends React.Component
   {
     const rsp = await axios.delete(
       '/wp-json/utubevideogallery/v1/albums/' + albumID,
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
-    if (rsp.status == 200)
+    if (rsp.status == 200 && !rsp.data.error)
       this.setState({rand: Math.random()});
   }
 
@@ -219,12 +208,8 @@ class AlbumTable extends React.Component
 
     const rsp = await axios.patch(
       '/wp-json/utubevideogallery/v1/albumsorder',
-      {
-        albumids: albumIDs
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+      { albumids: albumIDs },
+      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
   }
 

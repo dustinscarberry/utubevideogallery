@@ -25,7 +25,7 @@
   position: relative;
   height: 48px;
   box-sizing: border-box !important;
-  border-bottom: 0 !important;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
 }
 
 .ccgriddle-table td,
@@ -34,17 +34,14 @@
 }
 
 .ccgriddle-table td{
-  border-top: 1px solid rgba(0,0,0,0.12);
   border-bottom: 1px solid rgba(0,0,0,0.12);
   padding-top: 12px;
   vertical-align: middle;
-  height: 48px;
   box-sizing: border-box !important;
   vertical-align: top;
 }
 
-.ccgriddle-table tbody tr:hover,
-.ccgriddle-table tbody tr:hover {
+.ccgriddle-table tbody tr:hover{
   background-color: #f6f6f6;
 }
 
@@ -96,12 +93,13 @@
 /* Status */
 .ccgriddle-table-status{
   float: right;
-  line-height: 30px;
+  line-height: 40px;
 }
 
 /* Bulk Actions */
 .ccgriddle-table-bulk-actions{
   float: left;
+  margin: 5px 0;
 }
 
 /* Filter */
@@ -229,4 +227,84 @@
 
 .ccgriddle-action-dragndrop.ccgriddle-action-bulkaction{
   width: 85px;
+}
+
+.ccgriddle-toggle-row{
+  display: none;
+}
+
+@media screen and (max-width: 800px)
+{
+  .ccgriddle-table td{
+    border: 0;
+    position: relative;
+  }
+
+  .ccgriddle-table tbody tr:nth-child(odd){
+    background-color: #f6f6f6;
+  }
+
+  .ccgriddle-table th:not(.ccgriddle-column-primary),
+  .ccgriddle-table td:not(.ccgriddle-column-primary){
+    display: none;
+  }
+
+  .ccgriddle-table .ccgriddle-row-expanded td:not(.ccgriddle-action-cell){
+    display: block;
+    border-bottom: 0;
+    padding-left: 35%;
+  }
+
+  .ccgriddle-table .ccgriddle-row-expanded td:not(.ccgriddle-action-cell):before{
+    content: attr(data-columnname);
+    width: 32%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    display: block;
+    position: absolute;
+    left: 10px;
+  }
+
+  .ccgriddle-table td.ccgriddle-column-primary{
+    padding-left: inherit!important;
+  }
+
+  .ccgriddle-table td.ccgriddle-action-cell{
+    padding: 12px 18px 12px!important;
+  }
+
+  .ccgriddle-table td.ccgriddle-column-primary:before{
+    content: ''!important;
+    width: auto!important;
+  }
+
+  .ccgriddle-toggle-row{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: block;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    border: none;
+    outline: 0;
+    background: 0 0;
+  }
+
+  .ccgriddle-toggle-row:before{
+    border-radius: 50%;
+    display: block;
+    padding: 1px 2px 1px 0;
+    color: #444;
+    content: "\f140";
+    font: 400 20px/1 dashicons;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .ccgriddle-row-expanded .ccgriddle-toggle-row:before{
+    content: "\f142";
+  }
 }

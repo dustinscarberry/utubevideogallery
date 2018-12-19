@@ -1,36 +1,33 @@
 import React from 'react';
-import VideoTable from './VideoTable';
+import ActionBar from '../shared/ActionBar';
 import Breadcrumbs from '../shared/Breadcrumbs';
+import SecondaryButton from '../shared/SecondaryButton';
+import VideoTable from './VideoTable';
 
-class VideoTabView extends React.Component
+const VideoTabView = (props) =>
 {
-  constructor(props)
-  {
-    super(props);
-  }
-
-  render()
-  {
-    return (
-      <div>
-        <div className="utv-actionbar" style={{'margin': '20px 0'}}>
-          <button className="button-secondary" onClick={() => this.props.changeView('addVideo')}>{utvJSData.localization.addVideo}</button>
-        </div>
-        <Breadcrumbs
-          crumbs={[
-            {text: utvJSData.localization.galleries, onClick: () => this.props.changeGallery()},
-            {text: this.props.selectedGalleryTitle, onClick: () => this.props.changeAlbum()},
-            {text: this.props.selectedAlbumTitle}
-          ]}
+  return (
+    <div>
+      <ActionBar>
+        <SecondaryButton
+          title={utvJSData.localization.addVideo}
+          onClick={() => props.changeView('addVideo')}
         />
-        <VideoTable
-          selectedGallery={this.props.selectedGallery}
-          selectedAlbum={this.props.selectedAlbum}
-          changeView={this.props.changeView}
-        />
-      </div>
-    );
-  }
+      </ActionBar>
+      <Breadcrumbs
+        crumbs={[
+          {text: utvJSData.localization.galleries, onClick: () => props.changeGallery()},
+          {text: props.selectedGalleryTitle, onClick: () => props.changeAlbum()},
+          {text: props.selectedAlbumTitle}
+        ]}
+      />
+      <VideoTable
+        selectedGallery={props.selectedGallery}
+        selectedAlbum={props.selectedAlbum}
+        changeView={props.changeView}
+      />
+    </div>
+  );
 }
 
 export default VideoTabView;

@@ -1,35 +1,32 @@
 import React from 'react';
 import AlbumTable from './AlbumTable';
+import ActionBar from '../shared/ActionBar';
 import Breadcrumbs from '../shared/Breadcrumbs';
+import SecondaryButton from '../shared/SecondaryButton';
 
-class AlbumTabView extends React.Component
+const AlbumTabView = (props) =>
 {
-  constructor(props)
-  {
-    super(props);
-  }
-
-  render()
-  {
-    return (
-      <div>
-        <div className="utv-actionbar" style={{'margin': '20px 0'}}>
-          <button className="button-secondary" onClick={() => this.props.changeView('addAlbum')}>{utvJSData.localization.addAlbum}</button>
-        </div>
-        <Breadcrumbs
-          crumbs={[
-            {text: utvJSData.localization.galleries, onClick: () => this.props.changeGallery()},
-            {text: this.props.selectedGalleryTitle}
-          ]}
+  return (
+    <div>
+      <ActionBar>
+        <SecondaryButton
+          title={utvJSData.localization.addAlbum}
+          onClick={() => props.changeView('addAlbum')}
         />
-        <AlbumTable
-          changeAlbum={this.props.changeAlbum}
-          changeView={this.props.changeView}
-          selectedGallery={this.props.selectedGallery}
-        />
-      </div>
-    );
-  }
+      </ActionBar>
+      <Breadcrumbs
+        crumbs={[
+          {text: utvJSData.localization.galleries, onClick: () => props.changeGallery()},
+          {text: props.selectedGalleryTitle}
+        ]}
+      />
+      <AlbumTable
+        changeAlbum={props.changeAlbum}
+        changeView={props.changeView}
+        selectedGallery={props.selectedGallery}
+      />
+    </div>
+  );
 }
 
 export default AlbumTabView;

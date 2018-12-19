@@ -1,38 +1,30 @@
 import React from 'react';
 import GalleryTable from './GalleryTable';
+import ActionBar from '../shared/ActionBar';
 import Breadcrumbs from '../shared/Breadcrumbs';
-import Button from '../shared/Button';
+import SecondaryButton from '../shared/SecondaryButton';
 
-class GalleryTabView extends React.Component
+const GalleryTabView = (props) =>
 {
-  constructor(props)
-  {
-    super(props);
-  }
-
-  render()
-  {
-    return (
-      <div>
-        <div className="utv-actionbar" style={{'margin': '20px 0'}}>
-          <Button
-            classes={['button-secondary']}
-            title={utvJSData.localization.addGallery}
-            onClick={() => this.props.changeView('addGallery')}
-           />
-        </div>
-        <Breadcrumbs
-          crumbs={[
-            {text: 'Galleries'}
-          ]}
+  return (
+    <div>
+      <ActionBar>
+        <SecondaryButton
+          title={utvJSData.localization.addGallery}
+          onClick={() => props.changeView('addGallery')}
         />
-        <GalleryTable
-          changeGallery={this.props.changeGallery}
-          changeView={this.props.changeView}
-        />
-      </div>
-    );
-  }
+      </ActionBar>
+      <Breadcrumbs
+        crumbs={[
+          {text: utvJSData.localization.galleries}
+        ]}
+      />
+      <GalleryTable
+        changeGallery={props.changeGallery}
+        changeView={props.changeView}
+      />
+    </div>
+  );
 }
 
 export default GalleryTabView;

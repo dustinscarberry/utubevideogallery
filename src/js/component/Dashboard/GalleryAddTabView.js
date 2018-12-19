@@ -15,8 +15,8 @@ import URLInput from '../shared/URLInput';
 import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
-import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import CancelButton from '../shared/CancelButton';
 
 class GalleryAddTabView extends React.Component
 {
@@ -132,11 +132,9 @@ class GalleryAddTabView extends React.Component
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
                     title={utvJSData.localization.addGallery}
-                    classes="button-primary"
                   />
-                  <Button
+                  <CancelButton
                     title={utvJSData.localization.cancel}
-                    classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />
                 </FormField>

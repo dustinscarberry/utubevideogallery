@@ -12,6 +12,7 @@ const ActionCell = (props) =>
 
   let checkboxNode = undefined;
   let reorderHandleNode = undefined;
+  let classes = ['ccgriddle-action-cell', 'ccgriddle-column-primary'];
 
   if (enableBulkActions)
     checkboxNode = <input
@@ -24,7 +25,7 @@ const ActionCell = (props) =>
     reorderHandleNode = <span className="ccgriddle-reorder-handle"></span>;
 
   return (
-    <td>
+    <td className={classes.join(' ')}>
       {checkboxNode}
       {reorderHandleNode}
     </td>

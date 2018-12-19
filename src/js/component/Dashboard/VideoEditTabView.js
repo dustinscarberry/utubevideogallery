@@ -14,9 +14,10 @@ import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
 import NumberInput from '../shared/NumberInput';
 import TextBoxInput from '../shared/TextBoxInput';
-import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import CancelButton from '../shared/CancelButton';
 import Loader from '../shared/Loader';
+import sharedService from '../../service/SharedService';
 import axios from 'axios';
 
 class VideoEditTabView extends React.Component
@@ -202,18 +203,7 @@ class VideoEditTabView extends React.Component
     else if (this.state.source == 'vimeo')
       sourceFormatted = 'Vimeo';
 
-    const updateDate = new Date(this.state.updateDate * 1000);
-    const updateDateFormatted = updateDate.toLocaleString(
-      'en-US',
-      {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true
-      }
-    );
+    const updateDateFormatted = sharedService.getFormattedDateTime(this.state.updateDate);
 
     //show loader while form is loading
     if (this.state.loading)
@@ -321,11 +311,9 @@ class VideoEditTabView extends React.Component
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
                     title={utvJSData.localization.saveVideo}
-                    classes="button-primary"
                   />
-                  <Button
+                  <CancelButton
                     title={utvJSData.localization.cancel}
-                    classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />
                 </FormField>

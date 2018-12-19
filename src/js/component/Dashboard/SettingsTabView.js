@@ -26,6 +26,7 @@ class SettingsTabView extends React.Component
       imageMagickEnabled: undefined,
       phpVersion: undefined,
       version: undefined,
+      wpVersion: undefined,
       playerControlsColor: undefined,
       playerControlsTheme: undefined,
       popupPlayerWidth: undefined,
@@ -37,6 +38,7 @@ class SettingsTabView extends React.Component
       originalThumbnailWidth: undefined,
       thumbnailHorizontalPadding: undefined,
       thumbnailVerticalPadding: undefined,
+      showVideoDescription: undefined,
       vimeoAutoplay: undefined,
       vimeoHideDetails: undefined,
       youtubeAPIKey: undefined,
@@ -61,15 +63,10 @@ class SettingsTabView extends React.Component
   {
     const apiData = await axios.get(
       '/wp-json/utubevideogallery/v1/settings',
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
-    if (
-      apiData.status == 200
-      && !apiData.data.error
-    )
+    if (apiData.status == 200 && !apiData.data.error)
     {
       const data = apiData.data.data;
 
@@ -78,6 +75,7 @@ class SettingsTabView extends React.Component
         imageMagickEnabled: data.imageMagickEnabled,
         phpVersion: data.phpVersion,
         version: data.version,
+        wpVersion: data.wpVersion,
         playerControlsColor: data.playerControlsColor,
         playerControlsTheme: data.playerControlsTheme,
         popupPlayerWidth: data.popupPlayerWidth,
@@ -89,6 +87,7 @@ class SettingsTabView extends React.Component
         originalThumbnailWidth: data.thumbnailWidth,
         thumbnailHorizontalPadding: data.thumbnailHorizontalPadding,
         thumbnailVerticalPadding: data.thumbnailVerticalPadding,
+        showVideoDescription: data.showVideoDescription,
         vimeoAutoplay: data.vimeoAutoplay,
         vimeoHideDetails: data.vimeoHideDetails,
         youtubeAPIKey: data.youtubeAPIKey,
@@ -112,10 +111,7 @@ class SettingsTabView extends React.Component
     }
 
     //final user feedback
-    if (
-      rsp.status == 200
-      && !rsp.data.error
-    )
+    if (rsp.status == 200 && !rsp.data.error)
       this.props.setFeedbackMessage(utvJSData.localization.feedbackSettingsSaved, 'success');
     else
       this.props.setFeedbackMessage(rsp.data.error.message, 'error');
@@ -138,15 +134,14 @@ class SettingsTabView extends React.Component
         thumbnailWidth: this.state.thumbnailWidth,
         thumbnailHorizontalPadding: this.state.thumbnailHorizontalPadding,
         thumbnailVerticalPadding: this.state.thumbnailVerticalPadding,
+        showVideoDescription: this.state.showVideoDescription,
         vimeoAutoplay: this.state.vimeoAutoplay,
         vimeoHideDetails: this.state.vimeoHideDetails,
         youtubeAPIKey: this.state.youtubeAPIKey,
         youtubeAutoplay: this.state.youtubeAutoplay,
         youtubeHideDetails: this.state.youtubeHideDetails
       },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
     return rsp;
@@ -156,15 +151,10 @@ class SettingsTabView extends React.Component
   {
     const videosData = await axios.get(
       '/wp-json/utubevideogallery/v1/videos',
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
-    if (
-      videosData.status == 200
-      && !videosData.data.error
-    )
+    if (videosData.status == 200 && !videosData.data.error)
     {
       const videos = videosData.data.data;
 
@@ -174,9 +164,7 @@ class SettingsTabView extends React.Component
           '/wp-json/utubevideogallery/v1/videos/'
           + video.id,
           {},
-          {
-            headers: {'X-WP-Nonce': utvJSData.restNonce}
-          }
+          { headers: {'X-WP-Nonce': utvJSData.restNonce} }
         );
 
         //update status about what video is being rebuilt
@@ -222,6 +210,7 @@ class SettingsTabView extends React.Component
               <SectionHeader text={utvJSData.localization.serverInformation}/>
               <InfoLine text={utvJSData.localization.phpVersion + ': ' + this.state.phpVersion}/>
               <InfoLine text={utvJSData.localization.pluginVersion + ': ' + this.state.version}/>
+              <InfoLine text={utvJSData.localization.wpVersion + ': ' + this.state.wpVersion}/>
               <SectionHeader text={utvJSData.localization.status}/>
               <InfoLine
                 text="ImageMagick"
@@ -297,6 +286,15 @@ class SettingsTabView extends React.Component
                   value={this.state.popupPlayerOverlayOpacity}
                   onChange={this.changeValue}
                 />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.showVideoDescription}/>
+                <Toggle
+                  name="showVideoDescription"
+                  value={this.state.showVideoDescription}
+                  onChange={this.changeCheckboxValue}
+                />
+                <FieldHint text={utvJSData.localization.showVideoDescriptionHint}/>
               </FormField>
               <FormField>
                 <Label text={utvJSData.localization.removeVideoPopupScripts}/>

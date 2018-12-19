@@ -11,7 +11,8 @@ const TableHeader = (props) =>
     toggleAllRowCheckboxes,
     updateColumnSort,
     sortKey,
-    sortOrder
+    sortOrder,
+    toggleAllCheckbox
   } = props;
 
   const headerCells = headers.map(header =>
@@ -32,6 +33,9 @@ const TableHeader = (props) =>
         classes.push('sortable-' + sortOrder)
     }
 
+    if (header.primary)
+      classes.push('ccgriddle-column-primary');
+
     return (<HeaderCell
       key={header.key}
       data={header.title}
@@ -46,6 +50,7 @@ const TableHeader = (props) =>
     toggleAllRowCheckboxes={toggleAllRowCheckboxes}
     enableDragNDrop={enableDragNDrop}
     enableBulkActions={enableBulkActions}
+    toggleAllCheckbox={toggleAllCheckbox}
   />);
 
   return (

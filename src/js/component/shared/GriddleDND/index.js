@@ -14,6 +14,7 @@ class GriddleDND extends React.Component
       bulkAction: undefined,
       sortKey: undefined,
       sortOrder: undefined,
+      toggleAllCheckbox: false,
       loading: true
     };
 
@@ -104,13 +105,19 @@ class GriddleDND extends React.Component
     for (let i = 0; i < data.length; i++)
       data[i].rowSelected = e.target.checked;
 
-    this.setState({data});
+    this.setState(
+    {
+      data,
+      toggleAllCheckbox: e.target.checked
+    });
   }
 
   //run outside bulkaction
   runBulkAction()
   {
     const selectedData = this.state.data.filter(x => x.rowSelected);
+
+    this.setState({toggleAllCheckbox: false});
 
     this.props.bulkActionsData.callback(this.state.bulkAction, selectedData);
   }
@@ -214,6 +221,7 @@ class GriddleDND extends React.Component
           enableDragNDrop={enableDragNDrop}
           sortKey={sortKey}
           sortOrder={sortOrder}
+          toggleAllCheckbox={this.state.toggleAllCheckbox}
         />
         {bulkActionNode}
         {tableStatusNode}

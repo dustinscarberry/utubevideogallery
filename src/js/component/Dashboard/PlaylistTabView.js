@@ -1,33 +1,30 @@
 import React from 'react';
 import VideoTable from './PlaylistTable';
+import ActionBar from '../shared/ActionBar';
 import Breadcrumbs from '../shared/Breadcrumbs';
+import SecondaryButton from '../shared/SecondaryButton';
 import PlaylistTable from './PlaylistTable';
 
-class PlaylistTabView extends React.Component
+const PlaylistTabView = (props) =>
 {
-  constructor(props)
-  {
-    super(props);
-  }
-
-  render()
-  {
-    return (
-      <div>
-        <div className="utv-actionbar" style={{'margin': '20px 0'}}>
-          <button className="button-secondary" onClick={() => this.props.changeView('addPlaylist')}>{utvJSData.localization.addPlaylist}</button>
-        </div>
-        <Breadcrumbs
-          crumbs={[
-            {text: utvJSData.localization.savedPlaylists}
-          ]}
+  return (
+    <div>
+      <ActionBar>
+        <SecondaryButton
+          title={utvJSData.localization.addPlaylist}
+          onClick={() => props.changeView('addPlaylist')}
         />
-        <PlaylistTable
-          changeView={this.props.changeView}
-        />
-      </div>
-    );
-  }
+      </ActionBar>
+      <Breadcrumbs
+        crumbs={[
+          {text: utvJSData.localization.savedPlaylists}
+        ]}
+      />
+      <PlaylistTable
+        changeView={props.changeView}
+      />
+    </div>
+  );
 }
 
 export default PlaylistTabView;

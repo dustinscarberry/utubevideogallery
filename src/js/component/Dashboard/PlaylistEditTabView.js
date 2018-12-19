@@ -11,12 +11,13 @@ import FieldHint from '../shared/FieldHint';
 import TextInput from '../shared/TextInput';
 import SelectBox from '../shared/SelectBox';
 import Toggle from '../shared/Toggle';
-import Button from '../shared/Button';
 import SubmitButton from '../shared/SubmitButton';
+import CancelButton from '../shared/CancelButton';
 import PlaylistLegend from '../shared/PlaylistLegend';
 import PlaylistMultiSelect from '../shared/PlaylistMultiSelect';
 import PlaylistVideoSelection from '../shared/PlaylistVideoSelection';
 import Loader from '../shared/Loader';
+import sharedService from '../../service/SharedService';
 import axios from 'axios';
 
 class PlaylistEditTabView extends React.Component
@@ -144,6 +145,7 @@ class PlaylistEditTabView extends React.Component
 
         combinedData[source] = {};
         combinedData[source].title = localVideo.title;
+        combinedData[source].description = localVideo.description;
         combinedData[source].thumbnail = utvJSData.thumbnailCacheDirectory + localVideo.thumbnail + '.jpg';
         combinedData[source].sourceID = localVideo.sourceID;
         combinedData[source].localID = localVideo.id;
@@ -159,6 +161,7 @@ class PlaylistEditTabView extends React.Component
         if (source in combinedData)
         {
           combinedData[source].title = remoteVideo.title;
+          combinedData[source].description = remoteVideo.description;
           combinedData[source].legend = 'both';
           combinedData[source].thumbnail = remoteVideo.thumbnail;
         }
@@ -166,6 +169,7 @@ class PlaylistEditTabView extends React.Component
         {
           combinedData[source] = {};
           combinedData[source].title = remoteVideo.title;
+          combinedData[source].description = remoteVideo.description;
           combinedData[source].thumbnail = remoteVideo.thumbnail;
           combinedData[source].sourceID = remoteVideo.sourceID;
           combinedData[source].localID = undefined;
@@ -272,6 +276,7 @@ class PlaylistEditTabView extends React.Component
             + video.localID,
             {
               title: video.title,
+              description: video.description,
               quality: this.state.videoQuality,
               controls: this.state.showControls
             },
@@ -288,6 +293,7 @@ class PlaylistEditTabView extends React.Component
             {
               sourceID: video.sourceID,
               title: video.title,
+              description: video.description,
               quality: this.state.videoQuality,
               controls: this.state.showControls,
               source: this.state.source,
@@ -321,6 +327,7 @@ class PlaylistEditTabView extends React.Component
             {
               sourceID: video.sourceID,
               title: video.title,
+              description: video.description,
               quality: this.state.videoQuality,
               controls: this.state.showControls,
               source: this.state.source,
@@ -343,6 +350,7 @@ class PlaylistEditTabView extends React.Component
             + video.localID,
             {
               title: video.title,
+              description: video.description,
               quality: this.state.videoQuality,
               controls: this.state.showControls
             },
@@ -359,6 +367,7 @@ class PlaylistEditTabView extends React.Component
             {
               sourceID: video.sourceID,
               title: video.title,
+              description: video.description,
               quality: this.state.videoQuality,
               controls: this.state.showControls,
               source: this.state.source,
@@ -399,18 +408,7 @@ class PlaylistEditTabView extends React.Component
         changeVideoTitle={this.changeVideoTitle}
       />
 
-    const updateDate = new Date(this.state.updateDate * 1000);
-    const updateDateFormatted = updateDate.toLocaleString(
-      'en-US',
-      {
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: true
-      }
-    );
+    const updateDateFormatted = sharedService.getFormattedDateTime(this.state.updateDate);
 
     let source = undefined;
     if (this.state.source == 'youtube')
@@ -461,7 +459,7 @@ class PlaylistEditTabView extends React.Component
                   />
                 </FormField>
                 <FormField>
-                  <Label text={utvJSData.localization.videoQuality}/>
+                  <Label text={utvJSData.localization.quality}/>
                   <SelectBox
                     name="videoQuality"
                     value={this.state.videoQuality}
@@ -506,11 +504,9 @@ class PlaylistEditTabView extends React.Component
                 <FormField classes="utv-formfield-action">
                   <SubmitButton
                     title={utvJSData.localization.syncSaveChanges}
-                    classes="button-primary"
                   />
-                  <Button
+                  <CancelButton
                     title={utvJSData.localization.cancel}
-                    classes="utv-cancel"
                     onClick={() => this.props.changeView()}
                   />
                 </FormField>

@@ -62,10 +62,14 @@ class SettingsAPIv1 extends APIv1
     $settingData->vimeoAutoplay = $pluginSettings['vimeoAutoplay'] ? true : false;
     $settingData->vimeoHideDetails = $pluginSettings['vimeoDetailsHide'] ? true : false;
     $settingData->removeVideoPopupScript = $pluginSettings['skipMagnificPopup'] == 'yes' ? true : false;
+    $settingData->showVideoDescription = $pluginSettings['showVideoDescription'] ? true : false;
 
     //get php version
     preg_match('/^(.*?)-(.*)/', PHP_VERSION, $matches);
     $settingData->phpVersion = isset($matches[1]) ? $matches[1] : '';
+
+    //get WordPress version
+    $settingData->wpVersion = get_bloginfo('version');
 
     //get gd status
     $settingData->gdEnabled = extension_loaded('gd');
@@ -117,6 +121,11 @@ class SettingsAPIv1 extends APIv1
     else
       $youtubeHideDetails = null;
 
+    if (isset($req['showVideoDescription']))
+      $showVideoDescription = $req['showVideoDescription'] ? true : false;
+    else
+      $showVideoDescription = null;
+
     //set optional update fields
     if ($playerControlsColor)
       $pluginSettings['playerProgressColor'] = $playerControlsColor;
@@ -162,6 +171,9 @@ class SettingsAPIv1 extends APIv1
 
     if ($youtubeHideDetails !== null)
       $pluginSettings['youtubeDetailsHide'] = $youtubeHideDetails;
+
+    if ($showVideoDescription !== null)
+      $pluginSettings['showVideoDescription'] = $showVideoDescription;
 
     update_option('utubevideo_main_opts', $pluginSettings);
 

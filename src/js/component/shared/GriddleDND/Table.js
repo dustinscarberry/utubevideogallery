@@ -16,10 +16,11 @@ const Table = (props) =>
     moveRow,
     updateColumnSort,
     sortKey,
-    sortOrder
+    sortOrder,
+    toggleAllCheckbox
   } = props;
 
-  let classArray = ['ccgriddle-table'];
+  const classArray = ['ccgriddle-table'];
   let tableBody = undefined;
 
   if (loading)
@@ -51,6 +52,7 @@ const Table = (props) =>
         toggleAllRowCheckboxes={toggleAllRowCheckboxes}
         enableBulkActions={enableBulkActions}
         enableDragNDrop={enableDragNDrop}
+        toggleAllCheckbox={toggleAllCheckbox}
       />
       {tableBody}
     </table>

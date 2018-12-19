@@ -138,7 +138,7 @@ class Gallery extends React.Component
           overlay.style.background = utvJSData.setting.lightboxOverlayColor;
           overlay.style.opacity = utvJSData.setting.lightboxOverlayOpacity;
 
-          if (video.description)
+          if (video.description && utvJSData.setting.showVideoDescription)
           {
             popup.querySelector('.mfp-description').innerText = video.description;
             popup.classList.add('mfp-has-meta');
