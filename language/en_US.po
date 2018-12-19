@@ -1,0 +1,498 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: uTubeVideo Gallery\n"
+"POT-Creation-Date: 2018-12-19 10:22-0500\n"
+"PO-Revision-Date: 2018-12-19 10:23-0500\n"
+"Last-Translator: \n"
+"Language-Team: www.codeclouds.net\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: __\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: node_modules\n"
+"X-Poedit-SearchPathExcluded-1: public\n"
+"X-Poedit-SearchPathExcluded-2: src\n"
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:34
+msgid "uTubeVideo"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:62
+msgid "Title"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:63
+msgid "Shortcode"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:64
+msgid "Date Added"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:65
+msgid "# Albums"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:66
+msgid "Thumbnail"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:67
+msgid "Published"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:68
+msgid "# Videos"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:69
+msgid "Source"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:70
+msgid "Album"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:71
+msgid "Last Updated"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:72
+msgid "Galleries"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:73
+msgid "Saved Playlists"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:74
+msgid "Settings"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:75
+msgid "Bulk Actions"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:76
+msgid "Delete"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:77
+msgid "Publish"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:78
+msgid "Un-publish"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:79
+#: class/CodeClouds/UTubeVideoGallery/utvVideoGen.php:92
+#: class/CodeClouds/UTubeVideoGallery/utvVideoGen.php:149
+msgid "Albums"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:80
+msgid "Videos"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:81
+msgid "Playlists"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:82
+msgid "Add Gallery"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:83
+msgid "Add Album"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:84
+msgid "Add Video"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:85
+msgid "Add Playlist"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:86
+msgid "Edit"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:87
+msgid "View"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:88
+msgid "Watch"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:89
+msgid "URL"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:90
+msgid "Description"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:91
+msgid "Quality"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:92
+msgid "Controls"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:93
+msgid "Start Time"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:94
+msgid "End Time"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:95
+msgid "Show Player Controls"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:96
+msgid "Beginning timestamp (seconds)"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:97
+msgid "Ending timestamp (seconds)"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:98
+msgid "Cancel"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:99
+msgid "Video Sorting"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:100
+msgid "First to Last"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:101
+msgid "Last to First"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:102
+msgid "Album Sorting"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:103
+msgid "Thumbnail Type"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:104
+msgid "Display Type"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:105
+msgid "Rectangle"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:106
+msgid "Square"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:107
+msgid "Just Videos"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:108
+msgid "Playlist Items"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:109
+msgid "All"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:110
+msgid "None"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:111
+msgid "Edit / Sync Playlist"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:112
+msgid "Sync / Save Changes"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:113
+msgid "Sync Method"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:114
+msgid "Sync Selected"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:115
+msgid "Sync New"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:116
+msgid "Sync All"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:117
+msgid "Edit Gallery"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:118
+msgid "Save Gallery"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:119
+msgid "Edit Album"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:120
+msgid "Edit Video"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:121
+msgid "Gallery"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:122
+msgid "Save Album"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:123
+msgid "Album Thumbnail"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:124
+msgid "Save Video"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:125
+msgid "Server Information"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:126
+msgid "PHP Version"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:127
+msgid "Plugin Version"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:128
+msgid "WordPress Version"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:129
+msgid "Update Settings"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:130
+msgid "General"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:131
+msgid "Max Player Width"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:132
+msgid "Thumbnail Width"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:133
+msgid "Thumbnail Horizontal Padding"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:134
+msgid "Thumbnail Vertical Padding"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:135
+msgid "Thumbnail Border Radius"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:136
+msgid "Overlay Color"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:137
+msgid "Overlay Opacity"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:138
+msgid "Show Video Descriptions"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:139
+msgid "Enable or disable video descriptions"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:140
+msgid "Remove Video Popup Scripts"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:141
+msgid "Remove scripts if provided by another plugin"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:142
+msgid "API Key"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:143
+msgid "Controls Theme"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:144
+msgid "Controls Color"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:145
+msgid "Autoplay Videos"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:146
+msgid "Hide Videos Details"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:147
+msgid "Light"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:148
+msgid "Dark"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:149
+msgid "Red"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:150
+msgid "White"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:151
+msgid "Local"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:152
+msgid "Web"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:153
+msgid "Both"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:154
+msgid "Are you sure you want to delete this gallery?"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:155
+msgid "Are you sure you want to delete these galleries?"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:156
+msgid "Are you sure you want to delete this album?"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:157
+msgid "Are you sure you want to delete these albums?"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:158
+msgid "Are you sure you want to delete this video?"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:159
+msgid "Are you sure you want to delete these videos?"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:160
+msgid "Are you sure you want to delete this playlist?"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:161
+msgid "Are you sure you want to delete these playlists?"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:162
+msgid "Album created"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:163
+msgid "Album changes saved"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:164
+msgid "Gallery created"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:165
+msgid "Gallery changed saved"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:166
+msgid "Playlist added"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:167
+msgid "Playlist failed to add"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:168
+msgid "Playlist synced / saved"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:169
+msgid "Settings saved"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:170
+msgid "Video added"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:171
+msgid "Video changes saved"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:172
+msgid "Video"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:173
+msgid "updated"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/Dashboard.php:174
+msgid "added"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/UI.php:86
+msgid "albums"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/utvVideoGen.php:105
+msgid "Go Back"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/utvVideoGen.php:106
+msgid "Sorry... there appear to be no videos for this album yet."
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/utvVideoGen.php:168
+msgid "Sorry... there appear to be no video albums yet."
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/utvVideoGen.php:222
+#: class/CodeClouds/UTubeVideoGallery/utvVideoGen.php:225
+msgid "Sorry... there appear to be no videos yet."
+msgstr ""
