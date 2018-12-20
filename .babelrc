@@ -4,8 +4,9 @@
       "targets": {
         "ie": "11"
       },
-      "useBuiltIns": true,
-      "debug": true
+      "useBuiltIns": false,
+      "debug": true,
+      "modules": false
     }],
     "react"
   ]

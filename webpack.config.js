@@ -47,11 +47,11 @@ module.exports =
   ],
   optimization: {
     minimizer: [
-      new UglifyJsPlugin({
+     new UglifyJsPlugin({
         sourceMap: true
       }),
       new OptimizeCssAssetsPlugin({})
     ]
   },
-  //devtool: 'source-map'
+  devtool: 'source-map'
 };
