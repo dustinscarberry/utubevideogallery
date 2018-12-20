@@ -83,7 +83,7 @@ class UI
         'showVideoDescription' => $this->_options['showVideoDescription']
       ],
       'localization' => [
-        'albums' => __('albums', 'utvg')
+        'albums' => __('Albums', 'utvg')
       ]
     ];
 

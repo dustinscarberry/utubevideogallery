@@ -11,7 +11,7 @@ const BreadCrumb = (props) =>
 
   if (!albumName)
     crumbNodes = <div className="utv-breadcrumb">
-      <span className="utv-albumcrumb">Albums</span>
+      <span className="utv-albumcrumb">{utvJSData.localization.albums}</span>
     </div>;
   else
     crumbNodes = <div className="utv-breadcrumb">
