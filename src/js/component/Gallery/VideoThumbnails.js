@@ -8,20 +8,40 @@ const VideoThumbnails = (props) =>
   const {
     videos,
     onOpenVideo,
-    thumbnailType
+    thumbnailType,
+    currentPage,
+    thumbnailsPerPage
   } = props;
 
   const thumbnailsClasses = galleryService.getThumbnailsClasses(thumbnailType);
+  let startIndex = undefined;
+  let endIndex = undefined;
+
+  //get paginated videos if enabled
+  if (thumbnailsPerPage)
+  {
+    startIndex = (currentPage - 1) * parseInt(thumbnailsPerPage);
+    endIndex = startIndex + parseInt(thumbnailsPerPage);
+  }
 
   const videoThumbnailNodes = videos.map((video, i) =>
   {
-    return (<VideoThumbnail
-      key={i}
-      title={video.title}
-      image={video.thumbnail}
-      value={i}
-      onOpenVideo={onOpenVideo}
-    />);
+    if (thumbnailsPerPage && i >= startIndex && i < endIndex)
+      return <VideoThumbnail
+        key={i}
+        title={video.title}
+        image={video.thumbnail}
+        value={i}
+        onOpenVideo={onOpenVideo}
+      />;
+    else if (!thumbnailsPerPage)
+      return <VideoThumbnail
+        key={i}
+        title={video.title}
+        image={video.thumbnail}
+        value={i}
+        onOpenVideo={onOpenVideo}
+      />;
   });
 
   return (

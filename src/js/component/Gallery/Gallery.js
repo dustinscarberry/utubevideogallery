@@ -14,11 +14,13 @@ class Gallery extends React.Component
       albums: [],//object of albums and there videos
       videos: [],//object of just videos
       thumbnailType: undefined,
-      displayType: undefined
+      displayType: undefined,
+      currentPage: 1
     };
 
     this.loadAPIData = this.loadAPIData.bind(this);
     this.openVideoPopup = this.openVideoPopup.bind(this);
+    this.changePage = this.changePage.bind(this);
 
     this.loadAPIData();
   }
@@ -150,13 +152,19 @@ class Gallery extends React.Component
     });
   }
 
+  changePage(page)
+  {
+    this.setState({currentPage: page});
+  }
+
   render()
   {
     const {
       albums,
       videos,
       thumbnailType,
-      displayType
+      displayType,
+      currentPage
     } = this.state;
 
     if (displayType == 'albums' && albums.length)
@@ -165,6 +173,9 @@ class Gallery extends React.Component
         onOpenVideoPopup={this.openVideoPopup}
         thumbnailType={thumbnailType}
         iconType={this.props.iconType}
+        thumbnailsPerPage={this.props.thumbnailsPerPage}
+        currentPage={currentPage}
+        onChangePage={this.changePage}
       />;
     else if (displayType == 'videos' && videos.length)
       return <VideoView
@@ -172,6 +183,9 @@ class Gallery extends React.Component
         onOpenVideoPopup={this.openVideoPopup}
         thumbnailType={thumbnailType}
         iconType={this.props.iconType}
+        thumbnailsPerPage={this.props.thumbnailsPerPage}
+        currentPage={currentPage}
+        onChangePage={this.changePage}
       />;
     else
       return null;
@@ -181,7 +195,8 @@ class Gallery extends React.Component
 Gallery.defaultProps = {
   iconType: 'red',
   maxAlbums: undefined,
-  maxVideos: undefined
+  maxVideos: undefined,
+  thumbnailsPerPage: undefined
 };
 
 export default Gallery;

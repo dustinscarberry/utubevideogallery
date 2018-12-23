@@ -32,3 +32,27 @@
 .utv-gallery.utv-albums .utv-thumb img:hover{
   opacity: .85;
 }
+
+.utv-gallery-paging{
+  /*height: 20px;*/
+  text-align: right;
+  padding: 10px;
+}
+
+.utv-gallery-paging-active{
+  font-weight: bold;
+  background-color: #777;
+  color: #fff;
+  /*border-radius: 50%;*/
+  min-width: 20px;
+}
+
+.utv-gallery-paging-handle{
+  font-size: 18px;
+  padding: 8px;
+  cursor: pointer;
+  /*height: 20px;*/
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+}

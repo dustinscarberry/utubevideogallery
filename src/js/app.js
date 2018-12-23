@@ -28,6 +28,7 @@ Array.prototype.forEach.call(galleries, function(gallery)
       iconType={gallery.getAttribute('data-icontype')}
       maxAlbums={gallery.getAttribute('data-max-albums')}
       maxVideos={gallery.getAttribute('data-max-videos')}
+      thumbnailsPerPage={gallery.getAttribute('data-thumbnails-per-page')}
     />
   , gallery);
 });

@@ -80,6 +80,10 @@ Valid playlist url formats include:
 
 To edit a playlist / re-sync videos, click the edit action next to the item.
 
+### Changing Thumbnails Size
+
+To change the thumbnail for one video just edit and "Save Changes" for that video. To re-generate all video thumbnails at once, go to "Settings" and change the thumbnail size and "Save Changes".
+
 ## Shortcode Options
 
 There are a few options you can use with your shortcodes to modify / over-ride settings.
@@ -96,6 +100,7 @@ There are a few options you can use with your shortcodes to modify / over-ride s
 - align - Removed in version 2.0
 - maxvideos - Set the max number of videos displayed (default: n/a) NOTE: changed from "videocount"
 - maxalbums - Set the max number of albums displayed (default: n/a) NOTE: change from "albumcount"
+- thumbnailsperpage - If set, gallery will be paginated with specified number of albums / videos per page (default: n/a)
 
 ### Shared Options
 

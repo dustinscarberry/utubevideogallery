@@ -21,7 +21,8 @@ class GalleryView
       'icon' => 'red', //[original, red, blue]
       'controls' => 'false', //[true, false]
       'maxvideos' => null, //[any integer]
-      'maxalbums' => null //[any integer]
+      'maxalbums' => null, //[any integer]
+      'thumbnailsperpage' => null
     ], $atts, 'utubevideo');
   }
 
@@ -33,6 +34,7 @@ class GalleryView
       data-icontype="' . $this->_atts['icon'] . '"
       data-max-videos="' . $this->_atts['maxvideos'] . '"
       data-max-albums="' . $this->_atts['maxalbums'] . '"
+      data-thumbnails-per-page="' . $this->_atts['thumbnailsperpage'] . '"
     ></div>';
   }
 }

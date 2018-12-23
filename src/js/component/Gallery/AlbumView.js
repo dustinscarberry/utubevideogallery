@@ -2,6 +2,7 @@ import React from 'react';
 import AlbumThumbnails from './AlbumThumbnails';
 import VideoThumbnails from './VideoThumbnails';
 import BreadCrumb from './BreadCrumb';
+import Paging from './Paging';
 import galleryService from '../../service/GalleryService';
 
 class AlbumView extends React.Component
@@ -21,6 +22,9 @@ class AlbumView extends React.Component
   changeAlbum(albumIndex)
   {
     this.setState({selectedAlbum: albumIndex});
+
+    //reset current page to 1
+    this.props.onChangePage(1);
   }
 
   openVideo(value)
@@ -35,7 +39,9 @@ class AlbumView extends React.Component
   {
     const {
       thumbnailType,
-      albums
+      albums,
+      currentPage,
+      thumbnailsPerPage
     } = this.props;
 
     const album = albums[this.state.selectedAlbum];
@@ -45,13 +51,46 @@ class AlbumView extends React.Component
         videos={album.videos}
         onOpenVideo={this.openVideo}
         thumbnailType={thumbnailType}
+        currentPage={currentPage}
+        thumbnailsPerPage={thumbnailsPerPage}
       />;
     else
       return <AlbumThumbnails
         albums={albums}
         onChangeAlbum={this.changeAlbum}
         thumbnailType={thumbnailType}
+        currentPage={currentPage}
+        thumbnailsPerPage={thumbnailsPerPage}
       />;
+  }
+
+  getPagingNode()
+  {
+    //return if pagination not enabled
+    if (!this.props.thumbnailsPerPage)
+      return null;
+
+    const {
+      albums,
+      currentPage,
+      onChangePage
+    } = this.props;
+
+    //get total pages
+    let totalPages = undefined;
+    const thumbnailsPerPage = parseInt(this.props.thumbnailsPerPage);
+
+    if (this.state.selectedAlbum != undefined)
+      totalPages = Math.ceil(albums[this.state.selectedAlbum].videos.length / thumbnailsPerPage);
+    else
+      totalPages = Math.ceil(albums.length / thumbnailsPerPage);
+
+    //return paging component
+    return <Paging
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onChangePage={onChangePage}
+    />;
   }
 
   getSelectedAlbumName()
@@ -69,6 +108,9 @@ class AlbumView extends React.Component
     const {
       iconType,
       thumbnailType,
+      currentPage,
+      totalPages,
+      onChangePage
     } = this.props;
 
     const galleryClasses = galleryService.getGalleryClasses(
@@ -83,6 +125,7 @@ class AlbumView extends React.Component
           changeAlbum={this.changeAlbum}
         />
         {this.getThumbnailsNode()}
+        {this.getPagingNode()}
       </div>
     );
   }
