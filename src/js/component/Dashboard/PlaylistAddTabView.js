@@ -136,6 +136,8 @@ class PlaylistAddTabView extends React.Component
         playlistLoading: false
       });
     }
+    else
+      this.props.setFeedbackMessage(remoteVideos.data.error.message, 'error');
   }
 
   changeValue(event)
@@ -219,7 +221,7 @@ class PlaylistAddTabView extends React.Component
       this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAdded, 'success');
     }
     else
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAddFail, 'error');
+      this.props.setFeedbackMessage(remoteData.data.error.message, 'error');
 
     this.props.changeView();
   }

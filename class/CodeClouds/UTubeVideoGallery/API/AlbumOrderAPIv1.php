@@ -35,7 +35,7 @@ class AlbumOrderAPIv1 extends APIv1
     global $wpdb;
 
     if (!$req['albumids'])
-      return $this->errorResponse('Invalid data');
+      return $this->errorResponse(__('Invalid data', 'utvg'));
 
     $albumCount = count($req['albumids']);
 
@@ -44,7 +44,7 @@ class AlbumOrderAPIv1 extends APIv1
       $albumID = sanitize_key($req['albumids'][$i]);
 
       if (!$albumID)
-        return $this->errorResponse('Invalid data value');
+        return $this->errorResponse(__('Invalid data value', 'utvg'));
 
       $wpdb->update(
         $wpdb->prefix . 'utubevideo_album',

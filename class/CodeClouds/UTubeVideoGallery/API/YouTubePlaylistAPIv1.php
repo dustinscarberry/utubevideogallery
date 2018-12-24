@@ -9,7 +9,6 @@ use WP_REST_Server;
 use stdClass;
 use DateTime;
 use DateInterval;
-use utvAdminGen;
 
 class YouTubePlaylistAPIv1 extends APIv1
 {
@@ -32,7 +31,11 @@ class YouTubePlaylistAPIv1 extends APIv1
         'callback' => [$this, 'getAllItems'],
         'args' => [
           'sourceID'
-        ]
+        ],
+        'permission_callback' => function()
+        {
+          return current_user_can('edit_others_posts');
+        }
       ]
     );
   }
@@ -46,11 +49,11 @@ class YouTubePlaylistAPIv1 extends APIv1
 
     //check for a possibly valid api key before continuing
     if (Utility::isNullOrEmpty($this->_options['youtubeApiKey']))
-      return $this->errorResponse('YouTube API key is missing');
+      return $this->errorResponse(__('YouTube API key is missing', 'utvg'));
 
     //check for valid sourceID
     if (!$req['sourceID'])
-      return $this->errorResponse('Invalid source ID');
+      return $this->errorResponse(__('Invalid source ID', 'utvg'));
 
     //gather data fields
     $sourceID = sanitize_text_field($req['sourceID']);
@@ -63,18 +66,11 @@ class YouTubePlaylistAPIv1 extends APIv1
       . $sourceID
     );
 
-
-
     if ($data)
     {
       if (isset($data->items[0]->snippet->title))
         $returnData->title = $data->items[0]->snippet->title;
     }
-
-
-
-
-
 
     //get base video data
     $nextPageToken = true;
@@ -102,12 +98,6 @@ class YouTubePlaylistAPIv1 extends APIv1
       }
     }
 
-
-
-
-
-
-
     //create search id string to query video details for filtering info
     $videoIDsList = [];
     $videoIDSetList = [];
@@ -127,14 +117,6 @@ class YouTubePlaylistAPIv1 extends APIv1
     if (count($videoIDsList) > 0)
       $videoIDSetList[] = $videoIDsList;
 
-
-
-
-
-
-
-
-
     $finalVideoData = [];
 
     //get final video data to filter with
@@ -150,16 +132,6 @@ class YouTubePlaylistAPIv1 extends APIv1
       if ($data && isset($data->items))
         $finalVideoData = array_merge($finalVideoData, $data->items);
     }
-
-
-
-
-
-
-
-
-
-
 
     //filter videos and add them to return data
     foreach ($finalVideoData as $video)

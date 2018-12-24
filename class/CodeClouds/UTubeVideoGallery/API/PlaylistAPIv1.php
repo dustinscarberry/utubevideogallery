@@ -81,7 +81,7 @@ class PlaylistAPIv1 extends APIv1
   {
     //check for valid playlistID
     if (!$req['playlistID'])
-      return $this->errorResponse('Invalid playlist ID');
+      return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
 
     //get playlist
     $playlistRepository = new PlaylistRepository();
@@ -89,7 +89,7 @@ class PlaylistAPIv1 extends APIv1
 
     //check if playlist exists
     if (!$playlist)
-      return $this->errorResponse('The specified video resource was not found');
+      return $this->errorResponse(__('The specified video resource was not found', 'utvg'));
 
     return $this->response($playlist);
   }
@@ -114,7 +114,7 @@ class PlaylistAPIv1 extends APIv1
       || empty($videoQuality)
       || empty($albumID)
     )
-      return $this->errorResponse('Invalid parameters');
+      return $this->errorResponse(__('Invalid parameters', 'utvg'));
 
     //insert new playlist
     $playlistID = $playlistRepository->createItem(
@@ -130,14 +130,14 @@ class PlaylistAPIv1 extends APIv1
     if ($playlistID)
       return $this->response((object)['id' => $playlistID], 201);
     else
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
   }
 
   public function deleteItem(WP_REST_Request $req)
   {
     //check for valid playlistID
     if (!$req['playlistID'])
-      return $this->errorResponse('Invalid playlist ID');
+      return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
 
     //sanitize fields
     $playlistID = sanitize_key($req['playlistID']);
@@ -148,7 +148,7 @@ class PlaylistAPIv1 extends APIv1
 
     //check if playlist exists
     if (!$playlist)
-      return $this->errorResponse('Playlist does not exist');
+      return $this->errorResponse(__('Playlist does not exist', 'utvg'));
 
     //get playlist videos
     $videoRepository = new VideoRepository();
@@ -158,7 +158,7 @@ class PlaylistAPIv1 extends APIv1
     foreach ($playlistVideos as $video)
     {
       if (!$videoRepository->deleteItem($video->getID()))
-        return $this->errorResponse('A database error has occurred');
+        return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
       //delete video thumbnail
       $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
@@ -168,7 +168,7 @@ class PlaylistAPIv1 extends APIv1
 
     //delete playlist
     if (!$playlistRepository->deleteItem($playlistID))
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
     return $this->response(null);
   }
@@ -177,7 +177,7 @@ class PlaylistAPIv1 extends APIv1
   {
     //check for valid playlistID
     if (!$req['playlistID'])
-      return $this->errorResponse('Invalid playlist ID');
+      return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
 
     //gather data fields
     $playlistID = sanitize_key($req['playlistID']);
@@ -212,7 +212,7 @@ class PlaylistAPIv1 extends APIv1
     if ($playlistRepository->updateItem($playlistID, $updatedFields))
       return $this->response(null);
     else
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
   }
 
   public function getAllItems(WP_REST_Request $req)

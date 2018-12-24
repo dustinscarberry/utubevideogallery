@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: uTubeVideo Gallery\n"
-"POT-Creation-Date: 2018-12-23 14:36-0500\n"
-"PO-Revision-Date: 2018-12-23 14:36-0500\n"
+"POT-Creation-Date: 2018-12-24 01:42-0500\n"
+"PO-Revision-Date: 2018-12-24 01:43-0500\n"
 "Last-Translator: \n"
 "Language-Team: www.codeclouds.net\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.2\n"
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: __\n"
@@ -18,6 +18,114 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: node_modules\n"
 "X-Poedit-SearchPathExcluded-1: public\n"
 "X-Poedit-SearchPathExcluded-2: src\n"
+
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumAPIv1.php:101
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumAPIv1.php:159
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumAPIv1.php:195
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:316
+msgid "Invalid album ID"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumAPIv1.php:112
+msgid "The specified album resource was not found"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumAPIv1.php:130
+#: class/CodeClouds/UTubeVideoGallery/API/GalleryAPIv1.php:115
+#: class/CodeClouds/UTubeVideoGallery/API/PlaylistAPIv1.php:117
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:148
+msgid "Invalid parameters"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumAPIv1.php:151
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumAPIv1.php:175
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumAPIv1.php:243
+#: class/CodeClouds/UTubeVideoGallery/API/GalleryAPIv1.php:129
+#: class/CodeClouds/UTubeVideoGallery/API/GalleryAPIv1.php:213
+#: class/CodeClouds/UTubeVideoGallery/API/PlaylistAPIv1.php:133
+#: class/CodeClouds/UTubeVideoGallery/API/PlaylistAPIv1.php:161
+#: class/CodeClouds/UTubeVideoGallery/API/PlaylistAPIv1.php:171
+#: class/CodeClouds/UTubeVideoGallery/API/PlaylistAPIv1.php:215
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:188
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:197
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:220
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:308
+msgid "A database error has occurred"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumAPIv1.php:251
+#: class/CodeClouds/UTubeVideoGallery/API/GalleryAPIv1.php:85
+#: class/CodeClouds/UTubeVideoGallery/API/GalleryAPIv1.php:136
+#: class/CodeClouds/UTubeVideoGallery/API/GalleryAPIv1.php:173
+msgid "Invalid gallery ID"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumOrderAPIv1.php:38
+#: class/CodeClouds/UTubeVideoGallery/API/VideoOrderAPIv1.php:38
+msgid "Invalid data"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/AlbumOrderAPIv1.php:47
+#: class/CodeClouds/UTubeVideoGallery/API/VideoOrderAPIv1.php:47
+msgid "Invalid data value"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/GalleryAPIv1.php:95
+msgid "The specified gallery resource was not found"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/GalleryAPIv1.php:155
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:155
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:161
+msgid "A database error has occured"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/PlaylistAPIv1.php:84
+#: class/CodeClouds/UTubeVideoGallery/API/PlaylistAPIv1.php:140
+#: class/CodeClouds/UTubeVideoGallery/API/PlaylistAPIv1.php:180
+msgid "Invalid playlist ID"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/PlaylistAPIv1.php:92
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:117
+msgid "The specified video resource was not found"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/PlaylistAPIv1.php:151
+msgid "Playlist does not exist"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:106
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:205
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:235
+msgid "Invalid video ID"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:191
+msgid "Video thumbnail failed to save"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:216
+msgid "Video does not exist"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/VideoAPIv1.php:302
+msgid "Video thumbnail refresh failed"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/VimeoPlaylistAPIv1.php:53
+#: class/CodeClouds/UTubeVideoGallery/API/YouTubePlaylistAPIv1.php:56
+msgid "Invalid source ID"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/VimeoPlaylistAPIv1.php:67
+#: class/CodeClouds/UTubeVideoGallery/API/VimeoPlaylistAPIv1.php:92
+msgid "Vimeo API call failed"
+msgstr ""
+
+#: class/CodeClouds/UTubeVideoGallery/API/YouTubePlaylistAPIv1.php:52
+msgid "YouTube API key is missing"
+msgstr ""
 
 #: class/CodeClouds/UTubeVideoGallery/Dashboard.php:34
 msgid "uTubeVideo"

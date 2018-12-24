@@ -103,7 +103,7 @@ class VideoAPIv1 extends APIv1
   {
     //check for valid videoID
     if (!$req['videoID'])
-      return $this->errorResponse('Invalid video ID');
+      return $this->errorResponse(__('Invalid video ID', 'utvg'));
 
     //sanitize data
     $videoID = sanitize_key($req['videoID']);
@@ -114,7 +114,7 @@ class VideoAPIv1 extends APIv1
 
     //check if video exists
     if (!$video)
-      return $this->errorResponse('The specified video resource was not found');
+      return $this->errorResponse(__('The specified video resource was not found', 'utvg'));
 
     return $this->response($video);
   }
@@ -145,20 +145,20 @@ class VideoAPIv1 extends APIv1
       || empty($source)
       || !isset($albumID)
     )
-      return $this->errorResponse('Invalid parameters');
+      return $this->errorResponse(__('Invalid parameters', 'utvg'));
 
     //get next video sort position
     $nextSortPosition = $videoRepository->getNextSortPositionByAlbum($albumID);
 
     //check if value exists
     if ($nextSortPosition === false)
-      return $this->errorResponse('A database error has occured');
+      return $this->errorResponse(__('A database error has occured', 'utvg'));
 
     //get video thumbnail type
     $thumbnailType = $videoRepository->getThumbnailTypeByAlbum($albumID);
 
     if (!$thumbnailType)
-      return $this->errorResponse('A database error has occured');
+      return $this->errorResponse(__('A database error has occured', 'utvg'));
 
     //insert new video
     $videoID = $videoRepository->createItem(
@@ -185,16 +185,16 @@ class VideoAPIv1 extends APIv1
       {
         //delete video on failure
         if (!$videoRepository->deleteItem($videoID))
-          return $this->errorResponse('A database error has occurred');
+          return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
         //return error message
-        return $this->errorResponse('Video thumbnail failed to save');
+        return $this->errorResponse(__('Video thumbnail failed to save', 'utvg'));
       }
 
       return $this->response(null, 201);
     }
     else
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
   }
 
   //delete video
@@ -202,7 +202,7 @@ class VideoAPIv1 extends APIv1
   {
     //check for valid videoID
     if (!$req['videoID'])
-      return $this->errorResponse('Invalid video ID');
+      return $this->errorResponse(__('Invalid video ID', 'utvg'));
 
     //sanitize data
     $videoID = sanitize_key($req['videoID']);
@@ -213,11 +213,11 @@ class VideoAPIv1 extends APIv1
 
     //check if video exists
     if (!$video)
-      return $this->errorResponse('Video does not exist');
+      return $this->errorResponse(__('Video does not exist', 'utvg'));
 
     //delete video
     if (!$videoRepository->deleteItem($videoID))
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
     //delete video thumbnail
     $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
@@ -232,7 +232,7 @@ class VideoAPIv1 extends APIv1
   {
     //check for valid videoID
     if (!$req['videoID'])
-      return $this->errorResponse('Invalid video ID');
+      return $this->errorResponse(__('Invalid video ID', 'utvg'));
 
     //gather data fields
     $videoID = sanitize_key($req['videoID']);
@@ -299,13 +299,13 @@ class VideoAPIv1 extends APIv1
         $thumbnail = new Thumbnail($videoID);
 
         if (!$thumbnail->save())
-          return $this->errorResponse('Video thumbnail refresh failed');
+          return $this->errorResponse(__('Video thumbnail refresh failed', 'utvg'));
       }
 
       return $this->response(null);
     }
     else
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
   }
 
   //get list of videos within album
@@ -313,7 +313,7 @@ class VideoAPIv1 extends APIv1
   {
     //check for valid videoID
     if (!$req['albumID'])
-      return $this->errorResponse('Invalid album ID');
+      return $this->errorResponse(__('Invalid album ID', 'utvg'));
 
     //sanitize data
     $albumID = sanitize_key($req['albumID']);

@@ -98,7 +98,7 @@ class AlbumAPIv1 extends APIv1
   {
     //check for valid albumID
     if (!$req['albumID'])
-      return $this->errorResponse('Invalid album ID');
+      return $this->errorResponse(__('Invalid album ID', 'utvg'));
 
     //sanitize data
     $albumID = sanitize_key($req['albumID']);
@@ -109,7 +109,7 @@ class AlbumAPIv1 extends APIv1
 
     //check if album exists
     if (!$album)
-      return $this->errorResponse('The specified album resource was not found');
+      return $this->errorResponse(__('The specified album resource was not found', 'utvg'));
 
     return $this->response($album);
   }
@@ -127,7 +127,7 @@ class AlbumAPIv1 extends APIv1
 
     //check for required fields
     if (empty($title) || empty($videoSorting) || !isset($galleryID))
-      return $this->errorResponse('Invalid parameters');
+      return $this->errorResponse(__('Invalid parameters', 'utvg'));
 
     //get next album sort position
     $nextSortPosition = $albumRepository->getNextSortPositionByGallery($galleryID);
@@ -148,7 +148,7 @@ class AlbumAPIv1 extends APIv1
     if ($albumID)
       return $this->response(null, 201);
     else
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
   }
 
   //delete album
@@ -156,7 +156,7 @@ class AlbumAPIv1 extends APIv1
   {
     //check for valid albumID
     if (!$req['albumID'])
-      return $this->errorResponse('Invalid album ID');
+      return $this->errorResponse(__('Invalid album ID', 'utvg'));
 
     //sanitize fields
     $albumID = sanitize_key($req['albumID']);
@@ -172,7 +172,7 @@ class AlbumAPIv1 extends APIv1
       !$videoRepository->deleteItemsByAlbum($albumID)
       || !$albumRepository->deleteItem($albumID)
     )
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
     //delete thumbnails
     $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
@@ -192,7 +192,7 @@ class AlbumAPIv1 extends APIv1
   {
     //check for valid albumID
     if (!$req['albumID'])
-      return $this->errorResponse('Invalid album ID');
+      return $this->errorResponse(__('Invalid album ID', 'utvg'));
 
     //gather data fields
     $albumID = sanitize_key($req['albumID']);
@@ -240,7 +240,7 @@ class AlbumAPIv1 extends APIv1
     if ($albumRepository->updateItem($albumID, $updatedFields))
       return $this->response(null);
     else
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
   }
 
   //get list of albums within gallery
@@ -248,7 +248,7 @@ class AlbumAPIv1 extends APIv1
   {
     //check for valid gallery id
     if (!$req['galleryID'])
-      return $this->errorResponse('Invalid gallery ID');
+      return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
 
     //sanitize data
     $galleryID = sanitize_key($req['galleryID']);
@@ -275,7 +275,11 @@ class AlbumAPIv1 extends APIv1
   {
     global $wpdb;
 
-    $rawslugs = $wpdb->get_results('SELECT ALB_SLUG FROM ' . $wpdb->prefix . 'utubevideo_album', ARRAY_N);
+    $rawslugs = $wpdb->get_results(
+      'SELECT ALB_SLUG
+      FROM ' . $wpdb->prefix . 'utubevideo_album',
+      ARRAY_N
+    );
 
     foreach ($rawslugs as $item)
       $sluglist[] = $item[0];

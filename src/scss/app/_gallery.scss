@@ -20,6 +20,10 @@
   cursor: pointer;
 }
 
+.utv-gallery .utv-album{
+  cursor: pointer;
+}
+
 .utv-gallery .utv-album img{
   box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.6);
   background: none!important;
@@ -29,8 +33,11 @@
   border: 0;
 }
 
-.utv-gallery.utv-albums .utv-thumb img:hover{
-  opacity: .85;
+.utv-gallery .utv-album img:hover{
+  filter: blur(2px);
+  -webkit-filter: blur(1px);
+  -webkit-tra2sition: .1s ease-in-out;
+	transition: .1s ease-in-out;
 }
 
 .utv-gallery-paging{

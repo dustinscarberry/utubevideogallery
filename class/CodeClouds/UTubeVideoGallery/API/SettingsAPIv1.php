@@ -133,7 +133,7 @@ class SettingsAPIv1 extends APIv1
     if ($playerControlsTheme)
       $pluginSettings['playerControlTheme'] = $playerControlsTheme;
 
-    if ($popupPlayerWidth)
+    if ($popupPlayerWidth > 0)
       $pluginSettings['playerWidth'] = $popupPlayerWidth;
 
     if ($popupPlayerOverlayColor)
@@ -142,19 +142,19 @@ class SettingsAPIv1 extends APIv1
     if ($popupPlayerOverlayOpacity)
       $pluginSettings['fancyboxOverlayOpacity'] = $popupPlayerOverlayOpacity;
 
-    if ($thumbnailBorderRadius != null)
+    if ($thumbnailBorderRadius !== null)
       $pluginSettings['thumbnailBorderRadius'] = $thumbnailBorderRadius;
 
-    if ($thumbnailWidth)
+    if ($thumbnailWidth > 0)
       $pluginSettings['thumbnailWidth'] = $thumbnailWidth;
 
-    if ($thumbnailHorizontalPadding !== null)
+    if ($thumbnailHorizontalPadding > 0)
       $pluginSettings['thumbnailPadding'] = $thumbnailHorizontalPadding;
 
-    if ($thumbnailVerticalPadding != null)
+    if ($thumbnailVerticalPadding > 0)
       $pluginSettings['thumbnailVerticalPadding'] = $thumbnailVerticalPadding;
 
-    if ($youtubeAPIKey != null)
+    if ($youtubeAPIKey !== null)
       $pluginSettings['youtubeApiKey'] = $youtubeAPIKey;
 
     if ($removeVideoPopupScript)

@@ -28,7 +28,7 @@ Alternatively you may [download the plugin here](https://wordpress.org/plugins/u
 
 - **Remove Video Popup Scripts** - Remove video popup player scripts if using a plugin that already loads "Magnific Popup"
 
-- **(YouTube) API Key** - Your API key for YouTube API's
+- **(YouTube) API Key** - Your API key for YouTube API's **(this is required in order to add YouTube videos)**
 
 1. Go to [Google Developers Console](https://console.developers.google.com/) and log in with your Google account.
 2. Create a new project for your website.

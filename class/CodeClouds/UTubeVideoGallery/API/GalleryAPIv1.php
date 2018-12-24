@@ -82,7 +82,7 @@ class GalleryAPIv1 extends APIv1
   {
     //check for valid galleryID
     if (!$req['galleryID'])
-      return $this->errorResponse('Invalid gallery ID');
+      return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
 
     //sanitize data
     $galleryID = sanitize_key($req['galleryID']);
@@ -92,7 +92,7 @@ class GalleryAPIv1 extends APIv1
     $gallery = $galleryRepository->getItem($galleryID);
 
     if (!$gallery)
-      return $this->errorResponse('The specified gallery resource was not found');
+      return $this->errorResponse(__('The specified gallery resource was not found', 'utvg'));
 
     return $this->response($gallery);
   }
@@ -112,7 +112,7 @@ class GalleryAPIv1 extends APIv1
       || empty($thumbnailType)
       || empty($displayType)
     )
-      return $this->errorResponse('Invalid parameters');
+      return $this->errorResponse(__('Invalid parameters', 'utvg'));
 
     //insert new gallery
     $galleryRepository = new GalleryRepository();
@@ -126,14 +126,14 @@ class GalleryAPIv1 extends APIv1
     if ($galleryID)
       return $this->response($galleryID, 201);
     else
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
   }
 
   public function deleteItem(WP_REST_Request $req)
   {
     //check for valid galleryID
     if (!$req['galleryID'])
-      return $this->errorResponse('Invalid gallery ID');
+      return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
 
     //sanitize fields
     $galleryID = sanitize_key($req['galleryID']);
@@ -152,7 +152,7 @@ class GalleryAPIv1 extends APIv1
       || !$albumRepository->deleteItemsByGallery($galleryID)
       || !$galleryRepository->deleteItem($galleryID)
     )
-      return $this->errorResponse('A database error has occured');
+      return $this->errorResponse(__('A database error has occured', 'utvg'));
 
     //delete video thumbnails
     $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
@@ -170,7 +170,7 @@ class GalleryAPIv1 extends APIv1
   {
     //check for valid galleryID
     if (!$req['galleryID'])
-      return $this->errorResponse('Invalid gallery ID');
+      return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
 
     //gather data fields
     $galleryID = sanitize_key($req['galleryID']);
@@ -210,7 +210,7 @@ class GalleryAPIv1 extends APIv1
     if ($galleryRepository->updateItem($galleryID, $updatedFields))
       return $this->response(null);
     else
-      return $this->errorResponse('A database error has occurred');
+      return $this->errorResponse(__('A database error has occurred', 'utvg'));
   }
 
   public function getAllItems(WP_REST_Request $req)

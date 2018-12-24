@@ -122,71 +122,77 @@ class PlaylistEditTabView extends React.Component
       }
     );
 
-    if (
-      remoteVideos.status == 200
-      && !remoteVideos.data.error
-      && localVideos.status == 200
-      && !localVideos.data.error
-    )
+    //check for errors
+    if (remoteVideos.status == 200 && remoteVideos.data.error)
     {
-      const remoteData = remoteVideos.data.data;
-      let localData = localVideos.data.data;
-      let combinedData = {};
-
-      //filter local album videos to just playlist
-      localData = localData.filter(localVideo =>
-        localVideo.playlistID == this.props.currentViewID
-      );
-
-      //add local videos
-      for (let localVideo of localData)
-      {
-        const source = localVideo.sourceID;
-
-        combinedData[source] = {};
-        combinedData[source].title = localVideo.title;
-        combinedData[source].description = localVideo.description;
-        combinedData[source].thumbnail = utvJSData.thumbnailCacheDirectory + localVideo.thumbnail + '.jpg';
-        combinedData[source].sourceID = localVideo.sourceID;
-        combinedData[source].localID = localVideo.id;
-        combinedData[source].selected = true;
-        combinedData[source].legend = 'local';
-      }
-
-      //add remote videos
-      for (let remoteVideo of remoteData.videos)
-      {
-        const source = remoteVideo.sourceID;
-
-        if (source in combinedData)
-        {
-          combinedData[source].title = remoteVideo.title;
-          combinedData[source].description = remoteVideo.description;
-          combinedData[source].legend = 'both';
-          combinedData[source].thumbnail = remoteVideo.thumbnail;
-        }
-        else
-        {
-          combinedData[source] = {};
-          combinedData[source].title = remoteVideo.title;
-          combinedData[source].description = remoteVideo.description;
-          combinedData[source].thumbnail = remoteVideo.thumbnail;
-          combinedData[source].sourceID = remoteVideo.sourceID;
-          combinedData[source].localID = undefined;
-          combinedData[source].selected = false;
-          combinedData[source].legend = 'web';
-        }
-      }
-
-      //convert object to array
-      combinedData = Object.keys(combinedData).map(key => combinedData[key]);
-
-      this.setState({
-        playlistTitle: remoteData.title,
-        playlistVideos: combinedData,
-        playlistLoading: false
-      });
+      this.props.setFeedbackMessage(remoteVideos.data.error.message, 'error');
+      return;
     }
+
+    if (localVideos.status == 200 && localVideos.data.error)
+    {
+      this.props.setFeedbackMessage(localVideos.data.error.message, 'error');
+      return;
+    }
+
+    //if all is good filter playlist data
+    const remoteData = remoteVideos.data.data;
+    let localData = localVideos.data.data;
+    let combinedData = {};
+
+    //filter local album videos to just playlist
+    localData = localData.filter(localVideo =>
+      localVideo.playlistID == this.props.currentViewID
+    );
+
+    //add local videos
+    for (let localVideo of localData)
+    {
+      const source = localVideo.sourceID;
+
+      combinedData[source] = {};
+      combinedData[source].title = localVideo.title;
+      combinedData[source].description = localVideo.description;
+      combinedData[source].thumbnail = utvJSData.thumbnailCacheDirectory + localVideo.thumbnail + '.jpg';
+      combinedData[source].sourceID = localVideo.sourceID;
+      combinedData[source].localID = localVideo.id;
+      combinedData[source].selected = true;
+      combinedData[source].legend = 'local';
+    }
+
+    //add remote videos
+    for (let remoteVideo of remoteData.videos)
+    {
+      const source = remoteVideo.sourceID;
+
+      if (source in combinedData)
+      {
+        combinedData[source].title = remoteVideo.title;
+        combinedData[source].description = remoteVideo.description;
+        combinedData[source].legend = 'both';
+        combinedData[source].thumbnail = remoteVideo.thumbnail;
+      }
+      else
+      {
+        combinedData[source] = {};
+        combinedData[source].title = remoteVideo.title;
+        combinedData[source].description = remoteVideo.description;
+        combinedData[source].thumbnail = remoteVideo.thumbnail;
+        combinedData[source].sourceID = remoteVideo.sourceID;
+        combinedData[source].localID = undefined;
+        combinedData[source].selected = false;
+        combinedData[source].legend = 'web';
+      }
+    }
+
+    //convert object to array
+    combinedData = Object.keys(combinedData).map(key => combinedData[key]);
+
+    this.setState({
+      playlistTitle: remoteData.title,
+      playlistVideos: combinedData,
+      playlistLoading: false
+    });
   }
 
   changeValue(event)

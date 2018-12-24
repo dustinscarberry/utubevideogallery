@@ -58,7 +58,7 @@ class UI
 
     //add thumbnail border radius if defined
     if ($this->_options['thumbnailBorderRadius'] > 0)
-      $css .= '.utv-thumb>a,.utv-thumb img{border-radius:' . $this->_options['thumbnailBorderRadius'] . 'px!important}';
+      $css .= '.utv-thumbnail>a,.utv-thumbnail img{border-radius:' . $this->_options['thumbnailBorderRadius'] . 'px!important}';
 
     wp_add_inline_style('utv-app-css', $css);
   }
