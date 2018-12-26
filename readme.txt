@@ -4,7 +4,7 @@ Donate link: http://www.codeclouds.net/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
 Requires at least: 4.4.0
 Requires PHP: 5.6
-Tested up to: 4.9.9
+Tested up to: 5.0.2
 Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,18 +20,15 @@ Features Include:
 - Unlimited video galleries (YouTube and Vimeo support)
 - Built in Magnific Popup support with options to use Magnific Popup already installed by another plugin
 - Thumbnail images for videos are cached on your own website
-- Annotations are hidden automatically for a movie like experience
 - Set size of video player
 - Set progress bar color of video player
 - Set starting resolution of videos (480p, 720p, or 1080p)
 - Order video albums by newest or oldest videos first, as well as custom re-ordering of videos / albums
-- Possibility of skipping video albums and just display videos
-- Set video thumbnails as either square or rectangle
-- View counts of video albums and videos within a gallery in the backend
-- Add YouTube playlists to an album
-- Permalinks for galleries embedded within a page
+- Ability to display albums or just  videos
+- Use either square or rectangle thumbnails for videos
+- Add YouTube and Vimeo playlists to albums
 - Publish and un-publish videos and albums without having to delete them
-- Ability to set padding and width of album / video thumbnails
+- And more...
 
 == Installation ==
 
@@ -44,49 +41,41 @@ Features Include:
 
 == Frequently Asked Questions ==
 
-= How many video galleries can I create? =
+= How many video galleries, albums or videos can I create? =
 
-As many as you want.
+As many as needed.
 
 = Can I use any YouTube or Vimeo video? =
-
-Generally, yes, except in cases where the video it set to disable embedding.
-
-= Are Vevo YouTube videos supported? =
 
 Yes, all YouTube and Vimeo videos should work unless embedding has been disabled.
 
 = Are any other types of videos supported (ie not YouTube)? =
 
-Yes, Even though the plugin is named uTubeVideo Gallery, Vimeo videos are now also supported.
+Yes, Even though the plugin is named uTubeVideo Gallery, Vimeo videos are supported also.
 
 = Can I change the size of the video player? =
 
-Yes the video player size can be set in the 'General Settings' section in the settings page.
+Yes the video player size can be set in the ‘General’ section in the settings page.
 
-= How do I change older videos into the new square thumbnail type? =
+= How do I set a thumbnail for a new album? =
 
-Just go to edit the video in question: edit the thumbnail type and save changes.
-
-= How do I set a thumbnail for a new video album? =
-
-After adding at least one video to the album click on the edit link for the video album and select a thumbnail and then click save changes.
+After adding at least one video to the album click on the edit action for the album and select a thumbnail and then click "Save Changes".
 
 = How do I just display videos with no albums? =
 
-There is an option called Display Type in each gallery's settings; set it to Just Videos.
+There is an option called Display Type in each gallery’s settings; set it to Just Videos.
 
-= How big of a playlist can I add to an album at once? =
+= How big of a playlist can I add to an album at a time? =
 
-Do to programming constraints and such it seems around 80 videos is the limit, but you will have to experiment to find what works best for you.
+Playlist size, currently, has no limit to the amount of videos you can add. As videos are added you can view the progress at the top of the screen.
 
 = What determines the video order for a panel? =
 
 Video order is based on the order of the album(s) in the gallery and then ordering of the videos within each album(s).
 
-= What if my Permalink Status is NOT Ok? =
+= What happened to permalinks / permalink status? =
 
-If your permalink status is not Ok, it means permalinks are not enabled correctly. Check to see that you have permalinks turned on for Wordpress and if this does not fix the problem, de-activate and re-activate this plugin. It's also possible your the settings for your sites permalink structure are not completely compatible with this plugin.
+Galleries are now based on React and therefore do not cause a page reload. In doing so permalinks have been removed. This also allows multisite compatibility.
 
 = What user permissions are required to use this plugin? =
 
@@ -97,15 +86,18 @@ A user must be an editor or above in order to manage video galleries and change 
 1. A gallery embedded on a page showing the albums in the gallery
 2. A gallery embedded on a page showing the videos in an album
 3. A gallery showing a video playing
-4. A gallery showing a video playing (chromeless)
-5. Videos in the admin panel
-6. Panel View
+4. A gallery showing a video playing with description
+5. Panel View
+6. Videos in the admin panel
 
 == Changelog ==
 
 = 2.0.0 =
 * Complete rewrite of most of the plugin code
-
+* Plugin built on React
+* PHP 5.6 > required
+* YouTube API key required
+* Video descriptions added
 
 = 1.9.8 =
 * Corrected bug involving using query parameters to view galleries
