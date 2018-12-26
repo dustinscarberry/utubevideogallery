@@ -127,6 +127,7 @@ class Dashboard
         'pluginVersion' => __('Plugin Version', 'utvg'),
         'wpVersion' => __('WordPress Version', 'utvg'),
         'updateSettings' => __('Update Settings', 'utvg'),
+        'resyncThumbnails' => __('Re-Sync Thumbnails', 'utvg'),
         'general' => __('General', 'utvg'),
         'maxPlayerWidth' => __('Max Player Width', 'utvg'),
         'thumbnailWidth' => __('Thumbnail Width', 'utvg'),

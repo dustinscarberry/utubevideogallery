@@ -10,6 +10,7 @@ import Column from '../shared/Column';
 import SectionHeader from '../shared/SectionHeader';
 import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
+import SecondaryButton from '../shared/SecondaryButton';
 import SubmitButton from '../shared/SubmitButton';
 import InfoLine from '../shared/InfoLine';
 import Loader from '../shared/Loader';
@@ -50,6 +51,7 @@ class SettingsTabView extends React.Component
     this.changeValue = this.changeValue.bind(this);
     this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
     this.saveSettings = this.saveSettings.bind(this);
+    this.rebuildThumbnails = this.rebuildThumbnails.bind(this);
   }
 
   async componentDidMount()
@@ -99,8 +101,6 @@ class SettingsTabView extends React.Component
 
   async saveSettings()
   {
-    this.setState({loading: true});
-
     const rsp = await this.saveBaseSettings();
 
     //update thumbnails if width changed
@@ -115,12 +115,12 @@ class SettingsTabView extends React.Component
       this.props.setFeedbackMessage(utvJSData.localization.feedbackSettingsSaved, 'success');
     else
       this.props.setFeedbackMessage(rsp.data.error.message, 'error');
-
-    this.setState({loading: false});
   }
 
   async saveBaseSettings()
   {
+    this.setState({loading: true});
+
     const rsp = await axios.patch(
       '/wp-json/utubevideogallery/v1/settings',
       {
@@ -144,11 +144,15 @@ class SettingsTabView extends React.Component
       { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
+    this.setState({loading: false});
+
     return rsp;
   }
 
   async rebuildThumbnails()
   {
+    this.setState({loading: true});
+
     const videosData = await axios.get(
       '/wp-json/utubevideogallery/v1/videos',
       { headers: {'X-WP-Nonce': utvJSData.restNonce} }
@@ -178,6 +182,8 @@ class SettingsTabView extends React.Component
         );
       }
     }
+
+    this.setState({loading: false});
   }
 
   changeValue(event)
@@ -224,6 +230,10 @@ class SettingsTabView extends React.Component
                 <SubmitButton
                   title={utvJSData.localization.updateSettings}
                   classes="button-primary"
+                />
+                <SecondaryButton
+                  title={utvJSData.localization.resyncThumbnails}
+                  onClick={this.rebuildThumbnails}
                 />
               </FormField>
             </Card>
