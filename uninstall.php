@@ -31,6 +31,7 @@ function removeDatabaseTables()
 {
   global $wpdb;
 
+  $wpdb->query('DROP TABLE ' . $wpdb->prefix . 'utubevideo_playlist');
   $wpdb->query('DROP TABLE ' . $wpdb->prefix . 'utubevideo_video');
   $wpdb->query('DROP TABLE ' . $wpdb->prefix . 'utubevideo_album');
   $wpdb->query('DROP TABLE ' . $wpdb->prefix . 'utubevideo_dataset');
