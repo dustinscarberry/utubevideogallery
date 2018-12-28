@@ -52,7 +52,8 @@ class Dashboard
       true
     );
 
-    $thumbnailCacheDirectory = (wp_upload_dir())['baseurl'] . '/utubevideo-cache/';
+    $thumbnailCacheDirectory = wp_upload_dir();
+    $thumbnailCacheDirectory = $thumbnailCacheDirectory['baseurl'] . '/utubevideo-cache/';
 
     $embeddedJS = [
       'thumbnailCacheDirectory' => $thumbnailCacheDirectory,

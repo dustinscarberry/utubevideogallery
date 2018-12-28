@@ -27,7 +27,8 @@ if (!class_exists('utvVideoGen'))
       $this->_gallery = $wpdb->get_results('SELECT DATA_SORT, DATA_DISPLAYTYPE FROM ' . $wpdb->prefix . 'utubevideo_dataset WHERE DATA_ID = "' . $this->_atts['id'] . '"', ARRAY_A)[0];
 
       //set thumbnail cache folder location
-      $this->_dir = wp_upload_dir()['baseurl'];
+      $this->_dir = wp_upload_dir();
+      $this->_dir = $this->_dir['baseurl'];
 
       //set options
       $this->_options = $options;

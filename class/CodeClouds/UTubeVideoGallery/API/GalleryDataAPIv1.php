@@ -34,11 +34,13 @@ class GalleryDataAPIv1
   public function getItem(WP_REST_Request $req)
   {
     $data = new stdClass();
-    $thumbnailDirectory = wp_upload_dir()['baseurl'];
+    $thumbnailDirectory = wp_upload_dir();
+    $thumbnailDirectory = $thumbnailDirectory['baseurl'];
     global $wpdb;
 
     //get gallery data
-    $gallery = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_dataset WHERE DATA_ID = "' . $req['galleryID'] . '"')[0];
+    $gallery = $wpdb->get_results('SELECT * FROM ' . $wpdb->prefix . 'utubevideo_dataset WHERE DATA_ID = "' . $req['galleryID'] . '"');
+    $gallery = $gallery[0];
 
     $data->ID = $gallery->DATA_ID;
     $data->name = $gallery->DATA_NAME;

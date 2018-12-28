@@ -161,7 +161,8 @@ class PlaylistAPIv1 extends APIv1
         return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
       //delete video thumbnail
-      $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
+      $thumbnailPath = wp_upload_dir();
+      $thumbnailPath = $thumbnailPath['basedir'] . '/utubevideo-cache/';
       unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
       unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
     }

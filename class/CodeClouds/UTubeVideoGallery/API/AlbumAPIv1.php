@@ -175,7 +175,8 @@ class AlbumAPIv1 extends APIv1
       return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
     //delete thumbnails
-    $thumbnailPath = (wp_upload_dir())['basedir'] . '/utubevideo-cache/';
+    $thumbnailPath = wp_upload_dir();
+    $thumbnailPath = $thumbnailPath['basedir'] . '/utubevideo-cache/';
 
     //delete video thumbnails
     foreach ($videos as $video)
