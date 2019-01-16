@@ -3,7 +3,7 @@
 Plugin Name: uTubeVideo Gallery
 Plugin URI: http://www.codeclouds.net/
 Description: This plugin allows you to create YouTube video galleries to embed in a WordPress site.
-Version: 2.0.1
+Version: 2.0.2
 Author: Dustin Scarberry
 Author URI: http://www.codeclouds.net/
 License: GPL2
@@ -45,7 +45,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
   class App
   {
     private $_options;
-    const CURRENT_VERSION = '2.0.1';
+    const CURRENT_VERSION = '2.0.2';
 
     public function __construct()
     {

@@ -3,9 +3,9 @@ Contributors: dman25560
 Donate link: http://www.codeclouds.net/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
 Requires at least: 4.4.0
-Requires PHP: 5.6
-Tested up to: 5.0.2
-Stable tag: 2.0.1
+Requires PHP: 7.0
+Tested up to: 5.0.3
+Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,10 @@ A user must be an editor or above in order to manage video galleries and change 
 6. Videos in the admin panel
 
 == Changelog ==
+
+= 2.0.2 =
+* Compatibility fix for NextGEN gallery
+* Updated supported version to WordPress 5.0.3
 
 = 2.0.1 =
 * Compatibility fix for 5.x PHP with array accessor syntax

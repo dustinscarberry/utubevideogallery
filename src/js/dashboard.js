@@ -5,6 +5,7 @@ import Dashboard from './component/Dashboard/Dashboard';
 
 const dashboard = document.getElementById('utv-dashboard-root');
 
-ReactDOM.render(
-  <Dashboard
-  />, dashboard);
+if (dashboard)
+  ReactDOM.render(
+    <Dashboard
+    />, dashboard);
