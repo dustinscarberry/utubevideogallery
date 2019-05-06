@@ -52,6 +52,6 @@ module.exports =
       }),
       new OptimizeCssAssetsPlugin({})
     ]
-  },
-  devtool: 'source-map'
+  }
+  //devtool: 'source-map'
 };
