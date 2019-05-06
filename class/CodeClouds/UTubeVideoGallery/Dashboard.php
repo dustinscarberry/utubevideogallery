@@ -44,6 +44,18 @@ class Dashboard
   {
     wp_enqueue_script('jquery');
 
+    //attempt to work around babel polyfill conflicts
+    if (!wp_script_is('wp-polyfill-ecmascript', 'registered'))
+      wp_enqueue_script(
+        'utv-babel-polyfill',
+        'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.4/polyfill.js',
+        null,
+        $this->_version,
+        true
+      );
+    else
+      wp_enqueue_script('wp-polyfill-ecmascript');
+
     wp_enqueue_script(
       'utv-admin-js',
       plugins_url('../../../public/js/dashboard.min.js', __FILE__),
