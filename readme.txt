@@ -1,13 +1,13 @@
 === uTubeVideo Gallery ===
 Contributors: dman25560
-Donate link: http://www.codeclouds.net/utubevideo-gallery/
+Donate link: https://www.codeclouds.net/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
 Requires at least: 4.4.0
 Requires PHP: 7.0
 Tested up to: 5.2.0
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Display unlimited galleries of YouTube videos in any post or page within your site.
 
@@ -91,6 +91,13 @@ A user must be an editor or above in order to manage video galleries and change 
 6. Videos in the admin panel
 
 == Changelog ==
+
+= 2.0.3 =
+* Race condition with drag n drop reordering corrected
+* Possible fix for babel polyfill issues
+* Bumped supported WordPress version to 5.2.0
+* Upgraded Babel 6 to 7
+* Updated npm packages
 
 = 2.0.2 =
 * Compatibility fix for NextGEN gallery

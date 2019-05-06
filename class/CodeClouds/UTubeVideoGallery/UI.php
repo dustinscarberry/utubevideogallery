@@ -66,6 +66,18 @@ class UI
   //insert javascript
   public function loadJS()
   {
+    //attempt to work around babel polyfill conflicts
+    if (!wp_script_is('wp-polyfill-ecmascript', 'registered'))
+      wp_enqueue_script(
+        'utv-babel-polyfill',
+        'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.4/polyfill.js',
+        null,
+        $this->_version,
+        true
+      );
+    else
+      wp_enqueue_script('wp-polyfill-ecmascript');
+      
     $embeddedJS = [
       'setting' => [
         'thumbnailWidth' => $this->_options['thumbnailWidth'],
