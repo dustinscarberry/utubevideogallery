@@ -27,6 +27,11 @@ const rowSourceCollect = (connect, monitor) =>
 
 const rowTarget =
 {
+  drop(props, monitor, component)
+  {
+    props.reorderRows();
+    return undefined;
+  },
   hover(props, monitor, component)
   {
     if (!component)

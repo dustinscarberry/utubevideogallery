@@ -25,6 +25,7 @@ class GriddleDND extends React.Component
     this.runBulkAction = this.runBulkAction.bind(this);
     this.updateBulkAction = this.updateBulkAction.bind(this);
     this.moveRow = this.moveRow.bind(this);
+    this.reorderRows = this.reorderRows.bind(this);
   }
 
   componentDidMount()
@@ -81,8 +82,12 @@ class GriddleDND extends React.Component
 
     //update state
 		this.setState({data});
+  }
 
-    //call external reorder function
+  //pass state to external reorder row method
+  reorderRows()
+  {
+    const { data } = this.state;
     if (this.props.reorderRows)
       this.props.reorderRows(data);
   }
@@ -218,6 +223,7 @@ class GriddleDND extends React.Component
           toggleAllRowCheckboxes={this.toggleAllRowCheckboxes}
           enableBulkActions={enableBulkActions}
           moveRow={this.moveRow}
+          reorderRows={this.reorderRows}
           enableDragNDrop={enableDragNDrop}
           sortKey={sortKey}
           sortOrder={sortOrder}

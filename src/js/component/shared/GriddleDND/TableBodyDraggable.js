@@ -13,7 +13,8 @@ const TableBodyDraggable = (props) =>
     enableBulkActions,
     toggleRowCheckbox,
     rowKey,
-    moveRow
+    moveRow,
+    reorderRows
   } = props;
 
   let rows = data.map((row, i) =>
@@ -25,6 +26,7 @@ const TableBodyDraggable = (props) =>
       enableBulkActions={enableBulkActions}
       toggleRowCheckbox={toggleRowCheckbox}
       moveRow={moveRow}
+      reorderRows={reorderRows}
     />
   );
 

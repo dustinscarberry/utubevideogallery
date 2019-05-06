@@ -14,6 +14,7 @@ const Table = (props) =>
     toggleAllRowCheckboxes,
     enableBulkActions,
     moveRow,
+    reorderRows,
     updateColumnSort,
     sortKey,
     sortOrder,
@@ -40,6 +41,7 @@ const Table = (props) =>
         toggleRowCheckbox={toggleRowCheckbox}
         enableBulkActions={enableBulkActions}
         moveRow={moveRow}
+        reorderRows={reorderRows}
       />
 
   return (
