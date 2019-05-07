@@ -66,18 +66,18 @@ class UI
   //insert javascript
   public function loadJS()
   {
-    //attempt to work around babel polyfill conflicts
-    if (!wp_script_is('wp-polyfill-ecmascript', 'registered'))
+    //use gutenburg polyfill if registered
+    if (!wp_script_is('wp-polyfill', 'registered'))
       wp_enqueue_script(
-        'utv-babel-polyfill',
+        'babel-polyfill',
         'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.4/polyfill.js',
         null,
-        $this->_version,
+        false,
         true
       );
     else
-      wp_enqueue_script('wp-polyfill-ecmascript');
-      
+      wp_enqueue_script('wp-polyfill');
+
     $embeddedJS = [
       'setting' => [
         'thumbnailWidth' => $this->_options['thumbnailWidth'],
