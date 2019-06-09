@@ -104,8 +104,8 @@ class VideoAPIv1 extends APIv1
     try
     {
       //check for valid videoID
-      if (!$req['videoID'])
-        return $this->errorResponse(__('Invalid video ID', 'utvg'));
+      if ($req['videoID'] === false)
+        throw new \Exception(__('Invalid video ID', 'utvg'));
 
       //sanitize data
       $videoID = sanitize_key($req['videoID']);
@@ -116,7 +116,7 @@ class VideoAPIv1 extends APIv1
 
       //check if video exists
       if (!$video)
-        return $this->errorResponse(__('The specified video resource was not found', 'utvg'));
+        throw new \Exception(__('Database Error: The video does not exist', 'utvg'));
 
       return $this->response($video);
     }
@@ -205,7 +205,7 @@ class VideoAPIv1 extends APIv1
     {
       //check for valid videoID
       if (!$req['videoID'])
-        return $this->errorResponse(__('Invalid video ID', 'utvg'));
+        throw new \Exception(__('Invalid video ID', 'utvg'));
 
       //sanitize data
       $videoID = sanitize_key($req['videoID']);
@@ -216,11 +216,11 @@ class VideoAPIv1 extends APIv1
 
       //check if video exists
       if (!$video)
-        return $this->errorResponse(__('Video does not exist', 'utvg'));
+        throw new \Exception(__('Database Error: Video does not exist', 'utvg'));
 
       //delete video
       if (!$videoRepository->deleteItem($videoID))
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+        throw new \Exception(__('Database Error: Failed to delete video', 'utvg'));
 
       //delete video thumbnail
       $thumbnailPath = wp_upload_dir();
@@ -243,7 +243,7 @@ class VideoAPIv1 extends APIv1
     {
       //check for valid videoID
       if (!$req['videoID'])
-        return $this->errorResponse(__('Invalid video ID', 'utvg'));
+        throw new \Exception(__('Invalid video ID', 'utvg'));
 
       //gather data fields
       $videoID = sanitize_key($req['videoID']);
@@ -306,17 +306,15 @@ class VideoAPIv1 extends APIv1
       {
         if (!$skipThumbnailRender)
         {
-          //resave thumbnail
+          //refresh video thumbnail
           $thumbnail = new Thumbnail($videoID);
-
-          if (!$thumbnail->save())
-            return $this->errorResponse(__('Video thumbnail refresh failed', 'utvg'));
+          $thumbnail->save();
         }
 
         return $this->response(null);
       }
       else
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+        throw new \Exception(__('Database Error: Failed to update video', 'utvg'));
     }
     catch (\Exception $e)
     {
@@ -330,8 +328,8 @@ class VideoAPIv1 extends APIv1
     try
     {
       //check for valid videoID
-      if (!$req['albumID'])
-        return $this->errorResponse(__('Invalid album ID', 'utvg'));
+      if ($req['albumID'] === false)
+        throw new \Exception(__('Invalid album ID', 'utvg'));
 
       //sanitize data
       $albumID = sanitize_key($req['albumID']);

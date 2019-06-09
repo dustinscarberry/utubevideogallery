@@ -123,7 +123,7 @@ class PlaylistAPIv1 extends APIv1
         || empty($videoQuality)
         || empty($albumID)
       )
-        return $this->errorResponse(__('Invalid parameters', 'utvg'));
+        throw new \Exception(__('Invalid parameters', 'utvg'));
 
       //insert new playlist
       $playlistID = $playlistRepository->createItem(
@@ -139,7 +139,7 @@ class PlaylistAPIv1 extends APIv1
       if ($playlistID)
         return $this->response((object)['id' => $playlistID], 201);
       else
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+        throw new \Exception(__('Database Error: Playlist failed to save', 'utvg'));
     }
     catch (\Exception $e)
     {

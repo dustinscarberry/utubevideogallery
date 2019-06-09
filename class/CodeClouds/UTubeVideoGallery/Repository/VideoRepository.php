@@ -222,7 +222,7 @@ class VideoRepository
     return $nextSortPosition;
   }
 
-  public function getThumbnailTypeByAlbum($albumID)
+  public function getThumbnailTypeByAlbum($albumID = false)
   {
     global $wpdb;
 
@@ -246,7 +246,7 @@ class VideoRepository
     return $thumbnailType;
   }
 
-  public function deleteItemsByAlbum($albumID)
+  public function deleteItemsByAlbum($albumID = false)
   {
     global $wpdb;
 
