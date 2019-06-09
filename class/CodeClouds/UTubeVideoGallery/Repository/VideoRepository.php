@@ -254,7 +254,7 @@ class VideoRepository
     if ($wpdb->delete(
       $wpdb->prefix . 'utubevideo_video',
       ['ALB_ID' => $albumID]
-    ) != false)
+    ) !== false)
       return true;
 
     return false;
