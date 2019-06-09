@@ -2,10 +2,10 @@
 Contributors: dman25560
 Donate link: https://www.codeclouds.net/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
-Requires at least: 4.4.0
+Requires at least: 4.9.0
 Requires PHP: 7.0
 Tested up to: 5.2.0
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,10 @@ A user must be an editor or above in order to manage video galleries and change 
 6. Videos in the admin panel
 
 == Changelog ==
+
+= 2.0.4 =
+* Fixed issue where empty albums would refuse to delete
+* Added detailed error handling to video api endpoints
 
 = 2.0.3 =
 * Race condition with drag n drop reordering corrected
