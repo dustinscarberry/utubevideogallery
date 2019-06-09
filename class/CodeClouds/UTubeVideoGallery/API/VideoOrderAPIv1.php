@@ -32,27 +32,34 @@ class VideoOrderAPIv1 extends APIv1
 
   public function updateItem(WP_REST_Request $req)
   {
-    global $wpdb;
-
-    if (!$req['videoids'])
-      return $this->errorResponse(__('Invalid data', 'utvg'));
-
-    $videoCount = count($req['videoids']);
-
-    for ($i = 0; $i < $videoCount; $i++)
+    try
     {
-      $videoID = sanitize_key($req['videoids'][$i]);
+      global $wpdb;
 
-      if (!$videoID)
-        return $this->errorResponse(__('Invalid data value', 'utvg'));
+      if (!$req['videoids'])
+        return $this->errorResponse(__('Invalid data', 'utvg'));
 
-      $wpdb->update(
-        $wpdb->prefix . 'utubevideo_video',
-        ['VID_POS' => $i],
-        ['VID_ID' => $videoID]
-      );
+      $videoCount = count($req['videoids']);
+
+      for ($i = 0; $i < $videoCount; $i++)
+      {
+        $videoID = sanitize_key($req['videoids'][$i]);
+
+        if (!$videoID)
+          return $this->errorResponse(__('Invalid data value', 'utvg'));
+
+        $wpdb->update(
+          $wpdb->prefix . 'utubevideo_video',
+          ['VID_POS' => $i],
+          ['VID_ID' => $videoID]
+        );
+      }
+
+      return $this->response(null);
     }
-
-    return $this->response(null);
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }  
   }
 }

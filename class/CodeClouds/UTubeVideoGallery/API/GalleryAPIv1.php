@@ -80,146 +80,182 @@ class GalleryAPIv1 extends APIv1
 
   public function getItem(WP_REST_Request $req)
   {
-    //check for valid galleryID
-    if (!$req['galleryID'])
-      return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
+    try
+    {
+      //check for valid galleryID
+      if (!$req['galleryID'])
+        return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
 
-    //sanitize data
-    $galleryID = sanitize_key($req['galleryID']);
+      //sanitize data
+      $galleryID = sanitize_key($req['galleryID']);
 
-    //get gallery
-    $galleryRepository = new GalleryRepository();
-    $gallery = $galleryRepository->getItem($galleryID);
+      //get gallery
+      $galleryRepository = new GalleryRepository();
+      $gallery = $galleryRepository->getItem($galleryID);
 
-    if (!$gallery)
-      return $this->errorResponse(__('The specified gallery resource was not found', 'utvg'));
+      if (!$gallery)
+        return $this->errorResponse(__('The specified gallery resource was not found', 'utvg'));
 
-    return $this->response($gallery);
+      return $this->response($gallery);
+    }
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
   }
 
   public function createItem(WP_REST_Request $req)
   {
-    //gather data fields
-    $title = sanitize_text_field($req['title']);
-    $albumSorting = sanitize_text_field($req['albumSorting'] == 'desc' ? 'desc' : 'asc');
-    $thumbnailType = sanitize_text_field($req['thumbnailType'] == 'square' ? 'square' : 'rectangle');
-    $displayType = sanitize_text_field($req['displayType'] == 'video' ? 'video' : 'album');
+    try
+    {
+      //gather data fields
+      $title = sanitize_text_field($req['title']);
+      $albumSorting = sanitize_text_field($req['albumSorting'] == 'desc' ? 'desc' : 'asc');
+      $thumbnailType = sanitize_text_field($req['thumbnailType'] == 'square' ? 'square' : 'rectangle');
+      $displayType = sanitize_text_field($req['displayType'] == 'video' ? 'video' : 'album');
 
-    //check for required fields
-    if (
-      empty($title)
-      || empty($albumSorting)
-      || empty($thumbnailType)
-      || empty($displayType)
-    )
-      return $this->errorResponse(__('Invalid parameters', 'utvg'));
+      //check for required fields
+      if (
+        empty($title)
+        || empty($albumSorting)
+        || empty($thumbnailType)
+        || empty($displayType)
+      )
+        return $this->errorResponse(__('Invalid parameters', 'utvg'));
 
-    //insert new gallery
-    $galleryRepository = new GalleryRepository();
-    $galleryID = $galleryRepository->createItem(
-      $title,
-      $albumSorting,
-      $thumbnailType,
-      $displayType
-    );
+      //insert new gallery
+      $galleryRepository = new GalleryRepository();
+      $galleryID = $galleryRepository->createItem(
+        $title,
+        $albumSorting,
+        $thumbnailType,
+        $displayType
+      );
 
-    if ($galleryID)
-      return $this->response($galleryID, 201);
-    else
-      return $this->errorResponse(__('A database error has occurred', 'utvg'));
+      if ($galleryID)
+        return $this->response($galleryID, 201);
+      else
+        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+    }
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
+
   }
 
   public function deleteItem(WP_REST_Request $req)
   {
-    //check for valid galleryID
-    if (!$req['galleryID'])
-      return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
-
-    //sanitize fields
-    $galleryID = sanitize_key($req['galleryID']);
-
-    //create repositories
-    $galleryRepository = new GalleryRepository();
-    $albumRepository = new AlbumRepository();
-    $videoRepository = new VideoRepository();
-
-    //get videos for thumbnail deletion
-    $videos = $videoRepository->getItemsByGallery($galleryID);
-
-    //delete gallery, albums, and videos from database
-    if (
-      !$videoRepository->deleteItemsByGallery($galleryID)
-      || !$albumRepository->deleteItemsByGallery($galleryID)
-      || !$galleryRepository->deleteItem($galleryID)
-    )
-      return $this->errorResponse(__('A database error has occured', 'utvg'));
-
-    //delete video thumbnails
-    $thumbnailPath = wp_upload_dir();
-    $thumbnailPath = $thumbnailPath['basedir'] . '/utubevideo-cache/';
-
-    foreach ($videos as $video)
+    try
     {
-      unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
-      unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
-    }
+      //check for valid galleryID
+      if (!$req['galleryID'])
+        return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
 
-    return $this->response(null);
+      //sanitize fields
+      $galleryID = sanitize_key($req['galleryID']);
+
+      //create repositories
+      $galleryRepository = new GalleryRepository();
+      $albumRepository = new AlbumRepository();
+      $videoRepository = new VideoRepository();
+
+      //get videos for thumbnail deletion
+      $videos = $videoRepository->getItemsByGallery($galleryID);
+
+      //delete gallery, albums, and videos from database
+      if (
+        !$videoRepository->deleteItemsByGallery($galleryID)
+        || !$albumRepository->deleteItemsByGallery($galleryID)
+        || !$galleryRepository->deleteItem($galleryID)
+      )
+        return $this->errorResponse(__('A database error has occured', 'utvg'));
+
+      //delete video thumbnails
+      $thumbnailPath = wp_upload_dir();
+      $thumbnailPath = $thumbnailPath['basedir'] . '/utubevideo-cache/';
+
+      foreach ($videos as $video)
+      {
+        unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
+        unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
+      }
+
+      return $this->response(null);
+    }
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
   }
 
   public function updateItem(WP_REST_Request $req)
   {
-    //check for valid galleryID
-    if (!$req['galleryID'])
-      return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
+    try
+    {
+      //check for valid galleryID
+      if (!$req['galleryID'])
+        return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
 
-    //gather data fields
-    $galleryID = sanitize_key($req['galleryID']);
-    $title = sanitize_text_field($req['title']);
+      //gather data fields
+      $galleryID = sanitize_key($req['galleryID']);
+      $title = sanitize_text_field($req['title']);
 
-    if (isset($req['albumSorting']))
-      $albumSorting = $req['albumSorting'] == 'desc' ? 'desc' : 'asc';
-    else
-      $albumSorting = null;
+      if (isset($req['albumSorting']))
+        $albumSorting = $req['albumSorting'] == 'desc' ? 'desc' : 'asc';
+      else
+        $albumSorting = null;
 
-    $thumbnailType = sanitize_text_field($req['thumbnailType']);
-    $displayType = sanitize_text_field($req['displayType']);
-    $currentTime = current_time('timestamp');
+      $thumbnailType = sanitize_text_field($req['thumbnailType']);
+      $displayType = sanitize_text_field($req['displayType']);
+      $currentTime = current_time('timestamp');
 
-    //create updatedFields array
-    $updatedFields = [];
+      //create updatedFields array
+      $updatedFields = [];
 
-    //set optional update fields
-    if ($title != null)
-      $updatedFields['DATA_NAME'] = $title;
+      //set optional update fields
+      if ($title != null)
+        $updatedFields['DATA_NAME'] = $title;
 
-    if ($thumbnailType != null)
-      $updatedFields['DATA_THUMBTYPE'] = $thumbnailType;
+      if ($thumbnailType != null)
+        $updatedFields['DATA_THUMBTYPE'] = $thumbnailType;
 
-    if ($displayType != null)
-      $updatedFields['DATA_DISPLAYTYPE'] = $displayType;
+      if ($displayType != null)
+        $updatedFields['DATA_DISPLAYTYPE'] = $displayType;
 
-    if ($albumSorting != null)
-      $updatedFields['DATA_SORT'] = $albumSorting;
+      if ($albumSorting != null)
+        $updatedFields['DATA_SORT'] = $albumSorting;
 
-    //set required update fields
-    $updatedFields['DATA_UPDATEDATE'] = $currentTime;
+      //set required update fields
+      $updatedFields['DATA_UPDATEDATE'] = $currentTime;
 
-    //update gallery
-    $galleryRepository = new GalleryRepository();
+      //update gallery
+      $galleryRepository = new GalleryRepository();
 
-    if ($galleryRepository->updateItem($galleryID, $updatedFields))
-      return $this->response(null);
-    else
-      return $this->errorResponse(__('A database error has occurred', 'utvg'));
+      if ($galleryRepository->updateItem($galleryID, $updatedFields))
+        return $this->response(null);
+      else
+        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+    }
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
   }
 
   public function getAllItems(WP_REST_Request $req)
   {
-    //get galleries
-    $galleryRepository = new GalleryRepository();
-    $galleries = $galleryRepository->getItems();
+    try
+    {
+      //get galleries
+      $galleryRepository = new GalleryRepository();
+      $galleries = $galleryRepository->getItems();
 
-    return $this->response($galleries);
+      return $this->response($galleries);
+    }
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
   }
 }

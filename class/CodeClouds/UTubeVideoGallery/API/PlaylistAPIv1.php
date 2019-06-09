@@ -79,148 +79,183 @@ class PlaylistAPIv1 extends APIv1
 
   public function getItem(WP_REST_Request $req)
   {
-    //check for valid playlistID
-    if (!$req['playlistID'])
-      return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
+    try
+    {
+      //check for valid playlistID
+      if (!$req['playlistID'])
+        return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
 
-    //get playlist
-    $playlistRepository = new PlaylistRepository();
-    $playlist = $playlistRepository->getItem($req['playlistID']);
+      //get playlist
+      $playlistRepository = new PlaylistRepository();
+      $playlist = $playlistRepository->getItem($req['playlistID']);
 
-    //check if playlist exists
-    if (!$playlist)
-      return $this->errorResponse(__('The specified video resource was not found', 'utvg'));
+      //check if playlist exists
+      if (!$playlist)
+        return $this->errorResponse(__('The specified video resource was not found', 'utvg'));
 
-    return $this->response($playlist);
+      return $this->response($playlist);
+    }
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
   }
 
   public function createItem(WP_REST_Request $req)
   {
-    //create repository
-    $playlistRepository = new PlaylistRepository();
+    try
+    {
+      //create repository
+      $playlistRepository = new PlaylistRepository();
 
-    //gather data fields
-    $title = sanitize_text_field($req['title']);
-    $source = sanitize_text_field($req['source']);
-    $sourceID = sanitize_text_field($req['sourceID']);
-    $videoQuality = sanitize_text_field($req['videoQuality']);
-    $showControls = $req['showControls'] ? 0 : 1;
-    $albumID = sanitize_key($req['albumID']);
+      //gather data fields
+      $title = sanitize_text_field($req['title']);
+      $source = sanitize_text_field($req['source']);
+      $sourceID = sanitize_text_field($req['sourceID']);
+      $videoQuality = sanitize_text_field($req['videoQuality']);
+      $showControls = $req['showControls'] ? 0 : 1;
+      $albumID = sanitize_key($req['albumID']);
 
-    //check for required fields
-    if (empty($title)
-      || empty($source)
-      || empty($sourceID)
-      || empty($videoQuality)
-      || empty($albumID)
-    )
-      return $this->errorResponse(__('Invalid parameters', 'utvg'));
+      //check for required fields
+      if (empty($title)
+        || empty($source)
+        || empty($sourceID)
+        || empty($videoQuality)
+        || empty($albumID)
+      )
+        return $this->errorResponse(__('Invalid parameters', 'utvg'));
 
-    //insert new playlist
-    $playlistID = $playlistRepository->createItem(
-      $title,
-      $source,
-      $sourceID,
-      $videoQuality,
-      $showControls,
-      $albumID
-    );
+      //insert new playlist
+      $playlistID = $playlistRepository->createItem(
+        $title,
+        $source,
+        $sourceID,
+        $videoQuality,
+        $showControls,
+        $albumID
+      );
 
-    //if successfull playlist creation..
-    if ($playlistID)
-      return $this->response((object)['id' => $playlistID], 201);
-    else
-      return $this->errorResponse(__('A database error has occurred', 'utvg'));
+      //if successfull playlist creation..
+      if ($playlistID)
+        return $this->response((object)['id' => $playlistID], 201);
+      else
+        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+    }
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
   }
 
   public function deleteItem(WP_REST_Request $req)
   {
-    //check for valid playlistID
-    if (!$req['playlistID'])
-      return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
-
-    //sanitize fields
-    $playlistID = sanitize_key($req['playlistID']);
-
-    //get playlist
-    $playlistRepository = new PlaylistRepository();
-    $playlist = $playlistRepository->getItem($playlistID);
-
-    //check if playlist exists
-    if (!$playlist)
-      return $this->errorResponse(__('Playlist does not exist', 'utvg'));
-
-    //get playlist videos
-    $videoRepository = new VideoRepository();
-    $playlistVideos = $videoRepository->getItemsByPlaylist($playlistID);
-
-    //delete videos
-    foreach ($playlistVideos as $video)
+    try
     {
-      if (!$videoRepository->deleteItem($video->getID()))
+      //check for valid playlistID
+      if (!$req['playlistID'])
+        return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
+
+      //sanitize fields
+      $playlistID = sanitize_key($req['playlistID']);
+
+      //get playlist
+      $playlistRepository = new PlaylistRepository();
+      $playlist = $playlistRepository->getItem($playlistID);
+
+      //check if playlist exists
+      if (!$playlist)
+        return $this->errorResponse(__('Playlist does not exist', 'utvg'));
+
+      //get playlist videos
+      $videoRepository = new VideoRepository();
+      $playlistVideos = $videoRepository->getItemsByPlaylist($playlistID);
+
+      //delete videos
+      foreach ($playlistVideos as $video)
+      {
+        if (!$videoRepository->deleteItem($video->getID()))
+          return $this->errorResponse(__('A database error has occurred', 'utvg'));
+
+        //delete video thumbnail
+        $thumbnailPath = wp_upload_dir();
+        $thumbnailPath = $thumbnailPath['basedir'] . '/utubevideo-cache/';
+        unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
+        unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
+      }
+
+      //delete playlist
+      if (!$playlistRepository->deleteItem($playlistID))
         return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
-      //delete video thumbnail
-      $thumbnailPath = wp_upload_dir();
-      $thumbnailPath = $thumbnailPath['basedir'] . '/utubevideo-cache/';
-      unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
-      unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
+      return $this->response(null);
     }
-
-    //delete playlist
-    if (!$playlistRepository->deleteItem($playlistID))
-      return $this->errorResponse(__('A database error has occurred', 'utvg'));
-
-    return $this->response(null);
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
   }
 
   public function updateItem(WP_REST_Request $req)
   {
-    //check for valid playlistID
-    if (!$req['playlistID'])
-      return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
+    try
+    {
+      //check for valid playlistID
+      if (!$req['playlistID'])
+        return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
 
-    //gather data fields
-    $playlistID = sanitize_key($req['playlistID']);
-    $title = sanitize_text_field($req['title']);
-    $videoQuality = sanitize_text_field($req['videoQuality']);
+      //gather data fields
+      $playlistID = sanitize_key($req['playlistID']);
+      $title = sanitize_text_field($req['title']);
+      $videoQuality = sanitize_text_field($req['videoQuality']);
 
-    if (isset($req['showControls']))
-      $showControls = $req['showControls'] ? 0 : 1;
-    else
-      $showControls = null;
+      if (isset($req['showControls']))
+        $showControls = $req['showControls'] ? 0 : 1;
+      else
+        $showControls = null;
 
-    $currentTime = current_time('timestamp');
+      $currentTime = current_time('timestamp');
 
-    //create updatedFields array
-    $updatedFields = [];
+      //create updatedFields array
+      $updatedFields = [];
 
-    //set optional update fields
-    if ($title != null)
-      $updatedFields['PLAY_TITLE'] = $title;
+      //set optional update fields
+      if ($title != null)
+        $updatedFields['PLAY_TITLE'] = $title;
 
-    if ($videoQuality != null)
-      $updatedFields['PLAY_QUALITY'] = $videoQuality;
+      if ($videoQuality != null)
+        $updatedFields['PLAY_QUALITY'] = $videoQuality;
 
-    if ($showControls != null)
-      $updatedFields['PLAY_CHROME'] = $showControls;
+      if ($showControls != null)
+        $updatedFields['PLAY_CHROME'] = $showControls;
 
-    //set required update fields
-    $updatedFields['PLAY_UPDATEDATE'] = $currentTime;
+      //set required update fields
+      $updatedFields['PLAY_UPDATEDATE'] = $currentTime;
 
-    $playlistRepository = new PlaylistRepository();
+      $playlistRepository = new PlaylistRepository();
 
-    if ($playlistRepository->updateItem($playlistID, $updatedFields))
-      return $this->response(null);
-    else
-      return $this->errorResponse(__('A database error has occurred', 'utvg'));
+      if ($playlistRepository->updateItem($playlistID, $updatedFields))
+        return $this->response(null);
+      else
+        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+    }
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
   }
 
   public function getAllItems(WP_REST_Request $req)
   {
-    $playlistRepository = new PlaylistRepository();
-    $playlists = $playlistRepository->getItems();
+    try
+    {
+      $playlistRepository = new PlaylistRepository();
+      $playlists = $playlistRepository->getItems();
 
-    return $this->response($playlists);
+      return $this->response($playlists);
+    }
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
   }
 }

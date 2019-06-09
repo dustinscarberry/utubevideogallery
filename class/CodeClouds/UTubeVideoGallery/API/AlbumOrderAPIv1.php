@@ -32,27 +32,34 @@ class AlbumOrderAPIv1 extends APIv1
 
   public function updateItem(WP_REST_Request $req)
   {
-    global $wpdb;
-
-    if (!$req['albumids'])
-      return $this->errorResponse(__('Invalid data', 'utvg'));
-
-    $albumCount = count($req['albumids']);
-
-    for ($i = 0; $i < $albumCount; $i++)
+    try
     {
-      $albumID = sanitize_key($req['albumids'][$i]);
+      global $wpdb;
 
-      if (!$albumID)
-        return $this->errorResponse(__('Invalid data value', 'utvg'));
+      if (!$req['albumids'])
+        return $this->errorResponse(__('Invalid data', 'utvg'));
 
-      $wpdb->update(
-        $wpdb->prefix . 'utubevideo_album',
-        ['ALB_POS' => $i],
-        ['ALB_ID' => $albumID]
-      );
+      $albumCount = count($req['albumids']);
+
+      for ($i = 0; $i < $albumCount; $i++)
+      {
+        $albumID = sanitize_key($req['albumids'][$i]);
+
+        if (!$albumID)
+          return $this->errorResponse(__('Invalid data value', 'utvg'));
+
+        $wpdb->update(
+          $wpdb->prefix . 'utubevideo_album',
+          ['ALB_POS' => $i],
+          ['ALB_ID' => $albumID]
+        );
+      }
+
+      return $this->response(null);
     }
-
-    return $this->response(null);
+    catch (\Exception $e)
+    {
+      return $this->errorResponse($e->getMessage());
+    }
   }
 }
