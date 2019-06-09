@@ -154,20 +154,13 @@ class VideoAPIv1 extends APIv1
         || empty($source)
         || !isset($albumID)
       )
-        return $this->errorResponse(__('Invalid parameters', 'utvg'));
+        throw new \Exception(__('Invalid parameters', 'utvg'));
 
       //get next video sort position
       $nextSortPosition = $videoRepository->getNextSortPositionByAlbum($albumID);
 
-      //check if value exists
-      if ($nextSortPosition === false)
-        return $this->errorResponse(__('A database error has occured', 'utvg'));
-
       //get video thumbnail type
       $thumbnailType = $videoRepository->getThumbnailTypeByAlbum($albumID);
-
-      if (!$thumbnailType)
-        return $this->errorResponse(__('A database error has occured', 'utvg'));
 
       //insert new video
       $videoID = $videoRepository->createItem(
@@ -189,24 +182,18 @@ class VideoAPIv1 extends APIv1
       if ($videoID)
       {
         $thumbnail = new Thumbnail($videoID);
-
-        if (!$thumbnail->save())
-        {
-          //delete video on failure
-          if (!$videoRepository->deleteItem($videoID))
-            return $this->errorResponse(__('A database error has occurred', 'utvg'));
-
-          //return error message
-          return $this->errorResponse(__('Video thumbnail failed to save', 'utvg'));
-        }
-
+        $thumbnail->save();
         return $this->response(null, 201);
       }
       else
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+        throw new \Exception(__('Database Error: Video creation failed', 'utvg'));
     }
     catch (\Exception $e)
     {
+      //delete video from db due to error if needed
+      if (isset($videoID) && $videoID !== false)
+        $videoRepository->deleteItem($videoID)
+
       return $this->errorResponse($e->getMessage());
     }
   }

@@ -203,8 +203,8 @@ class VideoRepository
     global $wpdb;
 
     //check for valid albumID
-    if (!$albumID)
-      return false;
+    if ($albumID !== false)
+      throw new \Exception(__('Database Error: Invalid album ID', 'utvg'));
 
     $query = $wpdb->prepare(
       'SELECT COUNT(VID_ID) AS VID_COUNT
@@ -216,7 +216,7 @@ class VideoRepository
     //get next sort position for album
     $nextSortPosition = $wpdb->get_var($query);
 
-    if (!$nextSortPosition)
+    if ($nextSortPosition === false)
       $nextSortPosition = 0;
 
     return $nextSortPosition;
@@ -227,8 +227,8 @@ class VideoRepository
     global $wpdb;
 
     //check for valid albumID
-    if (!$albumID)
-      return false;
+    if ($albumID !== false)
+      throw new \Exception(__('Database Error: Invalid album ID', 'utvg'));
 
     $query = $wpdb->prepare(
       'SELECT DATA_THUMBTYPE
@@ -240,10 +240,10 @@ class VideoRepository
 
     $thumbnailType = $wpdb->get_var($query);
 
-    if ($thumbnailType)
-      return $thumbnailType;
+    if (!$thumbnailType)
+      $thumbnailType = 'rectangle';
 
-    return false;
+    return $thumbnailType;
   }
 
   public function deleteItemsByAlbum($albumID)

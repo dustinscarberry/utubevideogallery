@@ -28,15 +28,11 @@ class Thumbnail
   public function save()
   {
     if (!$this->_videoID)
-      return false;
+      throw new \Exception(__('Thumbnail Error: Invalid Video ID', 'utvg'));
 
     $this->setThumbnailData();
     $this->setSourceURL();
-
-    if (!$this->saveThumbnail())
-      return false;
-
-    return true;
+    $this->saveThumbnail();
   }
 
   //save thumbnails
@@ -50,7 +46,7 @@ class Thumbnail
       $image = wp_get_image_editor(plugins_url('missing.jpg', dirname(__FILE__)));
 
       if (is_wp_error($image))
-        return false;//image magick or gd is required or bad api key
+        throw new \Exception(__('Imagick or GD may be missing or bad YouTube API Key', 'utvg'));
     }
 
     if ($this->_thumbnailType == 'square')
@@ -87,8 +83,6 @@ class Thumbnail
       $image->set_quality($this->_imageQuality);
       $image->save($this->_destinationPath . $baseFilename . '.jpg');
     }
-
-    return true;
   }
 
   //load thumbnail data
@@ -105,7 +99,7 @@ class Thumbnail
     );
 
     if (!$thumbnailData)
-      return false;
+      throw new \Exception(__('Database Error: Can\'t determine video information', 'utvg'));
 
     $thumbnailData = $thumbnailData[0];
     $this->_videoID = $thumbnailData->VIDEO_ID;
@@ -120,6 +114,8 @@ class Thumbnail
       $this->_sourceURL = $this->getYouTubeSource();
     elseif ($this->_videoSource == 'vimeo')
       $this->_sourceURL = $this->getVimeoSource();
+    else
+      throw new \Exception(__('Thumbnail Error: Invalid source type', 'utvg'));
   }
 
   private function getYouTubeSource($bypassAPI = false)
@@ -130,7 +126,7 @@ class Thumbnail
     $data = $this->queryAPI('https://www.googleapis.com/youtube/v3/videos?part=id,snippet&id=' . $this->_videoSlug . '&key=' . $this->_pluginOptions['youtubeApiKey']);
 
     if (!$data)
-      return false;
+      throw new \Exception(__('Thumbnail Error: Can\'t contact the YouTube API. Ensure your API key is set.', 'utvg'));
 
     $thumbnailSources = $data->items[0]->snippet->thumbnails;
 
@@ -145,16 +141,19 @@ class Thumbnail
     $data = $this->queryAPI('https://vimeo.com/api/v2/video/' . $this->_videoSlug . '.json');
 
     if (!$data)
-      return false;
+      throw new \Exception(__('Thumbnail Error: Can\'t contact the Vimeo API', 'utvg'));
 
     $data = $data[0];
-
     return $data->thumbnail_large;
   }
 
   private function queryAPI($query)
   {
     $data = wp_remote_get($query);
+
+    if (is_wp_error($data))
+      throw new \Exception($data->get_error_message());
+
     return json_decode($data['body']);
   }
 }
