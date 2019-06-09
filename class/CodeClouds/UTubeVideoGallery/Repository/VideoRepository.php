@@ -203,7 +203,7 @@ class VideoRepository
     global $wpdb;
 
     //check for valid albumID
-    if ($albumID !== false)
+    if ($albumID === false)
       throw new \Exception(__('Database Error: Invalid album ID', 'utvg'));
 
     $query = $wpdb->prepare(
@@ -227,7 +227,7 @@ class VideoRepository
     global $wpdb;
 
     //check for valid albumID
-    if ($albumID !== false)
+    if ($albumID === false)
       throw new \Exception(__('Database Error: Invalid album ID', 'utvg'));
 
     $query = $wpdb->prepare(
