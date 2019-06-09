@@ -192,7 +192,7 @@ class VideoAPIv1 extends APIv1
     {
       //delete video from db due to error if needed
       if (isset($videoID) && $videoID !== false)
-        $videoRepository->deleteItem($videoID)
+        $videoRepository->deleteItem($videoID);
 
       return $this->errorResponse($e->getMessage());
     }
