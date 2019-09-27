@@ -2,7 +2,6 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 let distDir = path.resolve(__dirname, 'public/js');
 let sourceDir = path.resolve(__dirname, 'assets/js');
@@ -29,11 +28,10 @@ module.exports =
       {
         test: /\.scss$/,
         use: [
-          'style-loader',
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
-            options: {url: false, minimize: true}
+            options: {url: false}
           },
           'postcss-loader',
           'sass-loader'
@@ -42,16 +40,14 @@ module.exports =
     ]
   },
   plugins: [
-    new MiniCssExtractPlugin({filename: '../css/[name].min.css'}),
-    //new BundleAnalyzerPlugin()
+    new MiniCssExtractPlugin({filename: '../css/[name].min.css'})
   ],
   optimization: {
     minimizer: [
-     new UglifyJsPlugin({
+      new UglifyJsPlugin({
         sourceMap: true
       }),
       new OptimizeCssAssetsPlugin({})
     ]
   }
-  //devtool: 'source-map'
 };
