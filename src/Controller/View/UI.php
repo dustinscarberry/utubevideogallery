@@ -15,7 +15,8 @@ use UTubeVideoGallery\UI\GalleryView;
 
 class UI
 {
-  private $_options, $_version;
+  private $_options;
+  private $_version;
 
   public function __construct($version)
   {
@@ -132,10 +133,7 @@ class UI
   public function shortcode($atts)
   {
     //panel view
-    if (
-      isset($atts['view'])
-      && $atts['view'] == 'panel'
-    )
+    if (isset($atts['view']) && $atts['view'] == 'panel')
     {
       $panelView = new PanelView($atts);
       return $panelView->render();

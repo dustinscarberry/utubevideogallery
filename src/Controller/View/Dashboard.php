@@ -59,7 +59,7 @@ class Dashboard
     wp_enqueue_script(
       'utv-admin-js',
       plugins_url('../../../public/js/dashboard.min.js', __FILE__),
-      ['jquery', 'jquery-ui-core', 'jquery-ui-sortable'],
+      ['jquery'],
       $this->_version,
       true
     );
