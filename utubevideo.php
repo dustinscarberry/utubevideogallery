@@ -25,22 +25,22 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-namespace CodeClouds\UTubeVideoGallery;
+namespace UTubeVideoGallery;
 
-use CodeClouds\UTubeVideoGallery\Dashboard;
-use CodeClouds\UTubeVideoGallery\UI;
-use CodeClouds\UTubeVideoGallery\API\GalleryAPIv1;
-use CodeClouds\UTubeVideoGallery\API\AlbumAPIv1;
-use CodeClouds\UTubeVideoGallery\API\VideoAPIv1;
-use CodeClouds\UTubeVideoGallery\API\GalleryDataAPIv1;
-use CodeClouds\UTubeVideoGallery\API\PlaylistAPIv1;
-use CodeClouds\UTubeVideoGallery\API\VideoOrderAPIv1;
-use CodeClouds\UTubeVideoGallery\API\AlbumOrderAPIv1;
-use CodeClouds\UTubeVideoGallery\API\YouTubePlaylistAPIv1;
-use CodeClouds\UTubeVideoGallery\API\VimeoPlaylistAPIv1;
-use CodeClouds\UTubeVideoGallery\API\SettingsAPIv1;
+use UTubeVideoGallery\Controller\View\Dashboard;
+use UTubeVideoGallery\Controller\View\UI;
+use UTubeVideoGallery\Controller\API\GalleryAPIv1;
+use UTubeVideoGallery\Controller\API\AlbumAPIv1;
+use UTubeVideoGallery\Controller\API\VideoAPIv1;
+use UTubeVideoGallery\Controller\API\GalleryDataAPIv1;
+use UTubeVideoGallery\Controller\API\PlaylistAPIv1;
+use UTubeVideoGallery\Controller\API\VideoOrderAPIv1;
+use UTubeVideoGallery\Controller\API\AlbumOrderAPIv1;
+use UTubeVideoGallery\Controller\API\YouTubePlaylistAPIv1;
+use UTubeVideoGallery\Controller\API\VimeoPlaylistAPIv1;
+use UTubeVideoGallery\Controller\API\SettingsAPIv1;
 
-if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
+if (!class_exists('UTubeVideoGallery\App'))
 {
   class App
   {
@@ -129,7 +129,7 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
     //load dependencies for plugin
     private function load_dependencies()
     {
-      load_plugin_textdomain('utvg', false, 'utubevideo-gallery/language');
+      load_plugin_textdomain('utvg', false, 'utubevideo-gallery/translations');
 
       //load app or dashboard
       if (is_admin())
@@ -140,10 +140,11 @@ if (!class_exists('CodeClouds\UTubeVideoGallery\App'))
 
     public function autoloader($className)
     {
-      if (strpos($className, 'CodeClouds\UTubeVideoGallery') !== false)
+      if (strpos($className, 'UTubeVideoGallery') !== false)
       {
         $className = str_replace('\\', '/', $className);
-        include_once('class/' . $className . '.php');
+        $className = str_replace('UTubeVideoGallery/', '', $className);
+        include_once('src/' . $className . '.php');
       }
     }
 

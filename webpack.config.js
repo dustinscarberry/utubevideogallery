@@ -5,7 +5,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 let distDir = path.resolve(__dirname, 'public/js');
-let sourceDir = path.resolve(__dirname, 'src/js');
+let sourceDir = path.resolve(__dirname, 'assets/js');
 
 module.exports =
 {
