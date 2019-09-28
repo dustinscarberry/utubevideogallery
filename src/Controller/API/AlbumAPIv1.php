@@ -106,8 +106,7 @@ class AlbumAPIv1 extends APIv1
       $albumID = sanitize_key($req['albumID']);
 
       //get album
-      $albumRepository = new AlbumRepository();
-      $album = $albumRepository->getItem($albumID);
+      $album = AlbumRepository::getItem($albumID);
 
       //check if album exists
       if (!$album)
@@ -126,9 +125,6 @@ class AlbumAPIv1 extends APIv1
   {
     try
     {
-      //create repository
-      $albumRepository = new AlbumRepository();
-
       //gather data fields
       $title = sanitize_text_field($req['title']);
       $videoSorting = ($req['videoSorting'] == 'desc' ? 'desc' : 'asc');
@@ -140,13 +136,13 @@ class AlbumAPIv1 extends APIv1
         //return $this->errorResponse(__('Invalid parameters', 'utvg'));
 
       //get next album sort position
-      $nextSortPosition = $albumRepository->getNextSortPositionByGallery($galleryID);
+      $nextSortPosition = AlbumRepository::getNextSortPositionByGallery($galleryID);
 
       //generate slug and store for possible use in future
       $slug = $this->generateSlug($title, $wpdb);
 
       //insert new album
-      $albumID = $albumRepository->createItem(
+      $albumID = AlbumRepository::createItem(
         $title,
         $slug,
         $videoSorting,
@@ -179,15 +175,12 @@ class AlbumAPIv1 extends APIv1
       $albumID = sanitize_key($req['albumID']);
 
       //get all videos in album
-      $videoRepository = new VideoRepository();
-      $albumVideos = $videoRepository->getItemsByAlbum($albumID);
+      $albumVideos = VideoRepository::getItemsByAlbum($albumID);
 
       //delete album and videos from database
-      $albumRepository = new AlbumRepository();
-
       if (
-        !$videoRepository->deleteItemsByAlbum($albumID)
-        || !$albumRepository->deleteItem($albumID)
+        !VideoRepository::deleteItemsByAlbum($albumID)
+        || !AlbumRepository::deleteItem($albumID)
       )
         return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
@@ -260,9 +253,7 @@ class AlbumAPIv1 extends APIv1
       $updatedFields['ALB_UPDATEDATE'] = $currentTime;
 
       //update album
-      $albumRepository = new AlbumRepository();
-
-      if ($albumRepository->updateItem($albumID, $updatedFields))
+      if (AlbumRepository::updateItem($albumID, $updatedFields))
         return $this->response(null);
       else
         return $this->errorResponse(__('A database error has occurred', 'utvg'));
@@ -286,8 +277,7 @@ class AlbumAPIv1 extends APIv1
       $galleryID = sanitize_key($req['galleryID']);
 
       //get albums
-      $albumRepository = new AlbumRepository();
-      $albums = $albumRepository->getItemsByGallery($galleryID);
+      $albums = AlbumRepository::getItemsByGallery($galleryID);
 
       return $this->response($albums);
     }
@@ -303,8 +293,7 @@ class AlbumAPIv1 extends APIv1
     try
     {
       //get albums
-      $albumRepository = new AlbumRepository();
-      $albums = $albumRepository->getItems();
+      $albums = AlbumRepository::getItems();
 
       return $this->response($albums);
     }

@@ -111,8 +111,7 @@ class VideoAPIv1 extends APIv1
       $videoID = sanitize_key($req['videoID']);
 
       //get video
-      $videoRepository = new VideoRepository();
-      $video = $videoRepository->getItem($videoID);
+      $video = VideoRepository::getItem($videoID);
 
       //check if video exists
       if (!$video)
@@ -131,9 +130,6 @@ class VideoAPIv1 extends APIv1
   {
     try
     {
-      //create repository
-      $videoRepository = new VideoRepository();
-
       //gather data fields
       $sourceID = sanitize_text_field($req['sourceID']);
       $title = sanitize_text_field($req['title']);
@@ -157,13 +153,13 @@ class VideoAPIv1 extends APIv1
         throw new \Exception(__('Invalid parameters', 'utvg'));
 
       //get next video sort position
-      $nextSortPosition = $videoRepository->getNextSortPositionByAlbum($albumID);
+      $nextSortPosition = VideoRepository::getNextSortPositionByAlbum($albumID);
 
       //get video thumbnail type
-      $thumbnailType = $videoRepository->getThumbnailTypeByAlbum($albumID);
+      $thumbnailType = VideoRepository::getThumbnailTypeByAlbum($albumID);
 
       //insert new video
-      $videoID = $videoRepository->createItem(
+      $videoID = VideoRepository::createItem(
         $source,
         $title,
         $description,
@@ -192,7 +188,7 @@ class VideoAPIv1 extends APIv1
     {
       //delete video from db due to error if needed
       if (isset($videoID) && $videoID !== false)
-        $videoRepository->deleteItem($videoID);
+        VideoRepository::deleteItem($videoID);
 
       return $this->errorResponse($e->getMessage());
     }
@@ -211,15 +207,14 @@ class VideoAPIv1 extends APIv1
       $videoID = sanitize_key($req['videoID']);
 
       //get video
-      $videoRepository = new VideoRepository();
-      $video = $videoRepository->getItem($videoID);
+      $video = VideoRepository::getItem($videoID);
 
       //check if video exists
       if (!$video)
         throw new \Exception(__('Database Error: Video does not exist', 'utvg'));
 
       //delete video
-      if (!$videoRepository->deleteItem($videoID))
+      if (!VideoRepository::deleteItem($videoID))
         throw new \Exception(__('Database Error: Failed to delete video', 'utvg'));
 
       //delete video thumbnail
@@ -300,9 +295,7 @@ class VideoAPIv1 extends APIv1
       $updatedFields['VID_THUMBTYPE'] = 'default';
 
       //update video
-      $videoRepository = new VideoRepository();
-
-      if ($videoRepository->updateItem($videoID, $updatedFields))
+      if (VideoRepository::updateItem($videoID, $updatedFields))
       {
         if (!$skipThumbnailRender)
         {
@@ -335,8 +328,7 @@ class VideoAPIv1 extends APIv1
       $albumID = sanitize_key($req['albumID']);
 
       //get videos
-      $videoRepository = new VideoRepository();
-      $videos = $videoRepository->getItemsByAlbum($albumID);
+      $videos = VideoRepository::getItemsByAlbum($albumID);
 
       return $this->response($videos);
     }
@@ -352,8 +344,7 @@ class VideoAPIv1 extends APIv1
     try
     {
       //get videos
-      $videoRepository = new VideoRepository();
-      $videos = $videoRepository->getItems();
+      $videos = VideoRepository::getItems();
 
       return $this->response($videos);
     }

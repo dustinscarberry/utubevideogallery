@@ -6,7 +6,7 @@ use UTubeVideoGallery\Entity\Gallery;
 
 class GalleryRepository
 {
-  public function getItem($galleryID)
+  public static function getItem($galleryID)
   {
     global $wpdb;
 
@@ -42,7 +42,7 @@ class GalleryRepository
     return false;
   }
 
-  public function getItems()
+  public static function getItems()
   {
     global $wpdb;
     $data = [];
@@ -71,7 +71,7 @@ class GalleryRepository
     return $data;
   }
 
-  public function createItem(
+  public static function createItem(
     $title,
     $albumSorting,
     $thumbnailType,
@@ -98,7 +98,7 @@ class GalleryRepository
     return false;
   }
 
-  public function deleteItem($galleryID)
+  public static function deleteItem($galleryID)
   {
     global $wpdb;
 
@@ -111,7 +111,7 @@ class GalleryRepository
     return false;
   }
 
-  public function updateItem($galleryID, $updatedFields)
+  public static function updateItem($galleryID, $updatedFields)
   {
     global $wpdb;
 

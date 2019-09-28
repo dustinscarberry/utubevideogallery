@@ -12,7 +12,8 @@ namespace UTubeVideoGallery\Controller\View;
 
 class Dashboard
 {
-  private $_options, $_version;
+  private $_options;
+  private $_version;
 
   public function __construct($version)
   {

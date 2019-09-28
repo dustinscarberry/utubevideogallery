@@ -90,8 +90,7 @@ class GalleryAPIv1 extends APIv1
       $galleryID = sanitize_key($req['galleryID']);
 
       //get gallery
-      $galleryRepository = new GalleryRepository();
-      $gallery = $galleryRepository->getItem($galleryID);
+      $gallery = GalleryRepository::getItem($galleryID);
 
       if (!$gallery)
         return $this->errorResponse(__('The specified gallery resource was not found', 'utvg'));
@@ -124,8 +123,7 @@ class GalleryAPIv1 extends APIv1
         return $this->errorResponse(__('Invalid parameters', 'utvg'));
 
       //insert new gallery
-      $galleryRepository = new GalleryRepository();
-      $galleryID = $galleryRepository->createItem(
+      $galleryID = GalleryRepository::createItem(
         $title,
         $albumSorting,
         $thumbnailType,
@@ -155,19 +153,14 @@ class GalleryAPIv1 extends APIv1
       //sanitize fields
       $galleryID = sanitize_key($req['galleryID']);
 
-      //create repositories
-      $galleryRepository = new GalleryRepository();
-      $albumRepository = new AlbumRepository();
-      $videoRepository = new VideoRepository();
-
       //get videos for thumbnail deletion
-      $videos = $videoRepository->getItemsByGallery($galleryID);
+      $videos = VideoRepository::getItemsByGallery($galleryID);
 
       //delete gallery, albums, and videos from database
       if (
-        !$videoRepository->deleteItemsByGallery($galleryID)
-        || !$albumRepository->deleteItemsByGallery($galleryID)
-        || !$galleryRepository->deleteItem($galleryID)
+        !VideoRepository::deleteItemsByGallery($galleryID)
+        || !AlbumRepository::deleteItemsByGallery($galleryID)
+        || !GalleryRepository::deleteItem($galleryID)
       )
         return $this->errorResponse(__('A database error has occured', 'utvg'));
 
@@ -230,9 +223,7 @@ class GalleryAPIv1 extends APIv1
       $updatedFields['DATA_UPDATEDATE'] = $currentTime;
 
       //update gallery
-      $galleryRepository = new GalleryRepository();
-
-      if ($galleryRepository->updateItem($galleryID, $updatedFields))
+      if (GalleryRepository::updateItem($galleryID, $updatedFields))
         return $this->response(null);
       else
         return $this->errorResponse(__('A database error has occurred', 'utvg'));
@@ -248,8 +239,7 @@ class GalleryAPIv1 extends APIv1
     try
     {
       //get galleries
-      $galleryRepository = new GalleryRepository();
-      $galleries = $galleryRepository->getItems();
+      $galleries = GalleryRepository::getItems();
 
       return $this->response($galleries);
     }

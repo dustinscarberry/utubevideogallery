@@ -6,7 +6,7 @@ use UTubeVideoGallery\Entity\Video;
 
 class VideoRepository
 {
-  public function getItem($videoID)
+  public static function getItem($videoID)
   {
     global $wpdb;
 
@@ -28,7 +28,7 @@ class VideoRepository
     return false;
   }
 
-  public function getItems()
+  public static function getItems()
   {
     global $wpdb;
     $data = [];
@@ -45,7 +45,7 @@ class VideoRepository
     return $data;
   }
 
-  public function createItem(
+  public static function createItem(
     $source,
     $title,
     $description,
@@ -88,7 +88,7 @@ class VideoRepository
     return false;
   }
 
-  public function deleteItem($videoID)
+  public static function deleteItem($videoID)
   {
     global $wpdb;
 
@@ -102,7 +102,7 @@ class VideoRepository
     return false;
   }
 
-  public function updateItem($videoID, $updatedFields)
+  public static function updateItem($videoID, $updatedFields)
   {
     global $wpdb;
 
@@ -116,7 +116,7 @@ class VideoRepository
     return false;
   }
 
-  public function getItemsByAlbum($albumID)
+  public static function getItemsByAlbum($albumID)
   {
     global $wpdb;
     $data = [];
@@ -141,7 +141,7 @@ class VideoRepository
     return $data;
   }
 
-  public function getItemsByPlaylist($playlistID)
+  public static function getItemsByPlaylist($playlistID)
   {
     global $wpdb;
     $data = [];
@@ -165,7 +165,7 @@ class VideoRepository
     return $data;
   }
 
-  public function getItemsByGallery($galleryID)
+  public static function getItemsByGallery($galleryID)
   {
     global $wpdb;
     $data = [];
@@ -198,7 +198,7 @@ class VideoRepository
     return $data;
   }
 
-  public function getNextSortPositionByAlbum($albumID)
+  public static function getNextSortPositionByAlbum($albumID)
   {
     global $wpdb;
 
@@ -222,7 +222,7 @@ class VideoRepository
     return $nextSortPosition;
   }
 
-  public function getThumbnailTypeByAlbum($albumID = false)
+  public static function getThumbnailTypeByAlbum($albumID = false)
   {
     global $wpdb;
 
@@ -246,7 +246,7 @@ class VideoRepository
     return $thumbnailType;
   }
 
-  public function deleteItemsByAlbum($albumID = false)
+  public static function deleteItemsByAlbum($albumID = false)
   {
     global $wpdb;
 
@@ -260,7 +260,7 @@ class VideoRepository
     return false;
   }
 
-  public function deleteItemsByGallery($galleryID)
+  public static function deleteItemsByGallery($galleryID)
   {
     global $wpdb;
 

@@ -86,8 +86,7 @@ class PlaylistAPIv1 extends APIv1
         return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
 
       //get playlist
-      $playlistRepository = new PlaylistRepository();
-      $playlist = $playlistRepository->getItem($req['playlistID']);
+      $playlist = PlaylistRepository::getItem($req['playlistID']);
 
       //check if playlist exists
       if (!$playlist)
@@ -105,9 +104,6 @@ class PlaylistAPIv1 extends APIv1
   {
     try
     {
-      //create repository
-      $playlistRepository = new PlaylistRepository();
-
       //gather data fields
       $title = sanitize_text_field($req['title']);
       $source = sanitize_text_field($req['source']);
@@ -126,7 +122,7 @@ class PlaylistAPIv1 extends APIv1
         throw new \Exception(__('Invalid parameters', 'utvg'));
 
       //insert new playlist
-      $playlistID = $playlistRepository->createItem(
+      $playlistID = PlaylistRepository::createItem(
         $title,
         $source,
         $sourceID,
@@ -159,21 +155,19 @@ class PlaylistAPIv1 extends APIv1
       $playlistID = sanitize_key($req['playlistID']);
 
       //get playlist
-      $playlistRepository = new PlaylistRepository();
-      $playlist = $playlistRepository->getItem($playlistID);
+      $playlist = PlaylistRepository::getItem($playlistID);
 
       //check if playlist exists
       if (!$playlist)
         return $this->errorResponse(__('Playlist does not exist', 'utvg'));
 
       //get playlist videos
-      $videoRepository = new VideoRepository();
-      $playlistVideos = $videoRepository->getItemsByPlaylist($playlistID);
+      $playlistVideos = VideoRepository::getItemsByPlaylist($playlistID);
 
       //delete videos
       foreach ($playlistVideos as $video)
       {
-        if (!$videoRepository->deleteItem($video->getID()))
+        if (!VideoRepository::deleteItem($video->getID()))
           return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
         //delete video thumbnail
@@ -184,7 +178,7 @@ class PlaylistAPIv1 extends APIv1
       }
 
       //delete playlist
-      if (!$playlistRepository->deleteItem($playlistID))
+      if (!PlaylistRepository::deleteItem($playlistID))
         return $this->errorResponse(__('A database error has occurred', 'utvg'));
 
       return $this->response(null);
@@ -231,9 +225,7 @@ class PlaylistAPIv1 extends APIv1
       //set required update fields
       $updatedFields['PLAY_UPDATEDATE'] = $currentTime;
 
-      $playlistRepository = new PlaylistRepository();
-
-      if ($playlistRepository->updateItem($playlistID, $updatedFields))
+      if (PlaylistRepository::updateItem($playlistID, $updatedFields))
         return $this->response(null);
       else
         return $this->errorResponse(__('A database error has occurred', 'utvg'));
@@ -248,8 +240,7 @@ class PlaylistAPIv1 extends APIv1
   {
     try
     {
-      $playlistRepository = new PlaylistRepository();
-      $playlists = $playlistRepository->getItems();
+      $playlists = PlaylistRepository::getItems();
 
       return $this->response($playlists);
     }
