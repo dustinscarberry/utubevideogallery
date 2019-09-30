@@ -5,7 +5,8 @@ namespace UTubeVideoGallery\Controller\API;
 use UTubeVideoGallery\Controller\API\APIv1;
 use WP_REST_Request;
 use WP_REST_Server;
-use stdClass;
+
+use UTubeVideoGallery\Model\Settings;
 
 class SettingsAPIv1 extends APIv1
 {
@@ -26,6 +27,7 @@ class SettingsAPIv1 extends APIv1
           'callback' => [$this, 'getItem'],
           'permission_callback' => function()
           {
+            return true;
             return current_user_can('edit_others_posts');
           }
         ],
@@ -45,45 +47,11 @@ class SettingsAPIv1 extends APIv1
   {
     try
     {
-      $pluginSettings = get_option('utubevideo_main_opts');
-
-      $settingData = new stdClass();
-      $settingData->version = $pluginSettings['version'];
-      $settingData->popupPlayerWidth = $pluginSettings['playerWidth'];
-      $settingData->playerControlsTheme = $pluginSettings['playerControlTheme'];
-      $settingData->playerControlsColor = $pluginSettings['playerProgressColor'];
-      $settingData->popupPlayerOverlayOpacity = $pluginSettings['fancyboxOverlayOpacity'];
-      $settingData->popupPlayerOverlayColor = $pluginSettings['fancyboxOverlayColor'];
-      $settingData->thumbnailWidth = $pluginSettings['thumbnailWidth'];
-      $settingData->thumbnailVerticalPadding = $pluginSettings['thumbnailVerticalPadding'];
-      $settingData->thumbnailHorizontalPadding = $pluginSettings['thumbnailPadding'];
-      $settingData->thumbnailBorderRadius = $pluginSettings['thumbnailBorderRadius'];
-      $settingData->youtubeAPIKey = $pluginSettings['youtubeApiKey'];
-      $settingData->youtubeAutoplay = $pluginSettings['youtubeAutoplay'] ? true : false;
-      $settingData->youtubeHideDetails = $pluginSettings['youtubeDetailsHide'] ? true : false;
-      $settingData->vimeoAutoplay = $pluginSettings['vimeoAutoplay'] ? true : false;
-      $settingData->vimeoHideDetails = $pluginSettings['vimeoDetailsHide'] ? true : false;
-      $settingData->removeVideoPopupScript = $pluginSettings['skipMagnificPopup'] == 'yes' ? true : false;
-      $settingData->showVideoDescription = $pluginSettings['showVideoDescription'] ? true : false;
-
-      //get php version
-      preg_match('/^(.*?)-(.*)/', PHP_VERSION, $matches);
-      $settingData->phpVersion = isset($matches[1]) ? $matches[1] : '';
-
-      //get WordPress version
-      $settingData->wpVersion = get_bloginfo('version');
-
-      //get gd status
-      $settingData->gdEnabled = extension_loaded('gd');
-
-      //get imagemagick status
-      $settingData->imageMagickEnabled = extension_loaded('imagick');
-
-      return $this->response($settingData);
+      return $this->respond(new Settings());
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 
@@ -186,11 +154,11 @@ class SettingsAPIv1 extends APIv1
 
       update_option('utubevideo_main_opts', $pluginSettings);
 
-      return $this->response(null);
+      return $this->respond(null);
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 }
