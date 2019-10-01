@@ -115,14 +115,36 @@ class AlbumRepository
     return false;
   }
 
-  public static function updateItem($albumID, $updatedFields)
+  public static function updateItem($form)
   {
     global $wpdb;
+
+    //create updatedFields array
+    $updatedFields = [];
+
+    //set optional update fields
+    if ($form->getTitle() != null)
+      $updatedFields['ALB_NAME'] = $form->getTitle();
+
+    if ($form->getThumbnail() != null)
+      $updatedFields['ALB_THUMB'] = $form->getThumbnail();
+
+    if ($form->getVideoSorting() != null)
+      $updatedFields['ALB_SORT'] = $form->getVideoSorting();
+
+    if ($form->getPublished() !== null)
+      $updatedFields['ALB_PUBLISH'] = $form->getPublished();
+
+    if ($form->getGalleryID() != null)
+      $updatedFields['DATA_ID'] = $form->getGalleryID();
+
+    //set required update fields
+    $updatedFields['ALB_UPDATEDATE'] = current_time('timestamp');
 
     if ($wpdb->update(
       $wpdb->prefix . 'utubevideo_album',
       $updatedFields,
-      ['ALB_ID' => $albumID]
+      ['ALB_ID' => $form->getAlbumID()]
     ) >= 0)
       return true;
 

@@ -83,20 +83,20 @@ class PlaylistAPIv1 extends APIv1
     {
       //check for valid playlistID
       if (!$req['playlistID'])
-        return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
+        return $this->respondWithError(__('Invalid playlist ID', 'utvg'));
 
       //get playlist
       $playlist = PlaylistRepository::getItem($req['playlistID']);
 
       //check if playlist exists
       if (!$playlist)
-        return $this->errorResponse(__('The specified video resource was not found', 'utvg'));
+        return $this->respondWithError(__('The specified video resource was not found', 'utvg'));
 
-      return $this->response($playlist);
+      return $this->respond($playlist);
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 
@@ -133,13 +133,13 @@ class PlaylistAPIv1 extends APIv1
 
       //if successfull playlist creation..
       if ($playlistID)
-        return $this->response((object)['id' => $playlistID], 201);
+        return $this->respond((object)['id' => $playlistID], 201);
       else
         throw new \Exception(__('Database Error: Playlist failed to save', 'utvg'));
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 
@@ -149,7 +149,7 @@ class PlaylistAPIv1 extends APIv1
     {
       //check for valid playlistID
       if (!$req['playlistID'])
-        return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
+        return $this->respondWithError(__('Invalid playlist ID', 'utvg'));
 
       //sanitize fields
       $playlistID = sanitize_key($req['playlistID']);
@@ -159,7 +159,7 @@ class PlaylistAPIv1 extends APIv1
 
       //check if playlist exists
       if (!$playlist)
-        return $this->errorResponse(__('Playlist does not exist', 'utvg'));
+        return $this->respondWithError(__('Playlist does not exist', 'utvg'));
 
       //get playlist videos
       $playlistVideos = VideoRepository::getItemsByPlaylist($playlistID);
@@ -168,7 +168,7 @@ class PlaylistAPIv1 extends APIv1
       foreach ($playlistVideos as $video)
       {
         if (!VideoRepository::deleteItem($video->getID()))
-          return $this->errorResponse(__('A database error has occurred', 'utvg'));
+          return $this->respondWithError(__('A database error has occurred', 'utvg'));
 
         //delete video thumbnail
         $thumbnailPath = wp_upload_dir();
@@ -179,13 +179,13 @@ class PlaylistAPIv1 extends APIv1
 
       //delete playlist
       if (!PlaylistRepository::deleteItem($playlistID))
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+        return $this->respondWithError(__('A database error has occurred', 'utvg'));
 
-      return $this->response(null);
+      return $this->respond(null);
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 
@@ -195,7 +195,7 @@ class PlaylistAPIv1 extends APIv1
     {
       //check for valid playlistID
       if (!$req['playlistID'])
-        return $this->errorResponse(__('Invalid playlist ID', 'utvg'));
+        return $this->respondWithError(__('Invalid playlist ID', 'utvg'));
 
       //gather data fields
       $playlistID = sanitize_key($req['playlistID']);
@@ -226,13 +226,13 @@ class PlaylistAPIv1 extends APIv1
       $updatedFields['PLAY_UPDATEDATE'] = $currentTime;
 
       if (PlaylistRepository::updateItem($playlistID, $updatedFields))
-        return $this->response(null);
+        return $this->respond(null);
       else
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+        return $this->respondWithError(__('A database error has occurred', 'utvg'));
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 
@@ -242,11 +242,11 @@ class PlaylistAPIv1 extends APIv1
     {
       $playlists = PlaylistRepository::getItems();
 
-      return $this->response($playlists);
+      return $this->respond($playlists);
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 }

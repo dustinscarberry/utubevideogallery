@@ -3,8 +3,8 @@
 namespace UTubeVideoGallery\Controller\API;
 
 use UTubeVideoGallery\Controller\API\APIv1;
-use UTubeVideoGallery\Repository\AlbumRepository;
-use UTubeVideoGallery\Repository\VideoRepository;
+use UTubeVideoGallery\Form\AlbumType;
+use UTubeVideoGallery\Service\Manager\AlbumManager;
 use WP_REST_Request;
 use WP_REST_Server;
 
@@ -15,6 +15,7 @@ class AlbumAPIv1 extends APIv1
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
+  //register api routes
   public function registerRoutes()
   {
     register_rest_route(
@@ -22,7 +23,7 @@ class AlbumAPIv1 extends APIv1
       'galleries/(?P<galleryID>\d+)/albums',
       [
         'methods' => WP_REST_Server::READABLE,
-        'callback' => [$this, 'getAllItems'],
+        'callback' => [$this, 'getGalleryItems'],
         'args' => [
           'galleryID'
         ]
@@ -43,7 +44,7 @@ class AlbumAPIv1 extends APIv1
         ],
         [
           'methods' => WP_REST_Server::READABLE,
-          'callback' => [$this, 'getAnyAllItems'],
+          'callback' => [$this, 'getItems'],
           'permission_callback' => function()
           {
             return current_user_can('edit_others_posts');
@@ -98,25 +99,51 @@ class AlbumAPIv1 extends APIv1
   {
     try
     {
-      //check for valid albumID
-      if (!$req['albumID'])
-        return $this->errorResponse(__('Invalid album ID', 'utvg'));
+      $form = new AlbumType($req);
+      $form->validate('get');
 
-      //sanitize data
-      $albumID = sanitize_key($req['albumID']);
+      $album = AlbumManager::getAlbum($form->getAlbumID());
 
-      //get album
-      $album = AlbumRepository::getItem($albumID);
-
-      //check if album exists
-      if (!$album)
-        return $this->errorResponse(__('The specified album resource was not found', 'utvg'));
-
-      return $this->response($album);
+      return $this->respond($album);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
+    }
+  }
+
+  //get all albums
+  public function getItems(WP_REST_Request $req)
+  {
+    try
+    {
+      //get albums
+      $albums = AlbumManager::getAlbums();
+      return $this->respond($albums);
+    }
+    catch (UserMessageException $e)
+    {
+      return $this->respondWithError($e->getMessage());
+    }
+  }
+
+  //get all albums within gallery
+  public function getGalleryItems(WP_REST_Request $req)
+  {
+    try
+    {
+      $form = new AlbumType($req);
+      $form->validate('getGallery');
+
+      //get albums
+      $albums = AlbumManager::getGalleryAlbums($form->getGalleryID());
+
+      //respond
+      return $this->respond($albums);
+    }
+    catch (UserMessageException $e)
+    {
+      return $this->respondWithError($e->getMessage());
     }
   }
 
@@ -125,81 +152,16 @@ class AlbumAPIv1 extends APIv1
   {
     try
     {
-      //gather data fields
-      $title = sanitize_text_field($req['title']);
-      $videoSorting = ($req['videoSorting'] == 'desc' ? 'desc' : 'asc');
-      $galleryID = sanitize_key($req['galleryID']);
+      $form = new AlbumType($req);
+      $form->validate('create');
 
-      //check for required fields
-      if (empty($title) || empty($videoSorting) || !isset($galleryID))
-        throw new \Exception(__('Invalid parameters', 'utvg'));
-        //return $this->errorResponse(__('Invalid parameters', 'utvg'));
+      AlbumManager::createAlbum($form);
 
-      //get next album sort position
-      $nextSortPosition = AlbumRepository::getNextSortPositionByGallery($galleryID);
-
-      //generate slug and store for possible use in future
-      $slug = $this->generateSlug($title, $wpdb);
-
-      //insert new album
-      $albumID = AlbumRepository::createItem(
-        $title,
-        $slug,
-        $videoSorting,
-        $nextSortPosition,
-        $galleryID
-      );
-
-      //if successfull album creation..
-      if ($albumID)
-        return $this->response(null, 201);
-      else
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+      return $this->respond(null, 201);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
-      return $this->errorResponse($e->getMessage());
-    }
-  }
-
-  //delete album
-  public function deleteItem(WP_REST_Request $req)
-  {
-    try
-    {
-      //check for valid albumID
-      if (!$req['albumID'])
-        return $this->errorResponse(__('Invalid album ID', 'utvg'));
-
-      //sanitize fields
-      $albumID = sanitize_key($req['albumID']);
-
-      //get all videos in album
-      $albumVideos = VideoRepository::getItemsByAlbum($albumID);
-
-      //delete album and videos from database
-      if (
-        !VideoRepository::deleteItemsByAlbum($albumID)
-        || !AlbumRepository::deleteItem($albumID)
-      )
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
-
-      //delete thumbnails
-      $thumbnailPath = wp_upload_dir();
-      $thumbnailPath = $thumbnailPath['basedir'] . '/utubevideo-cache/';
-
-      //delete video thumbnails
-      foreach ($videos as $video)
-      {
-        unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
-        unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
-      }
-
-      return $this->response(null);
-    }
-    catch (\Exception $e)
-    {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 
@@ -208,137 +170,34 @@ class AlbumAPIv1 extends APIv1
   {
     try
     {
-      //check for valid albumID
-      if (!$req['albumID'])
-        return $this->errorResponse(__('Invalid album ID', 'utvg'));
+      $form = new AlbumType($req);
+      $form->validate('update');
 
-      //gather data fields
-      $albumID = sanitize_key($req['albumID']);
-      $title = sanitize_text_field($req['title']);
-      $thumbnail = sanitize_text_field($req['thumbnail']);
+      AlbumManager::updateAlbum($form);
 
-      if (isset($req['videoSorting']))
-        $videoSorting = $req['videoSorting'] == 'desc' ? 'desc' : 'asc';
-      else
-        $videoSorting = null;
-
-      if (isset($req['published']))
-        $published = $req['published'] ? true : false;
-      else
-        $published = null;
-
-      $galleryID = sanitize_key($req['galleryID']);
-      $currentTime = current_time('timestamp');
-
-      //create updatedFields array
-      $updatedFields = [];
-
-      //set optional update fields
-      if ($title != null)
-        $updatedFields['ALB_NAME'] = $title;
-
-      if ($thumbnail != null)
-        $updatedFields['ALB_THUMB'] = $thumbnail;
-
-      if ($videoSorting != null)
-        $updatedFields['ALB_SORT'] = $videoSorting;
-
-      if ($published !== null)
-        $updatedFields['ALB_PUBLISH'] = $published;
-
-      if ($galleryID != null)
-        $updatedFields['DATA_ID'] = $galleryID;
-
-      //set required update fields
-      $updatedFields['ALB_UPDATEDATE'] = $currentTime;
-
-      //update album
-      if (AlbumRepository::updateItem($albumID, $updatedFields))
-        return $this->response(null);
-      else
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+      return $this->respond(null);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 
-  //get list of albums within gallery
-  public function getAllItems(WP_REST_Request $req)
+  //delete album
+  public function deleteItem(WP_REST_Request $req)
   {
     try
     {
-      //check for valid gallery id
-      if (!$req['galleryID'])
-        return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
+      $form = new AlbumType($req);
+      $form->validate('delete');
 
-      //sanitize data
-      $galleryID = sanitize_key($req['galleryID']);
+      AlbumManager::deleteAlbum($form->getAlbumID());
 
-      //get albums
-      $albums = AlbumRepository::getItemsByGallery($galleryID);
-
-      return $this->response($albums);
+      return $this->respond(null);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
-  }
-
-  //get list of all albums
-  public function getAnyAllItems(WP_REST_Request $req)
-  {
-    try
-    {
-      //get albums
-      $albums = AlbumRepository::getItems();
-
-      return $this->response($albums);
-    }
-    catch (\Exception $e)
-    {
-      return $this->errorResponse($e->getMessage());
-    }
-  }
-
-  //generate album permalink slug
-  public function generateSlug($albumName, $wpdb)
-  {
-    global $wpdb;
-
-    $rawslugs = $wpdb->get_results(
-      'SELECT ALB_SLUG
-      FROM ' . $wpdb->prefix . 'utubevideo_album',
-      ARRAY_N
-    );
-
-    foreach ($rawslugs as $item)
-      $sluglist[] = $item[0];
-
-    $mark = 1;
-    $slug = strtolower($albumName);
-    $slug = str_replace(' ', '-', $slug);
-    $slug = html_entity_decode($slug, ENT_QUOTES, 'UTF-8');
-    $slug = preg_replace("/[^a-zA-Z0-9-]+/", '', $slug);
-
-    if (!empty($sluglist))
-      $this->checkslug($slug, $sluglist, $mark);
-
-    return $slug;
-  }
-
-  //recursive function for making sure slugs are unique
-  private function checkslug($slug, $sluglist, $mark)
-  {
-    if (in_array($slug, $sluglist))
-    {
-      $slug = $slug . '-' . $mark;
-      $mark++;
-      self::checkslug($slug, $sluglist, $mark);
-    }
-    else
-      return;
   }
 }

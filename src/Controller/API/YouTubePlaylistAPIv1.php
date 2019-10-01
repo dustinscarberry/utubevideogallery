@@ -51,11 +51,11 @@ class YouTubePlaylistAPIv1 extends APIv1
 
       //check for a possibly valid api key before continuing
       if (Utility::isNullOrEmpty($this->_options['youtubeApiKey']))
-        return $this->errorResponse(__('YouTube API key is missing', 'utvg'));
+        return $this->respondWithError(__('YouTube API key is missing', 'utvg'));
 
       //check for valid sourceID
       if (!$req['sourceID'])
-        return $this->errorResponse(__('Invalid source ID', 'utvg'));
+        return $this->respondWithError(__('Invalid source ID', 'utvg'));
 
       //gather data fields
       $sourceID = sanitize_text_field($req['sourceID']);
@@ -167,11 +167,11 @@ class YouTubePlaylistAPIv1 extends APIv1
         }
       }
 
-      return $this->response($returnData);
+      return $this->respond($returnData);
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 }

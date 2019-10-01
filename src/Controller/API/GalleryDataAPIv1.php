@@ -92,7 +92,7 @@ class GalleryDataAPIv1
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 }

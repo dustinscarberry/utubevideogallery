@@ -37,7 +37,7 @@ class VideoOrderAPIv1 extends APIv1
       global $wpdb;
 
       if (!$req['videoids'])
-        return $this->errorResponse(__('Invalid data', 'utvg'));
+        return $this->respondWithError(__('Invalid data', 'utvg'));
 
       $videoCount = count($req['videoids']);
 
@@ -46,7 +46,7 @@ class VideoOrderAPIv1 extends APIv1
         $videoID = sanitize_key($req['videoids'][$i]);
 
         if (!$videoID)
-          return $this->errorResponse(__('Invalid data value', 'utvg'));
+          return $this->respondWithError(__('Invalid data value', 'utvg'));
 
         $wpdb->update(
           $wpdb->prefix . 'utubevideo_video',
@@ -55,11 +55,11 @@ class VideoOrderAPIv1 extends APIv1
         );
       }
 
-      return $this->response(null);
+      return $this->respond(null);
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 }

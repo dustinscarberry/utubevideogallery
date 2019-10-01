@@ -52,7 +52,7 @@ class VimeoPlaylistAPIv1 extends APIv1
 
       //check for valid sourceID
       if (!$req['sourceID'])
-        return $this->errorResponse(__('Invalid source ID', 'utvg'));
+        return $this->respondWithError(__('Invalid source ID', 'utvg'));
 
       //gather data fields
       $sourceID = sanitize_text_field($req['sourceID']);
@@ -66,7 +66,7 @@ class VimeoPlaylistAPIv1 extends APIv1
 
       //check data fetch
       if (!$data)
-        return $this->errorResponse(__('Vimeo API call failed', 'utvg'));
+        return $this->respondWithError(__('Vimeo API call failed', 'utvg'));
 
       //retrieve playlist title
       if (isset($data->title))
@@ -91,7 +91,7 @@ class VimeoPlaylistAPIv1 extends APIv1
         );
 
         if (!$videoData)
-          return $this->errorResponse(__('Vimeo API call failed', 'utvg'));
+          return $this->respondWithError(__('Vimeo API call failed', 'utvg'));
 
         $baseVideoData = array_merge($baseVideoData, $videoData);
       }
@@ -112,11 +112,11 @@ class VimeoPlaylistAPIv1 extends APIv1
         $returnData->videos[] = $videoData;
       }
 
-      return $this->response($returnData);
+      return $this->respond($returnData);
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 }

@@ -84,7 +84,7 @@ class GalleryAPIv1 extends APIv1
     {
       //check for valid galleryID
       if (!$req['galleryID'])
-        return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
+        return $this->respondWithError(__('Invalid gallery ID', 'utvg'));
 
       //sanitize data
       $galleryID = sanitize_key($req['galleryID']);
@@ -93,13 +93,13 @@ class GalleryAPIv1 extends APIv1
       $gallery = GalleryRepository::getItem($galleryID);
 
       if (!$gallery)
-        return $this->errorResponse(__('The specified gallery resource was not found', 'utvg'));
+        return $this->respondWithError(__('The specified gallery resource was not found', 'utvg'));
 
-      return $this->response($gallery);
+      return $this->respond($gallery);
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 
@@ -120,7 +120,7 @@ class GalleryAPIv1 extends APIv1
         || empty($thumbnailType)
         || empty($displayType)
       )
-        return $this->errorResponse(__('Invalid parameters', 'utvg'));
+        return $this->respondWithError(__('Invalid parameters', 'utvg'));
 
       //insert new gallery
       $galleryID = GalleryRepository::createItem(
@@ -131,13 +131,13 @@ class GalleryAPIv1 extends APIv1
       );
 
       if ($galleryID)
-        return $this->response($galleryID, 201);
+        return $this->respond($galleryID, 201);
       else
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+        return $this->respondWithError(__('A database error has occurred', 'utvg'));
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
 
   }
@@ -148,7 +148,7 @@ class GalleryAPIv1 extends APIv1
     {
       //check for valid galleryID
       if (!$req['galleryID'])
-        return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
+        return $this->respondWithError(__('Invalid gallery ID', 'utvg'));
 
       //sanitize fields
       $galleryID = sanitize_key($req['galleryID']);
@@ -162,7 +162,7 @@ class GalleryAPIv1 extends APIv1
         || !AlbumRepository::deleteItemsByGallery($galleryID)
         || !GalleryRepository::deleteItem($galleryID)
       )
-        return $this->errorResponse(__('A database error has occured', 'utvg'));
+        return $this->respondWithError(__('A database error has occured', 'utvg'));
 
       //delete video thumbnails
       $thumbnailPath = wp_upload_dir();
@@ -174,11 +174,11 @@ class GalleryAPIv1 extends APIv1
         unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
       }
 
-      return $this->response(null);
+      return $this->respond(null);
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 
@@ -188,7 +188,7 @@ class GalleryAPIv1 extends APIv1
     {
       //check for valid galleryID
       if (!$req['galleryID'])
-        return $this->errorResponse(__('Invalid gallery ID', 'utvg'));
+        return $this->respondWithError(__('Invalid gallery ID', 'utvg'));
 
       //gather data fields
       $galleryID = sanitize_key($req['galleryID']);
@@ -224,13 +224,13 @@ class GalleryAPIv1 extends APIv1
 
       //update gallery
       if (GalleryRepository::updateItem($galleryID, $updatedFields))
-        return $this->response(null);
+        return $this->respond(null);
       else
-        return $this->errorResponse(__('A database error has occurred', 'utvg'));
+        return $this->respondWithError(__('A database error has occurred', 'utvg'));
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 
@@ -241,11 +241,11 @@ class GalleryAPIv1 extends APIv1
       //get galleries
       $galleries = GalleryRepository::getItems();
 
-      return $this->response($galleries);
+      return $this->respond($galleries);
     }
     catch (\Exception $e)
     {
-      return $this->errorResponse($e->getMessage());
+      return $this->respondWithError($e->getMessage());
     }
   }
 }

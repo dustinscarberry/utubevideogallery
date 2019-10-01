@@ -45,42 +45,27 @@ class VideoRepository
     return $data;
   }
 
-  public static function createItem(
-    $source,
-    $title,
-    $description,
-    $sourceID,
-    $thumbnailType,
-    $quality,
-    $showControls,
-    $startTime,
-    $endTime,
-    $nextSortPosition,
-    $albumID,
-    $playlistID
-  )
+  public static function createItem($form, $nextSortPosition, $thumbnailType)
   {
     global $wpdb;
-
-    $currentTime = current_time('timestamp');
 
     //insert new video
     if ($wpdb->insert(
       $wpdb->prefix . 'utubevideo_video',
       [
-        'VID_SOURCE' => $source,
-        'VID_NAME' => $title,
-        'VID_DESCRIPTION' => $description,
-        'VID_URL' => $sourceID,
+        'VID_SOURCE' => $form->getSource(),
+        'VID_NAME' => $form->getTitle(),
+        'VID_DESCRIPTION' => $form->getDescription(),
+        'VID_URL' => $form->getSourceID(),
         'VID_THUMBTYPE' => $thumbnailType,
-        'VID_QUALITY' => $quality,
-        'VID_CHROME' => $showControls,
-        'VID_STARTTIME' => $startTime,
-        'VID_ENDTIME' => $endTime,
+        'VID_QUALITY' => $form->getQuality(),
+        'VID_CHROME' => $form->getShowControls(),
+        'VID_STARTTIME' => $form->getStartTime(),
+        'VID_ENDTIME' => $form->getEndTime(),
         'VID_POS' => $nextSortPosition,
-        'VID_UPDATEDATE' => $currentTime,
-        'ALB_ID' => $albumID,
-        'PLAY_ID' => $playlistID
+        'VID_UPDATEDATE' => current_time('timestamp'),
+        'ALB_ID' => $form->getAlbumID(),
+        'PLAY_ID' => $form->getPlaylistID()
       ]
     ))
       return $wpdb->insert_id;
@@ -102,14 +87,47 @@ class VideoRepository
     return false;
   }
 
-  public static function updateItem($videoID, $updatedFields)
+  public static function updateItem($form)
   {
     global $wpdb;
 
+    //list of fields to update [patch]
+    $updatedFields = [];
+
+    //set optional update fields
+    if ($form->getTitle() != null)
+      $updatedFields['VID_NAME'] = $form->getTitle();
+
+    if ($form->getDescription() != null)
+      $updatedFields['VID_DESCRIPTION'] = $form->getDescription();
+
+    if ($form->getQuality() != null)
+      $updatedFields['VID_QUALITY'] = $form->getQuality();
+
+    if ($form->getShowControls() !== null)
+      $updatedFields['VID_CHROME'] = $form->getShowControls();
+
+    if ($form->getStartTime() != null)
+      $updatedFields['VID_STARTTIME'] = $form->getStartTime();
+
+    if ($form->getEndTime() != null)
+      $updatedFields['VID_ENDTIME'] = $form->getEndTime();
+
+    if ($form->getPublished() !== null)
+      $updatedFields['VID_PUBLISH'] = $form->getPublished();
+
+    if ($form->getAlbumID() != null)
+      $updatedFields['ALB_ID'] = $form->getAlbumID();
+
+    //set required update fields
+    $updatedFields['VID_UPDATEDATE'] = current_time('timestamp');
+    $updatedFields['VID_THUMBTYPE'] = 'default';
+
+    //update query
     if ($wpdb->update(
       $wpdb->prefix . 'utubevideo_video',
       $updatedFields,
-      ['VID_ID' => $videoID]
+      ['VID_ID' => $form->getVideoID()]
     ) >= 0)
       return true;
 
