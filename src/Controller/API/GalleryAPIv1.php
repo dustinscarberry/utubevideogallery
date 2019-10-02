@@ -3,9 +3,8 @@
 namespace UTubeVideoGallery\Controller\API;
 
 use UTubeVideoGallery\Controller\API\APIv1;
-use UTubeVideoGallery\Repository\GalleryRepository;
-use UTubeVideoGallery\Repository\AlbumRepository;
-use UTubeVideoGallery\Repository\VideoRepository;
+use UTubeVideoGallery\Form\GalleryType;
+use UTubeVideoGallery\Service\Manager\GalleryManager;
 use WP_REST_Request;
 use WP_REST_Server;
 
@@ -24,7 +23,7 @@ class GalleryAPIv1 extends APIv1
       [
         [
           'methods' => WP_REST_Server::READABLE,
-          'callback' => [$this, 'getAllItems']
+          'callback' => [$this, 'getItems']
         ],
         [
           'methods' => WP_REST_Server::CREATABLE,
@@ -82,22 +81,29 @@ class GalleryAPIv1 extends APIv1
   {
     try
     {
-      //check for valid galleryID
-      if (!$req['galleryID'])
-        return $this->respondWithError(__('Invalid gallery ID', 'utvg'));
+      $form = new GalleryType($req);
+      $form->validate('get');
 
-      //sanitize data
-      $galleryID = sanitize_key($req['galleryID']);
-
-      //get gallery
-      $gallery = GalleryRepository::getItem($galleryID);
-
-      if (!$gallery)
-        return $this->respondWithError(__('The specified gallery resource was not found', 'utvg'));
+      $gallery = GalleryManager::getGallery($form->getGalleryID());
 
       return $this->respond($gallery);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
+    {
+      return $this->respondWithError($e->getMessage());
+    }
+  }
+
+  public function getItems(WP_REST_Request $req)
+  {
+    try
+    {
+      //get galleries
+      $galleries = GalleryManager::getGalleries();
+
+      return $this->respond($galleries);
+    }
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }
@@ -107,76 +113,14 @@ class GalleryAPIv1 extends APIv1
   {
     try
     {
-      //gather data fields
-      $title = sanitize_text_field($req['title']);
-      $albumSorting = sanitize_text_field($req['albumSorting'] == 'desc' ? 'desc' : 'asc');
-      $thumbnailType = sanitize_text_field($req['thumbnailType'] == 'square' ? 'square' : 'rectangle');
-      $displayType = sanitize_text_field($req['displayType'] == 'video' ? 'video' : 'album');
+      $form = new GalleryType($req);
+      $form->validate('create');
 
-      //check for required fields
-      if (
-        empty($title)
-        || empty($albumSorting)
-        || empty($thumbnailType)
-        || empty($displayType)
-      )
-        return $this->respondWithError(__('Invalid parameters', 'utvg'));
+      GalleryManager::createGallery($form);
 
-      //insert new gallery
-      $galleryID = GalleryRepository::createItem(
-        $title,
-        $albumSorting,
-        $thumbnailType,
-        $displayType
-      );
-
-      if ($galleryID)
-        return $this->respond($galleryID, 201);
-      else
-        return $this->respondWithError(__('A database error has occurred', 'utvg'));
+      return $this->respond($galleryID, 201);
     }
-    catch (\Exception $e)
-    {
-      return $this->respondWithError($e->getMessage());
-    }
-
-  }
-
-  public function deleteItem(WP_REST_Request $req)
-  {
-    try
-    {
-      //check for valid galleryID
-      if (!$req['galleryID'])
-        return $this->respondWithError(__('Invalid gallery ID', 'utvg'));
-
-      //sanitize fields
-      $galleryID = sanitize_key($req['galleryID']);
-
-      //get videos for thumbnail deletion
-      $videos = VideoRepository::getItemsByGallery($galleryID);
-
-      //delete gallery, albums, and videos from database
-      if (
-        !VideoRepository::deleteItemsByGallery($galleryID)
-        || !AlbumRepository::deleteItemsByGallery($galleryID)
-        || !GalleryRepository::deleteItem($galleryID)
-      )
-        return $this->respondWithError(__('A database error has occured', 'utvg'));
-
-      //delete video thumbnails
-      $thumbnailPath = wp_upload_dir();
-      $thumbnailPath = $thumbnailPath['basedir'] . '/utubevideo-cache/';
-
-      foreach ($videos as $video)
-      {
-        unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
-        unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
-      }
-
-      return $this->respond(null);
-    }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }
@@ -186,64 +130,31 @@ class GalleryAPIv1 extends APIv1
   {
     try
     {
-      //check for valid galleryID
-      if (!$req['galleryID'])
-        return $this->respondWithError(__('Invalid gallery ID', 'utvg'));
+      $form = new GalleryType($req);
+      $form->validate('update');
 
-      //gather data fields
-      $galleryID = sanitize_key($req['galleryID']);
-      $title = sanitize_text_field($req['title']);
+      GalleryManager::updateGallery($form);
 
-      if (isset($req['albumSorting']))
-        $albumSorting = $req['albumSorting'] == 'desc' ? 'desc' : 'asc';
-      else
-        $albumSorting = null;
-
-      $thumbnailType = sanitize_text_field($req['thumbnailType']);
-      $displayType = sanitize_text_field($req['displayType']);
-      $currentTime = current_time('timestamp');
-
-      //create updatedFields array
-      $updatedFields = [];
-
-      //set optional update fields
-      if ($title != null)
-        $updatedFields['DATA_NAME'] = $title;
-
-      if ($thumbnailType != null)
-        $updatedFields['DATA_THUMBTYPE'] = $thumbnailType;
-
-      if ($displayType != null)
-        $updatedFields['DATA_DISPLAYTYPE'] = $displayType;
-
-      if ($albumSorting != null)
-        $updatedFields['DATA_SORT'] = $albumSorting;
-
-      //set required update fields
-      $updatedFields['DATA_UPDATEDATE'] = $currentTime;
-
-      //update gallery
-      if (GalleryRepository::updateItem($galleryID, $updatedFields))
-        return $this->respond(null);
-      else
-        return $this->respondWithError(__('A database error has occurred', 'utvg'));
+      return $this->respond(null);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }
   }
 
-  public function getAllItems(WP_REST_Request $req)
+  public function deleteItem(WP_REST_Request $req)
   {
     try
     {
-      //get galleries
-      $galleries = GalleryRepository::getItems();
+      $form = new GalleryType($req);
+      $form->validate('delete');
 
-      return $this->respond($galleries);
+      GalleryManager::deleteGallery($form->getGalleryID());
+
+      return $this->respond(null);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }

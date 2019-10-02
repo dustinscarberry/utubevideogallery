@@ -3,8 +3,8 @@
 namespace UTubeVideoGallery\Controller\API;
 
 use UTubeVideoGallery\Controller\API\APIv1;
-use UTubeVideoGallery\Repository\PlaylistRepository;
-use UTubeVideoGallery\Repository\VideoRepository;
+use UTubeVideoGallery\Form\PlaylistType;
+use UTubeVideoGallery\Service\Manager\PlaylistManager;
 use WP_REST_Request;
 use WP_REST_Server;
 
@@ -23,7 +23,7 @@ class PlaylistAPIv1 extends APIv1
       [
         [
           'methods' => WP_REST_Server::READABLE,
-          'callback' => [$this, 'getAllItems']
+          'callback' => [$this, 'getItems']
         ],
         [
           'methods' => WP_REST_Server::CREATABLE,
@@ -81,20 +81,28 @@ class PlaylistAPIv1 extends APIv1
   {
     try
     {
-      //check for valid playlistID
-      if (!$req['playlistID'])
-        return $this->respondWithError(__('Invalid playlist ID', 'utvg'));
+      $form = new PlaylistType($req);
+      $form->validate('get');
 
-      //get playlist
-      $playlist = PlaylistRepository::getItem($req['playlistID']);
-
-      //check if playlist exists
-      if (!$playlist)
-        return $this->respondWithError(__('The specified video resource was not found', 'utvg'));
+      $playlist = PlaylistManager::getPlaylist($form->getPlaylistID());
 
       return $this->respond($playlist);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
+    {
+      return $this->respondWithError($e->getMessage());
+    }
+  }
+
+  public function getItems(WP_REST_Request $req)
+  {
+    try
+    {
+      $playlists = PlaylistManager::getPlaylists();
+
+      return $this->respond($playlists);
+    }
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }
@@ -104,86 +112,14 @@ class PlaylistAPIv1 extends APIv1
   {
     try
     {
-      //gather data fields
-      $title = sanitize_text_field($req['title']);
-      $source = sanitize_text_field($req['source']);
-      $sourceID = sanitize_text_field($req['sourceID']);
-      $videoQuality = sanitize_text_field($req['videoQuality']);
-      $showControls = $req['showControls'] ? 0 : 1;
-      $albumID = sanitize_key($req['albumID']);
+      $form = new PlaylistType($req);
+      $form->validate('create');
 
-      //check for required fields
-      if (empty($title)
-        || empty($source)
-        || empty($sourceID)
-        || empty($videoQuality)
-        || empty($albumID)
-      )
-        throw new \Exception(__('Invalid parameters', 'utvg'));
+      $playlistID = PlaylistManager::createPlaylist($form);
 
-      //insert new playlist
-      $playlistID = PlaylistRepository::createItem(
-        $title,
-        $source,
-        $sourceID,
-        $videoQuality,
-        $showControls,
-        $albumID
-      );
-
-      //if successfull playlist creation..
-      if ($playlistID)
-        return $this->respond((object)['id' => $playlistID], 201);
-      else
-        throw new \Exception(__('Database Error: Playlist failed to save', 'utvg'));
+      return $this->respond((object)['id' => $playlistID], 201);
     }
-    catch (\Exception $e)
-    {
-      return $this->respondWithError($e->getMessage());
-    }
-  }
-
-  public function deleteItem(WP_REST_Request $req)
-  {
-    try
-    {
-      //check for valid playlistID
-      if (!$req['playlistID'])
-        return $this->respondWithError(__('Invalid playlist ID', 'utvg'));
-
-      //sanitize fields
-      $playlistID = sanitize_key($req['playlistID']);
-
-      //get playlist
-      $playlist = PlaylistRepository::getItem($playlistID);
-
-      //check if playlist exists
-      if (!$playlist)
-        return $this->respondWithError(__('Playlist does not exist', 'utvg'));
-
-      //get playlist videos
-      $playlistVideos = VideoRepository::getItemsByPlaylist($playlistID);
-
-      //delete videos
-      foreach ($playlistVideos as $video)
-      {
-        if (!VideoRepository::deleteItem($video->getID()))
-          return $this->respondWithError(__('A database error has occurred', 'utvg'));
-
-        //delete video thumbnail
-        $thumbnailPath = wp_upload_dir();
-        $thumbnailPath = $thumbnailPath['basedir'] . '/utubevideo-cache/';
-        unlink($thumbnailPath . $video->getThumbnail() . '.jpg');
-        unlink($thumbnailPath . $video->getThumbnail() . '@2x.jpg');
-      }
-
-      //delete playlist
-      if (!PlaylistRepository::deleteItem($playlistID))
-        return $this->respondWithError(__('A database error has occurred', 'utvg'));
-
-      return $this->respond(null);
-    }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }
@@ -193,58 +129,31 @@ class PlaylistAPIv1 extends APIv1
   {
     try
     {
-      //check for valid playlistID
-      if (!$req['playlistID'])
-        return $this->respondWithError(__('Invalid playlist ID', 'utvg'));
+      $form = new PlaylistType($req);
+      $form->validate('update');
 
-      //gather data fields
-      $playlistID = sanitize_key($req['playlistID']);
-      $title = sanitize_text_field($req['title']);
-      $videoQuality = sanitize_text_field($req['videoQuality']);
+      PlaylistManager::updatePlaylist($form);
 
-      if (isset($req['showControls']))
-        $showControls = $req['showControls'] ? 0 : 1;
-      else
-        $showControls = null;
-
-      $currentTime = current_time('timestamp');
-
-      //create updatedFields array
-      $updatedFields = [];
-
-      //set optional update fields
-      if ($title != null)
-        $updatedFields['PLAY_TITLE'] = $title;
-
-      if ($videoQuality != null)
-        $updatedFields['PLAY_QUALITY'] = $videoQuality;
-
-      if ($showControls != null)
-        $updatedFields['PLAY_CHROME'] = $showControls;
-
-      //set required update fields
-      $updatedFields['PLAY_UPDATEDATE'] = $currentTime;
-
-      if (PlaylistRepository::updateItem($playlistID, $updatedFields))
-        return $this->respond(null);
-      else
-        return $this->respondWithError(__('A database error has occurred', 'utvg'));
+      return $this->respond(null);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }
   }
 
-  public function getAllItems(WP_REST_Request $req)
+  public function deleteItem(WP_REST_Request $req)
   {
     try
     {
-      $playlists = PlaylistRepository::getItems();
+      $form = new PlaylistType($req);
+      $form->validate('delete');
 
-      return $this->respond($playlists);
+      PlaylistManager::deletePlaylist($form->getPlaylistID());
+
+      return $this->respond(null);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }

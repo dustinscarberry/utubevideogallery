@@ -111,9 +111,28 @@ class GalleryRepository
     return false;
   }
 
-  public static function updateItem($galleryID, $updatedFields)
+  public static function updateItem($form)
   {
     global $wpdb;
+
+    //create updatedFields array
+    $updatedFields = [];
+
+    //set optional update fields
+    if ($form->getTitle() != null)
+      $updatedFields['DATA_NAME'] = $form->getTitle();
+
+    if ($form->getThumbnailType() != null)
+      $updatedFields['DATA_THUMBTYPE'] = $form->getThumbnailType();
+
+    if ($form->getDisplayType() != null)
+      $updatedFields['DATA_DISPLAYTYPE'] = $form->getDisplayType();
+
+    if ($form->getAlbumSorting() != null)
+      $updatedFields['DATA_SORT'] = $form->getAlbumSorting();
+
+    //set required update fields
+    $updatedFields['DATA_UPDATEDATE'] = current_time('timestamp');
 
     //update database entry
     if ($wpdb->update(

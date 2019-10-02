@@ -93,14 +93,30 @@ class PlaylistRepository
     return false;
   }
 
-  public static function updateItem($playlistID, $updatedFields)
+  public static function updateItem($form)
   {
     global $wpdb;
+
+    //create updatedFields array
+    $updatedFields = [];
+
+    //set optional update fields
+    if ($form->getTitle() != null)
+      $updatedFields['PLAY_TITLE'] = $form->getTitle();
+
+    if ($form->getVideoQuality() != null)
+      $updatedFields['PLAY_QUALITY'] = $form->getVideoQuality();
+
+    if ($form->getShowControls() != null)
+      $updatedFields['PLAY_CHROME'] = $form->getShowControls();
+
+    //set required update fields
+    $updatedFields['PLAY_UPDATEDATE'] = current_time('timestamp');
 
     if ($wpdb->update(
       $wpdb->prefix . 'utubevideo_playlist',
       $updatedFields,
-      ['PLAY_ID' => $playlistID]
+      ['PLAY_ID' => $form->getPlaylistID()]
     ) >= 0)
       return true;
 

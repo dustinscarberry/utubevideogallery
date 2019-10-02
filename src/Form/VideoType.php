@@ -11,8 +11,8 @@ class VideoType
   private $description;
   private $quality;
   private $showControls;
-  private $startTime = '';
-  private $endTime = '';
+  private $startTime;
+  private $endTime;
   private $source;
   private $albumID;
   private $playlistID;
