@@ -40,7 +40,7 @@ class Gallery extends React.Component
 
     if (apiData.status == 200 && !apiData.data.error)
     {
-      const data = apiData.data;
+      const data = apiData.data.data;
       let albums = [];
       let videos = [];
 

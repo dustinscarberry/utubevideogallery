@@ -3,21 +3,16 @@
 namespace UTubeVideoGallery\Controller\API;
 
 use UTubeVideoGallery\Controller\API\APIv1;
-use UTubeVideoGallery\Service\Utility;
+use UTubeVideoGallery\Form\VimeoPlaylistType;
+use UTubeVideoGallery\Service\Manager\VimeoPlaylistManager;
+use UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
-use stdClass;
-use DateTime;
-use DateInterval;
-use utvAdminGen;
 
 class VimeoPlaylistAPIv1 extends APIv1
 {
-  private $_options;
-
   public function __construct()
   {
-    $this->_options = get_option('utubevideo_main_opts');
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
@@ -45,76 +40,14 @@ class VimeoPlaylistAPIv1 extends APIv1
   {
     try
     {
-      //initialize return object
-      $returnData = new stdClass();
-      $returnData->title = '';
-      $returnData->videos = [];
+      $form = new VimeoPlaylistType($req);
+      $form->validate();
 
-      //check for valid sourceID
-      if (!$req['sourceID'])
-        return $this->respondWithError(__('Invalid source ID', 'utvg'));
+      $playlistData = VimeoPlaylistManager::getPlaylistData($form);
 
-      //gather data fields
-      $sourceID = sanitize_text_field($req['sourceID']);
-
-      //retrieve playlist base data
-      $data = Utility::queryAPI(
-        'https://vimeo.com/api/v2/album/'
-        . $sourceID
-        . '/info.json'
-      );
-
-      //check data fetch
-      if (!$data)
-        return $this->respondWithError(__('Vimeo API call failed', 'utvg'));
-
-      //retrieve playlist title
-      if (isset($data->title))
-        $returnData->title = $data->title;
-
-      //retreive playlist total videos
-      if ($data->total_videos >= 60)
-        $pages = 3;
-      else
-        $pages = ceil($data->total_videos / 20);
-
-      //get base videos data
-      $baseVideoData = [];
-
-      for ($i = 1; $i <= $pages; $i++)
-      {
-        $videoData = Utility::queryAPI(
-          'https://vimeo.com/api/v2/album/'
-          . $sourceID
-          . '/videos.json?page='
-          . $i
-        );
-
-        if (!$videoData)
-          return $this->respondWithError(__('Vimeo API call failed', 'utvg'));
-
-        $baseVideoData = array_merge($baseVideoData, $videoData);
-      }
-
-      //filter videos and add them to return data
-      foreach ($baseVideoData as $video)
-      {
-        $duration = gmdate('H:i:s', $video->duration);
-
-        //map video
-        $videoData = new stdClass();
-        $videoData->sourceID = $video->id;
-        $videoData->title = $video->title;
-        $videoData->description = '';
-        $videoData->thumbnail = $video->thumbnail_large;
-        $videoData->duration = $duration;
-
-        $returnData->videos[] = $videoData;
-      }
-
-      return $this->respond($returnData);
+      return $this->respond($playlistData);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }

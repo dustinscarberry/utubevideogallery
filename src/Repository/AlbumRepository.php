@@ -198,6 +198,43 @@ class AlbumRepository
     return $data;
   }
 
+  public static function getPublishedItemsByGallery($galleryID, $sortDirection = 'desc')
+  {
+    global $wpdb;
+    $data = [];
+
+    if (!$galleryID)
+      return false;
+
+    $albumsQuery = $wpdb->prepare(
+      'SELECT *
+      FROM ' . $wpdb->prefix . 'utubevideo_album
+      WHERE DATA_ID = %d
+      && ALB_PUBLISH = 1
+      ORDER BY ALB_POS ' . $sortDirection,
+      $galleryID
+    );
+
+    $albumsData = $wpdb->get_results($albumsQuery);
+
+    foreach ($albumsData as $albumData)
+    {
+      $videoCount = $wpdb->get_var(
+        'SELECT count(VID_ID) as VIDEO_COUNT
+        FROM ' . $wpdb->prefix . 'utubevideo_video
+        WHERE ALB_ID = ' . $albumData->ALB_ID
+      );
+
+      if (!$videoCount)
+        $videoCount = 0;
+
+      $albumData->VIDEO_COUNT = $videoCount;
+      $data[] = new Album($albumData);
+    }
+
+    return $data;
+  }
+
   public static function deleteItemsByGallery($galleryID)
   {
     global $wpdb;

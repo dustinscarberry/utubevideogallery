@@ -138,7 +138,7 @@ class GalleryRepository
     if ($wpdb->update(
       $wpdb->prefix . 'utubevideo_dataset',
       $updatedFields,
-      ['DATA_ID' => $galleryID]
+      ['DATA_ID' => $form->getGalleryID()]
     ) >= 0)
       return true;
 

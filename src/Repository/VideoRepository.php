@@ -170,6 +170,32 @@ class VideoRepository
     return $data;
   }
 
+  public static function getPublishedItemsByAlbum($albumID, $sortDirection = 'desc')
+  {
+    global $wpdb;
+    $data = [];
+
+    //check for valid albumID
+    if (!$albumID)
+      return false;
+
+    $query = $wpdb->prepare(
+      'SELECT *
+      FROM ' . $wpdb->prefix . 'utubevideo_video
+      WHERE ALB_ID = %d
+      && VID_PUBLISH = 1
+      ORDER BY VID_POS ' . $sortDirection,
+      $albumID
+    );
+
+    $videosData = $wpdb->get_results($query);
+
+    foreach ($videosData as $videoData)
+      $data[] = new Video($videoData);
+
+    return $data;
+  }
+
   public static function getItemsByPlaylist($playlistID)
   {
     global $wpdb;
