@@ -151,6 +151,17 @@ class AlbumRepository
     return false;
   }
 
+  public static function updateItemPosition($albumID, $position)
+  {
+    global $wpdb;
+
+    $wpdb->update(
+      $wpdb->prefix . 'utubevideo_album',
+      ['ALB_POS' => $position],
+      ['ALB_ID' => $albumID]
+    );
+  }
+
   public static function getItemsByGallery($galleryID)
   {
     global $wpdb;

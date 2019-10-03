@@ -5,6 +5,7 @@ namespace UTubeVideoGallery\Controller\API;
 use UTubeVideoGallery\Controller\API\APIv1;
 use UTubeVideoGallery\Form\PlaylistType;
 use UTubeVideoGallery\Service\Manager\PlaylistManager;
+use UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
 

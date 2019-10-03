@@ -134,6 +134,17 @@ class VideoRepository
     return false;
   }
 
+  public static function updateItemPosition($videoID, $position)
+  {
+    global $wpdb;
+
+    $wpdb->update(
+      $wpdb->prefix . 'utubevideo_video',
+      ['VID_POS' => $position],
+      ['VID_ID' => $videoID]
+    );
+  }
+
   public static function getItemsByAlbum($albumID)
   {
     global $wpdb;

@@ -33,7 +33,7 @@ class Settings implements \JsonSerializable
 
   public function setPopupPlayerWidth($value)
   {
-    $this->settings['playerWidth'] = $value;
+    $this->settings['playerWidth'] = sanitize_text_field($value);
     return $this;
   }
 
@@ -44,7 +44,7 @@ class Settings implements \JsonSerializable
 
   public function setPlayerControlsTheme($value)
   {
-    $this->settings['playerControlTheme'] = $value;
+    $this->settings['playerControlTheme'] = sanitize_text_field($value);
     return $this;
   }
 
@@ -55,7 +55,7 @@ class Settings implements \JsonSerializable
 
   public function setPlayerControlsColor($value)
   {
-    $this->settings['playerProgressColor'] = $value;
+    $this->settings['playerProgressColor'] = sanitize_text_field($value);
     return $this;
   }
 
@@ -66,7 +66,7 @@ class Settings implements \JsonSerializable
 
   public function setPopupPlayerOverlayOpacity($value)
   {
-    $this->settings['fancyboxOverlayOpacity'] = $value;
+    $this->settings['fancyboxOverlayOpacity'] = sanitize_text_field($value);
     return $this;
   }
 
@@ -77,7 +77,7 @@ class Settings implements \JsonSerializable
 
   public function setPopupPlayerOverlayColor($value)
   {
-    $this->settings['fancyboxOverlayColor'] = $value;
+    $this->settings['fancyboxOverlayColor'] = sanitize_text_field($value);
     return $this;
   }
 
@@ -88,7 +88,7 @@ class Settings implements \JsonSerializable
 
   public function setThumbnailWidth($value)
   {
-    $this->settings['thumbnailWidth'] = $value;
+    $this->settings['thumbnailWidth'] = sanitize_text_field($value);
     return $this;
   }
 
@@ -99,7 +99,7 @@ class Settings implements \JsonSerializable
 
   public function setThumbnailVerticalPadding($value)
   {
-    $this->settings['thumbnailVerticalPadding'] = $value;
+    $this->settings['thumbnailVerticalPadding'] = sanitize_text_field($value);
     return $this;
   }
 
@@ -110,7 +110,7 @@ class Settings implements \JsonSerializable
 
   public function setThumbnailHorizontalPadding($value)
   {
-    $this->settings['thumbnailPadding'] = $value;
+    $this->settings['thumbnailPadding'] = sanitize_text_field($value);
     return $this;
   }
 
@@ -121,7 +121,7 @@ class Settings implements \JsonSerializable
 
   public function setThumbnailBorderRadius($value)
   {
-    $this->settings['thumbnailBorderRadius'] = $value;
+    $this->settings['thumbnailBorderRadius'] = sanitize_text_field($value);
     return $this;
   }
 
@@ -132,7 +132,7 @@ class Settings implements \JsonSerializable
 
   public function setYouTubeApiKey($value)
   {
-    $this->settings['youtubeApiKey'] = $value;
+    $this->settings['youtubeApiKey'] = sanitize_text_field($value);
     return $this;
   }
 
@@ -143,7 +143,7 @@ class Settings implements \JsonSerializable
 
   public function setYouTubeAutoplay($value)
   {
-    $this->settings['youtubeAutoplay'] = $value;
+    $this->settings['youtubeAutoplay'] = ($value ? 1 : 0);
     return $this;
   }
 
@@ -154,7 +154,7 @@ class Settings implements \JsonSerializable
 
   public function setYouTubeHideDetails($value)
   {
-    $this->settings['youtubeDetailsHide'] = $value;
+    $this->settings['youtubeDetailsHide'] = ($value ? 1 : 0);
     return $this;
   }
 
@@ -165,7 +165,7 @@ class Settings implements \JsonSerializable
 
   public function setVimeoAutoplay($value)
   {
-    $this->settings['vimeoAutoplay'] = $value;
+    $this->settings['vimeoAutoplay'] = ($value ? 1 : 0);
     return $this;
   }
 
@@ -176,7 +176,7 @@ class Settings implements \JsonSerializable
 
   public function setVimeoHideDetails($value)
   {
-    $this->settings['vimeoDetailsHide'] = $value;
+    $this->settings['vimeoDetailsHide'] = ($value ? 1 : 0);
     return $this;
   }
 
@@ -187,7 +187,7 @@ class Settings implements \JsonSerializable
 
   public function setRemoveVideoPopupScript($value)
   {
-    $this->settings['skipMagnificPopup'] = $value;
+    $this->settings['skipMagnificPopup'] = ($value ? 'yes' : 'no');
     return $this;
   }
 
@@ -198,7 +198,7 @@ class Settings implements \JsonSerializable
 
   public function setShowVideoDescription($value)
   {
-    $this->settings['showVideoDescription'] = $value;
+    $this->settings['showVideoDescription'] = ($value ? true : false);
   }
 
   public function getPHPVersion()

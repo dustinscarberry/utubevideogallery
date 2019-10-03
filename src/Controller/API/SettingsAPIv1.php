@@ -3,10 +3,10 @@
 namespace UTubeVideoGallery\Controller\API;
 
 use UTubeVideoGallery\Controller\API\APIv1;
+use UTubeVideoGallery\Model\Settings;
+use UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
-
-use UTubeVideoGallery\Model\Settings;
 
 class SettingsAPIv1 extends APIv1
 {
@@ -27,7 +27,6 @@ class SettingsAPIv1 extends APIv1
           'callback' => [$this, 'getItem'],
           'permission_callback' => function()
           {
-            return true;
             return current_user_can('edit_others_posts');
           }
         ],
@@ -47,9 +46,9 @@ class SettingsAPIv1 extends APIv1
   {
     try
     {
-      return $this->respond(new Settings());
+      return $this->respond(SettingsManager::getSettings());
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }
@@ -59,104 +58,11 @@ class SettingsAPIv1 extends APIv1
   {
     try
     {
-      $pluginSettings = get_option('utubevideo_main_opts');
-
-      //gather data fields
-      $playerControlsColor = sanitize_text_field($req['playerControlsColor']);
-      $playerControlsTheme = sanitize_text_field($req['playerControlsTheme']);
-      $popupPlayerWidth = sanitize_text_field($req['popupPlayerWidth']);
-      $popupPlayerOverlayColor = sanitize_text_field($req['popupPlayerOverlayColor']);
-      $popupPlayerOverlayOpacity = sanitize_text_field($req['popupPlayerOverlayOpacity']);
-      $thumbnailBorderRadius = sanitize_text_field($req['thumbnailBorderRadius']);
-      $thumbnailWidth = sanitize_text_field($req['thumbnailWidth']);
-      $thumbnailHorizontalPadding = sanitize_text_field($req['thumbnailHorizontalPadding']);
-      $thumbnailVerticalPadding = sanitize_text_field($req['thumbnailVerticalPadding']);
-      $youtubeAPIKey = sanitize_text_field($req['youtubeAPIKey']);
-
-      if (isset($req['removeVideoPopupScript']))
-        $removeVideoPopupScript = $req['removeVideoPopupScript'] ? 'yes' : 'no';
-      else
-        $removeVideoPopupScript = null;
-
-      if (isset($req['vimeoAutoplay']))
-        $vimeoAutoplay = $req['vimeoAutoplay'] ? 1 : 0;
-      else
-        $vimeoAutoplay = null;
-
-      if (isset($req['vimeoHideDetails']))
-        $vimeoHideDetails = $req['vimeoHideDetails'] ? 1 : 0;
-      else
-        $vimeoHideDetails = null;
-
-      if (isset($req['youtubeAutoplay']))
-        $youtubeAutoplay = $req['youtubeAutoplay'] ? 1 : 0;
-      else
-        $youtubeAutoplay = null;
-
-      if (isset($req['youtubeHideDetails']))
-        $youtubeHideDetails = $req['youtubeHideDetails'] ? 1 : 0;
-      else
-        $youtubeHideDetails = null;
-
-      if (isset($req['showVideoDescription']))
-        $showVideoDescription = $req['showVideoDescription'] ? true : false;
-      else
-        $showVideoDescription = null;
-
-      //set optional update fields
-      if ($playerControlsColor)
-        $pluginSettings['playerProgressColor'] = $playerControlsColor;
-
-      if ($playerControlsTheme)
-        $pluginSettings['playerControlTheme'] = $playerControlsTheme;
-
-      if ($popupPlayerWidth > 0)
-        $pluginSettings['playerWidth'] = $popupPlayerWidth;
-
-      if ($popupPlayerOverlayColor)
-        $pluginSettings['fancyboxOverlayColor'] = $popupPlayerOverlayColor;
-
-      if ($popupPlayerOverlayOpacity)
-        $pluginSettings['fancyboxOverlayOpacity'] = $popupPlayerOverlayOpacity;
-
-      if ($thumbnailBorderRadius !== null)
-        $pluginSettings['thumbnailBorderRadius'] = $thumbnailBorderRadius;
-
-      if ($thumbnailWidth > 0)
-        $pluginSettings['thumbnailWidth'] = $thumbnailWidth;
-
-      if ($thumbnailHorizontalPadding > 0)
-        $pluginSettings['thumbnailPadding'] = $thumbnailHorizontalPadding;
-
-      if ($thumbnailVerticalPadding > 0)
-        $pluginSettings['thumbnailVerticalPadding'] = $thumbnailVerticalPadding;
-
-      if ($youtubeAPIKey !== null)
-        $pluginSettings['youtubeApiKey'] = $youtubeAPIKey;
-
-      if ($removeVideoPopupScript)
-        $pluginSettings['skipMagnificPopup'] = $removeVideoPopupScript;
-
-      if ($vimeoAutoplay !== null)
-        $pluginSettings['vimeoAutoplay'] = $vimeoAutoplay;
-
-      if ($vimeoHideDetails !== null)
-        $pluginSettings['vimeoDetailsHide'] = $vimeoHideDetails;
-
-      if ($youtubeAutoplay !== null)
-        $pluginSettings['youtubeAutoplay'] = $youtubeAutoplay;
-
-      if ($youtubeHideDetails !== null)
-        $pluginSettings['youtubeDetailsHide'] = $youtubeHideDetails;
-
-      if ($showVideoDescription !== null)
-        $pluginSettings['showVideoDescription'] = $showVideoDescription;
-
-      update_option('utubevideo_main_opts', $pluginSettings);
+      SettingsManager::updateSettings($req);
 
       return $this->respond(null);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }

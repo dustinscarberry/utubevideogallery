@@ -3,6 +3,9 @@
 namespace UTubeVideoGallery\Controller\API;
 
 use UTubeVideoGallery\Controller\API\APIv1;
+use UTubeVideoGallery\Form\VideoOrderType;
+use UTubeVideoGallery\Service\Manager\VideoManager;
+use UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
 
@@ -34,30 +37,14 @@ class VideoOrderAPIv1 extends APIv1
   {
     try
     {
-      global $wpdb;
-
-      if (!$req['videoids'])
-        return $this->respondWithError(__('Invalid data', 'utvg'));
-
-      $videoCount = count($req['videoids']);
-
-      for ($i = 0; $i < $videoCount; $i++)
-      {
-        $videoID = sanitize_key($req['videoids'][$i]);
-
-        if (!$videoID)
-          return $this->respondWithError(__('Invalid data value', 'utvg'));
-
-        $wpdb->update(
-          $wpdb->prefix . 'utubevideo_video',
-          ['VID_POS' => $i],
-          ['VID_ID' => $videoID]
-        );
-      }
+      $form = new VideoOrderType($req);
+      $form->validate();
+      
+      VideoManager::updateVideosOrder($form);
 
       return $this->respond(null);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }

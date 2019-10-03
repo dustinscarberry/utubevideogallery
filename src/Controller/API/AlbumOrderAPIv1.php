@@ -3,6 +3,9 @@
 namespace UTubeVideoGallery\Controller\API;
 
 use UTubeVideoGallery\Controller\API\APIv1;
+use UTubeVideoGallery\Form\AlbumOrderType;
+use UTubeVideoGallery\Service\Manager\AlbumManager;
+use UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
 
@@ -34,30 +37,14 @@ class AlbumOrderAPIv1 extends APIv1
   {
     try
     {
-      global $wpdb;
+      $form = new AlbumOrderType($req);
+      $form->validate();
 
-      if (!$req['albumids'])
-        return $this->respondWithError(__('Invalid data', 'utvg'));
-
-      $albumCount = count($req['albumids']);
-
-      for ($i = 0; $i < $albumCount; $i++)
-      {
-        $albumID = sanitize_key($req['albumids'][$i]);
-
-        if (!$albumID)
-          return $this->respondWithError(__('Invalid data value', 'utvg'));
-
-        $wpdb->update(
-          $wpdb->prefix . 'utubevideo_album',
-          ['ALB_POS' => $i],
-          ['ALB_ID' => $albumID]
-        );
-      }
+      AlbumManager::updateAlbumsOrder($form);
 
       return $this->respond(null);
     }
-    catch (\Exception $e)
+    catch (UserMessageException $e)
     {
       return $this->respondWithError($e->getMessage());
     }

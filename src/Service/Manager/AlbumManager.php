@@ -64,6 +64,14 @@ class AlbumManager
       throw new UserMessageException(__('A database error has occurred', 'utvg'));
   }
 
+  public static function updateAlbumsOrder($form)
+  {
+    $albumCount = count($form->getAlbumIDs());
+
+    for ($i = 0; $i < $albumCount; $i++)
+      AlbumRepository::updateItemPosition($form->getAlbumIDs()[$i], $i);
+  }
+
   //delete album
   public static function deleteAlbum($albumID)
   {

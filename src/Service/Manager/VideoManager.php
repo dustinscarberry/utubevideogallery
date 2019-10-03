@@ -89,6 +89,14 @@ class VideoManager
       throw new UserMessageException(__('Database Error: Failed to update video', 'utvg'));
   }
 
+  public static function updateVideosOrder($form)
+  {
+    $videoCount = count($form->getVideoIDs());
+
+    for ($i = 0; $i < $videoCount; $i++)
+      VideoRepository::updateItemPosition($form->getVideoIDs()[$i], $i);
+  }
+
   //delete video
   public static function deleteVideo($videoID)
   {

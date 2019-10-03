@@ -3,9 +3,9 @@
 namespace UTubeVideoGallery\Controller\API;
 
 use UTubeVideoGallery\Controller\API\APIv1;
-use UTubeVideoGallery\Exception\UserMessageException;
 use UTubeVideoGallery\Form\VideoType;
 use UTubeVideoGallery\Service\Manager\VideoManager;
+use UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
 
