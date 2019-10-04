@@ -24,7 +24,9 @@ class SettingsTabView extends React.Component
 
     this.state = {
       gdEnabled: undefined,
+      gdVersion: undefined,
       imageMagickEnabled: undefined,
+      imageMagickVersion: undefined,
       phpVersion: undefined,
       version: undefined,
       wpVersion: undefined,
@@ -74,7 +76,9 @@ class SettingsTabView extends React.Component
 
       this.setState({
         gdEnabled: data.gdEnabled,
+        gdVersion: data.gdVersion,
         imageMagickEnabled: data.imageMagickEnabled,
+        imageMagickVersion: data.imageMagickVersion,
         phpVersion: data.phpVersion,
         version: data.version,
         wpVersion: data.wpVersion,
@@ -219,11 +223,11 @@ class SettingsTabView extends React.Component
               <InfoLine text={utvJSData.localization.wpVersion + ': ' + this.state.wpVersion}/>
               <SectionHeader text={utvJSData.localization.status}/>
               <InfoLine
-                text="ImageMagick"
+                text={'ImageMagick - ' + this.state.imageMagickVersion}
                 icon={this.state.imageMagickEnabled ? 'active' : 'inactive'}
               />
               <InfoLine
-                text="GD"
+                text={'GD - ' + this.state.gdVersion}
                 icon={this.state.gdEnabled ? 'active' : 'inactive'}
               />
               <FormField classes="utv-formfield-action">

@@ -8,7 +8,9 @@ class Settings implements \JsonSerializable
   private $phpVersion;
   private $wpVersion;
   private $gdEnabled;
+  private $gdVersion;
   private $imageMagickEnabled;
+  private $imageMagickVersion;
 
   public function __construct()
   {
@@ -221,6 +223,16 @@ class Settings implements \JsonSerializable
     return $this->imageMagickEnabled;
   }
 
+  public function getGDVersion()
+  {
+    return $this->gdVersion;
+  }
+
+  public function getImageMagickVersion()
+  {
+    return $this->imageMagickVersion;
+  }
+
   private function load()
   {
     $this->settings = get_option('utubevideo_main_opts');
@@ -244,8 +256,18 @@ class Settings implements \JsonSerializable
     //get gd status
     $this->gdEnabled = extension_loaded('gd');
 
+    //get gd version
+    $this->gdVersion = gd_info()['GD Version'];
+
     //get imagemagick status
     $this->imageMagickEnabled = extension_loaded('imagick');
+
+    //get imagemagick version
+    $version = \Imagick::getVersion()['versionString'];
+    $version = str_replace('ImageMagick', '', $version);
+    $version = str_replace('https://www.imagemagick.org', '', $version);
+    $version = str_replace('http://www.imagemagick.org', '', $version);
+     $this->imageMagickVersion = trim($version);
   }
 
   public function jsonSerialize()
@@ -271,7 +293,9 @@ class Settings implements \JsonSerializable
       'phpVersion' => $this->getPHPVersion(),
       'wpVersion' => $this->getWPVersion(),
       'gdEnabled' => $this->getGDEnabled(),
-      'imageMagickEnabled' => $this->getImageMagickEnabled()
+      'gdVersion' => $this->getGDVersion(),
+      'imageMagickEnabled' => $this->getImageMagickEnabled(),
+      'imageMagickVersion' => $this->getImageMagickVersion()
     ];
   }
 }
