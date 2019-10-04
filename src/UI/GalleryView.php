@@ -4,7 +4,7 @@ namespace UTubeVideoGallery\UI;
 
 class GalleryView
 {
-  private $_atts;
+  private $atts;
 
   public function __construct($atts)
   {
@@ -14,7 +14,7 @@ class GalleryView
   private function mapAttributes($atts)
   {
     //map default attributes
-    $this->_atts = shortcode_atts([
+    $this->atts = shortcode_atts([
       'id' => null,
       'panelvideocount' => 14, //video count per panel view / page
       'theme' => 'light', //[light, dark, transparent]
@@ -30,11 +30,11 @@ class GalleryView
   {
     return '<div
       class="utv-gallery-root"
-      data-id="' . $this->_atts['id'] . '"
-      data-icontype="' . $this->_atts['icon'] . '"
-      data-max-videos="' . $this->_atts['maxvideos'] . '"
-      data-max-albums="' . $this->_atts['maxalbums'] . '"
-      data-thumbnails-per-page="' . $this->_atts['thumbnailsperpage'] . '"
+      data-id="' . $this->atts['id'] . '"
+      data-icontype="' . $this->atts['icon'] . '"
+      data-max-videos="' . $this->atts['maxvideos'] . '"
+      data-max-albums="' . $this->atts['maxalbums'] . '"
+      data-thumbnails-per-page="' . $this->atts['thumbnailsperpage'] . '"
     ></div>';
   }
 }

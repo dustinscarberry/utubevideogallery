@@ -8,7 +8,7 @@ class PlaylistRepository
 {
   /* Playlist Items contain album name from album table */
 
-  public static function getItem($playlistID)
+  public static function getItem(int $playlistID)
   {
     global $wpdb;
 
@@ -80,7 +80,7 @@ class PlaylistRepository
     return false;
   }
 
-  public static function deleteItem($playlistID)
+  public static function deleteItem(int $playlistID)
   {
     global $wpdb;
 

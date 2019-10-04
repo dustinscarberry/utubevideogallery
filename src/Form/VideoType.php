@@ -2,6 +2,7 @@
 
 namespace UTubeVideoGallery\Form;
 
+use WP_REST_Request;
 use UTubeVideoGallery\Exception\UserMessageException;
 
 class VideoType
@@ -20,7 +21,7 @@ class VideoType
   private $published;
   private $skipThumbnailRender;
 
-  public function __construct($req)
+  public function __construct(WP_REST_Request $req)
   {
     if (isset($req['sourceID']))
       $this->sourceID = sanitize_text_field($req['sourceID']);
@@ -128,7 +129,7 @@ class VideoType
   }
 
   //validate form specific cases
-  public function validate($action)
+  public function validate(string $action)
   {
     if ($action == 'create')
       $this->validateCreate();

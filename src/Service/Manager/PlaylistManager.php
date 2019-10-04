@@ -4,11 +4,12 @@ namespace UTubeVideoGallery\Service\Manager;
 
 use UTubeVideoGallery\Repository\PlaylistRepository;
 use UTubeVideoGallery\Repository\VideoRepository;
+use UTubeVideoGallery\Form\PlaylistType;
 use UTubeVideoGallery\Exception\UserMessageException;
 
 class PlaylistManager
 {
-  public static function getPlaylist($playlistID)
+  public static function getPlaylist(int $playlistID)
   {
     //get playlist
     $playlist = PlaylistRepository::getItem($playlistID);
@@ -25,7 +26,7 @@ class PlaylistManager
     return PlaylistRepository::getItems();
   }
 
-  public static function createPlaylist($form)
+  public static function createPlaylist(PlaylistType $form)
   {
     //create playlist
     $playlistID = PlaylistRepository::createItem(
@@ -44,13 +45,13 @@ class PlaylistManager
     return $playlistID;
   }
 
-  public static function updatePlaylist($form)
+  public static function updatePlaylist(PlaylistType $form)
   {
     if (!PlaylistRepository::updateItem($form))
       throw new UserMessageException(__('A database error has occurred', 'utvg'));
   }
 
-  public static function deletePlaylist($playlistID)
+  public static function deletePlaylist(int $playlistID)
   {
     //get playlist
     $playlist = PlaylistRepository::getItem($playlistID);

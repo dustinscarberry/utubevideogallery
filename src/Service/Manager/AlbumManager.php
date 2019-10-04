@@ -4,12 +4,14 @@ namespace UTubeVideoGallery\Service\Manager;
 
 use UTubeVideoGallery\Repository\AlbumRepository;
 use UTubeVideoGallery\Repository\VideoRepository;
+use UTubeVideoGallery\Form\AlbumType;
+use UTubeVideoGallery\Form\AlbumOrderType;
 use UTubeVideoGallery\Exception\UserMessageException;
 
 class AlbumManager
 {
   //get album
-  public static function getAlbum($albumID)
+  public static function getAlbum(int $albumID)
   {
     //get album
     $album = AlbumRepository::getItem($albumID);
@@ -28,13 +30,13 @@ class AlbumManager
   }
 
   //get albums in gallery
-  public static function getGalleryAlbums($galleryID)
+  public static function getGalleryAlbums(int $galleryID)
   {
     return AlbumRepository::getItemsByGallery($galleryID);
   }
 
   //create album
-  public static function createAlbum($form)
+  public static function createAlbum(AlbumType $form)
   {
     //get next album sort position
     $nextSortPosition = AlbumRepository::getNextSortPositionByGallery($form->getGalleryID());
@@ -57,14 +59,15 @@ class AlbumManager
   }
 
   //update album
-  public static function updateAlbum($form)
+  public static function updateAlbum(AlbumType $form)
   {
     //update album
     if (!AlbumRepository::updateItem($form))
       throw new UserMessageException(__('A database error has occurred', 'utvg'));
   }
 
-  public static function updateAlbumsOrder($form)
+  //update albums order in gallery
+  public static function updateAlbumsOrder(AlbumOrderType $form)
   {
     $albumCount = count($form->getAlbumIDs());
 
@@ -73,7 +76,7 @@ class AlbumManager
   }
 
   //delete album
-  public static function deleteAlbum($albumID)
+  public static function deleteAlbum(int $albumID)
   {
     //get all videos in album
     $albumVideos = VideoRepository::getItemsByAlbum($albumID);

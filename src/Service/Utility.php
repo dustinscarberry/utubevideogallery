@@ -22,7 +22,7 @@ class Utility
     return (isset($value) && $value === $target);
   }
 
-  public static function queryAPI($query, $type = 'json')
+  public static function queryAPI(string $query, $type = 'json')
   {
     $data = wp_remote_get($query);
 

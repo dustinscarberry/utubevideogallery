@@ -2,6 +2,7 @@
 
 namespace UTubeVideoGallery\Form;
 
+use WP_REST_Request;
 use UTubeVideoGallery\Exception\UserMessageException;
 
 class GalleryType
@@ -12,7 +13,7 @@ class GalleryType
   private $thumbnailType;
   private $displayType;
 
-  public function __construct($req)
+  public function __construct(WP_REST_Request $req)
   {
     if (isset($req['galleryID']))
       $this->galleryID = sanitize_key($req['galleryID']);
@@ -55,7 +56,7 @@ class GalleryType
     return $this->displayType;
   }
 
-  public function validate($action)
+  public function validate(string $action)
   {
     if ($action == 'create')
       $this->validateCreate();

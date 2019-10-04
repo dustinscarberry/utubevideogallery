@@ -3,6 +3,7 @@
 namespace UTubeVideoGallery\Form;
 
 use UTubeVideoGallery\Exception\UserMessageException;
+use WP_REST_Request;
 
 class AlbumType
 {
@@ -13,7 +14,7 @@ class AlbumType
   private $thumbnail;
   private $published;
 
-  public function __construct($req)
+  public function __construct(WP_REST_Request $req)
   {
     if (isset($req['title']))
       $this->title = sanitize_text_field($req['title']);
@@ -64,7 +65,7 @@ class AlbumType
     return $this->published;
   }
 
-  public function validate($action)
+  public function validate(string $action)
   {
     if ($action == 'create')
       $this->validateCreate();

@@ -4,6 +4,7 @@ namespace UTubeVideoGallery\Service\Manager;
 
 use UTubeVideoGallery\Model\Settings;
 use UTubeVideoGallery\Exception\UserMessageException;
+use WP_REST_Request;
 
 class SettingsManager
 {
@@ -12,7 +13,7 @@ class SettingsManager
     return new Settings();
   }
 
-  public static function updateSettings($form)
+  public static function updateSettings(WP_REST_Request $req)
   {
     $settings = new Settings();
 
@@ -22,7 +23,7 @@ class SettingsManager
     if (isset($req['playerControlsTheme']))
       $settings->setPlayerControlsTheme($req['playerControlsTheme']);
 
-    if (isset($req['popupPlayerWidth'] && $req['popupPlayerWidth'] > 0)
+    if (isset($req['popupPlayerWidth']) && $req['popupPlayerWidth'] > 0)
       $settings->setPopupPlayerWidth($req['popupPlayerWidth']);
 
     if (isset($req['popupPlayerOverlayColor']))

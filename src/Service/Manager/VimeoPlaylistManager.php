@@ -3,10 +3,12 @@
 namespace UTubeVideoGallery\Service\Manager;
 
 use UTubeVideoGallery\Service\Utility;
+use UTubeVideoGallery\Form\VimeoPlaylistType;
+use UTubeVideoGallery\Exception\UserMessageException;
 
 class VimeoPlaylistManager
 {
-  public static function getPlaylistData($form)
+  public static function getPlaylistData(VimeoPlaylistType $form)
   {
     //initialize return object
     $playlistData = new \stdClass();

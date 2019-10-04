@@ -2,13 +2,14 @@
 
 namespace UTubeVideoGallery\Form;
 
+use WP_REST_Request;
 use UTubeVideoGallery\Exception\UserMessageException;
 
 class YouTubePlaylistType
 {
   private $sourceID;
 
-  public function __construct($req)
+  public function __construct(WP_REST_Request $req)
   {
     if (isset($req['sourceID']))
       $this->sourceID = sanitize_text_field($req['sourceID']);

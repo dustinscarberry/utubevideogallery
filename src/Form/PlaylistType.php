@@ -2,6 +2,7 @@
 
 namespace UTubeVideoGallery\Form;
 
+use WP_REST_Request;
 use UTubeVideoGallery\Exception\UserMessageException;
 
 class PlaylistType
@@ -14,7 +15,7 @@ class PlaylistType
   private $showControls;
   private $albumID;
 
-  public function __construct($req)
+  public function __construct(WP_REST_Request $req)
   {
     if (isset($req['playlistID']))
       $this->playlistID = sanitize_key($req['playlistID']);
@@ -74,7 +75,7 @@ class PlaylistType
   }
 
   //validate form specific cases
-  public function validate($action)
+  public function validate(string $action)
   {
     if ($action == 'create')
       $this->validateCreate();

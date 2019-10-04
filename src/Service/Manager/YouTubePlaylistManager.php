@@ -4,12 +4,14 @@ namespace UTubeVideoGallery\Service\Manager;
 
 use UTubeVideoGallery\Service\Utility;
 use UTubeVideoGallery\Model\Settings;
+use UTubeVideoGallery\Form\YouTubePlaylistType;
+use UTubeVideoGallery\Exception\UserMessageException;
 use DateTime;
 use DateInterval;
 
 class YouTubePlaylistManager
 {
-  public static function getPlaylistData($form)
+  public static function getPlaylistData(YouTubePlaylistType $form)
   {
     //get settings
     $settings = new Settings();

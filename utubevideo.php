@@ -45,7 +45,7 @@ if (!class_exists('UTubeVideoGallery\App'))
   class App
   {
     private $_options;
-    const CURRENT_VERSION = '2.0.4';
+    const CURRENT_VERSION = '2.0.5';
 
     public function __construct()
     {
@@ -152,6 +152,11 @@ if (!class_exists('UTubeVideoGallery\App'))
     {
       //set up globals
       global $wpdb;
+
+      //check for supported php version
+      $minPHPVersion = '7.0.0';
+      if (strnatcmp(phpversion(), $minPHPVersion) < 0)
+        die('PHP version ' . $minPHPVersion . ' or greater required. You currently have version ' . phpversion());
 
       //get directory path
       $dirpath = dirname(__FILE__);

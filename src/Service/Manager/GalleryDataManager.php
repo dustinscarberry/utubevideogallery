@@ -5,11 +5,12 @@ namespace UTubeVideoGallery\Service\Manager;
 use UTubeVideoGallery\Repository\GalleryRepository;
 use UTubeVideoGallery\Repository\AlbumRepository;
 use UTubeVideoGallery\Repository\VideoRepository;
+use UTubeVideoGallery\Form\GalleryDataType;
 use UTubeVideoGallery\Exception\UserMessageException;
 
 class GalleryDataManager
 {
-  public static function getGalleryData($form)
+  public static function getGalleryData(GalleryDataType $form)
   {
     //initialize variables
     $thumbnailDirectory = wp_upload_dir();

@@ -227,7 +227,7 @@ class Settings implements \JsonSerializable
     $this->loadDynamicSettings();
   }
 
-  private function save()
+  public function save()
   {
     return update_option('utubevideo_main_opts', $this->settings);
   }

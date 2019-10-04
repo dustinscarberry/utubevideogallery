@@ -5,11 +5,12 @@ namespace UTubeVideoGallery\Service\Manager;
 use UTubeVideoGallery\Repository\GalleryRepository;
 use UTubeVideoGallery\Repository\AlbumRepository;
 use UTubeVideoGallery\Repository\VideoRepository;
+use UTubeVideoGallery\Form\GalleryType;
 use UTubeVideoGallery\Exception\UserMessageException;
 
 class GalleryManager
 {
-  public static function getGallery($galleryID)
+  public static function getGallery(int $galleryID)
   {
     //get gallery
     $gallery = GalleryRepository::getItem($galleryID);
@@ -26,7 +27,7 @@ class GalleryManager
     return GalleryRepository::getItems();
   }
 
-  public static function createGallery($form)
+  public static function createGallery(GalleryType $form)
   {
     //insert new gallery
     $galleryID = GalleryRepository::createItem(
@@ -40,14 +41,14 @@ class GalleryManager
       throw new UserMessageException(__('A database error has occurred', 'utvg'));
   }
 
-  public static function updateGallery($form)
+  public static function updateGallery(GalleryType $form)
   {
     //update gallery
     if (!GalleryRepository::updateItem($form))
       throw new UserMessageException(__('A database error has occurred', 'utvg'));
   }
 
-  public static function deleteGallery($galleryID)
+  public static function deleteGallery(int $galleryID)
   {
     //get videos for thumbnail deletion
     $videos = VideoRepository::getItemsByGallery($galleryID);

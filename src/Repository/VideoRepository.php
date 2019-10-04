@@ -259,7 +259,7 @@ class VideoRepository
 
     //check for valid albumID
     if ($albumID === false)
-      throw new \Exception(__('Database Error: Invalid album ID', 'utvg'));
+      return false;
 
     $query = $wpdb->prepare(
       'SELECT COUNT(VID_ID) AS VID_COUNT
@@ -283,7 +283,7 @@ class VideoRepository
 
     //check for valid albumID
     if ($albumID === false)
-      throw new \Exception(__('Database Error: Invalid album ID', 'utvg'));
+      return false;
 
     $query = $wpdb->prepare(
       'SELECT DATA_THUMBTYPE
