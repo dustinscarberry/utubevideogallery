@@ -35,6 +35,12 @@ class VideoManager
     return VideoRepository::getItemsByAlbum($albumID);
   }
 
+  //get videos in galllery
+  public static function getGalleryVideos(int $galleryID)
+  {
+    return VideoRepository::getItemsByGallery($galleryID);
+  }
+
   //create video
   public static function createVideo(VideoType $form)
   {

@@ -3,7 +3,6 @@ import Card from '../shared/Card';
 import Columns from '../shared/Columns';
 import Column from '../shared/Column';
 import SectionHeader from '../shared/SectionHeader';
-import ResponsiveIframe from '../shared/ResponsiveIframe';
 import Breadcrumbs from '../shared/Breadcrumbs';
 import Form from '../shared/Form';
 import FormField from '../shared/FormField';
@@ -12,12 +11,16 @@ import FieldHint from '../shared/FieldHint';
 import TextInput from '../shared/TextInput';
 import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
-import NumberInput from '../shared/NumberInput';
 import SubmitButton from '../shared/SubmitButton';
 import CancelButton from '../shared/CancelButton';
 import Loader from '../shared/Loader';
 import sharedService from '../../service/SharedService';
 import axios from 'axios';
+import {
+  isValidResponse,
+  isErrorResponse,
+  getErrorMessage
+} from '../shared/service/shared';
 
 class GalleryEditTabView extends React.Component
 {
@@ -59,10 +62,7 @@ class GalleryEditTabView extends React.Component
       }
     );
 
-    if (
-      apiData.status == 200
-      && !apiData.data.error
-    )
+    if (isValidResponse(apiData))
     {
       const data = apiData.data.data;
 
@@ -75,6 +75,8 @@ class GalleryEditTabView extends React.Component
         updateDate: data.updateDate
       });
     }
+    else if (isErrorResponse(apiData))
+      this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
   }
 
   changeValue(event)
@@ -93,24 +95,21 @@ class GalleryEditTabView extends React.Component
 
     const rsp = await this.saveBaseGallery();
 
-    //update thumbnails if type changed
-    if (this.state.thumbnailType != this.state.originalThumbnailType)
+    //update thumbnails if format changed
+    if (isValidResponse(rsp) && this.state.thumbnailType != this.state.originalThumbnailType)
     {
       await this.rebuildThumbnails();
       this.setState({originalThumbnailType: this.state.thumbnailType});
     }
 
-    //final user feedback
-    if (
-      rsp.status == 200
-      && !rsp.data.error
-    )
+    //user feedback
+    if (isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackGallerySaved, 'success');
     }
-    else
-      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
+    else if (isErrorResponse(rsp))
+      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
 
     this.setState({loading: false});
   }
@@ -137,16 +136,15 @@ class GalleryEditTabView extends React.Component
   async rebuildThumbnails()
   {
     const videosData = await axios.get(
-      '/wp-json/utubevideogallery/v1/videos',
+      '/wp-json/utubevideogallery/v1/galleries/'
+      + this.props.currentViewID
+      + '/videos',
       {
         headers: {'X-WP-Nonce': utvJSData.restNonce}
       }
     );
 
-    if (
-      videosData.status == 200
-      && !videosData.data.error
-    )
+    if (isValidResponse(videosData))
     {
       const videos = videosData.data.data;
 
@@ -172,6 +170,8 @@ class GalleryEditTabView extends React.Component
         );
       }
     }
+    else if (isErrorResponse(videosData))
+      this.props.setFeedbackMessage(getErrorMessage(videosData), 'error');
   }
 
   render()
@@ -215,8 +215,8 @@ class GalleryEditTabView extends React.Component
                     value={this.state.albumSorting}
                     onChange={this.changeValue}
                     data={[
-                      {name: utvJSData.localization.firstToLast, value: 'asc'},
-                      {name: utvJSData.localization.lastToFirst, value: 'desc'}
+                      {name: utvJSData.localization.ascending, value: 'asc'},
+                      {name: utvJSData.localization.descending, value: 'desc'}
                     ]}
                   />
                 </FormField>

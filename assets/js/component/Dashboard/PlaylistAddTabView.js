@@ -17,6 +17,11 @@ import PlaylistMultiSelect from '../shared/PlaylistMultiSelect';
 import PlaylistVideoSelection from '../shared/PlaylistVideoSelection';
 import Loader from '../shared/Loader';
 import axios from 'axios';
+import {
+  isValidResponse,
+  isErrorResponse,
+  getErrorMessage
+} from '../shared/service/shared';
 
 class PlaylistAddTabView extends React.Component
 {
@@ -62,7 +67,7 @@ class PlaylistAddTabView extends React.Component
       this.loadPlaylistVideos();
   }
 
-  //load album list
+  //load album list for selectbox
   async loadAlbums()
   {
     const rsp = await axios.get(
@@ -72,10 +77,7 @@ class PlaylistAddTabView extends React.Component
       }
     );
 
-    if (
-      rsp.status == 200
-      && !rsp.data.error
-    )
+    if (isValidResponse(rsp))
     {
       const data = rsp.data.data;
 
@@ -92,8 +94,11 @@ class PlaylistAddTabView extends React.Component
 
       this.setState({albums});
     }
+    else if (isErrorResponse(rsp))
+      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
   }
 
+  //load playlist items from given url
   async loadPlaylistVideos()
   {
     //load remote playlist data
@@ -116,10 +121,7 @@ class PlaylistAddTabView extends React.Component
         }
       );
 
-    if (
-      remoteVideos.status == 200
-      && !remoteVideos.data.error
-    )
+    if (isValidResponse(remoteVideos))
     {
       let remoteData = remoteVideos.data.data;
 
@@ -136,8 +138,8 @@ class PlaylistAddTabView extends React.Component
         playlistLoading: false
       });
     }
-    else
-      this.props.setFeedbackMessage(remoteVideos.data.error.message, 'error');
+    else if (isErrorResponse(remoteVideos))
+      this.props.setFeedbackMessage(getErrorMessage(remoteVideos), 'error');
   }
 
   changeValue(event)
@@ -207,10 +209,7 @@ class PlaylistAddTabView extends React.Component
     //save base playlist
     const basePlaylist = await this.addPlaylistData();
 
-    if (
-      basePlaylist.status == 201
-      && !basePlaylist.data.error
-    )
+    if (isValidResponse(basePlaylist))
     {
       //get playlist id
       const id = basePlaylist.data.data.id;
@@ -220,8 +219,8 @@ class PlaylistAddTabView extends React.Component
 
       this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAdded, 'success');
     }
-    else
-      this.props.setFeedbackMessage(remoteData.data.error.message, 'error');
+    else if (isErrorResponse(basePlaylist))
+      this.props.setFeedbackMessage(getErrorMessage(basePlaylist), 'error');
 
     this.props.changeView();
   }

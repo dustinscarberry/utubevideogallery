@@ -15,6 +15,11 @@ import SubmitButton from '../shared/SubmitButton';
 import InfoLine from '../shared/InfoLine';
 import Loader from '../shared/Loader';
 import axios from 'axios';
+import {
+  isValidResponse,
+  isErrorResponse,
+  getErrorMessage
+} from '../shared/service/shared';
 
 class SettingsTabView extends React.Component
 {
@@ -70,7 +75,7 @@ class SettingsTabView extends React.Component
       { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
-    if (apiData.status == 200 && !apiData.data.error)
+    if (isValidResponse(apiData))
     {
       const data = apiData.data.data;
 
@@ -101,6 +106,8 @@ class SettingsTabView extends React.Component
         youtubeHideDetails: data.youtubeHideDetails
       });
     }
+    else if (isErrorResponse(apiData))
+      this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
   }
 
   async saveSettings()
@@ -114,11 +121,11 @@ class SettingsTabView extends React.Component
       this.setState({originalThumbnailWidth: this.state.thumbnailWidth});
     }
 
-    //final user feedback
-    if (rsp.status == 200 && !rsp.data.error)
+    //user feedback
+    if (isValidResponse(rsp))
       this.props.setFeedbackMessage(utvJSData.localization.feedbackSettingsSaved, 'success');
-    else
-      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
+    else if (isErrorResponse(rsp))
+      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
   }
 
   async saveBaseSettings()
@@ -162,7 +169,7 @@ class SettingsTabView extends React.Component
       { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
-    if (videosData.status == 200 && !videosData.data.error)
+    if (isValidResponse(videosData))
     {
       const videos = videosData.data.data;
 
@@ -186,6 +193,8 @@ class SettingsTabView extends React.Component
         );
       }
     }
+    else if (isErrorResponse(videosData))
+      this.props.setFeedbackMessage(getErrorMessage(videosData), 'error');
 
     this.setState({loading: false});
   }

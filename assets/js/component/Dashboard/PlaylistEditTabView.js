@@ -19,6 +19,11 @@ import PlaylistVideoSelection from '../shared/PlaylistVideoSelection';
 import Loader from '../shared/Loader';
 import sharedService from '../../service/SharedService';
 import axios from 'axios';
+import {
+  isValidResponse,
+  isErrorResponse,
+  getErrorMessage
+} from '../shared/service/shared';
 
 class PlaylistEditTabView extends React.Component
 {
@@ -70,10 +75,7 @@ class PlaylistEditTabView extends React.Component
       }
     );
 
-    if (
-      rsp.status == 200
-      && !rsp.data.error
-    )
+    if (isValidResponse(rsp))
     {
       const data = rsp.data.data;
 
@@ -88,6 +90,8 @@ class PlaylistEditTabView extends React.Component
         albumName: data.albumName
       });
     }
+    else if (isErrorResponse(rsp))
+      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
   }
 
   async loadPlaylistVideos()
@@ -123,15 +127,15 @@ class PlaylistEditTabView extends React.Component
     );
 
     //check for errors
-    if (remoteVideos.status == 200 && remoteVideos.data.error)
+    if (isErrorResponse(remoteVideos))
     {
-      this.props.setFeedbackMessage(remoteVideos.data.error.message, 'error');
+      this.props.setFeedbackMessage(getErrorMessage(remoteVideos), 'error');
       return;
     }
 
-    if (localVideos.status == 200 && localVideos.data.error)
+    if (isErrorResponse(localVideos))
     {
-      this.props.setFeedbackMessage(localVideos.data.error.message, 'error');
+      this.props.setFeedbackMessage(getErrorMessage(localVideos), 'error');
       return;
     }
 

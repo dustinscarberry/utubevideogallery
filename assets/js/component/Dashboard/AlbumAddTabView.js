@@ -1,22 +1,22 @@
 import React from 'react';
-import axios from 'axios';
 import Card from '../shared/Card';
 import Columns from '../shared/Columns';
 import Column from '../shared/Column';
 import SectionHeader from '../shared/SectionHeader';
-import ResponsiveIframe from '../shared/ResponsiveIframe';
 import Breadcrumbs from '../shared/Breadcrumbs';
 import Form from '../shared/Form';
 import FormField from '../shared/FormField';
 import Label from '../shared/Label';
-import FieldHint from '../shared/FieldHint';
 import TextInput from '../shared/TextInput';
-import URLInput from '../shared/URLInput';
-import Toggle from '../shared/Toggle';
 import SelectBox from '../shared/SelectBox';
-import NumberInput from '../shared/NumberInput';
 import SubmitButton from '../shared/SubmitButton';
 import CancelButton from '../shared/CancelButton';
+import {
+  isValidResponse,
+  isErrorResponse,
+  getErrorMessage
+} from '../shared/service/shared';
+import { createAlbum } from './service/AlbumAddTabView';
 
 class AlbumAddTabView extends React.Component
 {
@@ -38,30 +38,21 @@ class AlbumAddTabView extends React.Component
     this.setState({[event.target.name]: event.target.value});
   }
 
-  async addAlbum()
+  addAlbum()
   {
-    const rsp = await axios.post(
-      '/wp-json/utubevideogallery/v1/albums/',
-      {
-        title: this.state.title,
-        videoSorting: this.state.videoSorting,
-        galleryID: this.props.selectedGallery
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+    const rsp = createAlbum(
+      this.state.title,
+      this.state.videoSorting,
+      this.props.selectedGallery
     );
 
-    if (
-      rsp.status == 201
-      && !rsp.data.error
-    )
+    if (isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumCreated, 'success');
     }
-    else
-      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
+    else if (isErrorResponse(rsp))
+      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
   }
 
   render()
@@ -104,8 +95,8 @@ class AlbumAddTabView extends React.Component
                     value={this.state.videoSorting}
                     onChange={this.changeValue}
                     data={[
-                      {name: utvJSData.localization.firstToLast, value: 'asc'},
-                      {name: utvJSData.localization.lastToFirst, value: 'desc'}
+                      {name: utvJSData.localization.ascending, value: 'asc'},
+                      {name: utvJSData.localization.descending, value: 'desc'}
                     ]}
                     required={true}
                   />

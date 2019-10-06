@@ -267,7 +267,7 @@ class Settings implements \JsonSerializable
     $version = str_replace('ImageMagick', '', $version);
     $version = str_replace('https://www.imagemagick.org', '', $version);
     $version = str_replace('http://www.imagemagick.org', '', $version);
-     $this->imageMagickVersion = trim($version);
+    $this->imageMagickVersion = trim($version);
   }
 
   public function jsonSerialize()

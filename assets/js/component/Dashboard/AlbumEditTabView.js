@@ -16,6 +16,17 @@ import Loader from '../shared/Loader';
 import AlbumThumbnailSelection from '../shared/AlbumThumbnailSelection';
 import sharedService from '../../service/SharedService';
 import axios from 'axios';
+import {
+  isValidResponse,
+  isErrorResponse,
+  getErrorMessage
+} from '../shared/service/shared';
+import {
+  fetchGalleries,
+  parseGalleriesData,
+  fetchThumbnails,
+  parseThumbnailsData
+} from './service/AlbumEditTabView';
 
 class AlbumEditTabView extends React.Component
 {
@@ -62,10 +73,7 @@ class AlbumEditTabView extends React.Component
       }
     );
 
-    if (
-      apiData.status == 200
-      && !apiData.data.error
-    )
+    if (isValidResponse(apiData))
     {
       const data = apiData.data.data;
 
@@ -77,42 +85,34 @@ class AlbumEditTabView extends React.Component
         gallery: data.galleryID
       });
     }
+    else if (isErrorResponse(apiData))
+      this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
   }
 
-  async loadGalleries()
+  loadGalleries()
   {
-    const apiData = await axios.get('/wp-json/utubevideogallery/v1/galleries/');
+    const apiData = fetchGalleries();
 
-    if (apiData.status == 200)
+    if (isValidResponse(apiData))
     {
       const data = apiData.data.data;
-      let galleries = [];
-
-      for (let gallery of data)
-        galleries.push({name: gallery.title, value: gallery.id});
-
+      const galleries = parseGalleriesData(data);
       this.setState({galleries});
     }
   }
 
-  async loadThumbnails()
+  loadThumbnails()
   {
-    const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/albums/'
-      + this.props.currentViewID
-      + '/videos'
-    );
+    const apiData = fetchThumbnails(this.props.currentViewID);
 
-    if (apiData.status == 200)
+    if (isValidResponse(apiData))
     {
       const data = apiData.data.data;
-      let thumbnails = [];
-
-      for (let video of data)
-        thumbnails.push({thumbnail: video.thumbnail});
-
+      const thumbnails = parseThumbnailsData(data);
       this.setState({thumbnails});
     }
+    else if (isErrorResponse(apiData))
+      this.props.setFeedbackMessage('Loading album thumbnails failed', 'error');
   }
 
   changeValue(event)
@@ -151,16 +151,13 @@ class AlbumEditTabView extends React.Component
       }
     );
 
-    if (
-      rsp.status == 200
-      && !rsp.data.error
-    )
+    if (isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumSaved, 'success');
     }
-    else
-      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
+    else if (isErrorResponse(rsp))
+      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
   }
 
   render()
@@ -217,8 +214,8 @@ class AlbumEditTabView extends React.Component
                     value={this.state.videoSorting}
                     onChange={this.changeValue}
                     data={[
-                      {name: utvJSData.localization.firstToLast, value: 'asc'},
-                      {name: utvJSData.localization.lastToFirst, value: 'desc'}
+                      {name: utvJSData.localization.ascending, value: 'asc'},
+                      {name: utvJSData.localization.descending, value: 'desc'}
                     ]}
                   />
                 </FormField>

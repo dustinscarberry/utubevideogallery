@@ -20,6 +20,7 @@ class VideoType
   private $videoID;
   private $published;
   private $skipThumbnailRender;
+  private $galleryID;
 
   public function __construct(WP_REST_Request $req)
   {
@@ -35,8 +36,8 @@ class VideoType
     if (isset($req['quality']))
       $this->quality = sanitize_text_field($req['quality']);
 
-    if (isset($req['controls']))
-      $this->showControls = ($req['controls'] ? 1 : 0);
+    if (isset($req['showControls']))
+      $this->showControls = ($req['showControls'] ? 1 : 0);
 
     if (isset($req['startTime']))
       $this->startTime = sanitize_text_field($req['startTime']);
@@ -61,6 +62,9 @@ class VideoType
 
     if (isset($req['skipThumbnailRender']))
       $this->skipThumbnailRender = $req['skipThumbnailRender'] ? true : false;
+
+    if (isset($req['galleryID']))
+      $this->galleryID = sanitize_key($req['galleryID']);
   }
 
   public function getSourceID()
@@ -128,6 +132,11 @@ class VideoType
     return $this->skipThumbnailRender;
   }
 
+  public function getGalleryID()
+  {
+    return $this->galleryID;
+  }
+
   //validate form specific cases
   public function validate(string $action)
   {
@@ -141,20 +150,29 @@ class VideoType
       $this->validateGet();
     else if ($action == 'getAlbum')
       $this->validateGetAlbum();
+    else if ($action == 'getGallery')
+      $this->validateGetGallery();
   }
 
   private function validateGet()
   {
     //check for valid videoID
-    if (!$this->videoID)
-      throw new UserMessageException(__('Invalid video ID', 'utvg'));
+    if ($this->videoID === null)
+      throw new UserMessageException(__('Invalid videoID', 'utvg'));
   }
 
   private function validateGetAlbum()
   {
     //check for valid albumID
-    if ($req['albumID'] === false)
-      throw new UserMessageException(__('Invalid album ID', 'utvg'));
+    if ($this->albumID === null)
+      throw new UserMessageException(__('Invalid albumID', 'utvg'));
+  }
+
+  private function validateGetGallery()
+  {
+    //check for valid galleryID
+    if ($this->galleryID === null)
+      throw new UserMessageException(__('Invalid galleryID', 'utvg'));
   }
 
   private function validateCreate()

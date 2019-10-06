@@ -19,6 +19,11 @@ import CancelButton from '../shared/CancelButton';
 import Loader from '../shared/Loader';
 import sharedService from '../../service/SharedService';
 import axios from 'axios';
+import {
+  isValidResponse,
+  isErrorResponse,
+  getErrorMessage
+} from '../shared/service/shared';
 
 class VideoEditTabView extends React.Component
 {
@@ -33,7 +38,7 @@ class VideoEditTabView extends React.Component
       title: undefined,
       description: undefined,
       quality: undefined,
-      controls: undefined,
+      showControls: undefined,
       startTime: undefined,
       endTime: undefined,
       updateDate: undefined,
@@ -69,10 +74,7 @@ class VideoEditTabView extends React.Component
       }
     );
 
-    if (
-      apiData.status == 200
-      && !apiData.data.error
-    )
+    if (isValidResponse(apiData))
     {
       const data = apiData.data.data;
 
@@ -83,7 +85,7 @@ class VideoEditTabView extends React.Component
         title: data.title,
         description: data.description ? data.description : undefined,
         quality: data.quality,
-        controls: data.showChrome == 1 ? true : false,
+        showControls: data.showControls == 1 ? true : false,
         startTime: data.startTime,
         endTime: data.endTime,
         updateDate: data.updateDate,
@@ -91,6 +93,8 @@ class VideoEditTabView extends React.Component
         loading: false
       });
     }
+    else if (isErrorResponse(apiData))
+      this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
   }
 
   async loadAlbums()
@@ -101,10 +105,7 @@ class VideoEditTabView extends React.Component
       + '/albums'
     );
 
-    if (
-      apiData.status == 200
-      && !apiData.data.error
-    )
+    if (isValidResponse(apiData))
     {
       const data = apiData.data.data;
       const albums = [];
@@ -117,6 +118,8 @@ class VideoEditTabView extends React.Component
 
       this.setState({albums});
     }
+    else if (isErrorResponse(apiData))
+      this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
   }
 
   changeValue(event)
@@ -138,7 +141,7 @@ class VideoEditTabView extends React.Component
         title: this.state.title,
         description: this.state.description,
         quality: this.state.quality,
-        controls: this.state.controls,
+        showControls: this.state.showControls,
         startTime: this.state.startTime,
         endTime: this.state.endTime,
         albumID: this.state.album
@@ -276,8 +279,8 @@ class VideoEditTabView extends React.Component
                 <FormField>
                   <Label text={utvJSData.localization.controls}/>
                   <Toggle
-                    name="controls"
-                    value={this.state.controls}
+                    name="showControls"
+                    value={this.state.showControls}
                     onChange={this.changeCheckboxValue}
                   />
                   <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>

@@ -27,8 +27,20 @@ class VideoAPIv1 extends APIv1
         'methods' => WP_REST_Server::READABLE,
         'callback' => [$this, 'getAlbumItems'],
         'args' => [
-          'galleryID',
           'albumID'
+        ]
+      ]
+    );
+
+    //get all videos in gallery endpoint
+    register_rest_route(
+      $this->_namespace . '/' . $this->_version,
+      'galleries/(?P<galleryID>\d+)/videos',
+      [
+        'methods' => WP_REST_Server::READABLE,
+        'callback' => [$this, 'getGalleryItems'],
+        'args' => [
+          'galleryID'
         ]
       ]
     );
@@ -143,6 +155,26 @@ class VideoAPIv1 extends APIv1
 
       //get videos
       $videos = VideoManager::getAlbumVideos($form->getAlbumID());
+
+      //respond
+      return $this->respond($videos);
+    }
+    catch (UserMessageException $e)
+    {
+      return $this->respondWithError($e->getMessage());
+    }
+  }
+
+  //get all videos within gallery
+  public function getGalleryItems(WP_REST_Request $req)
+  {
+    try
+    {
+      $form = new VideoType($req);
+      $form->validate('getGallery');
+
+      //get videos
+      $videos = VideoManager::getGalleryVideos($form->getGalleryID());
 
       //respond
       return $this->respond($videos);

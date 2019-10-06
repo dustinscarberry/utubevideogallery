@@ -18,6 +18,11 @@ import NumberInput from '../shared/NumberInput';
 import TextBoxInput from '../shared/TextBoxInput';
 import SubmitButton from '../shared/SubmitButton';
 import CancelButton from '../shared/CancelButton';
+import {
+  isValidResponse,
+  isErrorResponse,
+  getErrorMessage
+} from '../shared/service/shared';
 
 class VideoAddTabView extends React.Component
 {
@@ -32,7 +37,7 @@ class VideoAddTabView extends React.Component
       title: '',
       description: '',
       quality: 'hd1080',
-      controls: false,
+      showControls: false,
       startTime: undefined,
       endTime: undefined
     };
@@ -97,7 +102,7 @@ class VideoAddTabView extends React.Component
         title: this.state.title,
         description: this.state.description,
         quality: this.state.quality,
-        controls: this.state.controls,
+        showControls: this.state.showControls,
         startTime: this.state.startTime,
         endTime: this.state.endTime,
         source: this.state.source,
@@ -106,13 +111,13 @@ class VideoAddTabView extends React.Component
       { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
-    if (rsp.status == 201 && !rsp.data.error)
+    if (isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoAdded, 'success');
     }
-    else
-      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
+    else if (isErrorResponse(rsp))
+      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
   }
 
   getVideoPreview()
@@ -209,8 +214,8 @@ class VideoAddTabView extends React.Component
                 <FormField>
                   <Label text={utvJSData.localization.controls}/>
                   <Toggle
-                    name="controls"
-                    value={this.state.controls}
+                    name="showControls"
+                    value={this.state.showControls}
                     onChange={this.changeCheckboxValue}
                   />
                   <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
