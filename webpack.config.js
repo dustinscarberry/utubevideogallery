@@ -3,19 +3,17 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-let distDir = path.resolve(__dirname, 'public/js');
+let destDir = path.resolve(__dirname, 'public/js');
 let sourceDir = path.resolve(__dirname, 'assets/js');
 
 module.exports =
 {
   entry: {
-    //app: ['idempotent-babel-polyfill', sourceDir + '/app.js'],
-    //dashboard: ['idempotent-babel-polyfill', sourceDir + '/dashboard.js']
     app: sourceDir + '/app.js',
     dashboard: sourceDir + '/dashboard.js'
   },
   output: {
-    path: distDir,
+    path: destDir,
     filename: "[name].min.js"
   },
   module: {

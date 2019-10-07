@@ -6,8 +6,8 @@
       "targets": {
         "ie": "11"
       },
-      "useBuiltIns": "entry",
-      "debug": true,
+      "useBuiltIns": false,
+      "debug": false,
       "modules": false
     }],
     "@babel/preset-react"
