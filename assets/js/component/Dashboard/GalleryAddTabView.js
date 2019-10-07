@@ -30,17 +30,14 @@ class GalleryAddTabView extends React.Component
       thumbnailType: 'rectangle',
       displayType: 'album'
     };
-
-    this.changeValue = this.changeValue.bind(this);
-    this.addGallery = this.addGallery.bind(this);
   }
 
-  changeValue(event)
+  changeValue = (event) =>
   {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  async addGallery()
+  addGallery = async() =>
   {
     const rsp = await axios.post(
       '/wp-json/utubevideogallery/v1/galleries/',
@@ -58,7 +55,7 @@ class GalleryAddTabView extends React.Component
     if (isValidResponse(rsp))
     {
       this.props.changeView();
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackGalleryCreated, 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackGalleryCreated);
     }
     else if (isErrorResponse(rsp))
       this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');

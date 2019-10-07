@@ -34,14 +34,9 @@ class Dashboard extends React.Component
     };
 
     this.feedbackTimeout = undefined;
-
-    this.changeGallery = this.changeGallery.bind(this);
-    this.changeAlbum = this.changeAlbum.bind(this);
-    this.changeView = this.changeView.bind(this);
-    this.setFeedbackMessage = this.setFeedbackMessage.bind(this);
   }
 
-  changeGallery(id = undefined, title = undefined)
+  changeGallery = (id = undefined, title = undefined) =>
   {
     this.setState({
       selectedGallery: id,
@@ -53,7 +48,7 @@ class Dashboard extends React.Component
     scroll(0, 0);
   }
 
-  changeAlbum(id = undefined, title = undefined)
+  changeAlbum = (id = undefined, title = undefined) =>
   {
     this.setState({
       selectedAlbum: id,
@@ -64,7 +59,7 @@ class Dashboard extends React.Component
     scroll(0, 0);
   }
 
-  changeView(view = undefined, id = undefined)
+  changeView = (view = undefined, id = undefined) =>
   {
     this.setState({
       currentView: view,
@@ -183,14 +178,10 @@ class Dashboard extends React.Component
       />
   }
 
-  setFeedbackMessage(message, type, timeout = 5000)
+  setFeedbackMessage = (message, type = 'success', timeout = 5000) =>
   {
     //set message
-    this.setState(
-    {
-      feedbackMessage: message,
-      feedbackType: type
-    });
+    this.setState({feedbackMessage: message, feedbackType: type});
 
     //clear past timeout if need be
     clearTimeout(this.feedbackTimeout);

@@ -1,24 +1,18 @@
 import React from 'react';
-import GriddleDND from '../shared/GriddleDND';
-import TableRowActions from '../shared/TableRowActions';
-import sharedService from '../../service/SharedService';
+import GriddleDND from '../../shared/GriddleDND';
+import TableRowActions from '../../shared/TableRowActions';
+import sharedService from '../../../service/SharedService';
 import axios from 'axios';
 
-class VideoTable extends React.Component
+class AlbumTable extends React.Component
 {
   constructor(props)
   {
     super(props);
+
     this.state = {
       rand: undefined
     };
-
-    this.togglePublishStatus = this.togglePublishStatus.bind(this);
-    this.deleteVideo = this.deleteVideo.bind(this);
-    this.deleteVideoPrompt = this.deleteVideoPrompt.bind(this);
-    this.deleteVideosPrompt = this.deleteVideosPrompt.bind(this);
-    this.publishVideos = this.publishVideos.bind(this);
-    this.unpublishVideos = this.unpublishVideos.bind(this);
   }
 
   getHeaders()
@@ -34,7 +28,7 @@ class VideoTable extends React.Component
         formatter: (row, cellData) =>
         {
           return <img
-            onClick={() => this.props.changeView('editVideo', row.id)}
+            onClick={() => this.props.changeAlbum(row.id, row.title)}
             src={utvJSData.thumbnailCacheDirectory + cellData + '.jpg'}
             className="utv-preview-thumbnail utv-is-clickable"
           />
@@ -47,16 +41,19 @@ class VideoTable extends React.Component
         sortDirection: '',
         formatter: (row, cellData) =>
         {
-          const watchLink = row.source == 'youtube' ? 'https://youtu.be/' + row.sourceID : 'https://vimeo.com/' + row.sourceID;
-
           return (
             <div>
-              <span className="utv-row-title">{cellData}</span>
+              <a
+                onClick={() => this.props.changeAlbum(row.id, cellData)}
+                href="javascript:void(0)"
+                className="utv-row-title">
+                  {cellData}
+              </a>
               <TableRowActions
                 actions={[
-                  {text: utvJSData.localization.edit, onClick: () => this.props.changeView('editVideo', row.id)},
-                  {text: utvJSData.localization.watch, link: watchLink},
-                  {text: utvJSData.localization.delete, onClick: () => this.deleteVideoPrompt([row.id])}
+                  {text: utvJSData.localization.edit, onClick: () => this.props.changeView('editAlbum', row.id)},
+                  {text: utvJSData.localization.view, onClick: () => this.props.changeAlbum(row.id, cellData)},
+                  {text: utvJSData.localization.delete, onClick: () => this.deleteAlbumPrompt(row.id)}
                 ]}
               />
             </div>
@@ -91,6 +88,12 @@ class VideoTable extends React.Component
         {
           return sharedService.getFormattedDate(cellData);
         }
+      },
+      {
+        key: 'videoCount',
+        title: utvJSData.localization.numberOfVideos,
+        sortable: true,
+        sortDirection: ''
       }
     ];
   }
@@ -115,90 +118,78 @@ class VideoTable extends React.Component
       callback: (key, items) =>
       {
         if (key == 'delete')
-          this.deleteVideosPrompt(items);
+          this.deleteAlbumsPrompt(items);
         else if (key == 'publish')
-          this.publishVideos(items);
+          this.publishAlbums(items);
         else if (key == 'unpublish')
-          this.unpublishVideos(items);
+          this.unpublishAlbums(items);
       }
     };
   }
 
-  deleteVideosPrompt(items)
+  getDataMapping(data)
   {
-    if (confirm(utvJSData.localization.confirmVideosDelete))
+    return data.map(item =>
+    {
+      let record = {};
+      record.id =  item.id;
+      record.thumbnail = item.thumbnail;
+      record.title = item.title;
+      record.published = item.published;
+      record.updateDate = item.updateDate;
+      record.videoCount = item.videoCount;
+      return record;
+    });
+  }
+
+  deleteAlbumsPrompt = (items) =>
+  {
+    if (confirm(utvJSData.localization.confirmAlbumsDelete))
     {
       for (let item of items)
-        this.deleteVideo(item.id);
+        this.deleteAlbum(item.id);
     }
   }
 
-  publishVideos(items)
+  publishAlbums = (items) =>
   {
     for (let item of items)
       this.togglePublishStatus(item.id, 1);
   }
 
-  unpublishVideos(items)
+  unpublishAlbums = (items) =>
   {
     for (let item of items)
       this.togglePublishStatus(item.id, 0);
   }
 
-  getDataMapping(data)
+  deleteAlbumPrompt = (albumID) =>
   {
-    let newData = [];
-
-    for (let item of data)
-    {
-      let record = {};
-      record.id = item.id;
-      record.thumbnail = item.thumbnail;
-      record.title = item.title;
-      record.source = item.source;
-      record.sourceID = item.sourceID;
-      record.published = item.published;
-      record.updateDate = item.updateDate;
-      newData.push(record);
-    }
-
-    return newData;
+    if (confirm(utvJSData.localization.confirmAlbumDelete))
+      this.deleteAlbum(albumID);
   }
 
-  async togglePublishStatus(videoID, changeTo)
+  togglePublishStatus = async(albumID, changeTo) =>
   {
     const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/videos/'
-      + videoID,
-      {
-        published: changeTo,
-        skipThumbnailRender: true
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+      '/wp-json/utubevideogallery/v1/albums/'
+      + albumID,
+      { published: changeTo },
+      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
-    if (rsp.status == 200)
+    if (rsp.status == 200 && !rsp.data.error)
       this.setState({rand: Math.random()});
   }
 
-  deleteVideoPrompt(videoID)
-  {
-    if (confirm(utvJSData.localization.confirmVideoDelete))
-      this.deleteVideo(videoID);
-  }
-
-  async deleteVideo(videoID)
+  deleteAlbum = async(albumID) =>
   {
     const rsp = await axios.delete(
-      '/wp-json/utubevideogallery/v1/videos/' + videoID,
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+      '/wp-json/utubevideogallery/v1/albums/' + albumID,
+      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
 
-    if (rsp.status == 200)
+    if (rsp.status == 200 && !rsp.data.error)
       this.setState({rand: Math.random()});
   }
 
@@ -207,16 +198,12 @@ class VideoTable extends React.Component
     if (!tableData)
       return;
 
-    const videoIDs = tableData.map(item => item.id);
+    const albumIDs = tableData.map(item => item.id);
 
     const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/videosorder',
-      {
-        videoids: videoIDs
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+      '/wp-json/utubevideogallery/v1/albumsorder',
+      { albumids: albumIDs },
+      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
     );
   }
 
@@ -224,11 +211,11 @@ class VideoTable extends React.Component
   {
     return <GriddleDND
       headers={this.getHeaders()}
-      recordLabel={utvJSData.localization.videos}
+      recordLabel={utvJSData.localization.albums}
       apiLoadPath={
-        '/wp-json/utubevideogallery/v1/albums/'
-        + this.props.selectedAlbum
-        + '/videos?'
+        '/wp-json/utubevideogallery/v1/galleries/'
+        + this.props.selectedGallery
+        + '/albums?'
         + this.state.rand
       }
       dataMapper={this.getDataMapping}
@@ -239,4 +226,4 @@ class VideoTable extends React.Component
   }
 }
 
-export default VideoTable;
+export default AlbumTable;

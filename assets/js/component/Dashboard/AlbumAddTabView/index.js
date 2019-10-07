@@ -1,22 +1,22 @@
 import React from 'react';
-import Card from '../shared/Card';
-import Columns from '../shared/Columns';
-import Column from '../shared/Column';
-import SectionHeader from '../shared/SectionHeader';
-import Breadcrumbs from '../shared/Breadcrumbs';
-import Form from '../shared/Form';
-import FormField from '../shared/FormField';
-import Label from '../shared/Label';
-import TextInput from '../shared/TextInput';
-import SelectBox from '../shared/SelectBox';
-import SubmitButton from '../shared/SubmitButton';
-import CancelButton from '../shared/CancelButton';
+import Card from '../../shared/Card';
+import Columns from '../../shared/Columns';
+import Column from '../../shared/Column';
+import SectionHeader from '../../shared/SectionHeader';
+import Breadcrumbs from '../../shared/Breadcrumbs';
+import Form from '../../shared/Form';
+import FormField from '../../shared/FormField';
+import Label from '../../shared/Label';
+import TextInput from '../../shared/TextInput';
+import SelectBox from '../../shared/SelectBox';
+import SubmitButton from '../../shared/SubmitButton';
+import CancelButton from '../../shared/CancelButton';
 import {
   isValidResponse,
   isErrorResponse,
   getErrorMessage
-} from '../shared/service/shared';
-import { createAlbum } from './service/AlbumAddTabView';
+} from '../../shared/service/shared';
+import actions from './actions';
 
 class AlbumAddTabView extends React.Component
 {
@@ -28,19 +28,16 @@ class AlbumAddTabView extends React.Component
       title: '',
       videoSorting: 'asc'
     };
-
-    this.changeValue = this.changeValue.bind(this);
-    this.addAlbum = this.addAlbum.bind(this);
   }
 
-  changeValue(event)
+  changeValue = (event) =>
   {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  addAlbum()
+  addAlbum = async() =>
   {
-    const rsp = createAlbum(
+    const rsp = await actions.createAlbum(
       this.state.title,
       this.state.videoSorting,
       this.props.selectedGallery
@@ -49,7 +46,7 @@ class AlbumAddTabView extends React.Component
     if (isValidResponse(rsp))
     {
       this.props.changeView();
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumCreated, 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumCreated);
     }
     else if (isErrorResponse(rsp))
       this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');

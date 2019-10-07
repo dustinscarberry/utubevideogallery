@@ -18,3 +18,15 @@ export function getErrorMessage(rsp)
   else
     return 'Unknown error';
 }
+
+export function getAPIData(rsp)
+{
+  return rsp.data.data;
+}
+
+export default {
+  isValidResponse,
+  isErrorResponse,
+  getErrorMessage,
+  getAPIData
+}

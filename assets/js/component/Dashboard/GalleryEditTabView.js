@@ -37,10 +37,6 @@ class GalleryEditTabView extends React.Component
       updateDate: undefined,
       loading: true
     };
-
-    this.changeValue = this.changeValue.bind(this);
-    this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
-    this.saveGallery = this.saveGallery.bind(this);
   }
 
   async componentDidMount()
@@ -79,17 +75,17 @@ class GalleryEditTabView extends React.Component
       this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
   }
 
-  changeValue(event)
+  changeValue = (event) =>
   {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  changeCheckboxValue(event)
+  changeCheckboxValue = (event) =>
   {
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  async saveGallery()
+  saveGallery = async() =>
   {
     this.setState({loading: true});
 
@@ -106,7 +102,7 @@ class GalleryEditTabView extends React.Component
     if (isValidResponse(rsp))
     {
       this.props.changeView();
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackGallerySaved, 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackGallerySaved);
     }
     else if (isErrorResponse(rsp))
       this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');

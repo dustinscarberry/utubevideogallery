@@ -41,24 +41,19 @@ class VideoAddTabView extends React.Component
       startTime: undefined,
       endTime: undefined
     };
-
-    this.changeValue = this.changeValue.bind(this);
-    this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
-    this.changeURL = this.changeURL.bind(this);
-    this.addVideo = this.addVideo.bind(this);
   }
 
-  changeValue(event)
+  changeValue = (event) =>
   {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  changeCheckboxValue(event)
+  changeCheckboxValue = (event) =>
   {
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  changeURL(event)
+  changeURL = (event) =>
   {
     let url = event.target.value.trim();
 
@@ -93,7 +88,7 @@ class VideoAddTabView extends React.Component
     }
   }
 
-  async addVideo()
+  addVideo = async() =>
   {
     const rsp = await axios.post(
       '/wp-json/utubevideogallery/v1/videos/',
@@ -114,7 +109,7 @@ class VideoAddTabView extends React.Component
     if (isValidResponse(rsp))
     {
       this.props.changeView();
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoAdded, 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoAdded);
     }
     else if (isErrorResponse(rsp))
       this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');

@@ -1,8 +1,8 @@
 import React from 'react';
-import GriddleDND from '../shared/GriddleDND';
-import TableRowActions from '../shared/TableRowActions';
-import BasicLink from '../shared/BasicLink';
-import sharedService from '../../service/SharedService';
+import GriddleDND from '../../shared/GriddleDND';
+import TableRowActions from '../../shared/TableRowActions';
+import BasicLink from '../../shared/BasicLink';
+import sharedService from '../../../service/SharedService';
 import axios from 'axios';
 
 class GalleryTable extends React.Component
@@ -13,10 +13,6 @@ class GalleryTable extends React.Component
     this.state = {
       rand: undefined
     };
-
-    this.deleteGalleriesPrompt = this.deleteGalleriesPrompt.bind(this);
-    this.deleteGalleryPrompt = this.deleteGalleryPrompt.bind(this);
-    this.deleteGallery = this.deleteGallery.bind(this);
   }
 
   getHeaders()
@@ -117,7 +113,7 @@ class GalleryTable extends React.Component
     };
   }
 
-  deleteGalleriesPrompt(items)
+  deleteGalleriesPrompt = (items) =>
   {
     if (confirm(utvJSData.localization.confirmGalleriesDelete))
     {
@@ -126,13 +122,13 @@ class GalleryTable extends React.Component
     }
   }
 
-  deleteGalleryPrompt(galleryID)
+  deleteGalleryPrompt = (galleryID) =>
   {
     if (confirm(utvJSData.localization.confirmGalleryDelete))
       this.deleteGallery(galleryID);
   }
 
-  async deleteGallery(galleryID)
+  deleteGallery = async(galleryID) =>
   {
     const rsp = await axios.delete(
       '/wp-json/utubevideogallery/v1/galleries/'

@@ -18,7 +18,7 @@ const ActionCell = (props) =>
     checkboxNode = <input
       type="checkbox"
       checked={isChecked}
-      onClick={() => toggleRowCheckbox(dataIndex)}
+      onChange={() => toggleRowCheckbox(dataIndex)}
     />;
 
   if (enableDragNDrop)

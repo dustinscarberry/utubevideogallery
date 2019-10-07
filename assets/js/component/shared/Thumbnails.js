@@ -15,6 +15,11 @@ class Thumbnails extends React.Component
     window.addEventListener('resize', this.setFlow);
   }
 
+  componentWillUnmount()
+  {
+    window.removeEventListener('resize', this.setFlow);
+  }
+
   setFlow()
   {
     let outerWidth = this.refs.outerContainer.getBoundingClientRect().width;

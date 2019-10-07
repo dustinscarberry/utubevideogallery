@@ -1,8 +1,8 @@
 import React from 'react';
 import GalleryTable from './GalleryTable';
-import ActionBar from '../shared/ActionBar';
-import Breadcrumbs from '../shared/Breadcrumbs';
-import SecondaryButton from '../shared/SecondaryButton';
+import ActionBar from '../../shared/ActionBar';
+import Breadcrumbs from '../../shared/Breadcrumbs';
+import SecondaryButton from '../../shared/SecondaryButton';
 
 const GalleryTabView = (props) =>
 {

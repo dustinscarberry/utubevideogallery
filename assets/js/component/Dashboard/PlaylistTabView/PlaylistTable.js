@@ -1,8 +1,8 @@
 import React from 'react';
-import GriddleDND from '../shared/GriddleDND';
-import TableRowActions from '../shared/TableRowActions';
-import BasicLink from '../shared/BasicLink';
-import sharedService from '../../service/SharedService';
+import GriddleDND from '../../shared/GriddleDND';
+import TableRowActions from '../../shared/TableRowActions';
+import BasicLink from '../../shared/BasicLink';
+import sharedService from '../../../service/SharedService';
 import axios from 'axios';
 
 class PlaylistTable extends React.Component
@@ -10,13 +10,10 @@ class PlaylistTable extends React.Component
   constructor(props)
   {
     super(props);
+
     this.state = {
       rand: undefined
     };
-
-    this.deletePlaylist = this.deletePlaylist.bind(this);
-    this.deletePlaylistPrompt = this.deletePlaylistPrompt.bind(this);
-    this.deletePlaylistsPrompt = this.deletePlaylistsPrompt.bind(this);
   }
 
   getHeaders()
@@ -116,7 +113,7 @@ class PlaylistTable extends React.Component
     };
   }
 
-  deletePlaylistsPrompt(items)
+  deletePlaylistsPrompt = (items) =>
   {
     if (confirm('Are you sure you want to delete these playlists?'))
     {
@@ -125,13 +122,13 @@ class PlaylistTable extends React.Component
     }
   }
 
-  deletePlaylistPrompt(playlistID)
+  deletePlaylistPrompt = (playlistID) =>
   {
     if (confirm('Are you sure you want to delete this playlist?'))
       this.deletePlaylist(playlistID);
   }
 
-  async deletePlaylist(playlistID)
+  deletePlaylist = async(playlistID) =>
   {
     const rsp = await axios.delete(
       '/wp-json/utubevideogallery/v1/playlists/' + playlistID,

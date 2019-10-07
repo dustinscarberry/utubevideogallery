@@ -32,4 +32,8 @@ const AlbumThumbnailSelection = (props) =>
   );
 }
 
+AlbumThumbnailSelection.defaultProps = {
+  thumbnails: []
+};
+
 export default AlbumThumbnailSelection;

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export async function createAlbum(title, videoSorting, galleryID)
+export function createAlbum(title, videoSorting, galleryID)
 {
-  return await axios.post(
+  return axios.post(
     '/wp-json/utubevideogallery/v1/albums/',
     {
       title: title,
@@ -14,3 +14,5 @@ export async function createAlbum(title, videoSorting, galleryID)
     }
   );
 }
+
+export default {createAlbum}

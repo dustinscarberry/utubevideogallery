@@ -1,32 +1,28 @@
 import React from 'react';
-import Card from '../shared/Card';
-import Columns from '../shared/Columns';
-import Column from '../shared/Column';
-import SectionHeader from '../shared/SectionHeader';
-import Breadcrumbs from '../shared/Breadcrumbs';
-import Form from '../shared/Form';
-import FormField from '../shared/FormField';
-import Label from '../shared/Label';
-import FieldHint from '../shared/FieldHint';
-import TextInput from '../shared/TextInput';
-import SelectBox from '../shared/SelectBox';
-import SubmitButton from '../shared/SubmitButton';
-import CancelButton from '../shared/CancelButton';
-import Loader from '../shared/Loader';
-import AlbumThumbnailSelection from '../shared/AlbumThumbnailSelection';
-import sharedService from '../../service/SharedService';
+import Card from '../../shared/Card';
+import Columns from '../../shared/Columns';
+import Column from '../../shared/Column';
+import SectionHeader from '../../shared/SectionHeader';
+import Breadcrumbs from '../../shared/Breadcrumbs';
+import Form from '../../shared/Form';
+import FormField from '../../shared/FormField';
+import Label from '../../shared/Label';
+import FieldHint from '../../shared/FieldHint';
+import TextInput from '../../shared/TextInput';
+import SelectBox from '../../shared/SelectBox';
+import SubmitButton from '../../shared/SubmitButton';
+import CancelButton from '../../shared/CancelButton';
+import Loader from '../../shared/Loader';
+import AlbumThumbnailSelection from './AlbumThumbnailSelection';
+import sharedService from '../../../service/SharedService';
 import axios from 'axios';
 import {
   isValidResponse,
   isErrorResponse,
-  getErrorMessage
-} from '../shared/service/shared';
-import {
-  fetchGalleries,
-  parseGalleriesData,
-  fetchThumbnails,
-  parseThumbnailsData
-} from './service/AlbumEditTabView';
+  getErrorMessage,
+  getAPIData
+} from '../../shared/service/shared';
+import actions from './actions';
 
 class AlbumEditTabView extends React.Component
 {
@@ -44,11 +40,6 @@ class AlbumEditTabView extends React.Component
       thumbnails: undefined,
       loading: true
     };
-
-    this.changeValue = this.changeValue.bind(this);
-    this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
-    this.updateThumbnailValue = this.updateThumbnailValue.bind(this);
-    this.saveAlbum = this.saveAlbum.bind(this);
   }
 
   async componentDidMount()
@@ -66,16 +57,11 @@ class AlbumEditTabView extends React.Component
 
   async loadData()
   {
-    const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/albums/' + this.props.currentViewID,
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    const apiData = await actions.fetchAlbum(this.props.currentViewID);
 
     if (isValidResponse(apiData))
     {
-      const data = apiData.data.data;
+      const data = getAPIData(apiData);
 
       this.setState({
         thumbnail: data.thumbnail,
@@ -89,72 +75,66 @@ class AlbumEditTabView extends React.Component
       this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
   }
 
-  loadGalleries()
+  async loadGalleries()
   {
-    const apiData = fetchGalleries();
+    const apiData = await actions.fetchGalleries();
 
     if (isValidResponse(apiData))
     {
-      const data = apiData.data.data;
-      const galleries = parseGalleriesData(data);
+      const data = getAPIData(apiData);
+      const galleries = actions.parseGalleriesData(data);
       this.setState({galleries});
     }
   }
 
-  loadThumbnails()
+  async loadThumbnails()
   {
-    const apiData = fetchThumbnails(this.props.currentViewID);
+    const apiData = await actions.fetchThumbnails(this.props.currentViewID);
 
     if (isValidResponse(apiData))
     {
-      const data = apiData.data.data;
-      const thumbnails = parseThumbnailsData(data);
+      const data = getAPIData(apiData);
+      const thumbnails = actions.parseThumbnailsData(data);
       this.setState({thumbnails});
     }
     else if (isErrorResponse(apiData))
       this.props.setFeedbackMessage('Loading album thumbnails failed', 'error');
   }
 
-  changeValue(event)
+  changeValue = (event) =>
   {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  changeCheckboxValue(event)
+  changeCheckboxValue = (event) =>
   {
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  updateThumbnailValue(thumbnail)
+  updateThumbnailValue = (thumbnail) =>
   {
     if (thumbnail)
       this.setState({thumbnail});
   }
 
-  async saveAlbum()
+  saveAlbum = async() =>
   {
     //clean thumbnail url before sending
-    let cleanedThumbnail = this.state.thumbnail.replace(utvJSData.thumbnailCacheDirectory, '');
-    cleanedThumbnail = cleanedThumbnail.replace('.jpg', '');
+    let cleanedThumbnail = actions.getCleanThumbnail(this.state.thumbnail);
 
-    const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/albums/'
-      + this.props.currentViewID,
-      {
-        title: this.state.title,
-        thumbnail: cleanedThumbnail,
-        videoSorting: this.state.videoSorting,
-        galleryID: this.state.gallery
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
+    //update album
+    const rsp = await actions.updateAlbum(
+      this.props.currentViewID,
+      this.state.title,
+      cleanedThumbnail,
+      this.state.videoSorting,
+      this.state.gallery
     );
 
     if (isValidResponse(rsp))
     {
       this.props.changeView();
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumSaved, 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumSaved);
     }
     else if (isErrorResponse(rsp))
       this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');

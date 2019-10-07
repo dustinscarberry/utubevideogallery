@@ -1,25 +1,25 @@
 import React from 'react';
-import Card from '../shared/Card';
-import Form from '../shared/Form';
-import FormField from '../shared/FormField';
-import TextInput from '../shared/TextInput';
-import FieldHint from '../shared/FieldHint';
-import Label from '../shared/Label';
-import Columns from '../shared/Columns';
-import Column from '../shared/Column';
-import SectionHeader from '../shared/SectionHeader';
-import Toggle from '../shared/Toggle';
-import SelectBox from '../shared/SelectBox';
-import SecondaryButton from '../shared/SecondaryButton';
-import SubmitButton from '../shared/SubmitButton';
-import InfoLine from '../shared/InfoLine';
-import Loader from '../shared/Loader';
+import Card from '../../shared/Card';
+import Form from '../../shared/Form';
+import FormField from '../../shared/FormField';
+import TextInput from '../../shared/TextInput';
+import FieldHint from '../../shared/FieldHint';
+import Label from '../../shared/Label';
+import Columns from '../../shared/Columns';
+import Column from '../../shared/Column';
+import SectionHeader from '../../shared/SectionHeader';
+import Toggle from '../../shared/Toggle';
+import SelectBox from '../../shared/SelectBox';
+import SecondaryButton from '../../shared/SecondaryButton';
+import SubmitButton from '../../shared/SubmitButton';
+import InfoLine from '../../shared/InfoLine';
+import Loader from '../../shared/Loader';
 import axios from 'axios';
 import {
   isValidResponse,
   isErrorResponse,
   getErrorMessage
-} from '../shared/service/shared';
+} from '../../shared/service/shared';
 
 class SettingsTabView extends React.Component
 {
@@ -54,11 +54,6 @@ class SettingsTabView extends React.Component
       youtubeHideDetails: undefined,
       loading: true
     };
-
-    this.changeValue = this.changeValue.bind(this);
-    this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
-    this.saveSettings = this.saveSettings.bind(this);
-    this.rebuildThumbnails = this.rebuildThumbnails.bind(this);
   }
 
   async componentDidMount()
@@ -110,7 +105,7 @@ class SettingsTabView extends React.Component
       this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
   }
 
-  async saveSettings()
+  saveSettings = async() =>
   {
     const rsp = await this.saveBaseSettings();
 
@@ -123,7 +118,7 @@ class SettingsTabView extends React.Component
 
     //user feedback
     if (isValidResponse(rsp))
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackSettingsSaved, 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackSettingsSaved);
     else if (isErrorResponse(rsp))
       this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
   }
@@ -160,7 +155,7 @@ class SettingsTabView extends React.Component
     return rsp;
   }
 
-  async rebuildThumbnails()
+  rebuildThumbnails = async() =>
   {
     this.setState({loading: true});
 
@@ -199,14 +194,14 @@ class SettingsTabView extends React.Component
     this.setState({loading: false});
   }
 
-  changeValue(event)
+  changeValue = (event) =>
   {
     this.setState({
       [event.target.name]: event.target.value
     });
   }
 
-  changeCheckboxValue(event)
+  changeCheckboxValue = (event) =>
   {
     this.setState({
       [event.target.name]: !this.state[event.target.name]

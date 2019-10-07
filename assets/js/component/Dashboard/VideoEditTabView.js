@@ -46,10 +46,6 @@ class VideoEditTabView extends React.Component
       albums: undefined,
       loading: true
     };
-
-    this.changeValue = this.changeValue.bind(this);
-    this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
-    this.saveVideo = this.saveVideo.bind(this);
   }
 
   async componentDidMount()
@@ -122,17 +118,17 @@ class VideoEditTabView extends React.Component
       this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
   }
 
-  changeValue(event)
+  changeValue = (event) =>
   {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  changeCheckboxValue(event)
+  changeCheckboxValue = (event) =>
   {
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  async saveVideo()
+  saveVideo = async() =>
   {
     const rsp = await axios.patch(
       '/wp-json/utubevideogallery/v1/videos/'
@@ -151,15 +147,12 @@ class VideoEditTabView extends React.Component
       }
     );
 
-    if (
-      rsp.status == 200
-      && !rsp.data.error
-    )
+    if (isValidResponse(rsp))
     {
       this.props.changeView();
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoSaved, 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoSaved);
     }
-    else
+    else if (isErrorResponse(rsp))
       this.props.setFeedbackMessage(rsp.data.error.message, 'error');
   }
 

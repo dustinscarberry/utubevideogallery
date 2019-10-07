@@ -46,13 +46,6 @@ class PlaylistEditTabView extends React.Component
       playlistLoading: true,
       loading: true
     };
-
-    this.changeValue = this.changeValue.bind(this);
-    this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
-    this.changeVideoTitle = this.changeVideoTitle.bind(this);
-    this.toggleVideoSelection = this.toggleVideoSelection.bind(this);
-    this.toggleAllVideosSelection = this.toggleAllVideosSelection.bind(this);
-    this.savePlaylist = this.savePlaylist.bind(this);
   }
 
   async componentDidMount()
@@ -199,17 +192,17 @@ class PlaylistEditTabView extends React.Component
     });
   }
 
-  changeValue(event)
+  changeValue = (event) =>
   {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  changeCheckboxValue(event)
+  changeCheckboxValue = (event) =>
   {
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  changeVideoTitle(dataIndex, event)
+  changeVideoTitle = (dataIndex, event) =>
   {
     let playlistVideos = this.state.playlistVideos;
     playlistVideos[dataIndex].title = event.target.value;
@@ -218,7 +211,7 @@ class PlaylistEditTabView extends React.Component
   }
 
   //flip state of video selected
-  toggleVideoSelection(dataIndex)
+  toggleVideoSelection = (dataIndex) =>
   {
     const { playlistVideos } = this.state;
     playlistVideos[dataIndex].selected = !playlistVideos[dataIndex].selected;
@@ -227,7 +220,7 @@ class PlaylistEditTabView extends React.Component
   }
 
   //flip state of all videos to selected or not selected
-  toggleAllVideosSelection(toggleAll)
+  toggleAllVideosSelection = (toggleAll) =>
   {
     let { playlistVideos } = this.state;
     const selected = toggleAll ? true : false;
@@ -240,7 +233,7 @@ class PlaylistEditTabView extends React.Component
     this.setState({playlistVideos});
   }
 
-  async savePlaylist()
+  savePlaylist = async() =>
   {
     //set loading
     this.setState({loading: true});
@@ -252,7 +245,7 @@ class PlaylistEditTabView extends React.Component
     await this.savePlaylistVideoData();
 
     this.props.changeView();
-    this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistSynced, 'success');
+    this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistSynced);
   }
 
   async savePlaylistData()

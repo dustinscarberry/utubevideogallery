@@ -40,14 +40,6 @@ class PlaylistAddTabView extends React.Component
       playlistLoading: true,
       loading: true
     };
-
-    this.changeValue = this.changeValue.bind(this);
-    this.changeCheckboxValue = this.changeCheckboxValue.bind(this);
-    this.changePlaylistURL = this.changePlaylistURL.bind(this);
-    this.changeVideoTitle = this.changeVideoTitle.bind(this);
-    this.toggleVideoSelection = this.toggleVideoSelection.bind(this);
-    this.toggleAllVideosSelection = this.toggleAllVideosSelection.bind(this);
-    this.addPlaylist = this.addPlaylist.bind(this);
   }
 
   //load api data on first load
@@ -142,17 +134,17 @@ class PlaylistAddTabView extends React.Component
       this.props.setFeedbackMessage(getErrorMessage(remoteVideos), 'error');
   }
 
-  changeValue(event)
+  changeValue = (event) =>
   {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  changeCheckboxValue(event)
+  changeCheckboxValue = (event) =>
   {
     this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
-  changeVideoTitle(dataIndex, event)
+  changeVideoTitle = (dataIndex, event) =>
   {
     const { playlistVideos } = this.state;
     playlistVideos[dataIndex].title = event.target.value;
@@ -160,7 +152,7 @@ class PlaylistAddTabView extends React.Component
     this.setState({playlistVideos});
   }
 
-  changePlaylistURL(event)
+  changePlaylistURL = (event) =>
   {
     const url = event.target.value;
     this.setState({url});
@@ -178,7 +170,7 @@ class PlaylistAddTabView extends React.Component
   }
 
   //toggle playlist video selection
-  toggleVideoSelection(dataIndex)
+  toggleVideoSelection = (dataIndex) =>
   {
     let { playlistVideos } = this.state;
     playlistVideos[dataIndex].selected = !playlistVideos[dataIndex].selected;
@@ -187,7 +179,7 @@ class PlaylistAddTabView extends React.Component
   }
 
   //flip state of all videos to selected or not selected
-  toggleAllVideosSelection(toggleAll)
+  toggleAllVideosSelection = (toggleAll) =>
   {
     let { playlistVideos } = this.state;
     const selected = toggleAll ? true : false;
@@ -201,7 +193,7 @@ class PlaylistAddTabView extends React.Component
   }
 
   //add new playlist to database
-  async addPlaylist()
+  addPlaylist = async() =>
   {
     //set loading
     this.setState({loading: true});
@@ -217,7 +209,7 @@ class PlaylistAddTabView extends React.Component
       //save playlist videos
       await this.addPlaylistVideoData(id);
 
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAdded, 'success');
+      this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAdded);
     }
     else if (isErrorResponse(basePlaylist))
       this.props.setFeedbackMessage(getErrorMessage(basePlaylist), 'error');

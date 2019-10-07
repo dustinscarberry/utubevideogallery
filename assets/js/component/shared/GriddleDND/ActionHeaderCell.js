@@ -21,7 +21,7 @@ const ActionHeaderCell = (props) =>
     checkboxNode = <input
       type="checkbox"
       checked={toggleAllCheckbox}
-      onClick={toggleAllRowCheckboxes}
+      onChange={toggleAllRowCheckboxes}
     />;
   }
 
