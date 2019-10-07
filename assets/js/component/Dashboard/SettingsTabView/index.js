@@ -1,4 +1,6 @@
 import React from 'react';
+import actions from './actions';
+import utility from '../../shared/utility';
 import Card from '../../shared/Card';
 import Form from '../../shared/Form';
 import FormField from '../../shared/FormField';
@@ -14,12 +16,6 @@ import SecondaryButton from '../../shared/SecondaryButton';
 import SubmitButton from '../../shared/SubmitButton';
 import InfoLine from '../../shared/InfoLine';
 import Loader from '../../shared/Loader';
-import axios from 'axios';
-import {
-  isValidResponse,
-  isErrorResponse,
-  getErrorMessage
-} from '../../shared/service/shared';
 
 class SettingsTabView extends React.Component
 {
@@ -65,14 +61,11 @@ class SettingsTabView extends React.Component
 
   async loadData()
   {
-    const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/settings',
-      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
-    );
+    const apiData = await actions.fetchSettings();
 
-    if (isValidResponse(apiData))
+    if (utility.isValidResponse(apiData))
     {
-      const data = apiData.data.data;
+      const data = utility.getAPIData(apiData);
 
       this.setState({
         gdEnabled: data.gdEnabled,
@@ -101,13 +94,16 @@ class SettingsTabView extends React.Component
         youtubeHideDetails: data.youtubeHideDetails
       });
     }
-    else if (isErrorResponse(apiData))
-      this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
+    else if (utility.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
   }
 
   saveSettings = async() =>
   {
-    const rsp = await this.saveBaseSettings();
+    this.setState({loading: true});
+
+    //update settings
+    const rsp = await actions.updateSettings(this.state);
 
     //update thumbnails if width changed
     if (this.state.thumbnailWidth != this.state.originalThumbnailWidth)
@@ -117,95 +113,48 @@ class SettingsTabView extends React.Component
     }
 
     //user feedback
-    if (isValidResponse(rsp))
+    if (utility.isValidResponse(rsp))
       this.props.setFeedbackMessage(utvJSData.localization.feedbackSettingsSaved);
-    else if (isErrorResponse(rsp))
-      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
-  }
-
-  async saveBaseSettings()
-  {
-    this.setState({loading: true});
-
-    const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/settings',
-      {
-        playerControlsColor: this.state.playerControlsColor,
-        playerControlsTheme: this.state.playerControlsTheme,
-        popupPlayerWidth: this.state.popupPlayerWidth,
-        popupPlayerOverlayColor: this.state.popupPlayerOverlayColor,
-        popupPlayerOverlayOpacity: this.state.popupPlayerOverlayOpacity,
-        removeVideoPopupScript: this.state.removeVideoPopupScript,
-        thumbnailBorderRadius: this.state.thumbnailBorderRadius,
-        thumbnailWidth: this.state.thumbnailWidth,
-        thumbnailHorizontalPadding: this.state.thumbnailHorizontalPadding,
-        thumbnailVerticalPadding: this.state.thumbnailVerticalPadding,
-        showVideoDescription: this.state.showVideoDescription,
-        vimeoAutoplay: this.state.vimeoAutoplay,
-        vimeoHideDetails: this.state.vimeoHideDetails,
-        youtubeAPIKey: this.state.youtubeAPIKey,
-        youtubeAutoplay: this.state.youtubeAutoplay,
-        youtubeHideDetails: this.state.youtubeHideDetails
-      },
-      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
-    );
+    else if (utility.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
 
     this.setState({loading: false});
-
-    return rsp;
   }
 
   rebuildThumbnails = async() =>
   {
     this.setState({loading: true});
 
-    const videosData = await axios.get(
-      '/wp-json/utubevideogallery/v1/videos',
-      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
-    );
+    //get all videos
+    const videosData = await actions.fetchAllVideos();
 
-    if (isValidResponse(videosData))
+    if (utility.isValidResponse(videosData))
     {
-      const videos = videosData.data.data;
+      const videos = utility.getAPIData(videosData);
 
       for (let video of videos)
       {
-        const rsp = await axios.patch(
-          '/wp-json/utubevideogallery/v1/videos/'
-          + video.id,
-          {},
-          { headers: {'X-WP-Nonce': utvJSData.restNonce} }
-        );
+        //update video thumbnail
+        const rsp = await actions.updateVideoThumbnail(video.id);
 
-        //update status about what video is being rebuilt
-        this.props.setFeedbackMessage(
-          utvJSData.localization.feedbackVideoPartial
-          + ' ['
-          + video.title
-          + '] '
-          + utvJSData.localization.feedbackUpdatedPartial,
-          'success'
-        );
+        //user feedback for thumbnail update
+        this.props.setFeedbackMessage(actions.getThumbnailUpdateMessage(video.title));
       }
     }
-    else if (isErrorResponse(videosData))
-      this.props.setFeedbackMessage(getErrorMessage(videosData), 'error');
+    else if (utility.isErrorResponse(videosData))
+      this.props.setFeedbackMessage(utility.getErrorMessage(videosData), 'error');
 
     this.setState({loading: false});
   }
 
   changeValue = (event) =>
   {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
+    this.setState({[event.target.name]: event.target.value});
   }
 
   changeCheckboxValue = (event) =>
   {
-    this.setState({
-      [event.target.name]: !this.state[event.target.name]
-    });
+    this.setState({[event.target.name]: !this.state[event.target.name]});
   }
 
   render()

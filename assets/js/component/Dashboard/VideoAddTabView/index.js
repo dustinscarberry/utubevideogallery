@@ -1,28 +1,25 @@
 import React from 'react';
 import axios from 'axios';
-import Card from '../shared/Card';
-import Columns from '../shared/Columns';
-import Column from '../shared/Column';
-import SectionHeader from '../shared/SectionHeader';
-import ResponsiveIframe from '../shared/ResponsiveIframe';
-import Breadcrumbs from '../shared/Breadcrumbs';
-import Form from '../shared/Form';
-import FormField from '../shared/FormField';
-import Label from '../shared/Label';
-import FieldHint from '../shared/FieldHint';
-import TextInput from '../shared/TextInput';
-import URLInput from '../shared/URLInput';
-import Toggle from '../shared/Toggle';
-import SelectBox from '../shared/SelectBox';
-import NumberInput from '../shared/NumberInput';
-import TextBoxInput from '../shared/TextBoxInput';
-import SubmitButton from '../shared/SubmitButton';
-import CancelButton from '../shared/CancelButton';
-import {
-  isValidResponse,
-  isErrorResponse,
-  getErrorMessage
-} from '../shared/service/shared';
+import actions from './actions';
+import utility from '../../shared/utility';
+import Card from '../../shared/Card';
+import Columns from '../../shared/Columns';
+import Column from '../../shared/Column';
+import SectionHeader from '../../shared/SectionHeader';
+import ResponsiveIframe from '../../shared/ResponsiveIframe';
+import Breadcrumbs from '../../shared/Breadcrumbs';
+import Form from '../../shared/Form';
+import FormField from '../../shared/FormField';
+import Label from '../../shared/Label';
+import FieldHint from '../../shared/FieldHint';
+import TextInput from '../../shared/TextInput';
+import URLInput from '../../shared/URLInput';
+import Toggle from '../../shared/Toggle';
+import SelectBox from '../../shared/SelectBox';
+import NumberInput from '../../shared/NumberInput';
+import TextBoxInput from '../../shared/TextBoxInput';
+import SubmitButton from '../../shared/SubmitButton';
+import CancelButton from '../../shared/CancelButton';
 
 class VideoAddTabView extends React.Component
 {
@@ -55,98 +52,34 @@ class VideoAddTabView extends React.Component
 
   changeURL = (event) =>
   {
-    let url = event.target.value.trim();
-
-    this.setState(
-    {
+    //reset state
+    this.setState({
       source: undefined,
-      url: url,
+      url: event.target.value.trim(),
       sourceID: undefined
     });
 
-    if (url)
-    {
-      const compareURL = url.toLowerCase();
+    //parse url
+    const urlParts = actions.parseURL(event.target.value);
 
-      if (
-        compareURL.indexOf('youtube') !== -1
-        || compareURL.indexOf('youtu.be') !== -1
-      )
-      {
-        let matches = url.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
-
-        if (matches)
-          this.setState({source: 'youtube', sourceID: matches[1]});
-      }
-      else if (compareURL.indexOf('vimeo') !== -1)
-      {
-        let matches = url.match(/https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/);
-
-        if (matches)
-          this.setState({source: 'vimeo', sourceID: matches[2]})
-      }
-    }
+    //update state
+    if (urlParts)
+      this.setState(urlParts);
   }
 
   addVideo = async() =>
   {
-    const rsp = await axios.post(
-      '/wp-json/utubevideogallery/v1/videos/',
-      {
-        sourceID: this.state.sourceID,
-        title: this.state.title,
-        description: this.state.description,
-        quality: this.state.quality,
-        showControls: this.state.showControls,
-        startTime: this.state.startTime,
-        endTime: this.state.endTime,
-        source: this.state.source,
-        albumID: this.props.selectedAlbum
-      },
-      { headers: {'X-WP-Nonce': utvJSData.restNonce} }
-    );
+    //create video
+    const rsp = await actions.createVideo(this.state, this.props.selectedAlbum);
 
-    if (isValidResponse(rsp))
+    //user feedback
+    if (utility.isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoAdded);
     }
-    else if (isErrorResponse(rsp))
-      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
-  }
-
-  getVideoPreview()
-  {
-    let src = '';
-
-    if (this.state.source == 'youtube')
-    {
-      src = 'https://www.youtube.com/embed/';
-      src += this.state.sourceID;
-      src += '?modestbranding=1';
-      src += '&rel=0';
-      src += '&showinfo=0';
-      src += '&autohide=0';
-      src += '&iv_load_policy=3';
-      src += '&color=white';
-      src += '&theme=dark';
-      src += '&autoplay=0';
-      src += '&start=' + this.state.startTime;
-      src += '&end=' + this.state.endTime;
-    }
-    else if (this.state.source == 'vimeo')
-    {
-      src = 'https://player.vimeo.com/video/';
-      src += this.state.sourceID;
-      src += '?title=0';
-      src += '&portrait=0';
-      src += '&byline=0';
-      src += '&badge=0';
-      src += '&autoplay=0';
-      src += '#t=' + this.state.startTime;
-    }
-
-    return <ResponsiveIframe src={src}/>;
+    else if (utility.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
   }
 
   render()
@@ -247,7 +180,12 @@ class VideoAddTabView extends React.Component
           </Column>
           <Column className="utv-right-two-thirds-column">
             <Card classes="utv-even-padding">
-              {this.getVideoPreview()}
+              <ResponsiveIframe src={actions.getVideoPreview(
+                this.state.source,
+                this.state.sourceID,
+                this.state.startTime,
+                this.state.endTime
+              )}/>
             </Card>
           </Column>
         </Columns>

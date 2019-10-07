@@ -11,12 +11,8 @@ import TextInput from '../../shared/TextInput';
 import SelectBox from '../../shared/SelectBox';
 import SubmitButton from '../../shared/SubmitButton';
 import CancelButton from '../../shared/CancelButton';
-import {
-  isValidResponse,
-  isErrorResponse,
-  getErrorMessage
-} from '../../shared/service/shared';
 import actions from './actions';
+import utility from '../../shared/utility';
 
 class AlbumAddTabView extends React.Component
 {
@@ -43,13 +39,13 @@ class AlbumAddTabView extends React.Component
       this.props.selectedGallery
     );
 
-    if (isValidResponse(rsp))
+    if (utility.isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumCreated);
     }
-    else if (isErrorResponse(rsp))
-      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
+    else if (utility.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
   }
 
   render()

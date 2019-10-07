@@ -15,14 +15,8 @@ import CancelButton from '../../shared/CancelButton';
 import Loader from '../../shared/Loader';
 import AlbumThumbnailSelection from './AlbumThumbnailSelection';
 import sharedService from '../../../service/SharedService';
-import axios from 'axios';
-import {
-  isValidResponse,
-  isErrorResponse,
-  getErrorMessage,
-  getAPIData
-} from '../../shared/service/shared';
 import actions from './actions';
+import utility from '../../shared/utility';
 
 class AlbumEditTabView extends React.Component
 {
@@ -59,9 +53,9 @@ class AlbumEditTabView extends React.Component
   {
     const apiData = await actions.fetchAlbum(this.props.currentViewID);
 
-    if (isValidResponse(apiData))
+    if (utility.isValidResponse(apiData))
     {
-      const data = getAPIData(apiData);
+      const data = utility.getAPIData(apiData);
 
       this.setState({
         thumbnail: data.thumbnail,
@@ -71,17 +65,17 @@ class AlbumEditTabView extends React.Component
         gallery: data.galleryID
       });
     }
-    else if (isErrorResponse(apiData))
-      this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
+    else if (utility.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
   }
 
   async loadGalleries()
   {
     const apiData = await actions.fetchGalleries();
 
-    if (isValidResponse(apiData))
+    if (utility.isValidResponse(apiData))
     {
-      const data = getAPIData(apiData);
+      const data = utility.getAPIData(apiData);
       const galleries = actions.parseGalleriesData(data);
       this.setState({galleries});
     }
@@ -91,13 +85,13 @@ class AlbumEditTabView extends React.Component
   {
     const apiData = await actions.fetchThumbnails(this.props.currentViewID);
 
-    if (isValidResponse(apiData))
+    if (utility.isValidResponse(apiData))
     {
-      const data = getAPIData(apiData);
+      const data = utility.getAPIData(apiData);
       const thumbnails = actions.parseThumbnailsData(data);
       this.setState({thumbnails});
     }
-    else if (isErrorResponse(apiData))
+    else if (utility.isErrorResponse(apiData))
       this.props.setFeedbackMessage('Loading album thumbnails failed', 'error');
   }
 
@@ -131,13 +125,13 @@ class AlbumEditTabView extends React.Component
       this.state.gallery
     );
 
-    if (isValidResponse(rsp))
+    if (utility.isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumSaved);
     }
-    else if (isErrorResponse(rsp))
-      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
+    else if (utility.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
   }
 
   render()

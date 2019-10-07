@@ -1,22 +1,18 @@
 import React from 'react';
-import axios from 'axios';
-import Card from '../shared/Card';
-import Columns from '../shared/Columns';
-import Column from '../shared/Column';
-import SectionHeader from '../shared/SectionHeader';
-import Breadcrumbs from '../shared/Breadcrumbs';
-import Form from '../shared/Form';
-import FormField from '../shared/FormField';
-import Label from '../shared/Label';
-import TextInput from '../shared/TextInput';
-import SelectBox from '../shared/SelectBox';
-import SubmitButton from '../shared/SubmitButton';
-import CancelButton from '../shared/CancelButton';
-import {
-  isValidResponse,
-  isErrorResponse,
-  getErrorMessage
-} from '../shared/service/shared';
+import actions from './actions';
+import utility from '../../shared/utility';
+import Card from '../../shared/Card';
+import Columns from '../../shared/Columns';
+import Column from '../../shared/Column';
+import SectionHeader from '../../shared/SectionHeader';
+import Breadcrumbs from '../../shared/Breadcrumbs';
+import Form from '../../shared/Form';
+import FormField from '../../shared/FormField';
+import Label from '../../shared/Label';
+import TextInput from '../../shared/TextInput';
+import SelectBox from '../../shared/SelectBox';
+import SubmitButton from '../../shared/SubmitButton';
+import CancelButton from '../../shared/CancelButton';
 
 class GalleryAddTabView extends React.Component
 {
@@ -39,26 +35,15 @@ class GalleryAddTabView extends React.Component
 
   addGallery = async() =>
   {
-    const rsp = await axios.post(
-      '/wp-json/utubevideogallery/v1/galleries/',
-      {
-        title: this.state.title,
-        albumSorting: this.state.albumSorting,
-        thumbnailType: this.state.thumbnailType,
-        displayType: this.state.displayType
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    const rsp = await actions.createGallery(this.state);
 
-    if (isValidResponse(rsp))
+    if (utility.isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackGalleryCreated);
     }
-    else if (isErrorResponse(rsp))
-      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
+    else if (utility.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
   }
 
   render()

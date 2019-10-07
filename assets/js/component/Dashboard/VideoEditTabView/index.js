@@ -1,29 +1,24 @@
 import React from 'react';
-import Card from '../shared/Card';
-import Columns from '../shared/Columns';
-import Column from '../shared/Column';
-import SectionHeader from '../shared/SectionHeader';
-import ResponsiveIframe from '../shared/ResponsiveIframe';
-import Breadcrumbs from '../shared/Breadcrumbs';
-import Form from '../shared/Form';
-import FormField from '../shared/FormField';
-import Label from '../shared/Label';
-import FieldHint from '../shared/FieldHint';
-import TextInput from '../shared/TextInput';
-import Toggle from '../shared/Toggle';
-import SelectBox from '../shared/SelectBox';
-import NumberInput from '../shared/NumberInput';
-import TextBoxInput from '../shared/TextBoxInput';
-import SubmitButton from '../shared/SubmitButton';
-import CancelButton from '../shared/CancelButton';
-import Loader from '../shared/Loader';
-import sharedService from '../../service/SharedService';
-import axios from 'axios';
-import {
-  isValidResponse,
-  isErrorResponse,
-  getErrorMessage
-} from '../shared/service/shared';
+import actions from './actions';
+import utility from '../../shared/utility';
+import Card from '../../shared/Card';
+import Columns from '../../shared/Columns';
+import Column from '../../shared/Column';
+import SectionHeader from '../../shared/SectionHeader';
+import ResponsiveIframe from '../../shared/ResponsiveIframe';
+import Breadcrumbs from '../../shared/Breadcrumbs';
+import Form from '../../shared/Form';
+import FormField from '../../shared/FormField';
+import Label from '../../shared/Label';
+import FieldHint from '../../shared/FieldHint';
+import TextInput from '../../shared/TextInput';
+import Toggle from '../../shared/Toggle';
+import SelectBox from '../../shared/SelectBox';
+import NumberInput from '../../shared/NumberInput';
+import TextBoxInput from '../../shared/TextBoxInput';
+import SubmitButton from '../../shared/SubmitButton';
+import CancelButton from '../../shared/CancelButton';
+import Loader from '../../shared/Loader';
 
 class VideoEditTabView extends React.Component
 {
@@ -62,17 +57,12 @@ class VideoEditTabView extends React.Component
 
   async loadData()
   {
-    const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/videos/'
-      + this.props.currentViewID,
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    //get video
+    const apiData = await actions.fetchVideo(this.props.currentViewID);
 
-    if (isValidResponse(apiData))
+    if (utility.isValidResponse(apiData))
     {
-      const data = apiData.data.data;
+      const data = utility.getAPIData(apiData);
 
       this.setState({
         thumbnail: data.thumbnail,
@@ -89,33 +79,23 @@ class VideoEditTabView extends React.Component
         loading: false
       });
     }
-    else if (isErrorResponse(apiData))
-      this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
+    else if (utility.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
   }
 
   async loadAlbums()
   {
-    const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/galleries/'
-      + this.props.selectedGallery
-      + '/albums'
-    );
+    //get albums
+    const apiData = await actions.fetchGalleryAlbums(this.props.selectedGallery);
 
-    if (isValidResponse(apiData))
+    if (utility.isValidResponse(apiData))
     {
-      const data = apiData.data.data;
-      const albums = [];
-
-      for (const album of data)
-        albums.push({
-          name: album.title,
-          value: album.id
-        });
-
+      const data = utility.getAPIData(apiData);
+      const albums = actions.parseAlbumsData(data);
       this.setState({albums});
     }
-    else if (isErrorResponse(apiData))
-      this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
+    else if (utility.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
   }
 
   changeValue = (event) =>
@@ -130,76 +110,21 @@ class VideoEditTabView extends React.Component
 
   saveVideo = async() =>
   {
-    const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/videos/'
-      + this.props.currentViewID,
-      {
-        title: this.state.title,
-        description: this.state.description,
-        quality: this.state.quality,
-        showControls: this.state.showControls,
-        startTime: this.state.startTime,
-        endTime: this.state.endTime,
-        albumID: this.state.album
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    //update video
+    const rsp = await actions.updateVideo(this.props.currentViewID, this.state);
 
-    if (isValidResponse(rsp))
+    if (utility.isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoSaved);
     }
-    else if (isErrorResponse(rsp))
-      this.props.setFeedbackMessage(rsp.data.error.message, 'error');
-  }
-
-  getVideoPreview()
-  {
-    let src = '';
-
-    if (this.state.source == 'youtube')
-    {
-      src = 'https://www.youtube.com/embed/';
-      src += this.state.sourceID;
-      src += '?modestbranding=1';
-      src += '&rel=0';
-      src += '&showinfo=0';
-      src += '&autohide=0';
-      src += '&iv_load_policy=3';
-      src += '&color=white';
-      src += '&theme=dark';
-      src += '&autoplay=0';
-      src += '&start=' + this.state.startTime;
-      src += '&end=' + this.state.endTime;
-    }
-    else if (this.state.source == 'vimeo')
-    {
-      src = 'https://player.vimeo.com/video/';
-      src += this.state.sourceID;
-      src += '?title=0';
-      src += '&portrait=0';
-      src += '&byline=0';
-      src += '&badge=0';
-      src += '&autoplay=0';
-      src += '#t=' + this.state.startTime;
-    }
-
-    return <ResponsiveIframe src={src}/>;
+    else if (utility.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
   }
 
   render()
   {
-    let sourceFormatted = undefined;
-
-    if (this.state.source == 'youtube')
-      sourceFormatted = 'YouTube';
-    else if (this.state.source == 'vimeo')
-      sourceFormatted = 'Vimeo';
-
-    const updateDateFormatted = sharedService.getFormattedDateTime(this.state.updateDate);
+    const updateDateFormatted = utility.getFormattedDateTime(this.state.updateDate);
 
     //show loader while form is loading
     if (this.state.loading)
@@ -226,7 +151,7 @@ class VideoEditTabView extends React.Component
                   <Label text={utvJSData.localization.source}/>
                   <TextInput
                     name="source"
-                    value={sourceFormatted}
+                    value={actions.getFormattedSource(this.state.source)}
                     disabled={true}
                   />
                 </FormField>
@@ -318,7 +243,12 @@ class VideoEditTabView extends React.Component
           </Column>
           <Column className="utv-right-two-thirds-column">
             <Card classes="utv-even-padding">
-              {this.getVideoPreview()}
+              <ResponsiveIframe src={actions.getVideoPreview(
+                this.state.source,
+                this.state.sourceID,
+                this.state.startTime,
+                this.state.endTime
+              )}/>
             </Card>
           </Column>
         </Columns>

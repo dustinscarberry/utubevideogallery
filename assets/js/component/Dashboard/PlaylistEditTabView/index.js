@@ -1,29 +1,25 @@
 import React from 'react';
-import Card from '../shared/Card';
-import Columns from '../shared/Columns';
-import Column from '../shared/Column';
-import SectionHeader from '../shared/SectionHeader';
-import Breadcrumbs from '../shared/Breadcrumbs';
-import Form from '../shared/Form';
-import FormField from '../shared/FormField';
-import Label from '../shared/Label';
-import FieldHint from '../shared/FieldHint';
-import TextInput from '../shared/TextInput';
-import SelectBox from '../shared/SelectBox';
-import Toggle from '../shared/Toggle';
-import SubmitButton from '../shared/SubmitButton';
-import CancelButton from '../shared/CancelButton';
-import PlaylistLegend from '../shared/PlaylistLegend';
-import PlaylistMultiSelect from '../shared/PlaylistMultiSelect';
-import PlaylistVideoSelection from '../shared/PlaylistVideoSelection';
-import Loader from '../shared/Loader';
-import sharedService from '../../service/SharedService';
+import Card from '../../shared/Card';
+import Columns from '../../shared/Columns';
+import Column from '../../shared/Column';
+import SectionHeader from '../../shared/SectionHeader';
+import Breadcrumbs from '../../shared/Breadcrumbs';
+import Form from '../../shared/Form';
+import FormField from '../../shared/FormField';
+import Label from '../../shared/Label';
+import FieldHint from '../../shared/FieldHint';
+import TextInput from '../../shared/TextInput';
+import SelectBox from '../../shared/SelectBox';
+import Toggle from '../../shared/Toggle';
+import SubmitButton from '../../shared/SubmitButton';
+import CancelButton from '../../shared/CancelButton';
+import PlaylistLegend from '../../shared/PlaylistLegend';
+import PlaylistMultiSelect from '../../shared/PlaylistMultiSelect';
+import PlaylistVideoSelection from '../../shared/PlaylistVideoSelection';
+import Loader from '../../shared/Loader';
+import sharedService from '../../../service/SharedService';
 import axios from 'axios';
-import {
-  isValidResponse,
-  isErrorResponse,
-  getErrorMessage
-} from '../shared/service/shared';
+import utility from '../../shared/utility';
 
 class PlaylistEditTabView extends React.Component
 {
@@ -68,7 +64,7 @@ class PlaylistEditTabView extends React.Component
       }
     );
 
-    if (isValidResponse(rsp))
+    if (utility.isValidResponse(rsp))
     {
       const data = rsp.data.data;
 
@@ -83,8 +79,8 @@ class PlaylistEditTabView extends React.Component
         albumName: data.albumName
       });
     }
-    else if (isErrorResponse(rsp))
-      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
+    else if (utility.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
   }
 
   async loadPlaylistVideos()
@@ -120,15 +116,15 @@ class PlaylistEditTabView extends React.Component
     );
 
     //check for errors
-    if (isErrorResponse(remoteVideos))
+    if (utility.isErrorResponse(remoteVideos))
     {
-      this.props.setFeedbackMessage(getErrorMessage(remoteVideos), 'error');
+      this.props.setFeedbackMessage(utility.getErrorMessage(remoteVideos), 'error');
       return;
     }
 
-    if (isErrorResponse(localVideos))
+    if (utility.isErrorResponse(localVideos))
     {
-      this.props.setFeedbackMessage(getErrorMessage(localVideos), 'error');
+      this.props.setFeedbackMessage(utility.getErrorMessage(localVideos), 'error');
       return;
     }
 

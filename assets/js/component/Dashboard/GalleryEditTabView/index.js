@@ -1,26 +1,19 @@
 import React from 'react';
-import Card from '../shared/Card';
-import Columns from '../shared/Columns';
-import Column from '../shared/Column';
-import SectionHeader from '../shared/SectionHeader';
-import Breadcrumbs from '../shared/Breadcrumbs';
-import Form from '../shared/Form';
-import FormField from '../shared/FormField';
-import Label from '../shared/Label';
-import FieldHint from '../shared/FieldHint';
-import TextInput from '../shared/TextInput';
-import Toggle from '../shared/Toggle';
-import SelectBox from '../shared/SelectBox';
-import SubmitButton from '../shared/SubmitButton';
-import CancelButton from '../shared/CancelButton';
-import Loader from '../shared/Loader';
-import sharedService from '../../service/SharedService';
-import axios from 'axios';
-import {
-  isValidResponse,
-  isErrorResponse,
-  getErrorMessage
-} from '../shared/service/shared';
+import actions from './actions';
+import utility from '../../shared/utility';
+import Card from '../../shared/Card';
+import Columns from '../../shared/Columns';
+import Column from '../../shared/Column';
+import SectionHeader from '../../shared/SectionHeader';
+import Breadcrumbs from '../../shared/Breadcrumbs';
+import Form from '../../shared/Form';
+import FormField from '../../shared/FormField';
+import Label from '../../shared/Label';
+import TextInput from '../../shared/TextInput';
+import SelectBox from '../../shared/SelectBox';
+import SubmitButton from '../../shared/SubmitButton';
+import CancelButton from '../../shared/CancelButton';
+import Loader from '../../shared/Loader';
 
 class GalleryEditTabView extends React.Component
 {
@@ -50,17 +43,11 @@ class GalleryEditTabView extends React.Component
 
   async loadData()
   {
-    const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/galleries/'
-      + this.props.currentViewID,
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    const apiData = await actions.fetchGallery(this.props.currentViewID);
 
-    if (isValidResponse(apiData))
+    if (utility.isValidResponse(apiData))
     {
-      const data = apiData.data.data;
+      const data = utility.getAPIData(apiData);
 
       this.setState({
         title: data.title,
@@ -71,8 +58,8 @@ class GalleryEditTabView extends React.Component
         updateDate: data.updateDate
       });
     }
-    else if (isErrorResponse(apiData))
-      this.props.setFeedbackMessage(getErrorMessage(apiData), 'error');
+    else if (utility.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
   }
 
   changeValue = (event) =>
@@ -89,90 +76,53 @@ class GalleryEditTabView extends React.Component
   {
     this.setState({loading: true});
 
-    const rsp = await this.saveBaseGallery();
+    const rsp = await actions.updateGallery(this.props.currentViewID, this.state);
 
     //update thumbnails if format changed
-    if (isValidResponse(rsp) && this.state.thumbnailType != this.state.originalThumbnailType)
+    if (utility.isValidResponse(rsp)
+      && this.state.thumbnailType != this.state.originalThumbnailType
+    )
     {
       await this.rebuildThumbnails();
       this.setState({originalThumbnailType: this.state.thumbnailType});
     }
 
     //user feedback
-    if (isValidResponse(rsp))
+    if (utility.isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackGallerySaved);
     }
-    else if (isErrorResponse(rsp))
-      this.props.setFeedbackMessage(getErrorMessage(rsp), 'error');
+    else if (utility.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
 
     this.setState({loading: false});
   }
 
-  async saveBaseGallery()
-  {
-    const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/galleries/'
-      + this.props.currentViewID,
-      {
-        title: this.state.title,
-        albumSorting: this.state.albumSorting,
-        thumbnailType: this.state.thumbnailType,
-        displayType: this.state.displayType
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
-
-    return rsp;
-  }
-
   async rebuildThumbnails()
   {
-    const videosData = await axios.get(
-      '/wp-json/utubevideogallery/v1/galleries/'
-      + this.props.currentViewID
-      + '/videos',
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    const videosData = await actions.fetchGalleryVideos(this.props.currentViewID);
 
-    if (isValidResponse(videosData))
+    if (utility.isValidResponse(videosData))
     {
       const videos = videosData.data.data;
 
       for (let video of videos)
       {
-        const rsp = await axios.patch(
-          '/wp-json/utubevideogallery/v1/videos/'
-          + video.id,
-          {},
-          {
-            headers: {'X-WP-Nonce': utvJSData.restNonce}
-          }
-        );
+        //update video thumbnail
+        const rsp = await actions.updateVideoThumbnail(video.id);
 
-        //update status about what video is being rebuilt
-        this.props.setFeedbackMessage(
-          utvJSData.localization.feedbackVideoPartial
-          + ' ['
-          + video.title
-          + '] '
-          + utvJSData.localization.feedbackUpdatedPartial,
-          'success'
-        );
+        //user feedback for thumbnail update
+        this.props.setFeedbackMessage(actions.getThumbnailUpdateMessage(video.title));
       }
     }
-    else if (isErrorResponse(videosData))
-      this.props.setFeedbackMessage(getErrorMessage(videosData), 'error');
+    else if (utility.isErrorResponse(videosData))
+      this.props.setFeedbackMessage(utility.getErrorMessage(videosData), 'error');
   }
 
   render()
   {
-    const updateDateFormatted = sharedService.getFormattedDateTime(this.state.updateDate);
+    const updateDateFormatted = utility.getFormattedDateTime(this.state.updateDate);
 
     if (this.state.loading)
       return <Loader/>;

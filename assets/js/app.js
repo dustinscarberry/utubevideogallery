@@ -1,8 +1,8 @@
 import '../scss/app.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Gallery from './component/Gallery/Gallery';
-import Panel from './component/Panel/Panel';
+import Gallery from './component/Gallery';
+import Panel from './component/Panel';
 
 const galleries = document.querySelectorAll('.utv-gallery-root');
 const panels = document.querySelectorAll('.utv-panel-root');
