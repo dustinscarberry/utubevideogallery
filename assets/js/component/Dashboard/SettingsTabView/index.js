@@ -147,14 +147,14 @@ class SettingsTabView extends React.Component
     this.setState({loading: false});
   }
 
-  changeValue = (event) =>
+  changeValue = (e) =>
   {
-    this.setState({[event.target.name]: event.target.value});
+    this.setState({[e.target.name]: e.target.value});
   }
 
-  changeCheckboxValue = (event) =>
+  changeCheckboxValue = (e) =>
   {
-    this.setState({[event.target.name]: !this.state[event.target.name]});
+    this.setState({[e.target.name]: !this.state[e.target.name]});
   }
 
   render()

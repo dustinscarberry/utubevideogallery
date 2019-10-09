@@ -1,4 +1,6 @@
 import React from 'react';
+import actions from './actions';
+import utility from '../../shared/utility';
 import Card from '../../shared/Card';
 import Columns from '../../shared/Columns';
 import Column from '../../shared/Column';
@@ -16,8 +18,6 @@ import CancelButton from '../../shared/CancelButton';
 import PlaylistMultiSelect from '../../shared/PlaylistMultiSelect';
 import PlaylistVideoSelection from '../../shared/PlaylistVideoSelection';
 import Loader from '../../shared/Loader';
-import axios from 'axios';
-import utility from '../../shared/utility';
 
 class PlaylistAddTabView extends React.Component
 {
@@ -58,71 +58,36 @@ class PlaylistAddTabView extends React.Component
   //load album list for selectbox
   async loadAlbums()
   {
-    const rsp = await axios.get(
-      '/wp-json/utubevideogallery/v1/albums',
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    const rsp = await actions.fetchAlbums();
 
     if (utility.isValidResponse(rsp))
     {
-      const data = rsp.data.data;
-
-      const albums = data.map(album =>
-      {
-        return {
-          name: album.title,
-          value: album.id
-        };
-      });
-
-      //add blank entry to list
-      albums.unshift({name: '', value: ''});
-
+      const data = utility.getAPIData(rsp);
+      const albums = actions.parseAlbumsData(data);
       this.setState({albums});
     }
     else if (utility.isErrorResponse(rsp))
       this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
   }
 
-  //load playlist items from given url
+  //load remote playlist
   async loadPlaylistVideos()
   {
-    //load remote playlist data
-    let remoteVideos = undefined;
+    const { source, sourceID } = this.state;
 
-    if (this.state.source == 'youtube')
-      remoteVideos = await axios.get(
-        '/wp-json/utubevideogallery/v1/youtubeplaylists/'
-        + this.state.sourceID,
-        {
-          headers: {'X-WP-Nonce': utvJSData.restNonce}
-        }
-      );
-    else if (this.state.source == 'vimeo')
-      remoteVideos = await axios.get(
-        '/wp-json/utubevideogallery/v1/vimeoplaylists/'
-        + this.state.sourceID,
-        {
-          headers: {'X-WP-Nonce': utvJSData.restNonce}
-        }
-      );
+    //fetch remote playlist data
+    let remoteVideos = await actions.fetchRemotePlaylist(source, sourceID);
 
     if (utility.isValidResponse(remoteVideos))
     {
-      let remoteData = remoteVideos.data.data;
-
       //augment remote videos data
-      remoteData.videos = remoteData.videos.map((remoteVideo) =>
-      {
-        remoteVideo.selected = true;
-        return remoteVideo;
-      });
+      remoteVideos = utility.getAPIData(remoteVideos);
+      remoteVideos = actions.parseRemotePlaylistData(remoteVideos);
 
+      //add remote videos to state
       this.setState({
-        playlistTitle: remoteData.title,
-        playlistVideos: remoteData.videos,
+        playlistTitle: remoteVideos.title,
+        playlistVideos: remoteVideos.videos,
         playlistLoading: false
       });
     }
@@ -130,38 +95,35 @@ class PlaylistAddTabView extends React.Component
       this.props.setFeedbackMessage(utility.getErrorMessage(remoteVideos), 'error');
   }
 
-  changeValue = (event) =>
+  changeValue = (e) =>
   {
-    this.setState({[event.target.name]: event.target.value});
+    this.setState({[e.target.name]: e.target.value});
   }
 
-  changeCheckboxValue = (event) =>
+  changeCheckboxValue = (e) =>
   {
-    this.setState({[event.target.name]: !this.state[event.target.name]});
+    this.setState({[e.target.name]: !this.state[e.target.name]});
   }
 
-  changeVideoTitle = (dataIndex, event) =>
+  changeVideoTitle = (dataIndex, e) =>
   {
     const { playlistVideos } = this.state;
-    playlistVideos[dataIndex].title = event.target.value;
+    playlistVideos[dataIndex].title = e.target.value;
 
     this.setState({playlistVideos});
   }
 
-  changePlaylistURL = (event) =>
+  changePlaylistURL = (e) =>
   {
-    const url = event.target.value;
+    const url = e.target.value;
     this.setState({url});
 
     if (url)
     {
-      const matches = url.match(/^.*?(youtube|vimeo).*?(?:list=|album\/)(.*?)(?:&|$)/);
+      const urlParts = actions.parsePlaylistURL(url);
 
-      if (matches && matches.length == 3)
-        this.setState({
-          source: matches[1],
-          sourceID: matches[2]
-        });
+      if (urlParts)
+        this.setState(urlParts);
     }
   }
 
@@ -174,36 +136,36 @@ class PlaylistAddTabView extends React.Component
     this.setState({playlistVideos});
   }
 
-  //flip state of all videos to selected or not selected
+  //toggle selected state of all playlist videos
   toggleAllVideosSelection = (toggleAll) =>
   {
     let { playlistVideos } = this.state;
-    const selected = toggleAll ? true : false;
 
     playlistVideos = playlistVideos.map(video => {
-      video.selected = selected;
+      video.selected = toggleAll;
       return video;
     });
 
     this.setState({playlistVideos});
   }
 
-  //add new playlist to database
+  //add new playlist
   addPlaylist = async() =>
   {
     //set loading
     this.setState({loading: true});
 
     //save base playlist
-    const basePlaylist = await this.addPlaylistData();
+    const basePlaylist = await actions.createPlaylist(this.state);
 
     if (utility.isValidResponse(basePlaylist))
     {
       //get playlist id
-      const id = basePlaylist.data.data.id;
+      let playlistID = utility.getAPIData(basePlaylist);
+      playlistID = playlistID.id;
 
       //save playlist videos
-      await this.addPlaylistVideoData(id);
+      await this.addPlaylistVideoData(playlistID);
 
       this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAdded);
     }
@@ -213,58 +175,24 @@ class PlaylistAddTabView extends React.Component
     this.props.changeView();
   }
 
-  async addPlaylistData()
-  {
-    //add base playlist data
-    return await axios.post(
-      '/wp-json/utubevideogallery/v1/playlists',
-      {
-        title: this.state.playlistTitle,
-        source: this.state.source,
-        sourceID: this.state.sourceID,
-        videoQuality: this.state.videoQuality,
-        showControls: this.state.showControls,
-        albumID: this.state.album
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
-  }
-
+  //add each playlist video
   async addPlaylistVideoData(playlistID)
   {
-    //create, update, or delete playlist videos based on sync method
+    //create all videos that selected
     for (let video of this.state.playlistVideos)
     {
-      //create video
       if (video.selected)
       {
-        let rsp = await axios.post(
-          '/wp-json/utubevideogallery/v1/videos',
-          {
-            sourceID: video.sourceID,
-            title: video.title,
-            quality: this.state.videoQuality,
-            controls: this.state.showControls,
-            source: this.state.source,
-            albumID: this.state.album,
-            playlistID: playlistID
-          },
-          {
-            headers: {'X-WP-Nonce': utvJSData.restNonce}
-          }
+        //create video
+        const rsp = await actions.createVideo(
+          video.sourceID,
+          video.title,
+          playlistID,
+          this.state
         );
 
-        //update status about what video is being saved
-        this.props.setFeedbackMessage(
-          utvJSData.localization.feedbackVideoPartial
-          + ' ['
-          + video.title
-          + '] '
-          + utvJSData.localization.feedbackAddedPartial,
-          'success'
-        );
+        //feedback of video creation
+        this.props.setFeedbackMessage(actions.getVideoCreateMessage(video.title));
       }
     }
   }
@@ -277,17 +205,14 @@ class PlaylistAddTabView extends React.Component
 
     //show playlist videos or loader
     let playlistNode = undefined;
-    if (this.state.playlistLoading
-      && this.state.url
-      && this.state.url != ''
-    )
+    if (actions.isPlaylistLoading(this.state))
       playlistNode = <Loader/>;
     else
       playlistNode = <PlaylistVideoSelection
         videos={this.state.playlistVideos}
         toggleVideoSelection={this.toggleVideoSelection}
         changeVideoTitle={this.changeVideoTitle}
-      />
+      />;
 
     return (
       <div>
@@ -332,6 +257,7 @@ class PlaylistAddTabView extends React.Component
                     onChange={this.changeValue}
                     data={this.state.albums}
                     required={true}
+                    blankEntry={true}
                   />
                 </FormField>
                 <FormField>

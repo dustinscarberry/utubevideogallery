@@ -26,9 +26,9 @@ class AlbumAddTabView extends React.Component
     };
   }
 
-  changeValue = (event) =>
+  changeValue = (e) =>
   {
-    this.setState({[event.target.name]: event.target.value});
+    this.setState({[e.target.name]: e.target.value});
   }
 
   addAlbum = async() =>

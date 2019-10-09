@@ -21,12 +21,6 @@ class Panel extends React.Component
       forceNoAutoplay: true
     }
 
-    this.loadAPIData = this.loadAPIData.bind(this);
-    this.previousVideo = this.previousVideo.bind(this);
-    this.nextVideo = this.nextVideo.bind(this);
-    this.changeVideo = this.changeVideo.bind(this);
-    this.changePage = this.changePage.bind(this);
-
     this.loadAPIData();
   }
 
@@ -35,7 +29,7 @@ class Panel extends React.Component
     this.setState({forceNoAutoplay: false});
   }
 
-  previousVideo()
+  previousVideo = () =>
   {
     if (this.state.selectedVideo > 0)
     {
@@ -44,7 +38,7 @@ class Panel extends React.Component
     }
   }
 
-  nextVideo()
+  nextVideo = () =>
   {
     if (this.state.selectedVideo < this.state.videos.length - 1)
     {
@@ -53,7 +47,7 @@ class Panel extends React.Component
     }
   }
 
-  changeVideo(videoIndex)
+  changeVideo = (videoIndex) =>
   {
     if (this.state.forceNoAutoplay)
       this.turnOnAutoplay();
@@ -61,7 +55,7 @@ class Panel extends React.Component
     this.setState({selectedVideo: videoIndex});
   }
 
-  changePage(page)
+  changePage = (page) =>
   {
     this.setState({currentPage: page});
   }
@@ -92,7 +86,7 @@ class Panel extends React.Component
     return panelClasses.join(' ');
   }
 
-  async loadAPIData()
+  loadAPIData = async() =>
   {
     const {
       id,

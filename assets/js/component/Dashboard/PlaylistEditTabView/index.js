@@ -1,4 +1,6 @@
 import React from 'react';
+import actions from './actions';
+import utility from '../../shared/utility';
 import Card from '../../shared/Card';
 import Columns from '../../shared/Columns';
 import Column from '../../shared/Column';
@@ -17,9 +19,6 @@ import PlaylistLegend from '../../shared/PlaylistLegend';
 import PlaylistMultiSelect from '../../shared/PlaylistMultiSelect';
 import PlaylistVideoSelection from '../../shared/PlaylistVideoSelection';
 import Loader from '../../shared/Loader';
-import sharedService from '../../../service/SharedService';
-import axios from 'axios';
-import utility from '../../shared/utility';
 
 class PlaylistEditTabView extends React.Component
 {
@@ -56,17 +55,11 @@ class PlaylistEditTabView extends React.Component
 
   async loadPlaylist()
   {
-    const rsp = await axios.get(
-      '/wp-json/utubevideogallery/v1/playlists/'
-      + this.props.currentViewID,
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    const rsp = await actions.fetchPlaylist(this.props.currentViewID);
 
     if (utility.isValidResponse(rsp))
     {
-      const data = rsp.data.data;
+      const data = utility.getAPIData(rsp);
 
       this.setState({
         title: data.title,
@@ -85,35 +78,13 @@ class PlaylistEditTabView extends React.Component
 
   async loadPlaylistVideos()
   {
-    //load remote playlist data
-    let remoteVideos = undefined;
+    const { source, sourceID, albumID } = this.state;
 
-    if (this.state.source == 'youtube')
-      remoteVideos = await axios.get(
-        '/wp-json/utubevideogallery/v1/youtubeplaylists/'
-        + this.state.sourceID,
-        {
-          headers: {'X-WP-Nonce': utvJSData.restNonce}
-        }
-      );
-    else if (this.state.source == 'vimeo')
-      remoteVideos = await axios.get(
-        '/wp-json/utubevideogallery/v1/vimeoplaylists/'
-        + this.state.sourceID,
-        {
-          headers: {'X-WP-Nonce': utvJSData.restNonce}
-        }
-      );
+    //fetch remote playlist videos
+    const remoteVideos = await actions.fetchRemotePlaylist(source, sourceID);
 
-    //load local videos already in album
-    const localVideos = await axios.get(
-      '/wp-json/utubevideogallery/v1/albums/'
-      + this.state.albumID
-      + '/videos',
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    //fetch local playlist videos already created
+    const localVideos = await actions.fetchLocalPlaylistVideos(albumID);
 
     //check for errors
     if (utility.isErrorResponse(remoteVideos))
@@ -129,100 +100,57 @@ class PlaylistEditTabView extends React.Component
     }
 
     //if all is good filter playlist data
-    const remoteData = remoteVideos.data.data;
-    let localData = localVideos.data.data;
-    let combinedData = {};
+    const remoteData = utility.getAPIData(remoteVideos);
+    let localData = utility.getAPIData(localVideos);
 
-    //filter local album videos to just playlist
+    //// TODO: remove this and switch to correct query above instead
+    //filter local playlist videos
     localData = localData.filter(localVideo =>
       localVideo.playlistID == this.props.currentViewID
     );
 
-    //add local videos
-    for (let localVideo of localData)
-    {
-      const source = localVideo.sourceID;
-
-      combinedData[source] = {};
-      combinedData[source].title = localVideo.title;
-      combinedData[source].description = localVideo.description;
-      combinedData[source].thumbnail = utvJSData.thumbnailCacheDirectory + localVideo.thumbnail + '.jpg';
-      combinedData[source].sourceID = localVideo.sourceID;
-      combinedData[source].localID = localVideo.id;
-      combinedData[source].selected = true;
-      combinedData[source].legend = 'local';
-    }
-
-    //add remote videos
-    for (let remoteVideo of remoteData.videos)
-    {
-      const source = remoteVideo.sourceID;
-
-      if (source in combinedData)
-      {
-        combinedData[source].title = remoteVideo.title;
-        combinedData[source].description = remoteVideo.description;
-        combinedData[source].legend = 'both';
-        combinedData[source].thumbnail = remoteVideo.thumbnail;
-      }
-      else
-      {
-        combinedData[source] = {};
-        combinedData[source].title = remoteVideo.title;
-        combinedData[source].description = remoteVideo.description;
-        combinedData[source].thumbnail = remoteVideo.thumbnail;
-        combinedData[source].sourceID = remoteVideo.sourceID;
-        combinedData[source].localID = undefined;
-        combinedData[source].selected = false;
-        combinedData[source].legend = 'web';
-      }
-    }
-
-    //convert object to array
-    combinedData = Object.keys(combinedData).map(key => combinedData[key]);
+    //combine local and remote playlist videos
+    const combinedVideos = actions.combineVideos(localData, remoteData);
 
     this.setState({
       playlistTitle: remoteData.title,
-      playlistVideos: combinedData,
+      playlistVideos: combinedVideos,
       playlistLoading: false
     });
   }
 
-  changeValue = (event) =>
+  changeValue = (e) =>
   {
-    this.setState({[event.target.name]: event.target.value});
+    this.setState({[e.target.name]: e.target.value});
   }
 
-  changeCheckboxValue = (event) =>
+  changeCheckboxValue = (e) =>
   {
-    this.setState({[event.target.name]: !this.state[event.target.name]});
+    this.setState({[e.target.name]: !this.state[e.target.name]});
   }
 
-  changeVideoTitle = (dataIndex, event) =>
+  changeVideoTitle = (videoIndex, e) =>
   {
-    let playlistVideos = this.state.playlistVideos;
-    playlistVideos[dataIndex].title = event.target.value;
-
+    let { playlistVideos } = this.state;
+    playlistVideos[videoIndex].title = e.target.value;
     this.setState({playlistVideos});
   }
 
-  //flip state of video selected
-  toggleVideoSelection = (dataIndex) =>
+  //toggle playlist video selection
+  toggleVideoSelection = (videoIndex) =>
   {
     const { playlistVideos } = this.state;
-    playlistVideos[dataIndex].selected = !playlistVideos[dataIndex].selected;
-
+    playlistVideos[videoIndex].selected = !playlistVideos[videoIndex].selected;
     this.setState({playlistVideos});
   }
 
-  //flip state of all videos to selected or not selected
+  //toggle selected state of all playlist videos
   toggleAllVideosSelection = (toggleAll) =>
   {
     let { playlistVideos } = this.state;
-    const selected = toggleAll ? true : false;
 
     playlistVideos = playlistVideos.map(video => {
-      video.selected = selected;
+      video.selected = toggleAll;
       return video;
     });
 
@@ -235,7 +163,7 @@ class PlaylistEditTabView extends React.Component
     this.setState({loading: true});
 
     //save base playlist
-    await this.savePlaylistData();
+    await actions.updatePlaylist(this.props.currentViewID, this.state);
 
     //save playlist videos
     await this.savePlaylistVideoData();
@@ -244,151 +172,18 @@ class PlaylistEditTabView extends React.Component
     this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistSynced);
   }
 
-  async savePlaylistData()
-  {
-    //save base playlist data
-    const playlistRsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/playlists/'
-      + this.props.currentViewID,
-      {
-        videoQuality: this.state.videoQuality,
-        showControls: this.state.showControls
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
-  }
-
   async savePlaylistVideoData()
   {
-    //create, update, or delete playlist videos based on sync method
-    for (let video of this.state.playlistVideos)
-    {
-      if (this.state.syncMethod == 'syncSelected')
-      {
-        //update video
-        if (video.selected && video.localID)
-        {
-          let rsp = await axios.patch(
-            '/wp-json/utubevideogallery/v1/videos/'
-            + video.localID,
-            {
-              title: video.title,
-              description: video.description,
-              quality: this.state.videoQuality,
-              controls: this.state.showControls
-            },
-            {
-              headers: {'X-WP-Nonce': utvJSData.restNonce}
-            }
-          );
-        }
-        //create video
-        else if (video.selected && !video.localID)
-        {
-          let rsp = await axios.post(
-            '/wp-json/utubevideogallery/v1/videos',
-            {
-              sourceID: video.sourceID,
-              title: video.title,
-              description: video.description,
-              quality: this.state.videoQuality,
-              controls: this.state.showControls,
-              source: this.state.source,
-              albumID: this.state.albumID,
-              playlistID: this.props.currentViewID
-            },
-            {
-              headers: {'X-WP-Nonce': utvJSData.restNonce}
-            }
-          );
-        }
-        //delete video
-        else if (!video.selected && video.localID)
-        {
-          let rsp = await axios.delete(
-            '/wp-json/utubevideogallery/v1/videos/'
-            + video.localID,
-            {
-              headers: {'X-WP-Nonce': utvJSData.restNonce}
-            }
-          );
-        }
-      }
-      else if (this.state.syncMethod == 'syncNew')
-      {
-        //create video
-        if (!video.localID)
-        {
-          let rsp = await axios.post(
-            '/wp-json/utubevideogallery/v1/videos',
-            {
-              sourceID: video.sourceID,
-              title: video.title,
-              description: video.description,
-              quality: this.state.videoQuality,
-              controls: this.state.showControls,
-              source: this.state.source,
-              albumID: this.state.albumID,
-              playlistID: this.props.currentViewID
-            },
-            {
-              headers: {'X-WP-Nonce': utvJSData.restNonce}
-            }
-          );
-        }
-      }
-      else if (this.state.syncMethod == 'syncAll')
-      {
-        //update video
-        if (video.localID)
-        {
-          let rsp = await axios.patch(
-            '/wp-json/utubevideogallery/v1/videos/'
-            + video.localID,
-            {
-              title: video.title,
-              description: video.description,
-              quality: this.state.videoQuality,
-              controls: this.state.showControls
-            },
-            {
-              headers: {'X-WP-Nonce': utvJSData.restNonce}
-            }
-          );
-        }
-        //create video
-        else
-        {
-          let rsp = await axios.post(
-            '/wp-json/utubevideogallery/v1/videos',
-            {
-              sourceID: video.sourceID,
-              title: video.title,
-              description: video.description,
-              quality: this.state.videoQuality,
-              controls: this.state.showControls,
-              source: this.state.source,
-              albumID: this.state.albumID,
-              playlistID: this.props.currentViewID
-            },
-            {
-              headers: {'X-WP-Nonce': utvJSData.restNonce}
-            }
-          );
-        }
-      }
+    const { playlistVideos, syncMethod } = this.state;
 
-      //update status about what video is being saved
-      this.props.setFeedbackMessage(
-        utvJSData.localization.feedbackVideoPartial
-        + ' ['
-        + video.title
-        + '] '
-        + utvJSData.localization.feedbackUpdatedPartial,
-        'success'
-      );
+    //create, update, or delete playlist videos based on sync method
+    for (let video of playlistVideos)
+    {
+      //sync video
+      await actions.syncVideo(syncMethod, this.props.currentViewID, video, this.state);
+
+      //user feedback for video created / updated / deleted
+      this.props.setFeedbackMessage(actions.getVideoUpdateMessage(video.title));
     }
   }
 
@@ -406,14 +201,6 @@ class PlaylistEditTabView extends React.Component
         toggleVideoSelection={this.toggleVideoSelection}
         changeVideoTitle={this.changeVideoTitle}
       />
-
-    const updateDateFormatted = sharedService.getFormattedDateTime(this.state.updateDate);
-
-    let source = undefined;
-    if (this.state.source == 'youtube')
-      source = 'YouTube';
-    else if (this.state.source == 'vimeo')
-      source = 'Vimeo';
 
     return (
       <div>
@@ -445,7 +232,7 @@ class PlaylistEditTabView extends React.Component
                   <Label text={utvJSData.localization.source}/>
                   <TextInput
                     name="source"
-                    value={source}
+                    value={actions.getFormattedSource(this.state.source)}
                     disabled={true}
                   />
                 </FormField>
@@ -483,7 +270,7 @@ class PlaylistEditTabView extends React.Component
                   <Label text={utvJSData.localization.lastUpdated}/>
                   <TextInput
                     name="updateDate"
-                    value={updateDateFormatted}
+                    value={utility.getFormattedDateTime(this.state.updateDate)}
                     disabled={true}
                   />
                 </FormField>

@@ -1,9 +1,13 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const SelectBox = ({classes, name, value, onChange, data = []}) =>
+const SelectBox = ({classes, name, value, onChange, data = [], blankEntry = false}) =>
 {
-  let options = data.map(e =>
+  //add empty option
+  if (blankEntry)
+    data.unshift({name: '', value: ''});
+
+  const options = data.map(e =>
     <option key={e.value} value={e.value}>{e.name}</option>
   );
 

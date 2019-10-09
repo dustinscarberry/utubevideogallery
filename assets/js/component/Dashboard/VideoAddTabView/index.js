@@ -40,27 +40,27 @@ class VideoAddTabView extends React.Component
     };
   }
 
-  changeValue = (event) =>
+  changeValue = (e) =>
   {
-    this.setState({[event.target.name]: event.target.value});
+    this.setState({[e.target.name]: e.target.value});
   }
 
-  changeCheckboxValue = (event) =>
+  changeCheckboxValue = (e) =>
   {
-    this.setState({[event.target.name]: !this.state[event.target.name]});
+    this.setState({[e.target.name]: !this.state[e.target.name]});
   }
 
-  changeURL = (event) =>
+  changeURL = (e) =>
   {
     //reset state
     this.setState({
       source: undefined,
-      url: event.target.value.trim(),
+      url: e.target.value.trim(),
       sourceID: undefined
     });
 
     //parse url
-    const urlParts = actions.parseURL(event.target.value);
+    const urlParts = actions.parseURL(e.target.value);
 
     //update state
     if (urlParts)

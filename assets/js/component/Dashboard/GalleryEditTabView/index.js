@@ -62,14 +62,14 @@ class GalleryEditTabView extends React.Component
       this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
   }
 
-  changeValue = (event) =>
+  changeValue = (e) =>
   {
-    this.setState({[event.target.name]: event.target.value});
+    this.setState({[e.target.name]: e.target.value});
   }
 
-  changeCheckboxValue = (event) =>
+  changeCheckboxValue = (e) =>
   {
-    this.setState({[event.target.name]: !this.state[event.target.name]});
+    this.setState({[e.target.name]: !this.state[e.target.name]});
   }
 
   saveGallery = async() =>
@@ -122,8 +122,6 @@ class GalleryEditTabView extends React.Component
 
   render()
   {
-    const updateDateFormatted = utility.getFormattedDateTime(this.state.updateDate);
-
     if (this.state.loading)
       return <Loader/>;
 
@@ -194,7 +192,7 @@ class GalleryEditTabView extends React.Component
                   <Label text={utvJSData.localization.lastUpdated}/>
                   <TextInput
                     name="updateDate"
-                    value={updateDateFormatted}
+                    value={utility.getFormattedDateTime(this.state.updateDate)}
                     disabled={true}
                   />
                 </FormField>
