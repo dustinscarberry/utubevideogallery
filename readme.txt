@@ -4,7 +4,7 @@ Donate link: https://www.codeclouds.net/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
 Requires at least: 4.9.0
 Requires PHP: 7.0
-Tested up to: 5.2.0
+Tested up to: 5.2.3
 Stable tag: 2.0.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -83,14 +83,23 @@ A user must be an editor or above in order to manage video galleries and change 
 
 == Screenshots ==
 
-1. A gallery embedded on a page showing the albums in the gallery
-2. A gallery embedded on a page showing the videos in an album
-3. A gallery showing a video playing
-4. A gallery showing a video playing with description
-5. Panel View
-6. Videos in the admin panel
+1. Album view of gallery
+2. Video view of gallery
+3. Gallery video playing
+4. Gallery video playing with description
+5. Panel view
+6. Admin view
 
 == Changelog ==
+
+= 2.0.5 =
+
+* Security fixes
+* Code restructuring
+* Dependency updates
+* Added Imagick and GD versions
+* Bug fixes
+* PHP >= 7.0 is now required (DO NOT UPDATE UNLESS YOU HAVE REQUIRED VERSION)
 
 = 2.0.4 =
 * Fixed issue where empty albums would refuse to delete
