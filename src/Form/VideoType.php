@@ -94,12 +94,12 @@ class VideoType
 
   public function getStartTime()
   {
-    return $this->startTime;
+    return ($this->startTime == '' ? null : $this->startTime);
   }
 
   public function getEndTime()
   {
-    return $this->endTime;
+    return ($this->endTime == '' ? null : $this->endTime);
   }
 
   public function getSource()

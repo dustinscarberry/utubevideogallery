@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import axios from 'axios';
 import Table from './Table';
 import TableStatus from './TableStatus';
@@ -36,9 +36,18 @@ class GriddleDND extends React.Component
     this.setState({loading: false});
   }
 
+  /*
+  //migrated to componentDidUpdate()
   componentWillReceiveProps(nextProps)
   {
     if (this.props.apiLoadPath != nextProps.apiLoadPath)
+      this.loadData();
+  }
+  */
+
+  componentDidUpdate(prevProps, prevState, snapshot)
+  {
+    if (this.props.apiLoadPath != prevProps.apiLoadPath)
       this.loadData();
   }
 

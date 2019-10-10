@@ -107,12 +107,6 @@ class VideoRepository
     if ($form->getShowControls() !== null)
       $updatedFields['VID_CHROME'] = $form->getShowControls();
 
-    if ($form->getStartTime() != null)
-      $updatedFields['VID_STARTTIME'] = $form->getStartTime();
-
-    if ($form->getEndTime() != null)
-      $updatedFields['VID_ENDTIME'] = $form->getEndTime();
-
     if ($form->getPublished() !== null)
       $updatedFields['VID_PUBLISH'] = $form->getPublished();
 
@@ -122,6 +116,10 @@ class VideoRepository
     //set required update fields
     $updatedFields['VID_UPDATEDATE'] = current_time('timestamp');
     $updatedFields['VID_THUMBTYPE'] = 'default';
+
+    //set semi required update fields
+    $updatedFields['VID_STARTTIME'] = $form->getStartTime();
+    $updatedFields['VID_ENDTIME'] = $form->getEndTime();
 
     //update query
     if ($wpdb->update(

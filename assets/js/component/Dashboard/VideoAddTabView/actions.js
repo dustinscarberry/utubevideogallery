@@ -23,8 +23,7 @@ export function parseURL(rawURL)
 {
   //normalize url
   rawURL = rawURL.trim();
-  rawURL = rawURL.toLowerCase();
-
+  
   //get url parts
   if (rawURL)
   {

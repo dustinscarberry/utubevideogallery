@@ -12,7 +12,6 @@ const BasicLink = (props) =>
 
   return <a
     onClick={onClick}
-    href="javascript:void(0)"
     className={classnames(classes)}
   >
     {text}

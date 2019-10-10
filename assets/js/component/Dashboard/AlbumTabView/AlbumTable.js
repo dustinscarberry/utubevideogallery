@@ -45,7 +45,6 @@ class AlbumTable extends React.Component
             <div>
               <a
                 onClick={() => this.props.changeAlbum(row.id, cellData)}
-                href="javascript:void(0)"
                 className="utv-row-title">
                   {cellData}
               </a>
