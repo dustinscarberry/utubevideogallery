@@ -1,11 +1,11 @@
 <?php
 
-namespace UTubeVideoGallery\Service\Manager;
+namespace CodeClouds\UTubeVideoGallery\Service\Manager;
 
-use UTubeVideoGallery\Repository\PlaylistRepository;
-use UTubeVideoGallery\Repository\VideoRepository;
-use UTubeVideoGallery\Form\PlaylistType;
-use UTubeVideoGallery\Exception\UserMessageException;
+use CodeClouds\UTubeVideoGallery\Repository\PlaylistRepository;
+use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
+use CodeClouds\UTubeVideoGallery\Form\PlaylistType;
+use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
 class PlaylistManager
 {

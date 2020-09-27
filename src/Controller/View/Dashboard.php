@@ -1,6 +1,6 @@
 <?php
 /**
- * uTubeVideoGallery\Dashboard - Admin panel for uTubeVideo Gallery
+ * CodeClouds\UTubeVideoGallery\Dashboard - Admin panel for uTubeVideo Gallery
  *
  * @package uTubeVideo Gallery
  * @author Dustin Scarberry
@@ -8,7 +8,7 @@
  * @since 1.3
  */
 
-namespace UTubeVideoGallery\Controller\View;
+namespace CodeClouds\UTubeVideoGallery\Controller\View;
 
 class Dashboard
 {
@@ -59,7 +59,7 @@ class Dashboard
 
     wp_enqueue_script(
       'utv-admin-js',
-      plugins_url('../../../public/js/dashboard.min.js', __FILE__),
+      plugins_url('../../../public/js/admin.min.js', __FILE__),
       ['jquery'],
       $this->_version,
       true
@@ -197,7 +197,7 @@ class Dashboard
   {
     wp_enqueue_style(
       'utv-admin-css',
-      plugins_url('../../../public/css/dashboard.min.css', __FILE__),
+      plugins_url('../../../public/css/admin.min.css', __FILE__),
       false,
       $this->_version
     );

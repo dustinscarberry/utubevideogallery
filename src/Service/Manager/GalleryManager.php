@@ -1,12 +1,12 @@
 <?php
 
-namespace UTubeVideoGallery\Service\Manager;
+namespace CodeClouds\UTubeVideoGallery\Service\Manager;
 
-use UTubeVideoGallery\Repository\GalleryRepository;
-use UTubeVideoGallery\Repository\AlbumRepository;
-use UTubeVideoGallery\Repository\VideoRepository;
-use UTubeVideoGallery\Form\GalleryType;
-use UTubeVideoGallery\Exception\UserMessageException;
+use CodeClouds\UTubeVideoGallery\Repository\GalleryRepository;
+use CodeClouds\UTubeVideoGallery\Repository\AlbumRepository;
+use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
+use CodeClouds\UTubeVideoGallery\Form\GalleryType;
+use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
 class GalleryManager
 {

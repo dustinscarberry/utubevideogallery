@@ -1,12 +1,12 @@
 <?php
 
-namespace UTubeVideoGallery\Service\Manager;
+namespace CodeClouds\UTubeVideoGallery\Service\Manager;
 
-use UTubeVideoGallery\Repository\VideoRepository;
-use UTubeVideoGallery\Service\Thumbnail;
-use UTubeVideoGallery\Form\VideoType;
-use UTubeVideoGallery\Form\VideoOrderType;
-use UTubeVideoGallery\Exception\UserMessageException;
+use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
+use CodeClouds\UTubeVideoGallery\Service\Thumbnail;
+use CodeClouds\UTubeVideoGallery\Form\VideoType;
+use CodeClouds\UTubeVideoGallery\Form\VideoOrderType;
+use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
 class VideoManager
 {

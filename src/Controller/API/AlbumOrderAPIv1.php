@@ -1,11 +1,11 @@
 <?php
 
-namespace UTubeVideoGallery\Controller\API;
+namespace CodeClouds\UTubeVideoGallery\Controller\API;
 
-use UTubeVideoGallery\Controller\API\APIv1;
-use UTubeVideoGallery\Form\AlbumOrderType;
-use UTubeVideoGallery\Service\Manager\AlbumManager;
-use UTubeVideoGallery\Exception\UserMessageException;
+use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
+use CodeClouds\UTubeVideoGallery\Form\AlbumOrderType;
+use CodeClouds\UTubeVideoGallery\Service\Manager\AlbumManager;
+use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
 

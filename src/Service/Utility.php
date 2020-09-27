@@ -1,6 +1,6 @@
 <?php
 
-namespace UTubeVideoGallery\Service;
+namespace CodeClouds\UTubeVideoGallery\Service;
 
 class Utility
 {

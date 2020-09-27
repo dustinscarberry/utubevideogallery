@@ -1,6 +1,6 @@
 <?php
 /**
- * uTubeVideoGallery\UI - Frontend for uTubeVideo Gallery
+ * CodeClouds\UTubeVideoGallery\UI - Frontend for uTubeVideo Gallery
  *
  * @package uTubeVideo Gallery
  * @author Dustin Scarberry
@@ -8,10 +8,10 @@
  * @since 1.3
  */
 
-namespace UTubeVideoGallery\Controller\View;
+namespace CodeClouds\UTubeVideoGallery\Controller\View;
 
-use UTubeVideoGallery\UI\PanelView;
-use UTubeVideoGallery\UI\GalleryView;
+use CodeClouds\UTubeVideoGallery\UI\PanelView;
+use CodeClouds\UTubeVideoGallery\UI\GalleryView;
 
 class UI
 {

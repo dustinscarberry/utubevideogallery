@@ -3,14 +3,14 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-let destDir = path.resolve(__dirname, 'public/js');
-let sourceDir = path.resolve(__dirname, 'assets/js');
+const destDir = path.resolve(__dirname, 'public/js');
+const sourceDir = path.resolve(__dirname, 'assets/js');
 
 module.exports =
 {
   entry: {
     app: sourceDir + '/app.js',
-    dashboard: sourceDir + '/dashboard.js'
+    admin: sourceDir + '/admin.js'
   },
   output: {
     path: destDir,

@@ -1,8 +1,8 @@
 <?php
 
-namespace UTubeVideoGallery\Repository;
+namespace CodeClouds\UTubeVideoGallery\Repository;
 
-use UTubeVideoGallery\Entity\Playlist;
+use CodeClouds\UTubeVideoGallery\Entity\Playlist;
 
 class PlaylistRepository
 {

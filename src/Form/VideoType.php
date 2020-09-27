@@ -1,9 +1,9 @@
 <?php
 
-namespace UTubeVideoGallery\Form;
+namespace CodeClouds\UTubeVideoGallery\Form;
 
 use WP_REST_Request;
-use UTubeVideoGallery\Exception\UserMessageException;
+use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
 class VideoType
 {

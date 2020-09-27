@@ -1,6 +1,6 @@
 <?php
 
-namespace UTubeVideoGallery\Model;
+namespace CodeClouds\UTubeVideoGallery\Model;
 
 class Settings implements \JsonSerializable
 {

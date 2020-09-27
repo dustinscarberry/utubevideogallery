@@ -1,10 +1,10 @@
 <?php
 
-namespace UTubeVideoGallery\Service\Manager;
+namespace CodeClouds\UTubeVideoGallery\Service\Manager;
 
-use UTubeVideoGallery\Service\Utility;
-use UTubeVideoGallery\Form\VimeoPlaylistType;
-use UTubeVideoGallery\Exception\UserMessageException;
+use CodeClouds\UTubeVideoGallery\Service\Utility;
+use CodeClouds\UTubeVideoGallery\Form\VimeoPlaylistType;
+use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
 class VimeoPlaylistManager
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace UTubeVideoGallery\UI;
+namespace CodeClouds\UTubeVideoGallery\UI;
 
 class GalleryView
 {

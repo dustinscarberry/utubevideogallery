@@ -1,8 +1,8 @@
 <?php
 
-namespace UTubeVideoGallery\Service;
+namespace CodeClouds\UTubeVideoGallery\Service;
 
-use UTubeVideoGallery\Exception\UserMessageException;
+use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
 class Thumbnail
 {

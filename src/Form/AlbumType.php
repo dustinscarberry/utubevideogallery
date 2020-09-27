@@ -1,8 +1,8 @@
 <?php
 
-namespace UTubeVideoGallery\Form;
+namespace CodeClouds\UTubeVideoGallery\Form;
 
-use UTubeVideoGallery\Exception\UserMessageException;
+use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 
 class AlbumType
