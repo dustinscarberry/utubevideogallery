@@ -51,7 +51,7 @@
   margin-bottom: -1px;
 }
 
-.tabs nav a:before {
+.tabs nav a::before {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: inline-block;
@@ -63,21 +63,26 @@
   font-size: 16px;
 }
 
-.tabs-icon-cog:before {
+.tabs-icon-cog::before {
   content: "\f013";
   font-family: "Font Awesome 5 Free";
 }
 
-.tabs-icon-list:before{
+.tabs-icon-book::before {
+  content: "\f02d";
+  font-family: "Font Awesome 5 Free";
+}
+
+.tabs-icon-list::before {
   content: "\f03a";
   font-family: "Font Awesome 5 Free";
 }
 
-.tabs-icon-grid:before{
+.tabs-icon-grid::before {
   content: "\f009";
   font-family: "Font Awesome 5 Free";
 }
 
-.tabs-content{
+.tabs-content {
   margin-top: 20px;
 }

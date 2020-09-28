@@ -39,6 +39,7 @@ use CodeClouds\UTubeVideoGallery\Controller\API\AlbumOrderAPIv1;
 use CodeClouds\UTubeVideoGallery\Controller\API\YouTubePlaylistAPIv1;
 use CodeClouds\UTubeVideoGallery\Controller\API\VimeoPlaylistAPIv1;
 use CodeClouds\UTubeVideoGallery\Controller\API\SettingsAPIv1;
+use CodeClouds\UTubeVideoGallery\Controller\API\DocumentationAPIv1;
 
 require(dirname(__FILE__) . '/config.php');
 
@@ -109,6 +110,7 @@ class Bootstrap
     new YouTubePlaylistAPIv1();
     new VimeoPlaylistAPIv1();
     new SettingsAPIv1();
+    new DocumentationAPIv1();
   }
 
   //version check for updates

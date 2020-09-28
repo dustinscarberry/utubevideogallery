@@ -86,6 +86,7 @@ class Dashboard
         'galleries' => __('Galleries', 'utvg'),
         'savedPlaylists' => __('Saved Playlists', 'utvg'),
         'settings' => __('Settings', 'utvg'),
+        'documentation' => __('Documentation', 'utvg'),
         'bulkActions' => __('Bulk Actions', 'utvg'),
         'delete' => __('Delete', 'utvg'),
         'publish' => __('Publish', 'utvg'),

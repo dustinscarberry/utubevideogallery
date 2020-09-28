@@ -14,6 +14,7 @@ import PlaylistTabView from './PlaylistTabView';
 import PlaylistAddTabView from './PlaylistAddTabView';
 import PlaylistEditTabView from './PlaylistEditTabView';
 import SettingsTabView from './SettingsTabView';
+import DocumentationTabView from './DocumentationTabView';
 import UserFeedback from '../shared/UserFeedback';
 
 class Dashboard extends React.Component
@@ -217,6 +218,11 @@ class Dashboard extends React.Component
           </Pane>
           <Pane label={utvJSData.localization.settings} iconClass="tabs-icon-cog">
             <SettingsTabView
+              setFeedbackMessage={this.setFeedbackMessage}
+            />
+          </Pane>
+          <Pane label={utvJSData.localization.documentation} iconClass="tabs-icon-book">
+            <DocumentationTabView
               setFeedbackMessage={this.setFeedbackMessage}
             />
           </Pane>
