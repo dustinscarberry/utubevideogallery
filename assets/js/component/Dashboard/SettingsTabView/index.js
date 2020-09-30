@@ -46,6 +46,8 @@ class SettingsTabView extends React.Component
       vimeoAutoplay: undefined,
       vimeoHideDetails: undefined,
       youtubeAPIKey: undefined,
+      youtubeAPIKeyValid: undefined,
+      youtubeAPIKeyValidMessage: undefined,
       youtubeAutoplay: undefined,
       youtubeHideDetails: undefined,
       loading: true
@@ -90,6 +92,8 @@ class SettingsTabView extends React.Component
         vimeoAutoplay: data.vimeoAutoplay,
         vimeoHideDetails: data.vimeoHideDetails,
         youtubeAPIKey: data.youtubeAPIKey,
+        youtubeAPIKeyValid: data.youtubeApiKeyValid,
+        youtubeAPIKeyValidMessage: data.youtubeApiKeyValidMessage,
         youtubeAutoplay: data.youtubeAutoplay,
         youtubeHideDetails: data.youtubeHideDetails
       });
@@ -111,6 +115,9 @@ class SettingsTabView extends React.Component
       await this.rebuildThumbnails();
       this.setState({originalThumbnailWidth: this.state.thumbnailWidth});
     }
+
+    // reload settings
+    await this.loadData();
 
     //user feedback
     if (utility.isValidResponse(rsp))
@@ -282,6 +289,11 @@ class SettingsTabView extends React.Component
                   value={this.state.youtubeAPIKey}
                   onChange={this.changeValue}
                 />
+                <InfoLine
+                  text={this.state.youtubeAPIKeyValidMessage}
+                  icon={this.state.youtubeAPIKeyValid ? 'active' : 'inactive'}
+                />
+                <FieldHint text={this.state.youtubeAPIKeyValidMessage}/>
                 <Label text={utvJSData.localization.youtubeControlsTheme}/>
                 <SelectBox
                   name="playerControlsTheme"

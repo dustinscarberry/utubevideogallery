@@ -11,226 +11,238 @@ class Settings implements \JsonSerializable
   private $gdVersion;
   private $imageMagickEnabled;
   private $imageMagickVersion;
+  private $youtubeApiKeyValid;
+  private $youtubeApiKeyValidMessage;
 
-  public function __construct()
+  function __construct()
   {
     $this->load();
   }
 
-  public function getVersion()
+  function getVersion()
   {
     return $this->settings['version'];
   }
 
-  public function setVersion($value)
+  function setVersion($value)
   {
     $this->settings['version'] = $value;
     return $this;
   }
 
-  public function getPopupPlayerWidth()
+  function getPopupPlayerWidth()
   {
     return $this->settings['playerWidth'];
   }
 
-  public function setPopupPlayerWidth($value)
+  function setPopupPlayerWidth($value)
   {
     $this->settings['playerWidth'] = sanitize_text_field($value);
     return $this;
   }
 
-  public function getPlayerControlsTheme()
+  function getPlayerControlsTheme()
   {
     return $this->settings['playerControlTheme'];
   }
 
-  public function setPlayerControlsTheme($value)
+  function setPlayerControlsTheme($value)
   {
     $this->settings['playerControlTheme'] = sanitize_text_field($value);
     return $this;
   }
 
-  public function getPlayerControlsColor()
+  function getPlayerControlsColor()
   {
     return $this->settings['playerProgressColor'];
   }
 
-  public function setPlayerControlsColor($value)
+  function setPlayerControlsColor($value)
   {
     $this->settings['playerProgressColor'] = sanitize_text_field($value);
     return $this;
   }
 
-  public function getPopupPlayerOverlayOpacity()
+  function getPopupPlayerOverlayOpacity()
   {
     return $this->settings['fancyboxOverlayOpacity'];
   }
 
-  public function setPopupPlayerOverlayOpacity($value)
+  function setPopupPlayerOverlayOpacity($value)
   {
     $this->settings['fancyboxOverlayOpacity'] = sanitize_text_field($value);
     return $this;
   }
 
-  public function getPopupPlayerOverlayColor()
+  function getPopupPlayerOverlayColor()
   {
     return $this->settings['fancyboxOverlayColor'];
   }
 
-  public function setPopupPlayerOverlayColor($value)
+  function setPopupPlayerOverlayColor($value)
   {
     $this->settings['fancyboxOverlayColor'] = sanitize_text_field($value);
     return $this;
   }
 
-  public function getThumbnailWidth()
+  function getThumbnailWidth()
   {
     return $this->settings['thumbnailWidth'];
   }
 
-  public function setThumbnailWidth($value)
+  function setThumbnailWidth($value)
   {
     $this->settings['thumbnailWidth'] = sanitize_text_field($value);
     return $this;
   }
 
-  public function getThumbnailVerticalPadding()
+  function getThumbnailVerticalPadding()
   {
     return $this->settings['thumbnailVerticalPadding'];
   }
 
-  public function setThumbnailVerticalPadding($value)
+  function setThumbnailVerticalPadding($value)
   {
     $this->settings['thumbnailVerticalPadding'] = sanitize_text_field($value);
     return $this;
   }
 
-  public function getThumbnailHorizontalPadding()
+  function getThumbnailHorizontalPadding()
   {
     return $this->settings['thumbnailPadding'];
   }
 
-  public function setThumbnailHorizontalPadding($value)
+  function setThumbnailHorizontalPadding($value)
   {
     $this->settings['thumbnailPadding'] = sanitize_text_field($value);
     return $this;
   }
 
-  public function getThumbnailBorderRadius()
+  function getThumbnailBorderRadius()
   {
     return $this->settings['thumbnailBorderRadius'];
   }
 
-  public function setThumbnailBorderRadius($value)
+  function setThumbnailBorderRadius($value)
   {
     $this->settings['thumbnailBorderRadius'] = sanitize_text_field($value);
     return $this;
   }
 
-  public function getYouTubeApiKey()
+  function getYouTubeApiKey()
   {
     return $this->settings['youtubeApiKey'];
   }
 
-  public function setYouTubeApiKey($value)
+  function setYouTubeApiKey($value)
   {
     $this->settings['youtubeApiKey'] = sanitize_text_field($value);
     return $this;
   }
 
-  public function getYouTubeAutoplay()
+  function getYouTubeAutoplay()
   {
     return $this->settings['youtubeAutoplay'] ? true : false;
   }
 
-  public function setYouTubeAutoplay($value)
+  function setYouTubeAutoplay($value)
   {
     $this->settings['youtubeAutoplay'] = ($value ? 1 : 0);
     return $this;
   }
 
-  public function getYouTubeHideDetails()
+  function getYouTubeHideDetails()
   {
     return $this->settings['youtubeDetailsHide'] ? true : false;
   }
 
-  public function setYouTubeHideDetails($value)
+  function setYouTubeHideDetails($value)
   {
     $this->settings['youtubeDetailsHide'] = ($value ? 1 : 0);
     return $this;
   }
 
-  public function getVimeoAutoplay()
+  function getVimeoAutoplay()
   {
     return $this->settings['vimeoAutoplay'] ? true : false;
   }
 
-  public function setVimeoAutoplay($value)
+  function setVimeoAutoplay($value)
   {
     $this->settings['vimeoAutoplay'] = ($value ? 1 : 0);
     return $this;
   }
 
-  public function getVimeoHideDetails()
+  function getVimeoHideDetails()
   {
     return $this->settings['vimeoDetailsHide'] ? true : false;
   }
 
-  public function setVimeoHideDetails($value)
+  function setVimeoHideDetails($value)
   {
     $this->settings['vimeoDetailsHide'] = ($value ? 1 : 0);
     return $this;
   }
 
-  public function getRemoveVideoPopupScript()
+  function getRemoveVideoPopupScript()
   {
     return $this->settings['skipMagnificPopup'] == 'yes' ? true : false;
   }
 
-  public function setRemoveVideoPopupScript($value)
+  function setRemoveVideoPopupScript($value)
   {
     $this->settings['skipMagnificPopup'] = ($value ? 'yes' : 'no');
     return $this;
   }
 
-  public function getShowVideoDescription()
+  function getShowVideoDescription()
   {
     return $this->settings['showVideoDescription'] ? true : false;
   }
 
-  public function setShowVideoDescription($value)
+  function setShowVideoDescription($value)
   {
     $this->settings['showVideoDescription'] = ($value ? true : false);
   }
 
-  public function getPHPVersion()
+  function getPHPVersion()
   {
     return $this->phpVersion;
   }
 
-  public function getWPVersion()
+  function getWPVersion()
   {
     return $this->wpVersion;
   }
 
-  public function getGDEnabled()
+  function getGDEnabled()
   {
     return $this->gdEnabled;
   }
 
-  public function getImageMagickEnabled()
+  function getImageMagickEnabled()
   {
     return $this->imageMagickEnabled;
   }
 
-  public function getGDVersion()
+  function getGDVersion()
   {
     return $this->gdVersion;
   }
 
-  public function getImageMagickVersion()
+  function getImageMagickVersion()
   {
     return $this->imageMagickVersion;
+  }
+
+  function getYouTubeApiKeyValid()
+  {
+    return $this->youtubeApiKeyValid;
+  }
+
+  function getYouTubeApiKeyValidMessage()
+  {
+    return $this->youtubeApiKeyValidMessage;
   }
 
   private function load()
@@ -239,7 +251,7 @@ class Settings implements \JsonSerializable
     $this->loadDynamicSettings();
   }
 
-  public function save()
+  function save()
   {
     return update_option('utubevideo_main_opts', $this->settings);
   }
@@ -268,9 +280,21 @@ class Settings implements \JsonSerializable
     $version = str_replace('https://www.imagemagick.org', '', $version);
     $version = str_replace('http://www.imagemagick.org', '', $version);
     $this->imageMagickVersion = trim($version);
+
+    // check api key for validity
+    $check = wp_remote_get('https://www.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&regionCode=US&key=' . $this->getYouTubeApiKey());
+    $check = json_decode($check['body'], true);
+
+    if (isset($check['error'])) {
+      $this->youtubeApiKeyValid = false;
+      $this->youtubeApiKeyValidMessage = $check['error']['message'];
+    } else {
+      $this->youtubeApiKeyValid = true;
+      $this->youtubeApiKeyValidMessage = 'API Key valid';
+    }
   }
 
-  public function jsonSerialize()
+  function jsonSerialize()
   {
     return [
       'version' => $this->getVersion(),
@@ -295,7 +319,9 @@ class Settings implements \JsonSerializable
       'gdEnabled' => $this->getGDEnabled(),
       'gdVersion' => $this->getGDVersion(),
       'imageMagickEnabled' => $this->getImageMagickEnabled(),
-      'imageMagickVersion' => $this->getImageMagickVersion()
+      'imageMagickVersion' => $this->getImageMagickVersion(),
+      'youtubeApiKeyValid' => $this->getYouTubeApiKeyValid(),
+      'youtubeApiKeyValidMessage' => $this->getYouTubeApiKeyValidMessage()
     ];
   }
 }
