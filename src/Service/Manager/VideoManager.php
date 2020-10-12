@@ -3,7 +3,7 @@
 namespace CodeClouds\UTubeVideoGallery\Service\Manager;
 
 use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
-use CodeClouds\UTubeVideoGallery\Service\Thumbnail;
+use CodeClouds\UTubeVideoGallery\Service\Factory\ThumbnailFactory;
 use CodeClouds\UTubeVideoGallery\Form\VideoType;
 use CodeClouds\UTubeVideoGallery\Form\VideoOrderType;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
@@ -58,9 +58,7 @@ class VideoManager
       //if successfull video creation..
       if ($videoID)
       {
-        $thumbnail = new Thumbnail($videoID);
-        $thumbnail->save();
-
+        ThumbnailFactory::createThumbnailFromId($videoID);
         return true;
       }
       else

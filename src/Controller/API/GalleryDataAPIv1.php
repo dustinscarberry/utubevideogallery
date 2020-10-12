@@ -11,12 +11,12 @@ use WP_REST_Server;
 
 class GalleryDataAPIv1 extends APIv1
 {
-  public function __construct()
+  function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
-  public function registerRoutes()
+  function registerRoutes()
   {
     register_rest_route(
       $this->_namespace . '/' . $this->_version,
@@ -31,19 +31,16 @@ class GalleryDataAPIv1 extends APIv1
     );
   }
 
-  public function getItem(WP_REST_Request $req)
+  function getItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new GalleryDataType($req);
       $form->validate();
 
       $galleryData = GalleryDataManager::getGalleryData($form);
 
       return $this->respond($galleryData);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }

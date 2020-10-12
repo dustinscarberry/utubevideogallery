@@ -14,7 +14,7 @@ class AlbumType
   private $thumbnail;
   private $published;
 
-  public function __construct(WP_REST_Request $req)
+  function __construct(WP_REST_Request $req)
   {
     if (isset($req['title']))
       $this->title = sanitize_text_field($req['title']);
@@ -35,37 +35,37 @@ class AlbumType
       $this->published = ($req['published'] ? true : false);
   }
 
-  public function getTitle()
+  function getTitle()
   {
     return $this->title;
   }
 
-  public function getVideoSorting()
+  function getVideoSorting()
   {
     return $this->videoSorting;
   }
 
-  public function getGalleryID()
+  function getGalleryID()
   {
     return $this->galleryID;
   }
 
-  public function getAlbumID()
+  function getAlbumID()
   {
     return $this->albumID;
   }
 
-  public function getThumbnail()
+  function getThumbnail()
   {
     return $this->thumbnail;
   }
 
-  public function getPublished()
+  function getPublished()
   {
     return $this->published;
   }
 
-  public function validate(string $action)
+  function validate(string $action)
   {
     if ($action == 'create')
       $this->validateCreate();

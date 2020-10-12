@@ -18,7 +18,7 @@ class UI
   private $_options;
   private $_version;
 
-  public function __construct($version)
+  function __construct($version)
   {
     //set version
     $this->_version = $version;
@@ -37,7 +37,7 @@ class UI
   }
 
   //insert styles for galleries
-  public function loadCSS()
+  function loadCSS()
   {
     //load frontend styles
     wp_enqueue_style(
@@ -65,7 +65,7 @@ class UI
   }
 
   //insert javascript
-  public function loadJS()
+  function loadJS()
   {
     //use gutenburg polyfill if registered
     if (!wp_script_is('wp-polyfill', 'registered'))
@@ -112,7 +112,7 @@ class UI
   }
 
   //load jquery and lightbox js / css
-  public function addLightboxScripts()
+  function addLightboxScripts()
   {
     wp_enqueue_script('jquery');
     wp_enqueue_script(
@@ -130,7 +130,7 @@ class UI
     );
   }
 
-  public function shortcode($atts)
+  function shortcode($atts)
   {
     //panel view
     if (isset($atts['view']) && $atts['view'] == 'panel')

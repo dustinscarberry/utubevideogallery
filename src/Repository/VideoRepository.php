@@ -6,7 +6,7 @@ use CodeClouds\UTubeVideoGallery\Entity\Video;
 
 class VideoRepository
 {
-  public static function getItem($videoID)
+  static function getItem($videoID)
   {
     global $wpdb;
 
@@ -14,9 +14,11 @@ class VideoRepository
       return false;
 
     $query = $wpdb->prepare(
-      'SELECT *
-      FROM ' . $wpdb->prefix . 'utubevideo_video
-      WHERE VID_ID = %d',
+      'SELECT v.*, d.DATA_THUMBTYPE AS THUMBNAIL_TYPE FROM '
+      . $wpdb->prefix . 'utubevideo_video v INNER JOIN '
+      . $wpdb->prefix . 'utubevideo_album a ON v.ALB_ID = a.ALB_ID INNER JOIN '
+      . $wpdb->prefix . 'utubevideo_dataset d ON a.DATA_ID = d.DATA_ID '
+      . 'WHERE VID_ID = %d',
       $videoID
     );
 
@@ -28,7 +30,7 @@ class VideoRepository
     return false;
   }
 
-  public static function getItems()
+  static function getItems()
   {
     global $wpdb;
     $data = [];
@@ -45,7 +47,7 @@ class VideoRepository
     return $data;
   }
 
-  public static function createItem($form, $nextSortPosition, $thumbnailType)
+  static function createItem($form, $nextSortPosition, $thumbnailType)
   {
     global $wpdb;
 
@@ -73,7 +75,7 @@ class VideoRepository
     return false;
   }
 
-  public static function deleteItem($videoID)
+  static function deleteItem($videoID)
   {
     global $wpdb;
 
@@ -87,7 +89,7 @@ class VideoRepository
     return false;
   }
 
-  public static function updateItem($form)
+  static function updateItem($form)
   {
     global $wpdb;
 
@@ -132,7 +134,7 @@ class VideoRepository
     return false;
   }
 
-  public static function updateItemPosition($videoID, $position)
+  static function updateItemPosition($videoID, $position)
   {
     global $wpdb;
 
@@ -143,7 +145,7 @@ class VideoRepository
     );
   }
 
-  public static function getItemsByAlbum($albumID)
+  static function getItemsByAlbum($albumID)
   {
     global $wpdb;
     $data = [];
@@ -168,7 +170,7 @@ class VideoRepository
     return $data;
   }
 
-  public static function getPublishedItemsByAlbum($albumID, $sortDirection = 'desc')
+  static function getPublishedItemsByAlbum($albumID, $sortDirection = 'desc')
   {
     global $wpdb;
     $data = [];
@@ -194,7 +196,7 @@ class VideoRepository
     return $data;
   }
 
-  public static function getItemsByPlaylist($playlistID)
+  static function getItemsByPlaylist($playlistID)
   {
     global $wpdb;
     $data = [];
@@ -218,7 +220,7 @@ class VideoRepository
     return $data;
   }
 
-  public static function getItemsByGallery($galleryID)
+  static function getItemsByGallery($galleryID)
   {
     global $wpdb;
     $data = [];
@@ -251,7 +253,7 @@ class VideoRepository
     return $data;
   }
 
-  public static function getNextSortPositionByAlbum($albumID)
+  static function getNextSortPositionByAlbum($albumID)
   {
     global $wpdb;
 
@@ -275,7 +277,7 @@ class VideoRepository
     return $nextSortPosition;
   }
 
-  public static function getThumbnailTypeByAlbum($albumID = false)
+  static function getThumbnailTypeByAlbum($albumID = false)
   {
     global $wpdb;
 
@@ -299,7 +301,7 @@ class VideoRepository
     return $thumbnailType;
   }
 
-  public static function deleteItemsByAlbum($albumID = false)
+  static function deleteItemsByAlbum($albumID = false)
   {
     global $wpdb;
 
@@ -313,7 +315,7 @@ class VideoRepository
     return false;
   }
 
-  public static function deleteItemsByGallery($galleryID)
+  static function deleteItemsByGallery($galleryID)
   {
     global $wpdb;
 

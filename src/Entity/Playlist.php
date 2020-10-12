@@ -16,7 +16,7 @@ class Playlist implements JsonSerializable
   private $albumID;
   private $albumName;
 
-  public function __construct($dbRow)
+  function __construct($dbRow)
   {
     $this->mapData($dbRow);
   }
@@ -34,52 +34,52 @@ class Playlist implements JsonSerializable
     $this->albumName = $dbRow->ALB_NAME;
   }
 
-  public function getID()
+  function getID()
   {
     return $this->id;
   }
 
-  public function getTitle()
+  function getTitle()
   {
     return $this->title;
   }
 
-  public function getSource()
+  function getSource()
   {
     return $this->source;
   }
 
-  public function getSourceID()
+  function getSourceID()
   {
     return $this->sourceID;
   }
 
-  public function getVideoQuality()
+  function getVideoQuality()
   {
     return $this->quality;
   }
 
-  public function getShowControls()
+  function getShowControls()
   {
     return $this->showControls;
   }
 
-  public function getUpdateDate()
+  function getUpdateDate()
   {
     return $this->updateDate;
   }
 
-  public function getAlbumID()
+  function getAlbumID()
   {
     return $this->albumID;
   }
 
-  public function getAlbumName()
+  function getAlbumName()
   {
     return $this->albumName;
   }
 
-  public function jsonSerialize()
+  function jsonSerialize()
   {
     return get_object_vars($this);
   }

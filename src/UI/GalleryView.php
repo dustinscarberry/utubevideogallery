@@ -6,7 +6,7 @@ class GalleryView
 {
   private $atts;
 
-  public function __construct($atts)
+  function __construct($atts)
   {
     $this->mapAttributes($atts);
   }
@@ -26,7 +26,7 @@ class GalleryView
     ], $atts, 'utubevideo');
   }
 
-  public function render()
+  function render()
   {
     return '<div
       class="utv-gallery-root"

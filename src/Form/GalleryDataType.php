@@ -8,18 +8,18 @@ class GalleryDataType
 {
   private $galleryID;
 
-  public function __construct($req)
+  function __construct($req)
   {
     if (isset($req['galleryID']))
       $this->galleryID = sanitize_key($req['galleryID']);
   }
 
-  public function getGalleryID()
+  function getGalleryID()
   {
     return $this->galleryID;
   }
 
-  public function validate()
+  function validate()
   {
     //check for valid galleryID
     if (!$this->galleryID)

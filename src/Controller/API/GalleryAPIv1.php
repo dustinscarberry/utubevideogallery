@@ -11,12 +11,12 @@ use WP_REST_Server;
 
 class GalleryAPIv1 extends APIv1
 {
-  public function __construct()
+  function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
-  public function registerRoutes()
+  function registerRoutes()
   {
     register_rest_route(
       $this->_namespace . '/' . $this->_version,
@@ -78,85 +78,70 @@ class GalleryAPIv1 extends APIv1
     );
   }
 
-  public function getItem(WP_REST_Request $req)
+  function getItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new GalleryType($req);
       $form->validate('get');
 
       $gallery = GalleryManager::getGallery($form->getGalleryID());
 
       return $this->respond($gallery);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
-  public function getItems(WP_REST_Request $req)
+  function getItems(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       //get galleries
       $galleries = GalleryManager::getGalleries();
 
       return $this->respond($galleries);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
-  public function createItem(WP_REST_Request $req)
+  function createItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new GalleryType($req);
       $form->validate('create');
 
       GalleryManager::createGallery($form);
 
       return $this->respond($galleryID, 201);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
-  public function updateItem(WP_REST_Request $req)
+  function updateItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new GalleryType($req);
       $form->validate('update');
 
       GalleryManager::updateGallery($form);
 
       return $this->respond(null);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
-  public function deleteItem(WP_REST_Request $req)
+  function deleteItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new GalleryType($req);
       $form->validate('delete');
 
       GalleryManager::deleteGallery($form->getGalleryID());
 
       return $this->respond(null);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }

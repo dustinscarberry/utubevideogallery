@@ -8,7 +8,7 @@ class VideoOrderType
 {
   private $videoIDs = [];
 
-  public function __construct($req)
+  function __construct($req)
   {
     if (isset($req['videoids']))
     {
@@ -17,12 +17,12 @@ class VideoOrderType
     }
   }
 
-  public function getVideoIDs()
+  function getVideoIDs()
   {
     return $this->videoIDs;
   }
 
-  public function validate()
+  function validate()
   {
     if (count($this->videoIDs) == 0)
       throw new UserMessageException(__('Invalid data', 'utvg'));

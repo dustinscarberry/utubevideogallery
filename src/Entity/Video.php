@@ -11,6 +11,7 @@ class Video implements JsonSerializable
   private $description;
   private $source;
   private $thumbnail;
+  private $thumbnailType;
   private $sourceID;
   private $quality;
   private $showControls;
@@ -22,7 +23,7 @@ class Video implements JsonSerializable
   private $albumID;
   private $playlistID;
 
-  public function __construct($dbRow)
+  function __construct($dbRow)
   {
     $this->mapData($dbRow);
   }
@@ -34,6 +35,7 @@ class Video implements JsonSerializable
     $this->description = $dbRow->VID_DESCRIPTION;
     $this->source = $dbRow->VID_SOURCE;
     $this->thumbnail = $dbRow->VID_URL . $dbRow->VID_ID;
+    $this->thumbnailType = $dbRow->THUMBNAIL_TYPE;
     $this->sourceID = $dbRow->VID_URL;
     $this->quality = $dbRow->VID_QUALITY;
     $this->showControls = $dbRow->VID_CHROME;
@@ -46,82 +48,87 @@ class Video implements JsonSerializable
     $this->playlistID = $dbRow->PLAY_ID;
   }
 
-  public function getID()
+  function getID()
   {
     return $this->id;
   }
 
-  public function getTitle()
+  function getTitle()
   {
     return $this->title;
   }
 
-  public function getDescription()
+  function getDescription()
   {
     return $this->description;
   }
 
-  public function getSource()
+  function getSource()
   {
     return $this->source;
   }
 
-  public function getThumbnail()
+  function getThumbnail()
   {
     return $this->thumbnail;
   }
 
-  public function getSourceID()
+  function getThumbnailType()
+  {
+    return $this->thumbnailType;
+  }
+
+  function getSourceID()
   {
     return $this->sourceID;
   }
 
-  public function getQuality()
+  function getQuality()
   {
     return $this->quality;
   }
 
-  public function getShowControls()
+  function getShowControls()
   {
     return $this->showControls;
   }
 
-  public function getStartTime()
+  function getStartTime()
   {
     return $this->startTime;
   }
 
-  public function getEndTime()
+  function getEndTime()
   {
     return $this->endTime;
   }
 
-  public function getPosition()
+  function getPosition()
   {
     return $this->positiion;
   }
 
-  public function getPublished()
+  function getPublished()
   {
     return $this->published;
   }
 
-  public function getUpdateDate()
+  function getUpdateDate()
   {
     return $this->updateDate;
   }
 
-  public function getAlbumID()
+  function getAlbumID()
   {
     return $this->albumID;
   }
 
-  public function getPlaylistID()
+  function getPlaylistID()
   {
     return $this->playlistID;
   }
 
-  public function jsonSerialize()
+  function jsonSerialize()
   {
     return get_object_vars($this);
   }

@@ -11,12 +11,12 @@ use WP_REST_Server;
 
 class SettingsAPIv1 extends APIv1
 {
-  public function __construct()
+  function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
-  public function registerRoutes()
+  function registerRoutes()
   {
     //get, update settings endpoints
     register_rest_route(
@@ -43,28 +43,22 @@ class SettingsAPIv1 extends APIv1
     );
   }
 
-  public function getItem(WP_REST_Request $req)
+  function getItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       return $this->respond(SettingsManager::getSettings());
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
   public function updateItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       SettingsManager::updateSettings($req);
 
       return $this->respond(null);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }

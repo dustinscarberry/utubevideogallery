@@ -22,7 +22,7 @@ class VideoType
   private $skipThumbnailRender;
   private $galleryID;
 
-  public function __construct(WP_REST_Request $req)
+  function __construct(WP_REST_Request $req)
   {
     if (isset($req['sourceID']))
       $this->sourceID = sanitize_text_field($req['sourceID']);
@@ -67,78 +67,78 @@ class VideoType
       $this->galleryID = sanitize_key($req['galleryID']);
   }
 
-  public function getSourceID()
+  function getSourceID()
   {
     return $this->sourceID;
   }
 
-  public function getTitle()
+  function getTitle()
   {
     return $this->title;
   }
 
-  public function getDescription()
+  function getDescription()
   {
     return $this->description;
   }
 
-  public function getQuality()
+  function getQuality()
   {
     return $this->quality;
   }
 
-  public function getShowControls()
+  function getShowControls()
   {
     return $this->showControls;
   }
 
-  public function getStartTime()
+  function getStartTime()
   {
     return ($this->startTime == '' ? null : $this->startTime);
   }
 
-  public function getEndTime()
+  function getEndTime()
   {
     return ($this->endTime == '' ? null : $this->endTime);
   }
 
-  public function getSource()
+  function getSource()
   {
     return $this->source;
   }
 
-  public function getAlbumID()
+  function getAlbumID()
   {
     return $this->albumID;
   }
 
-  public function getPlaylistID()
+  function getPlaylistID()
   {
     return $this->playlistID;
   }
 
-  public function getVideoID()
+  function getVideoID()
   {
     return $this->videoID;
   }
 
-  public function getPublished()
+  function getPublished()
   {
     return $this->published;
   }
 
-  public function getSkipThumbnailRender()
+  function getSkipThumbnailRender()
   {
     return $this->skipThumbnailRender;
   }
 
-  public function getGalleryID()
+  function getGalleryID()
   {
     return $this->galleryID;
   }
 
   //validate form specific cases
-  public function validate(string $action)
+  function validate(string $action)
   {
     if ($action == 'create')
       $this->validateCreate();

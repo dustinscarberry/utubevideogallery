@@ -9,7 +9,7 @@ use WP_REST_Server;
 
 class DocumentationAPIv1 extends APIv1
 {
-  public function __construct()
+  function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }

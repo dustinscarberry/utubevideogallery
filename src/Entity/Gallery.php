@@ -14,7 +14,7 @@ class Gallery implements JsonSerializable
   private $updateDate;
   private $albumCount;
 
-  public function __construct($dbRow)
+  function __construct($dbRow)
   {
     $this->mapData($dbRow);
   }
@@ -30,42 +30,42 @@ class Gallery implements JsonSerializable
     $this->albumCount = $dbRow->ALBUM_COUNT;
   }
 
-  public function getID()
+  function getID()
   {
     return $this->id;
   }
 
-  public function getTitle()
+  function getTitle()
   {
     return $this->title;
   }
 
-  public function getSortDirection()
+  function getSortDirection()
   {
     return $this->sortDirection;
   }
 
-  public function getDisplayType()
+  function getDisplayType()
   {
     return $this->displayType;
   }
 
-  public function getThumbnailType()
+  function getThumbnailType()
   {
     return $this->thumbnailType;
   }
 
-  public function getUpdateDate()
+  function getUpdateDate()
   {
     return $this->updateDate;
   }
 
-  public function getAlbumCount()
+  function getAlbumCount()
   {
     return $this->albumCount;
   }
 
-  public function jsonSerialize()
+  function jsonSerialize()
   {
     return get_object_vars($this);
   }

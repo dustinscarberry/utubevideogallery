@@ -8,7 +8,7 @@ class AlbumOrderType
 {
   private $albumIDs = [];
 
-  public function __construct($req)
+  function __construct($req)
   {
     if (isset($req['albumids']))
     {
@@ -17,12 +17,12 @@ class AlbumOrderType
     }
   }
 
-  public function getAlbumIDs()
+  function getAlbumIDs()
   {
     return $this->albumIDs;
   }
 
-  public function validate()
+  function validate()
   {
     if (count($this->albumIDs) == 0)
       throw new UserMessageException(__('Invalid data', 'utvg'));

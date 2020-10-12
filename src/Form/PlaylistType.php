@@ -15,7 +15,7 @@ class PlaylistType
   private $showControls;
   private $albumID;
 
-  public function __construct(WP_REST_Request $req)
+  function __construct(WP_REST_Request $req)
   {
     if (isset($req['playlistID']))
       $this->playlistID = sanitize_key($req['playlistID']);
@@ -39,43 +39,43 @@ class PlaylistType
       $this->albumID = sanitize_key($req['albumID']);
   }
 
-  public function getPlaylistID()
+  function getPlaylistID()
   {
     return $this->playlistID;
   }
 
-  public function getTitle()
+  function getTitle()
   {
     return $this->title;
   }
 
-  public function getSource()
+  function getSource()
   {
     return $this->source;
   }
 
-  public function getSourceID()
+  function getSourceID()
   {
     return $this->sourceID;
   }
 
-  public function getVideoQuality()
+  function getVideoQuality()
   {
     return $this->videoQuality;
   }
 
-  public function getShowControls()
+  function getShowControls()
   {
     return $this->showControls;
   }
 
-  public function getAlbumID()
+  function getAlbumID()
   {
     return $this->albumID;
   }
 
   //validate form specific cases
-  public function validate(string $action)
+  function validate(string $action)
   {
     if ($action == 'create')
       $this->validateCreate();

@@ -6,7 +6,7 @@ use CodeClouds\UTubeVideoGallery\Entity\Album;
 
 class AlbumRepository
 {
-  public static function getItem(int $albumID)
+  static function getItem(int $albumID)
   {
     global $wpdb;
 
@@ -42,7 +42,7 @@ class AlbumRepository
     return false;
   }
 
-  public static function getItems()
+  static function getItems()
   {
     global $wpdb;
     $data = [];
@@ -71,7 +71,7 @@ class AlbumRepository
     return $data;
   }
 
-  public static function createItem(
+  static function createItem(
     $title,
     $slug,
     $videoSorting,
@@ -101,7 +101,7 @@ class AlbumRepository
     return false;
   }
 
-  public static function deleteItem(int $albumID)
+  static function deleteItem(int $albumID)
   {
     global $wpdb;
 
@@ -115,7 +115,7 @@ class AlbumRepository
     return false;
   }
 
-  public static function updateItem($form)
+  static function updateItem($form)
   {
     global $wpdb;
 
@@ -151,7 +151,7 @@ class AlbumRepository
     return false;
   }
 
-  public static function updateItemPosition(int $albumID, $position)
+  static function updateItemPosition(int $albumID, $position)
   {
     global $wpdb;
 
@@ -162,7 +162,7 @@ class AlbumRepository
     );
   }
 
-  public static function getItemsByGallery(int $galleryID)
+  static function getItemsByGallery(int $galleryID)
   {
     global $wpdb;
     $data = [];
@@ -198,7 +198,7 @@ class AlbumRepository
     return $data;
   }
 
-  public static function getPublishedItemsByGallery(int $galleryID, string $sortDirection = 'desc')
+  static function getPublishedItemsByGallery(int $galleryID, string $sortDirection = 'desc')
   {
     global $wpdb;
     $data = [];
@@ -235,7 +235,7 @@ class AlbumRepository
     return $data;
   }
 
-  public static function deleteItemsByGallery(int $galleryID)
+  static function deleteItemsByGallery(int $galleryID)
   {
     global $wpdb;
 
@@ -248,7 +248,7 @@ class AlbumRepository
     return false;
   }
 
-  public static function getNextSortPositionByGallery(int $galleryID)
+  static function getNextSortPositionByGallery(int $galleryID)
   {
     global $wpdb;
 

@@ -11,12 +11,12 @@ use WP_REST_Server;
 
 class VimeoPlaylistAPIv1 extends APIv1
 {
-  public function __construct()
+  function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
-  public function registerRoutes()
+  function registerRoutes()
   {
     //get all videos in album endpoint
     register_rest_route(
@@ -36,19 +36,16 @@ class VimeoPlaylistAPIv1 extends APIv1
     );
   }
 
-  public function getAllItems(WP_REST_Request $req)
+  function getAllItems(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new VimeoPlaylistType($req);
       $form->validate();
 
       $playlistData = VimeoPlaylistManager::getPlaylistData($form);
 
       return $this->respond($playlistData);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }

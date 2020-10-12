@@ -15,7 +15,7 @@ class Dashboard
   private $_options;
   private $_version;
 
-  public function __construct($version)
+  function __construct($version)
   {
     //set version
     $this->_version = $version;
@@ -29,7 +29,7 @@ class Dashboard
     add_action('admin_enqueue_scripts', [$this, 'loadJS']);
   }
 
-  public function addMenus()
+  function addMenus()
   {
     add_menu_page(
       __('uTubeVideo', 'utvg'),
@@ -41,7 +41,7 @@ class Dashboard
     );
   }
 
-  public function loadJS()
+  function loadJS()
   {
     wp_enqueue_script('jquery');
 
@@ -194,7 +194,7 @@ class Dashboard
     wp_localize_script('utv-admin-js', 'utvJSData', $embeddedJS);
   }
 
-  public function loadCSS()
+  function loadCSS()
   {
     wp_enqueue_style(
       'utv-admin-css',
@@ -210,7 +210,7 @@ class Dashboard
     );
   }
 
-  public function dashboardPanel()
+  function dashboardPanel()
   {
     echo '<div id="utv-dashboard-root"></div>';
   }

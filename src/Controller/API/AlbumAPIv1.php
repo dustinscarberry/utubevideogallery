@@ -11,13 +11,13 @@ use WP_REST_Server;
 
 class AlbumAPIv1 extends APIv1
 {
-  public function __construct()
+  function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
   //register api routes
-  public function registerRoutes()
+  function registerRoutes()
   {
     register_rest_route(
       $this->_namespace . '/' . $this->_version,
@@ -95,26 +95,23 @@ class AlbumAPIv1 extends APIv1
     );
   }
 
-  //get single album
-  public function getItem(WP_REST_Request $req)
+  // get single album
+  function getItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new AlbumType($req);
       $form->validate('get');
 
       $album = AlbumManager::getAlbum($form->getAlbumID());
 
       return $this->respond($album);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
-  //get all albums
-  public function getItems(WP_REST_Request $req)
+  // get all albums
+  function getItems(WP_REST_Request $req)
   {
     try
     {
@@ -128,11 +125,10 @@ class AlbumAPIv1 extends APIv1
     }
   }
 
-  //get all albums within gallery
-  public function getGalleryItems(WP_REST_Request $req)
+  // get all albums within gallery
+  function getGalleryItems(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new AlbumType($req);
       $form->validate('getGallery');
 
@@ -141,63 +137,52 @@ class AlbumAPIv1 extends APIv1
 
       //respond
       return $this->respond($albums);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
-  //create album
+  // create album
   public function createItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new AlbumType($req);
       $form->validate('create');
 
       AlbumManager::createAlbum($form);
 
       return $this->respond(null, 201);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
-  //update album
-  public function updateItem(WP_REST_Request $req)
+  // update album
+  function updateItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new AlbumType($req);
       $form->validate('update');
 
       AlbumManager::updateAlbum($form);
 
       return $this->respond(null);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
-  //delete album
-  public function deleteItem(WP_REST_Request $req)
+  // delete album
+  function deleteItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new AlbumType($req);
       $form->validate('delete');
 
       AlbumManager::deleteAlbum($form->getAlbumID());
 
       return $this->respond(null);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }

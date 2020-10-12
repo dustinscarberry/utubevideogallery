@@ -11,12 +11,12 @@ use WP_REST_Server;
 
 class AlbumOrderAPIv1 extends APIv1
 {
-  public function __construct()
+  function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
-  public function registerRoutes()
+  function registerRoutes()
   {
     //get, update, delete video endpoints
     register_rest_route(
@@ -33,19 +33,16 @@ class AlbumOrderAPIv1 extends APIv1
     );
   }
 
-  public function updateItem(WP_REST_Request $req)
+  function updateItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new AlbumOrderType($req);
       $form->validate();
 
       AlbumManager::updateAlbumsOrder($form);
 
       return $this->respond(null);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }

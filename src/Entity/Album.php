@@ -17,7 +17,7 @@ class Album implements JsonSerializable
   private $videoCount;
   private $galleryID;
 
-  public function __construct($dbRow)
+  function __construct($dbRow)
   {
     $this->mapData($dbRow);
   }
@@ -36,57 +36,57 @@ class Album implements JsonSerializable
     $this->galleryID = $dbRow->DATA_ID;
   }
 
-  public function getID()
+  function getID()
   {
     return $this->id;
   }
 
-  public function getTitle()
+  function getTitle()
   {
     return $this->title;
   }
 
-  public function getSlug()
+  function getSlug()
   {
     return $this->slug;
   }
 
-  public function getThumbnail()
+  function getThumbnail()
   {
     return $this->thumbnail;
   }
 
-  public function getSortDirection()
+  function getSortDirection()
   {
     return $this->sortDirection;
   }
 
-  public function getPosition()
+  function getPosition()
   {
     return $this->position;
   }
 
-  public function getPublished()
+  function getPublished()
   {
     return $this->published;
   }
 
-  public function getUpdateDate()
+  function getUpdateDate()
   {
     return $this->updateDate;
   }
 
-  public function getVideoCount()
+  function getVideoCount()
   {
     return $this->videoCount;
   }
 
-  public function getGalleryID()
+  function getGalleryID()
   {
     return $this->galleryID;
   }
 
-  public function jsonSerialize()
+  function jsonSerialize()
   {
     return get_object_vars($this);
   }

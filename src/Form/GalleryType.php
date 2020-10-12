@@ -13,7 +13,7 @@ class GalleryType
   private $thumbnailType;
   private $displayType;
 
-  public function __construct(WP_REST_Request $req)
+  function __construct(WP_REST_Request $req)
   {
     if (isset($req['galleryID']))
       $this->galleryID = sanitize_key($req['galleryID']);
@@ -31,32 +31,32 @@ class GalleryType
       $this->displayType = ($req['displayType'] == 'video' ? 'video' : 'album');
   }
 
-  public function getGalleryID()
+  function getGalleryID()
   {
     return $this->galleryID;
   }
 
-  public function getTitle()
+  function getTitle()
   {
     return $this->title;
   }
 
-  public function getAlbumSorting()
+  function getAlbumSorting()
   {
     return $this->albumSorting;
   }
 
-  public function getThumbnailType()
+  function getThumbnailType()
   {
     return $this->thumbnailType;
   }
 
-  public function getDisplayType()
+  function getDisplayType()
   {
     return $this->displayType;
   }
 
-  public function validate(string $action)
+  function validate(string $action)
   {
     if ($action == 'create')
       $this->validateCreate();

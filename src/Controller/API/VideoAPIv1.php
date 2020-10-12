@@ -11,13 +11,13 @@ use WP_REST_Server;
 
 class VideoAPIv1 extends APIv1
 {
-  public function __construct()
+  function __construct()
   {
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
   //register api routes
-  public function registerRoutes()
+  function registerRoutes()
   {
     //get all videos in album endpoint
     register_rest_route(
@@ -113,43 +113,36 @@ class VideoAPIv1 extends APIv1
   }
 
   //get video
-  public function getItem(WP_REST_Request $req)
+  function getItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new VideoType($req);
       $form->validate('get');
 
       $video = VideoManager::getVideo($form->getVideoID());
 
       return $this->respond($video);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
   //get all videos
-  public function getItems(WP_REST_Request $req)
+  function getItems(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       //get videos
       $videos = VideoManager::getVideos();
       return $this->respond($videos);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
   //get all videos within album
-  public function getAlbumItems(WP_REST_Request $req)
+  function getAlbumItems(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new VideoType($req);
       $form->validate('getAlbum');
 
@@ -158,18 +151,15 @@ class VideoAPIv1 extends APIv1
 
       //respond
       return $this->respond($videos);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
   //get all videos within gallery
-  public function getGalleryItems(WP_REST_Request $req)
+  function getGalleryItems(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new VideoType($req);
       $form->validate('getGallery');
 
@@ -178,18 +168,15 @@ class VideoAPIv1 extends APIv1
 
       //respond
       return $this->respond($videos);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
   //create video
-  public function createItem(WP_REST_Request $req)
+  function createItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new VideoType($req);
       $form->validate('create');
 
@@ -197,43 +184,35 @@ class VideoAPIv1 extends APIv1
         return $this->respond(null, 201);
       else
         return $this->respondWithError(__('An unknown error has occurred', 'utvg'));
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
   //update video
-  public function updateItem(WP_REST_Request $req)
+  function updateItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new VideoType($req);
       $form->validate('update');
 
       VideoManager::updateVideo($form);
       return $this->respond(null);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }
 
   //delete video
-  public function deleteItem(WP_REST_Request $req)
+  function deleteItem(WP_REST_Request $req)
   {
-    try
-    {
+    try {
       $form = new VideoType($req);
       $form->validate('delete');
 
       VideoManager::deleteVideo($form->getVideoID());
       return $this->respond(null);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }

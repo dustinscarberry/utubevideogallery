@@ -6,7 +6,7 @@ class PanelView
 {
   private $atts;
 
-  public function __construct($atts)
+  function __construct($atts)
   {
     $this->mapAttributes($atts);
   }
@@ -24,7 +24,7 @@ class PanelView
     ], $atts, 'utubevideo');
   }
 
-  public function render()
+  function render()
   {
     return '<div
       class="utv-panel-root"
