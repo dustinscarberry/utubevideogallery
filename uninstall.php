@@ -2,13 +2,13 @@
 
 if (defined('WP_UNINSTALL_PLUGIN'))
 {
-  //uninstall from each multisite site
+  // multisite uninstall
   if (function_exists('is_multisite') && is_multisite())
   {
     global $wpdb;
     $old_blog =  $wpdb->blogid;
 
-    //Get all blog ids
+    // get all blog ids
     $blogids =  $wpdb->get_col('SELECT blog_id FROM ' .  $wpdb->blogs);
 
     foreach ($blogids as $blog_id)
@@ -20,10 +20,10 @@ if (defined('WP_UNINSTALL_PLUGIN'))
     switch_to_blog($old_blog);
   }
 
-  //uninstall from regular site
+  // uninstall from regular site
   removeDatabaseTables();
 
-  //remove file directories
+  // remove file directories
   removeFiles((wp_upload_dir())['basedir'] . '/utubevideo-cache');
 }
 

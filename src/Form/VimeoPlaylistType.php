@@ -20,9 +20,10 @@ class VimeoPlaylistType
     return $this->sourceID;
   }
 
+  // validate form
   function validate()
   {
-    //check for valid sourceID
+    // check for valid sourceID
     if (!$this->sourceID)
       throw new UserMessageException(__('Invalid source ID', 'utvg'));
   }

@@ -16,11 +16,11 @@ class YouTubePlaylistAPIv1 extends APIv1
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
+  // register api routes
   function registerRoutes()
   {
-    //get all videos in album endpoint
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'youtubeplaylists/(?P<sourceID>.*)',
       [
         'methods' => WP_REST_Server::READABLE,
@@ -36,6 +36,7 @@ class YouTubePlaylistAPIv1 extends APIv1
     );
   }
 
+  // get all youtube playlist items
   function getAllItems(WP_REST_Request $req)
   {
     try {

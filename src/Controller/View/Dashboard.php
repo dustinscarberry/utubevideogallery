@@ -12,23 +12,15 @@ namespace CodeClouds\UTubeVideoGallery\Controller\View;
 
 class Dashboard
 {
-  private $_options;
-  private $_version;
-
-  function __construct($version)
+  function __construct()
   {
-    //set version
-    $this->_version = $version;
-
-    //get plugin options
-    $this->_options = get_option('utubevideo_main_opts');
-
-    //main hooks
+    // add hooks
     add_action('admin_menu', [$this, 'addMenus']);
     add_action('admin_enqueue_scripts', [$this, 'loadCSS']);
     add_action('admin_enqueue_scripts', [$this, 'loadJS']);
   }
 
+  // add menus
   function addMenus()
   {
     add_menu_page(
@@ -41,15 +33,16 @@ class Dashboard
     );
   }
 
+  // load js
   function loadJS()
   {
     wp_enqueue_script('jquery');
 
-    //use gutenburg polyfill if registered
+    // babel polyfill fallback
     if (!wp_script_is('wp-polyfill', 'registered'))
       wp_enqueue_script(
         'babel-polyfill',
-        'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.4.4/polyfill.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.11.5/polyfill.min.js',
         null,
         false,
         true
@@ -61,7 +54,7 @@ class Dashboard
       'utv-admin-js',
       plugins_url('../../../public/js/admin.min.js', __FILE__),
       ['jquery'],
-      $this->_version,
+      CC_UTUBEVIDEOGALLERY_VERSION,
       true
     );
 
@@ -194,18 +187,19 @@ class Dashboard
     wp_localize_script('utv-admin-js', 'utvJSData', $embeddedJS);
   }
 
+  // load css
   function loadCSS()
   {
     wp_enqueue_style(
       'utv-admin-css',
       plugins_url('../../../public/css/admin.min.css', __FILE__),
       false,
-      $this->_version
+      CC_UTUBEVIDEOGALLERY_VERSION
     );
 
     wp_enqueue_style(
       'utv-fontawesome5',
-      'https://use.fontawesome.com/releases/v5.3.1/css/all.css',
+      'https://use.fontawesome.com/releases/v5.15.1/css/all.css',
       false
     );
   }

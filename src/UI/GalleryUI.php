@@ -2,7 +2,7 @@
 
 namespace CodeClouds\UTubeVideoGallery\UI;
 
-class GalleryView
+class GalleryUI
 {
   private $atts;
 

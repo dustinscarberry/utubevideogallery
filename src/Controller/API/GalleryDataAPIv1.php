@@ -16,10 +16,11 @@ class GalleryDataAPIv1 extends APIv1
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
+  // register api routes
   function registerRoutes()
   {
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       '/galleriesdata/(?P<galleryID>\d+)',
       [
         'methods' => WP_REST_Server::READABLE,

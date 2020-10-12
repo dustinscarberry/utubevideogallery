@@ -16,10 +16,11 @@ class PlaylistAPIv1 extends APIv1
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
+  // register api routes
   function registerRoutes()
   {
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       '/playlists',
       [
         [
@@ -38,7 +39,7 @@ class PlaylistAPIv1 extends APIv1
     );
 
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'playlists/(?P<playlistID>\d+)',
       [
         [
@@ -78,6 +79,7 @@ class PlaylistAPIv1 extends APIv1
     );
   }
 
+  // get video playlist
   function getItem(WP_REST_Request $req)
   {
     try {
@@ -92,6 +94,7 @@ class PlaylistAPIv1 extends APIv1
     }
   }
 
+  // get video playlists
   function getItems(WP_REST_Request $req)
   {
     try {
@@ -103,6 +106,7 @@ class PlaylistAPIv1 extends APIv1
     }
   }
 
+  // create video playlist
   function createItem(WP_REST_Request $req)
   {
     try {
@@ -117,6 +121,7 @@ class PlaylistAPIv1 extends APIv1
     }
   }
 
+  // update video playlist
   function updateItem(WP_REST_Request $req)
   {
     try {
@@ -131,6 +136,7 @@ class PlaylistAPIv1 extends APIv1
     }
   }
 
+  // delete video playlist
   function deleteItem(WP_REST_Request $req)
   {
     try {

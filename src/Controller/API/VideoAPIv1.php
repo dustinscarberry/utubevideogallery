@@ -16,12 +16,12 @@ class VideoAPIv1 extends APIv1
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
-  //register api routes
+  // register api routes
   function registerRoutes()
   {
-    //get all videos in album endpoint
+    // get all videos in album endpoint
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'albums/(?P<albumID>\d+)/videos',
       [
         'methods' => WP_REST_Server::READABLE,
@@ -32,9 +32,9 @@ class VideoAPIv1 extends APIv1
       ]
     );
 
-    //get all videos in gallery endpoint
+    // get all videos in gallery endpoint
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'galleries/(?P<galleryID>\d+)/videos',
       [
         'methods' => WP_REST_Server::READABLE,
@@ -45,9 +45,9 @@ class VideoAPIv1 extends APIv1
       ]
     );
 
-    //create new video endpoint
+    // create new video endpoint
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'videos',
       [
         [
@@ -70,9 +70,9 @@ class VideoAPIv1 extends APIv1
 
     );
 
-    //get, update, delete video endpoints
+    // get, update, delete video endpoints
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'videos/(?P<videoID>\d+)',
       [
         [
@@ -112,7 +112,7 @@ class VideoAPIv1 extends APIv1
     );
   }
 
-  //get video
+  // get video
   function getItem(WP_REST_Request $req)
   {
     try {
@@ -127,7 +127,7 @@ class VideoAPIv1 extends APIv1
     }
   }
 
-  //get all videos
+  // get all videos
   function getItems(WP_REST_Request $req)
   {
     try {
@@ -139,7 +139,7 @@ class VideoAPIv1 extends APIv1
     }
   }
 
-  //get all videos within album
+  // get all videos within album
   function getAlbumItems(WP_REST_Request $req)
   {
     try {
@@ -156,7 +156,7 @@ class VideoAPIv1 extends APIv1
     }
   }
 
-  //get all videos within gallery
+  // get all videos within gallery
   function getGalleryItems(WP_REST_Request $req)
   {
     try {
@@ -173,7 +173,7 @@ class VideoAPIv1 extends APIv1
     }
   }
 
-  //create video
+  // create video
   function createItem(WP_REST_Request $req)
   {
     try {
@@ -189,7 +189,7 @@ class VideoAPIv1 extends APIv1
     }
   }
 
-  //update video
+  // update video
   function updateItem(WP_REST_Request $req)
   {
     try {
@@ -203,7 +203,7 @@ class VideoAPIv1 extends APIv1
     }
   }
 
-  //delete video
+  // delete video
   function deleteItem(WP_REST_Request $req)
   {
     try {

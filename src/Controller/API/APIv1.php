@@ -6,22 +6,22 @@ use WP_REST_Response;
 
 class APIv1
 {
-  protected $_namespace = 'utubevideogallery';
-  protected $_version = 'v1';
+  protected $namespace = 'utubevideogallery';
+  protected $version = 'v1';
 
   function respond($data, $code = 200)
   {
-    $returnData = new \stdClass();
-    $returnData->data = $data;
+    $returnData = [];
+    $returnData['data'] = $data;
     return new WP_REST_Response($returnData, $code);
   }
 
   function respondWithError($message, $code = 200)
   {
-    $returnData = new \stdClass();
-    $returnData->error = new \stdClass();
-    $returnData->error->message = $message;
-    $returnData->error->code = $code;
+    $returnData = [];
+    $returnData['error'] = [];
+    $returnData['error']['message'] = $message;
+    $returnData['error']['code'] = $code;
     return new WP_REST_Response($returnData, $code);
   }
 }

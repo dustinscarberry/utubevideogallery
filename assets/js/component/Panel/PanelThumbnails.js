@@ -23,8 +23,7 @@ const PanelThumbnails = (props) =>
   else
     thumbnailsClasses.push('utv-thumbnails-rectangle');
 
-  const thumbnailNodes = videos.map((video, i) =>
-  {
+  const thumbnailNodes = videos.map((video, i) => {
     if (i >= startIndex && i < endIndex)
       return (<Thumbnail
         key={i}

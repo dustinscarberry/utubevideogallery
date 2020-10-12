@@ -18,9 +18,9 @@ class AlbumOrderAPIv1 extends APIv1
 
   function registerRoutes()
   {
-    //get, update, delete video endpoints
+    // get, update, delete video endpoints
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'albumsorder',
       [
         'methods' => 'PATCH',

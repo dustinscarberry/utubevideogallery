@@ -2,7 +2,7 @@
 
 namespace CodeClouds\UTubeVideoGallery\UI;
 
-class PanelView
+class PanelUI
 {
   private $atts;
 

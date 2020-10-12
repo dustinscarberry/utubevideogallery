@@ -19,7 +19,7 @@ class DocumentationAPIv1 extends APIv1
   {
     // get plugin documentation markdown
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'documentation',
       [
         'methods' => WP_REST_Server::READABLE,

@@ -19,9 +19,10 @@ class GalleryDataType
     return $this->galleryID;
   }
 
+  // validate form
   function validate()
   {
-    //check for valid galleryID
+    // check for valid galleryID
     if (!$this->galleryID)
       throw new UserMessageException(__('Invalid gallery ID', 'utvg'));
   }

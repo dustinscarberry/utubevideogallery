@@ -74,7 +74,7 @@ class PlaylistType
     return $this->albumID;
   }
 
-  //validate form specific cases
+  // validate form
   function validate(string $action)
   {
     if ($action == 'create')
@@ -89,7 +89,7 @@ class PlaylistType
 
   private function validateCreate()
   {
-    //check for required fields
+    // check for required fields
     if (empty($this->title)
       || empty($this->source)
       || empty($this->sourceID)
@@ -101,21 +101,21 @@ class PlaylistType
 
   private function validateUpdate()
   {
-    //check for valid playlistID
+    // check for valid playlistID
     if (!$this->playlistID)
       throw new UserMessageException(__('Invalid playlist ID', 'utvg'));
   }
 
   private function validateDelete()
   {
-    //check for valid playlistID
+    // check for valid playlistID
     if (!$this->playlistID)
       throw new UserMessageException(__('Invalid playlist ID', 'utvg'));
   }
 
   private function validateGet()
   {
-    //check for valid playlistID
+    // check for valid playlistID
     if (!$this->playlistID)
       throw new UserMessageException(__('Invalid playlist ID', 'utvg'));
   }

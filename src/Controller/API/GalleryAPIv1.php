@@ -19,7 +19,7 @@ class GalleryAPIv1 extends APIv1
   function registerRoutes()
   {
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       '/galleries',
       [
         [
@@ -38,7 +38,7 @@ class GalleryAPIv1 extends APIv1
     );
 
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'galleries/(?P<galleryID>\d+)',
       [
         [

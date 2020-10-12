@@ -16,11 +16,12 @@ class SettingsAPIv1 extends APIv1
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
+  // register api routes
   function registerRoutes()
   {
-    //get, update settings endpoints
+    // get, update settings endpoints
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'settings',
       [
         [
@@ -43,6 +44,7 @@ class SettingsAPIv1 extends APIv1
     );
   }
 
+  // get plugin settings
   function getItem(WP_REST_Request $req)
   {
     try {
@@ -52,6 +54,7 @@ class SettingsAPIv1 extends APIv1
     }
   }
 
+  // update plugin settings
   public function updateItem(WP_REST_Request $req)
   {
     try {

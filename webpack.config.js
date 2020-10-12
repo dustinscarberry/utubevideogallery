@@ -6,8 +6,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const destDir = path.resolve(__dirname, 'public/js');
 const sourceDir = path.resolve(__dirname, 'assets/js');
 
-module.exports =
-{
+module.exports = {
   entry: {
     app: sourceDir + '/app.js',
     admin: sourceDir + '/admin.js'

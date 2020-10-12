@@ -20,7 +20,7 @@ class VideoOrderAPIv1 extends APIv1
   {
     //get, update, delete video endpoints
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'videosorder',
       [
         'methods' => 'PATCH',

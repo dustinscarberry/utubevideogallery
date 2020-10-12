@@ -8,8 +8,7 @@ const galleries = document.querySelectorAll('.utv-gallery-root');
 const panels = document.querySelectorAll('.utv-panel-root');
 
 if (panels)
-  Array.prototype.forEach.call(panels, function(panel)
-  {
+  Array.prototype.forEach.call(panels, function(panel) {
     ReactDOM.render(
       <Panel
         id={panel.getAttribute('data-id')}
@@ -22,8 +21,7 @@ if (panels)
   });
 
 if (galleries)
-  Array.prototype.forEach.call(galleries, function(gallery)
-  {
+  Array.prototype.forEach.call(galleries, function(gallery) {
     ReactDOM.render(
       <Gallery
         id={gallery.getAttribute('data-id')}

@@ -137,7 +137,7 @@ class VideoType
     return $this->galleryID;
   }
 
-  //validate form specific cases
+  // validate form
   function validate(string $action)
   {
     if ($action == 'create')
@@ -156,28 +156,28 @@ class VideoType
 
   private function validateGet()
   {
-    //check for valid videoID
+    // check for valid videoID
     if ($this->videoID === null)
       throw new UserMessageException(__('Invalid videoID', 'utvg'));
   }
 
   private function validateGetAlbum()
   {
-    //check for valid albumID
+    // check for valid albumID
     if ($this->albumID === null)
       throw new UserMessageException(__('Invalid albumID', 'utvg'));
   }
 
   private function validateGetGallery()
   {
-    //check for valid galleryID
+    // check for valid galleryID
     if ($this->galleryID === null)
       throw new UserMessageException(__('Invalid galleryID', 'utvg'));
   }
 
   private function validateCreate()
   {
-    //check for required fields
+    // check for required fields
     if (
       empty($this->sourceID)
       || empty($this->quality)
@@ -190,14 +190,14 @@ class VideoType
 
   private function validateUpdate()
   {
-    //check for valid videoID
+    // check for valid videoID
     if (!$this->videoID)
       throw new UserMessageException(__('Invalid video ID', 'utvg'));
   }
 
   private function validateDelete()
   {
-    //check for valid videoID
+    // check for valid videoID
     if (!$this->videoID)
       throw new UserMessageException(__('Invalid video ID', 'utvg'));
   }

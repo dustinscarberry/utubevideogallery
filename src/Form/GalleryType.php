@@ -56,6 +56,7 @@ class GalleryType
     return $this->displayType;
   }
 
+  // validate form
   function validate(string $action)
   {
     if ($action == 'create')
@@ -70,7 +71,7 @@ class GalleryType
 
   private function validateCreate()
   {
-    //check for required fields
+    // check for required fields
     if (empty($this->title)
       || empty($this->albumSorting)
       || empty($this->thumbnailType)
@@ -81,21 +82,21 @@ class GalleryType
 
   private function validateUpdate()
   {
-    //check for valid galleryID
+    // check for valid galleryID
     if (!$this->galleryID)
       throw new UserMessageException(__('Invalid gallery ID', 'utvg'));
   }
 
   private function validateDelete()
   {
-    //check for valid galleryID
+    // check for valid galleryID
     if (!$this->galleryID)
       throw new UserMessageException(__('Invalid gallery ID', 'utvg'));
   }
 
   private function validateGet()
   {
-    //check for valid galleryID
+    // check for valid galleryID
     if (!$this->galleryID)
       throw new UserMessageException(__('Invalid gallery ID', 'utvg'));
   }

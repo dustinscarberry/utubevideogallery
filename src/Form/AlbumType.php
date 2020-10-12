@@ -65,6 +65,7 @@ class AlbumType
     return $this->published;
   }
 
+  // validate form
   function validate(string $action)
   {
     if ($action == 'create')
@@ -81,37 +82,35 @@ class AlbumType
 
   private function validateGet()
   {
-    //check for valid albumID
+    // check for valid albumID
     if (!$this->albumID)
       throw new UserMessageException(__('Invalid albumID', 'utvg'));
   }
 
   private function validateGetGallery()
   {
-    //check for valid galleryID
+    // check for valid galleryID
     if (!$this->galleryID)
       return new UserMessageException(__('Invalid galleryID', 'utvg'));
   }
 
   private function validateCreate()
   {
-    //check for required fields
+    // check for required fields
     if (empty($this->title) || empty($this->videoSorting) || !isset($this->galleryID))
       throw new UserMessageException(__('Invalid parameters', 'utvg'));
   }
 
   private function validateUpdate()
   {
-    //check for valid albumID
+    // check for valid albumID
     if (!$this->albumID)
       throw new UserMessageException(__('Invalid albumID', 'utvg'));
   }
 
   private function validateDelete()
   {
-
-    throw new UserMessageException('bad baby');
-    //check for valid albumID
+    // check for valid albumID
     if (!$this->albumID)
       throw new UserMessageException(__('Invalid albumID', 'utvg'));
   }

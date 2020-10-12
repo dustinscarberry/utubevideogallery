@@ -20,7 +20,7 @@ class AlbumAPIv1 extends APIv1
   function registerRoutes()
   {
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'galleries/(?P<galleryID>\d+)/albums',
       [
         'methods' => WP_REST_Server::READABLE,
@@ -32,7 +32,7 @@ class AlbumAPIv1 extends APIv1
     );
 
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'albums',
       [
         [
@@ -55,7 +55,7 @@ class AlbumAPIv1 extends APIv1
     );
 
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'albums/(?P<albumID>\d+)',
       [
         [

@@ -28,7 +28,7 @@ License: GPL2
 namespace CodeClouds\UTubeVideoGallery;
 
 use CodeClouds\UTubeVideoGallery\Controller\View\Dashboard;
-use CodeClouds\UTubeVideoGallery\Controller\View\UI;
+use CodeClouds\UTubeVideoGallery\Controller\View\App;
 use CodeClouds\UTubeVideoGallery\Controller\API\GalleryAPIv1;
 use CodeClouds\UTubeVideoGallery\Controller\API\AlbumAPIv1;
 use CodeClouds\UTubeVideoGallery\Controller\API\VideoAPIv1;
@@ -60,7 +60,7 @@ class Bootstrap
       $this->upgrade_check();
 
     //load external files
-    $this->load_dependencies();
+    $this->loadDependencies();
 
     //hook APIs
     $this->hookAPIs();
@@ -128,15 +128,15 @@ class Bootstrap
   }
 
   //load dependencies for plugin
-  private function load_dependencies()
+  private function loadDependencies()
   {
     load_plugin_textdomain('utvg', false, 'utubevideo-gallery/translations');
 
     //load app or dashboard
     if (is_admin())
-      new Dashboard(CC_UTUBEVIDEOGALLERY_VERSION);
+      new Dashboard();
     else
-      new UI(CC_UTUBEVIDEOGALLERY_VERSION);
+      new App();
   }
 
   public function autoloader($className)

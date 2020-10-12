@@ -16,11 +16,12 @@ class VimeoPlaylistAPIv1 extends APIv1
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
+  // register api routes
   function registerRoutes()
   {
-    //get all videos in album endpoint
+    // get all videos in album endpoint
     register_rest_route(
-      $this->_namespace . '/' . $this->_version,
+      $this->namespace . '/' . $this->version,
       'vimeoplaylists/(?P<sourceID>.*)',
       [
         'methods' => WP_REST_Server::READABLE,
@@ -36,6 +37,7 @@ class VimeoPlaylistAPIv1 extends APIv1
     );
   }
 
+  // get vimeo playlist items
   function getAllItems(WP_REST_Request $req)
   {
     try {
