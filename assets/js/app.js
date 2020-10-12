@@ -7,7 +7,7 @@ import Panel from './component/Panel';
 const galleries = document.querySelectorAll('.utv-gallery-root');
 const panels = document.querySelectorAll('.utv-panel-root');
 
-if (galleries)
+if (panels)
   Array.prototype.forEach.call(panels, function(panel)
   {
     ReactDOM.render(
@@ -21,7 +21,7 @@ if (galleries)
       />, panel);
   });
 
-if (panels)
+if (galleries)
   Array.prototype.forEach.call(galleries, function(gallery)
   {
     ReactDOM.render(
