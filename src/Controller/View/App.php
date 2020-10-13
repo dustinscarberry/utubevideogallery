@@ -48,11 +48,8 @@ class App
     );
 
     // add embedded thumbnail sizing css
-    $css = '.utv-thumbnail,.utv-thumbnail>a{width:' . $this->options['thumbnailWidth'] . 'px!important}';
-    $css .= '.utv-thumbnails-rectangle img{height:' . round($this->options['thumbnailWidth'] / 1.7778) . 'px}';
-    $css .= '.utv-thumbnails-square img{height:' . $this->options['thumbnailWidth'] . 'px}';
-    $css .= '.utv-thumbnail{margin:' . $this->options['thumbnailVerticalPadding'] . 'px ' . $this->options['thumbnailPadding'] . 'px!important}';
-
+    $css = '.utv-panel-thumbnails{padding:' . $this->options['thumbnailPadding'] . 'px;grid-gap:' . $this->options['thumbnailPadding'] . 'px}';
+    
     // add thumbnail border radius if defined
     if ($this->options['thumbnailBorderRadius'] > 0)
       $css .= '.utv-thumbnail>a,.utv-thumbnail img{border-radius:' . $this->options['thumbnailBorderRadius'] . 'px!important}';

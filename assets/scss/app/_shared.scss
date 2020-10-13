@@ -1,16 +1,22 @@
-.utv-inner-wrapper{
+.utv-panel-thumbnails,
+.utv-video-gallery-thumbnails {
   text-align: left;
-  display: inline-block;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  align-items: start;
+  grid-gap: 20px; // default
+  padding: 20px; // default
 }
 
-.utv-inner-wrapper img{
+.utv-panel-thumbnails img,
+.utv-video-gallery-thumbnails img {
   display: block;
 }
 
 .utv-gallery .utv-thumbnail,
-.utv-panel .utv-thumbnail{
+.utv-panel .utv-thumbnail {
   display: inline-block;
-  margin: 10px 10px;
+  margin: 0;
   vertical-align: top;
   padding: 0;
 }

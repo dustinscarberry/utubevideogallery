@@ -5,7 +5,7 @@ Tags: video, gallery, youtube, vimeo
 Requires at least: 4.9.0
 Requires PHP: 7.0
 Tested up to: 5.2.3
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,13 @@ A user must be an editor or above in order to manage video galleries and change 
 6. Admin view
 
 == Changelog ==
+
+= 2.0.6 =
+
+* Code restructuring
+* Grid thumbnail layout
+* Api Key validity checks
+* Updated missing image
 
 = 2.0.5 =
 

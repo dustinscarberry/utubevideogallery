@@ -20,7 +20,7 @@ const Thumbnail = (props) =>
     <div className={thumbnailClasses.join(' ')} onClick={() => onChangeVideo(value)}>
       <a>
         <span className="utv-play-btn"></span>
-        <RetinaImage src={image}/>
+        <img src={image}/>
       </a>
       <span>{title}</span>
     </div>

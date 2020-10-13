@@ -12,7 +12,7 @@ const AlbumThumbnail = (props) =>
 
   return (
     <div className="utv-thumbnail utv-album" onClick={() => onChangeAlbum(value)}>
-      <RetinaImage src={image}/>
+      <img src={image}/>
       <span>{title}</span>
     </div>
   );

@@ -3,7 +3,7 @@
 Plugin Name: uTubeVideo Gallery
 Plugin URI: http://www.codeclouds.net/
 Description: This plugin allows you to create YouTube video galleries to embed in a WordPress site.
-Version: 2.0.5
+Version: 2.0.6
 Author: Dustin Scarberry
 Author URI: http://www.codeclouds.net/
 License: GPL2
@@ -96,10 +96,9 @@ class Bootstrap
     $this->maintenance();
   }
 
-  //hook apis
+  // hook apis
   public function hookAPIs()
   {
-    // hook APIs
     new GalleryAPIv1();
     new AlbumAPIv1();
     new VideoAPIv1();
@@ -457,8 +456,9 @@ class Bootstrap
     $dir = $dir['basedir'];
     wp_mkdir_p($dir . '/utubevideo-cache');
 
-    //copy 'missing.jpg' into cache directory
+    // copy 'missing.jpg' into cache directory
     copy(plugins_url('public/img/missing.jpg', __FILE__), $dir . '/utubevideo-cache/missing.jpg');
+    copy(plugins_url('public/img/missing@2x.jpg', __FILE__), $dir . '/utubevideo-cache/missing@2x.jpg');
 
     //add rewrite rules to rewrite engine
     add_action('init', [$this, 'setup_rewrite_rules']);

@@ -107,7 +107,7 @@ class Gallery extends React.Component
 
   openVideoPopup(video)
   {
-    let url = undefined;
+    let url;
 
     if (video.source == 'youtube')
       url = this.getYouTubeURL(video);

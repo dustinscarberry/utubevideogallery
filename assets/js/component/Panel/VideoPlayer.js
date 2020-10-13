@@ -10,7 +10,7 @@ const VideoPlayer = (props) =>
     forceNoAutoplay
   } = props;
 
-  let videoNode = undefined;
+  let videoNode;
 
   if (videoData.source == 'youtube')
     videoNode = <YouTubeVideo

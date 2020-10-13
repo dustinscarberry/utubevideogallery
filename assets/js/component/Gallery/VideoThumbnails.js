@@ -1,5 +1,5 @@
 import React from 'react';
-import Thumbnails from '../shared/Thumbnails';
+import ThumbnailsGrid from '../shared/ThumbnailsGrid';
 import VideoThumbnail from './VideoThumbnail';
 import galleryService from '../../service/GalleryService';
 
@@ -30,7 +30,7 @@ const VideoThumbnails = (props) =>
       return <VideoThumbnail
         key={i}
         title={video.title}
-        image={video.thumbnail}
+        image={video.thumbnail.replace('.jpg', '@2x.jpg')}
         value={i}
         onOpenVideo={onOpenVideo}
       />;
@@ -38,16 +38,16 @@ const VideoThumbnails = (props) =>
       return <VideoThumbnail
         key={i}
         title={video.title}
-        image={video.thumbnail}
+        image={video.thumbnail.replace('.jpg', '@2x.jpg')}
         value={i}
         onOpenVideo={onOpenVideo}
       />;
   });
 
   return (
-    <Thumbnails className={thumbnailsClasses.join(' ')}>
+    <ThumbnailsGrid className={thumbnailsClasses.join(' ')}>
       {videoThumbnailNodes}
-    </Thumbnails>
+    </ThumbnailsGrid>
   );
 }
 

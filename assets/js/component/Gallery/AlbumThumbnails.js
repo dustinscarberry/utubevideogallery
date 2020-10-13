@@ -1,5 +1,5 @@
 import React from 'react';
-import Thumbnails from '../shared/Thumbnails';
+import ThumbnailsGrid from '../shared/ThumbnailsGrid';
 import AlbumThumbnail from './AlbumThumbnail';
 import galleryService from '../../service/GalleryService';
 
@@ -30,7 +30,7 @@ const AlbumThumbnails = (props) =>
       return <AlbumThumbnail
         key={i}
         title={album.title}
-        image={album.thumbnail}
+        image={album.thumbnail.replace('.jpg', '@2x.jpg')}
         value={i}
         onChangeAlbum={onChangeAlbum}
       />;
@@ -38,16 +38,16 @@ const AlbumThumbnails = (props) =>
       return <AlbumThumbnail
         key={i}
         title={album.title}
-        image={album.thumbnail}
+        image={album.thumbnail.replace('.jpg', '@2x.jpg')}
         value={i}
         onChangeAlbum={onChangeAlbum}
       />;
   });
 
   return (
-    <Thumbnails className={thumbnailsClasses.join(' ')}>
+    <ThumbnailsGrid className={thumbnailsClasses.join(' ')}>
       {albumThumbnailNodes}
-    </Thumbnails>
+    </ThumbnailsGrid>
   );
 }
 

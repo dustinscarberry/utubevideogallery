@@ -14,7 +14,7 @@ const VideoThumbnail = (props) =>
     <div className="utv-thumbnail" onClick={() => onOpenVideo(value)}>
       <a>
         <span className="utv-play-btn"></span>
-        <RetinaImage src={image}/>
+        <img src={image}/>
       </a>
       <span>{title}</span>
     </div>
