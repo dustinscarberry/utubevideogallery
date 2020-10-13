@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Columns = ({children}) =>
 {
@@ -7,6 +8,10 @@ const Columns = ({children}) =>
       {children}
     </div>
   );
+}
+
+Columns.propTypes = {
+  children: PropTypes.node
 }
 
 export default Columns;

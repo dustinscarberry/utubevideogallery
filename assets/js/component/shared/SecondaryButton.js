@@ -1,13 +1,8 @@
 import React from 'react';
 import Button from './Button';
 
-const SecondaryButton = (props) =>
+const SecondaryButton = ({title, onClick}) =>
 {
-  const {
-    title,
-    onClick
-  } = props;
-
   return <Button
     classes="button-secondary"
     onClick={onClick}

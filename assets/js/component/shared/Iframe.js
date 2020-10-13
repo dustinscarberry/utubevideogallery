@@ -1,13 +1,9 @@
 import React from 'react';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
-const Iframe = (props) =>
+const Iframe = ({src, classes = []}) =>
 {
-  const {
-    src,
-    classes
-  } = props;
-
   return (
     <iframe
       src={src}
@@ -15,6 +11,11 @@ const Iframe = (props) =>
       allowFullScreen>
     </iframe>
   );
+}
+
+Iframe.propTypes = {
+  src: PropTypes.string,
+  classes: PropTypes.array
 }
 
 export default Iframe;

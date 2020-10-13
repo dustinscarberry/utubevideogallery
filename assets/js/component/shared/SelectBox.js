@@ -1,15 +1,16 @@
 import React from 'react';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
-const SelectBox = ({classes, name, value, onChange, data = [], blankEntry = false}) =>
+const SelectBox = ({classes, name, value, onChange, choices = [], blankChoice = false}) =>
 {
-  //create options
-  const options = data.map(e =>
+  // create options
+  const options = choices.map(e =>
     <option key={e.value} value={e.value}>{e.name}</option>
   );
 
-  //add empty option
-  if (blankEntry)
+  // add empty option
+  if (blankChoice)
     options.unshift(<option key={'__blank'} value=""></option>);
 
   return (
@@ -23,5 +24,18 @@ const SelectBox = ({classes, name, value, onChange, data = [], blankEntry = fals
     </select>
   );
 }
+
+SelectBox.propTypes = {
+  classes: PropTypes.array,
+  name: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  onChange: PropTypes.func,
+  choices: PropTypes.array,
+  blankChoice: PropTypes.bool
+}
+
 
 export default SelectBox;

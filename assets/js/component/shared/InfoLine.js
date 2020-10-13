@@ -1,16 +1,12 @@
 import React from 'react';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
-const InfoLine = (props) =>
+const InfoLine = ({text, icon}) =>
 {
-  const {
-    text,
-    icon
-  } = props;
+  const classes = ['utv-infoline'];
 
-  let classes = ['utv-infoline'];
-
-  if (icon)
-  {
+  if (icon) {
     classes.push('utv-status');
 
     if (icon == 'active')
@@ -22,8 +18,13 @@ const InfoLine = (props) =>
   }
 
   return (
-    <span className={classes.join(' ')}>{text}</span>
+    <span className={classnames(classes)}>{text}</span>
   );
+}
+
+InfoLine.propTypes = {
+  text: PropTypes.string,
+  icon: PropTypes.string
 }
 
 export default InfoLine;
