@@ -84,26 +84,29 @@
   opacity: .85!important;
 }
 
-.utv-panel-paging{
-  /*height: 20px;*/
+.utv-panel-paging {
   text-align: right;
   padding: 10px;
-}
 
-.utv-panel-paging-active{
-  font-weight: bold;
-  background-color: #777;
-  color: #fff;
-  /*border-radius: 50%;*/
-  min-width: 20px;
-}
+  .utv-panel-paging-handle {
+    font-size: 18px;
+    padding: 8px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    line-height: 20px;
 
-.utv-panel-paging-handle{
-  font-size: 18px;
-  padding: 8px;
-  cursor: pointer;
-  /*height: 20px;*/
-  display: inline-block;
-  text-align: center;
-  line-height: 20px;
+    &:hover {
+      background-color: #999;
+      color: #fff;
+      min-width: 20px;
+    }
+
+    &.utv-panel-paging-active {
+      font-weight: bold;
+      background-color: #777;
+      color: #fff;
+      min-width: 20px;
+    }
+  }
 }
