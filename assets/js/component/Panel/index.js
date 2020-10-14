@@ -21,6 +21,8 @@ class Panel extends React.Component
       forceNoAutoplay: true
     }
 
+    this.panel = React.createRef();
+
     this.loadAPIData();
   }
 
@@ -53,12 +55,16 @@ class Panel extends React.Component
       this.turnOnAutoplay();
 
     this.setState({selectedVideo: videoIndex});
+
+    this.scrollToPanel();
   }
 
   changePage = (page) =>
   {
     this.setState({currentPage: page});
   }
+
+  scrollToPanel = () => window.scrollTo(0, this.panel.current.offsetTop - 30)
 
   getPanelClasses()
   {
@@ -138,7 +144,7 @@ class Panel extends React.Component
       return null;
 
     return (
-      <div className={this.getPanelClasses()}>
+      <div ref={this.panel} className={this.getPanelClasses()}>
         <VideoPlayer
           videoData={videos[selectedVideo]}
           controls={this.props.controls}
