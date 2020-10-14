@@ -8,11 +8,9 @@ class VideoView extends React.Component
   constructor(props)
   {
     super(props);
-
-    this.openVideo = this.openVideo.bind(this);
   }
 
-  openVideo(value)
+  openVideo = (value) =>
   {
     const selectedVideo = this.props.videos[value];
 

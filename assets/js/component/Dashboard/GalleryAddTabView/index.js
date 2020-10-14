@@ -37,8 +37,7 @@ class GalleryAddTabView extends React.Component
   {
     const rsp = await actions.createGallery(this.state);
 
-    if (utility.isValidResponse(rsp))
-    {
+    if (utility.isValidResponse(rsp)) {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackGalleryCreated);
     }

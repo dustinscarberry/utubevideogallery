@@ -1,13 +1,8 @@
 import React from 'react';
 
-const BreadCrumb = (props) =>
+const BreadCrumb = ({albumName, changeAlbum}) =>
 {
-  const {
-    albumName,
-    changeAlbum
-  } = props;
-
-  let crumbNodes = undefined;
+  let crumbNodes;
 
   if (!albumName)
     crumbNodes = <div className="utv-breadcrumb">

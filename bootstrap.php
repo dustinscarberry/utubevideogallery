@@ -45,31 +45,31 @@ require(dirname(__FILE__) . '/config.php');
 
 class Bootstrap
 {
-  private $_options;
+  private $options;
 
   public function __construct()
   {
-    //register autoloader
+    // register autoloader
     spl_autoload_register([$this, 'autoloader']);
 
-    //load options
-    $this->_options = get_option('utubevideo_main_opts');
+    // load options
+    $this->options = get_option('utubevideo_main_opts');
 
-    //call upgrade check if in dashboard
+    // call upgrade check if in dashboard
     if (is_admin())
       $this->upgrade_check();
 
-    //load external files
+    // load dependencies
     $this->loadDependencies();
 
-    //hook APIs
+    // hook APIs
     $this->hookAPIs();
 
-    //activation hook
+    // activation hook
     register_activation_hook(__FILE__, [$this, 'activate']);
   }
 
-  //activate plugin
+  // activate plugin
   public function activate($network)
   {
     // multisite activation
@@ -92,7 +92,7 @@ class Bootstrap
       switch_to_blog($old_blog);
     }
 
-    //single site activation
+    // single site activation
     $this->maintenance();
   }
 
@@ -116,17 +116,17 @@ class Bootstrap
   private function upgrade_check()
   {
     if (
-      !isset($this->_options['version'])
-      || $this->_options['version'] < CC_UTUBEVIDEOGALLERY_VERSION
+      !isset($this->options['version'])
+      || $this->options['version'] < CC_UTUBEVIDEOGALLERY_VERSION
     )
     {
       $this->maintenance();
-      $this->_options['version'] = CC_UTUBEVIDEOGALLERY_VERSION;
-      update_option('utubevideo_main_opts', $this->_options);
+      $this->options['version'] = CC_UTUBEVIDEOGALLERY_VERSION;
+      update_option('utubevideo_main_opts', $this->options);
     }
   }
 
-  //load dependencies for plugin
+  // load dependencies for plugin
   private function loadDependencies()
   {
     load_plugin_textdomain('utvg', false, 'utubevideo-gallery/translations');
@@ -235,11 +235,11 @@ class Bootstrap
     //set up main option defaults if needed
 
     //initalize main if empty
-    if (empty($this->_options))
-      $this->_options = [];
+    if (empty($this->options))
+      $this->options = [];
 
     //fix video sorting if not done yet
-    if (!isset($this->_options['sortFix']))
+    if (!isset($this->options['sortFix']))
     {
       $albumIds = $wpdb->get_results(
         'SELECT ALB_ID
@@ -247,8 +247,7 @@ class Bootstrap
         ARRAY_A
       );
 
-      foreach ($albumIds as $value)
-      {
+      foreach ($albumIds as $value) {
         $videoIds = $wpdb->get_results(
           'SELECT VID_ID
           FROM ' . $wpdb->prefix . 'utubevideo_video
@@ -259,8 +258,7 @@ class Bootstrap
 
         $posCounter = 0;
 
-        foreach ($videoIds as $video)
-        {
+        foreach ($videoIds as $video) {
           $wpdb->update($wpdb->prefix . 'utubevideo_video',
             ['VID_POS' => $posCounter],
             ['VID_ID' => $video['VID_ID']]
@@ -274,16 +272,14 @@ class Bootstrap
     }
 
     //album sort fix
-    if (!isset($this->_options['albumSortFix']))
-    {
+    if (!isset($this->options['albumSortFix'])) {
       $galleryIds = $wpdb->get_results(
         'SELECT DATA_ID
         FROM ' . $wpdb->prefix . 'utubevideo_dataset',
         ARRAY_A
       );
 
-      foreach ($galleryIds as $value)
-      {
+      foreach ($galleryIds as $value) {
         $albumIds = $wpdb->get_results(
           'SELECT ALB_ID
           FROM ' . $wpdb->prefix . 'utubevideo_album
@@ -294,8 +290,7 @@ class Bootstrap
 
         $posCounter = 0;
 
-        foreach ($albumIds as $album)
-        {
+        foreach ($albumIds as $album) {
           $wpdb->update($wpdb->prefix . 'utubevideo_album',
             ['ALB_POS' => $posCounter],
             ['ALB_ID' => $album['ALB_ID']]
@@ -309,8 +304,7 @@ class Bootstrap
     }
 
     //set slugs if not set yet
-    if (!isset($this->_options['setSlugs']))
-    {
+    if (!isset($this->options['setSlugs'])) {
       $mark = 1;
       $sluglist = [];
 
@@ -320,8 +314,7 @@ class Bootstrap
         ARRAY_A
       );
 
-      foreach ($data as $value)
-      {
+      foreach ($data as $value) {
         $slug = strtolower($value['ALB_NAME']);
         $slug = str_replace(' ', '-', $slug);
         $slug = html_entity_decode($slug, ENT_QUOTES, 'UTF-8');
@@ -343,8 +336,7 @@ class Bootstrap
     }
 
     //set filenames in not set yet
-    if (!isset($this->_options['filenameFix']))
-    {
+    if (!isset($this->options['filenameFix'])) {
       //suppress odd warning messages temporarily
       error_reporting(0);
 
@@ -357,8 +349,7 @@ class Bootstrap
         ARRAY_A
       );
 
-      foreach ($data as $val)
-      {
+      foreach ($data as $val) {
         $old = $dir . $val['VID_URL'] . '.jpg';
         $new = $dir . $val['VID_URL'] . $val['VID_ID'] . '.jpg';
 
@@ -374,8 +365,7 @@ class Bootstrap
         ARRAY_A
       );
 
-      foreach ($albumData as $val)
-      {
+      foreach ($albumData as $val) {
         $wpdb->update(
           $wpdb->prefix . 'utubevideo_album',
           ['ALB_THUMB' => $val['ALB_THUMB'] . $val['VID_ID']],
@@ -387,8 +377,7 @@ class Bootstrap
     }
 
     //add @2x images if needed
-    if (!isset($this->_options['retinaFix']))
-    {
+    if (!isset($this->options['retinaFix'])) {
       //suppress odd warning messages temporarily
       error_reporting(0);
 
@@ -406,16 +395,13 @@ class Bootstrap
       );
 
       //process each video thumbnail if not avaiable
-      foreach($videoData as $val)
-      {
+      foreach($videoData as $val) {
         $filename = $val['VID_URL'] . $val['VID_ID'];
 
-        if (!file_exists($dir . $filename . '@2x.jpg'))
-        {
+        if (!file_exists($dir . $filename . '@2x.jpg')) {
           if ($val['VID_SOURCE'] == 'youtube')
             $sourceURL = 'http://img.youtube.com/vi/' . $val['VID_URL'] . '/0.jpg';
-          elseif ($val['VID_SOURCE'] == 'vimeo')
-          {
+          elseif ($val['VID_SOURCE'] == 'vimeo') {
             $data = $this->queryAPI('https://vimeo.com/api/v2/video/' . $val['VID_URL'] . '.json');
             $sourceURL = $data[0]['thumbnail_large'];
           }
@@ -447,9 +433,9 @@ class Bootstrap
     $dft['showVideoDescription'] = true;
     $dft['version'] = CC_UTUBEVIDEOGALLERY_VERSION;
 
-    $this->_options = $this->_options + $dft;
+    $this->options = $this->options + $dft;
 
-    update_option('utubevideo_main_opts', $this->_options);
+    update_option('utubevideo_main_opts', $this->options);
 
     //create photo cache directory if needed
     $dir = wp_upload_dir();
@@ -469,13 +455,11 @@ class Bootstrap
   //recursive function for making sure slugs are unique
   private function checkslug($slug, $sluglist, $mark)
   {
-    if (in_array($slug, $sluglist))
-    {
+    if (in_array($slug, $sluglist)) {
       $slug = $slug . '-' . $mark;
       $mark++;
       $this->checkslug($slug, $sluglist, $mark);
-    }
-    else
+    } else
       return;
   }
 
@@ -490,19 +474,19 @@ class Bootstrap
     {
       if ($thumbType == 'square')
       {
-        $image->resize($this->_options['thumbnailWidth'] * 2, $this->_options['thumbnailWidth'] * 2, true);
+        $image->resize($this->options['thumbnailWidth'] * 2, $this->options['thumbnailWidth'] * 2, true);
         $image->set_quality(65);
         $image->save($basePath . $destFilename . '@2x.jpg');
-        $image->resize($this->_options['thumbnailWidth'], $this->_options['thumbnailWidth'], true);
+        $image->resize($this->options['thumbnailWidth'], $this->options['thumbnailWidth'], true);
         $image->set_quality(95);
         $image->save($basePath . $destFilename . '.jpg');
       }
       else
       {
-        $image->resize($this->_options['thumbnailWidth'] * 2, $this->_options['thumbnailWidth'] * 2);
+        $image->resize($this->options['thumbnailWidth'] * 2, $this->options['thumbnailWidth'] * 2);
         $image->set_quality(65);
         $image->save($basePath . $destFilename . '@2x.jpg');
-        $image->resize($this->_options['thumbnailWidth'], $this->_options['thumbnailWidth']);
+        $image->resize($this->options['thumbnailWidth'], $this->options['thumbnailWidth']);
         $image->set_quality(95);
         $image->save($basePath . $destFilename . '.jpg');
       }
@@ -513,23 +497,21 @@ class Bootstrap
     {
       //reload missing image into editor
       $image = wp_get_image_editor(plugins_url('missing.jpg', dirname(__FILE__)));
-      if (!is_wp_error($image))
-      {
-        if ($thumbType == 'square')
-        {
-          $image->resize($this->_options['thumbnailWidth'] * 2, $this->_options['thumbnailWidth'] * 2, true);
+      if (!is_wp_error($image)) {
+        if ($thumbType == 'square') {
+          $image->resize($this->options['thumbnailWidth'] * 2, $this->options['thumbnailWidth'] * 2, true);
           $image->set_quality(65);
           $image->save($basePath . $destFilename . '@2x.jpg');
-          $image->resize($this->_options['thumbnailWidth'], $this->_options['thumbnailWidth'], true);
+          $image->resize($this->options['thumbnailWidth'], $this->options['thumbnailWidth'], true);
           $image->set_quality(95);
           $image->save($basePath . $destFilename . '.jpg');
         }
         else
         {
-          $image->resize($this->_options['thumbnailWidth'] * 2, $this->_options['thumbnailWidth'] * 2);
+          $image->resize($this->options['thumbnailWidth'] * 2, $this->options['thumbnailWidth'] * 2);
           $image->set_quality(65);
           $image->save($basePath . $destFilename . '@2x.jpg');
-          $image->resize($this->_options['thumbnailWidth'], $this->_options['thumbnailWidth']);
+          $image->resize($this->options['thumbnailWidth'], $this->options['thumbnailWidth']);
           $image->set_quality(95);
           $image->save($basePath . $destFilename . '.jpg');
         }

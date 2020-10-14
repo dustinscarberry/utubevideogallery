@@ -33,8 +33,7 @@ class Panel extends React.Component
 
   previousVideo = () =>
   {
-    if (this.state.selectedVideo > 0)
-    {
+    if (this.state.selectedVideo > 0) {
       this.changeVideo(this.state.selectedVideo - 1);
       this.changePage(Math.ceil(this.state.selectedVideo / this.props.videosPerPage));
     }
@@ -42,8 +41,7 @@ class Panel extends React.Component
 
   nextVideo = () =>
   {
-    if (this.state.selectedVideo < this.state.videos.length - 1)
-    {
+    if (this.state.selectedVideo < this.state.videos.length - 1) {
       this.changeVideo(this.state.selectedVideo + 1);
       this.changePage(Math.ceil((this.state.selectedVideo + 2) / this.props.videosPerPage));
     }

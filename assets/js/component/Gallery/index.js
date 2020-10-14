@@ -18,14 +18,10 @@ class Gallery extends React.Component
       currentPage: 1
     };
 
-    this.loadAPIData = this.loadAPIData.bind(this);
-    this.openVideoPopup = this.openVideoPopup.bind(this);
-    this.changePage = this.changePage.bind(this);
-
     this.loadAPIData();
   }
 
-  async loadAPIData()
+  loadAPIData = async () =>
   {
     const {
       id,
@@ -38,16 +34,13 @@ class Gallery extends React.Component
       + id
     );
 
-    if (apiData.status == 200 && !apiData.data.error)
-    {
+    if (apiData.status == 200 && !apiData.data.error) {
       const data = apiData.data.data;
       let albums = [];
       let videos = [];
 
-      if (data.displaytype == 'video')
-      {
-        for (const album of data.albums)
-        {
+      if (data.displaytype == 'video') {
+        for (const album of data.albums) {
           for (const video of album.videos)
             videos.push(video);
         }
@@ -59,12 +52,11 @@ class Gallery extends React.Component
       {
         albums = data.albums;
 
-        //filter on maxalbums and maxvideos if specified
+        // filter on maxalbums and maxvideos if specified
         if (maxAlbums)
           albums = albums.slice(0, maxAlbums);
 
-        if (maxVideos)
-        {
+        if (maxVideos) {
           data.albums = data.albums.map(album => {
             album.videos = album.videos.slice(0, maxVideos);
             return album;
@@ -105,7 +97,7 @@ class Gallery extends React.Component
     );
   }
 
-  openVideoPopup(video)
+  openVideoPopup = (video) =>
   {
     let url;
 
@@ -152,7 +144,7 @@ class Gallery extends React.Component
     });
   }
 
-  changePage(page)
+  changePage = (page) =>
   {
     this.setState({currentPage: page});
   }

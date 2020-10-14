@@ -2,13 +2,8 @@ import React from 'react';
 import Iframe from '../shared/Iframe';
 import sharedService from '../../service/SharedService';
 
-const VimeoVideo = (props) =>
+const VimeoVideo = ({videoData, forceNoAutoplay}) =>
 {
-  const {
-    videoData,
-    forceNoAutoplay
-  } = props;
-
   const source = sharedService.getVimeoEmbedURL(
     videoData.slugID,
     (forceNoAutoplay ? '0' : utvJSData.setting.vimeoAutoplay),

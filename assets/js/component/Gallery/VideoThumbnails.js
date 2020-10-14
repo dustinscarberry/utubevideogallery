@@ -14,8 +14,8 @@ const VideoThumbnails = (props) =>
   } = props;
 
   const thumbnailsClasses = galleryService.getThumbnailsClasses(thumbnailType);
-  let startIndex = undefined;
-  let endIndex = undefined;
+  let startIndex;
+  let endIndex;
 
   //get paginated videos if enabled
   if (thumbnailsPerPage)

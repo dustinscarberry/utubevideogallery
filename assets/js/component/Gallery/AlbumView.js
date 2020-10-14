@@ -14,12 +14,9 @@ class AlbumView extends React.Component
     this.state = {
       selectedAlbum: undefined
     };
-
-    this.changeAlbum = this.changeAlbum.bind(this);
-    this.openVideo = this.openVideo.bind(this);
   }
 
-  changeAlbum(albumIndex)
+  changeAlbum = (albumIndex) =>
   {
     this.setState({selectedAlbum: albumIndex});
 
@@ -27,7 +24,7 @@ class AlbumView extends React.Component
     this.props.onChangePage(1);
   }
 
-  openVideo(value)
+  openVideo = (value) =>
   {
     let selectedVideo = this.props.albums[this.state.selectedAlbum].videos[value];
 

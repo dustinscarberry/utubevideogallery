@@ -14,18 +14,17 @@ const AlbumThumbnails = (props) =>
   } = props;
 
   const thumbnailsClasses = galleryService.getThumbnailsClasses(thumbnailType);
-  let startIndex = undefined;
-  let endIndex = undefined;
+  let startIndex;
+  let endIndex;
 
-  //get paginated videos if enabled
+  // get paginated videos if enabled
   if (thumbnailsPerPage)
   {
     startIndex = (currentPage - 1) * parseInt(thumbnailsPerPage);
     endIndex = startIndex + parseInt(thumbnailsPerPage);
   }
 
-  const albumThumbnailNodes = albums.map((album, i) =>
-  {
+  const albumThumbnailNodes = albums.map((album, i) => {
     if (thumbnailsPerPage && i >= startIndex && i < endIndex)
       return <AlbumThumbnail
         key={i}

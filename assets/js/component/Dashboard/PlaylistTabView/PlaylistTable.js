@@ -81,8 +81,7 @@ class PlaylistTable extends React.Component
   {
     let mappedData = [];
 
-    for (let item of data)
-    {
+    for (let item of data) {
       let record = {};
       record.id = item.id;
       record.title = item.title;
@@ -99,12 +98,10 @@ class PlaylistTable extends React.Component
   getBulkActions()
   {
     return {
-      options: [
-        {
-          name: 'Delete',
-          value: 'delete'
-        }
-      ],
+      options: [{
+        name: 'Delete',
+        value: 'delete'
+      }],
       callback: (key, items) =>
       {
         if (key == 'delete')

@@ -1,12 +1,8 @@
 import React from 'react';
 
-const Description = (props) =>
+const Description = ({text}) =>
 {
-  const {
-    text
-  } = props;
-
-  //return null if no text or disabled
+  // return null if no text or disabled
   if (!text || !utvJSData.setting.showVideoDescription)
     return null;
 

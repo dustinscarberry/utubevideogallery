@@ -11,8 +11,7 @@ if (defined('WP_UNINSTALL_PLUGIN'))
     // get all blog ids
     $blogids =  $wpdb->get_col('SELECT blog_id FROM ' .  $wpdb->blogs);
 
-    foreach ($blogids as $blog_id)
-    {
+    foreach ($blogids as $blog_id) {
       switch_to_blog($blog_id);
       removeDatabaseTables();
     }
@@ -41,8 +40,7 @@ function removeDatabaseTables()
 
 function removeFiles($dir)
 {
-  foreach (glob($dir . '/*') as $file)
-  {
+  foreach (glob($dir . '/*') as $file) {
     if (is_dir($file))
       rrmdir($file);
     else

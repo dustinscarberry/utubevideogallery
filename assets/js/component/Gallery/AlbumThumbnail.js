@@ -1,15 +1,8 @@
 import React from 'react';
 import RetinaImage from 'react-retina-image';
 
-const AlbumThumbnail = (props) =>
+const AlbumThumbnail = ({title, image, value, onChangeAlbum}) =>
 {
-  const {
-    title,
-    image,
-    value,
-    onChangeAlbum
-  } = props;
-
   return (
     <div className="utv-thumbnail utv-album" onClick={() => onChangeAlbum(value)}>
       <img src={image}/>

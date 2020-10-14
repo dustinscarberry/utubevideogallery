@@ -1,13 +1,7 @@
 import React from 'react';
 
-const Controls = (props) =>
+const Controls = ({videoData, onPreviousVideo, onNextVideo}) =>
 {
-  const {
-    videoData,
-    onPreviousVideo,
-    onNextVideo
-  } = props;
-
   return (
     <div className="utv-panel-controls">
       <i className="fa fa-chevron-left utv-panel-bkarrow" onClick={onPreviousVideo}></i>

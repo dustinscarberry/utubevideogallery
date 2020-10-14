@@ -1,13 +1,7 @@
 import React from 'react';
 
-const PageHandle = (props) =>
+const PageHandle = ({page, selected, onChangePage}) =>
 {
-  const {
-    page,
-    selected,
-    onChangePage
-  } = props;
-
   const handleClasses = ['utv-gallery-paging-handle'];
 
   if (selected)
