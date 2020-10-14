@@ -27,16 +27,14 @@ class SettingsAPIv1 extends APIv1
         [
           'methods' => WP_REST_Server::READABLE,
           'callback' => [$this, 'getItem'],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ],
         [
           'methods' => 'PATCH',
           'callback' => [$this, 'updateItem'],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ]

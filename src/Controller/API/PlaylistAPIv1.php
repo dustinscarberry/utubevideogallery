@@ -30,8 +30,7 @@ class PlaylistAPIv1 extends APIv1
         [
           'methods' => WP_REST_Server::CREATABLE,
           'callback' => [$this, 'createItem'],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ]
@@ -48,8 +47,7 @@ class PlaylistAPIv1 extends APIv1
           'args' => [
             'playlistID'
           ],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ],
@@ -59,8 +57,7 @@ class PlaylistAPIv1 extends APIv1
           'args' => [
             'playlistID'
           ],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ],
@@ -70,8 +67,7 @@ class PlaylistAPIv1 extends APIv1
           'args' => [
             'playlistID'
           ],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ]

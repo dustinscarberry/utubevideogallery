@@ -16,17 +16,16 @@ class VideoOrderAPIv1 extends APIv1
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
+  // register api routes
   function registerRoutes()
   {
-    //get, update, delete video endpoints
     register_rest_route(
       $this->namespace . '/' . $this->version,
       'videosorder',
       [
         'methods' => 'PATCH',
         'callback' => [$this, 'updateItem'],
-        'permission_callback' => function()
-        {
+        'permission_callback' => function() {
           return current_user_can('edit_others_posts');
         }
       ]

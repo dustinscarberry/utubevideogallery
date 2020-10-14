@@ -16,6 +16,7 @@ class GalleryAPIv1 extends APIv1
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
+  // register api routes
   function registerRoutes()
   {
     register_rest_route(
@@ -29,8 +30,7 @@ class GalleryAPIv1 extends APIv1
         [
           'methods' => WP_REST_Server::CREATABLE,
           'callback' => [$this, 'createItem'],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ]
@@ -47,8 +47,7 @@ class GalleryAPIv1 extends APIv1
           'args' => [
             'galleryID'
           ],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ],
@@ -58,8 +57,7 @@ class GalleryAPIv1 extends APIv1
           'args' => [
             'galleryID'
           ],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ],
@@ -69,8 +67,7 @@ class GalleryAPIv1 extends APIv1
           'args' => [
             'galleryID'
           ],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ]

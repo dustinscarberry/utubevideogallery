@@ -16,7 +16,7 @@ class AlbumAPIv1 extends APIv1
     add_action('rest_api_init', [$this, 'registerRoutes']);
   }
 
-  //register api routes
+  // register api routes
   function registerRoutes()
   {
     register_rest_route(
@@ -38,16 +38,14 @@ class AlbumAPIv1 extends APIv1
         [
           'methods' => WP_REST_Server::CREATABLE,
           'callback' => [$this, 'createItem'],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ],
         [
           'methods' => WP_REST_Server::READABLE,
           'callback' => [$this, 'getItems'],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ]
@@ -64,8 +62,7 @@ class AlbumAPIv1 extends APIv1
           'args' => [
             'albumID'
           ],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ],
@@ -75,8 +72,7 @@ class AlbumAPIv1 extends APIv1
           'args' => [
             'albumID'
           ],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ],
@@ -86,8 +82,7 @@ class AlbumAPIv1 extends APIv1
           'args' => [
             'albumID'
           ],
-          'permission_callback' => function()
-          {
+          'permission_callback' => function() {
             return current_user_can('edit_others_posts');
           }
         ]

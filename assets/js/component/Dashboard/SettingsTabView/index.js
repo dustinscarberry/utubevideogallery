@@ -222,18 +222,10 @@ class SettingsTabView extends React.Component
                 />
               <FormField>
               </FormField>
-                <Label text={utvJSData.localization.thumbnailHorizontalPadding}/>
+                <Label text={utvJSData.localization.thumbnailPadding}/>
                 <TextInput
                   name="thumbnailHorizontalPadding"
                   value={this.state.thumbnailHorizontalPadding}
-                  onChange={this.changeValue}
-                />
-              </FormField>
-              <FormField>
-                <Label text={utvJSData.localization.thumbnailVerticalPadding}/>
-                <TextInput
-                  name="thumbnailVerticalPadding"
-                  value={this.state.thumbnailVerticalPadding}
                   onChange={this.changeValue}
                 />
               </FormField>
