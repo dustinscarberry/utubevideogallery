@@ -1,5 +1,4 @@
 import React from 'react';
-import RetinaImage from 'react-retina-image';
 
 const VideoThumbnail = ({title, image, value, onOpenVideo}) =>
 {

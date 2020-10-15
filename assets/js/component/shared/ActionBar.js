@@ -1,12 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const ActionBar = (props) =>
+const ActionBar = ({children}) =>
 {
   return (
     <div className="utv-actionbar">
-      {props.children}
+      {children}
     </div>
   );
+}
+
+ActionBar.propTypes = {
+  children: PropTypes.node
 }
 
 export default ActionBar;

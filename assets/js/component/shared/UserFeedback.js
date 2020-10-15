@@ -1,16 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const UserFeedback = (props) =>
+const UserFeedback = ({message, type}) =>
 {
-  const {
-    message,
-    type
-  } = props;
-
   if (!message || !type)
     return null;
 
-  let classes = ['notice'];
+  const classes = ['notice'];
 
   if (type == 'success')
     classes.push('notice-success');
@@ -26,6 +22,11 @@ const UserFeedback = (props) =>
       <p>{message}</p>
     </div>
   );
+}
+
+UserFeedback.propTypes = {
+  message: PropTypes.string,
+  type: PropTypes.string
 }
 
 export default UserFeedback;

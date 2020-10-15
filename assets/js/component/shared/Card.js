@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
 const Card = ({classes, children}) =>
 {
@@ -8,6 +9,11 @@ const Card = ({classes, children}) =>
       {children}
     </div>
   );
+}
+
+Card.propTypes = {
+  classes: PropTypes.array,
+  children: PropTypes.node
 }
 
 export default Card;

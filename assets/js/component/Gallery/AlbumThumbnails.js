@@ -18,8 +18,7 @@ const AlbumThumbnails = (props) =>
   let endIndex;
 
   // get paginated videos if enabled
-  if (thumbnailsPerPage)
-  {
+  if (thumbnailsPerPage) {
     startIndex = (currentPage - 1) * parseInt(thumbnailsPerPage);
     endIndex = startIndex + parseInt(thumbnailsPerPage);
   }

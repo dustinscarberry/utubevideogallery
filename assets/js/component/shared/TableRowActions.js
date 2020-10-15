@@ -4,8 +4,7 @@ const TableRowActions = ({actions}) =>
 {
   let actionNodes = [];
 
-  for (let i = 0; i < actions.length; i++)
-  {
+  for (let i = 0; i < actions.length; i++) {
     if (i != 0)
       actionNodes.push(<span key={i + '-divider'} className="utv-row-divider">|</span>);
 

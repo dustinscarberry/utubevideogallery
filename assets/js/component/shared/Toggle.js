@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Toggle = ({name, value, onChange, text}) =>
 {

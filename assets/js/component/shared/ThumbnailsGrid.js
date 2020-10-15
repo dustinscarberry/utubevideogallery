@@ -1,20 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-class ThumbnailsGrid extends React.Component
+const ThumbnailsGrid = ({className, children}) =>
 {
-  constructor(props)
-  {
-    super(props);
-  }
+  return (
+    <div className={className}>
+      {children}
+    </div>
+  );
+}
 
-  render()
-  {
-    return (
-      <div className={this.props.className}>
-        {this.props.children}
-      </div>
-    );
-  }
+ThumbnailsGrid.propTypes = {
+  className: PropTypes.string,
+  children: PropTypes.node
 }
 
 export default ThumbnailsGrid;

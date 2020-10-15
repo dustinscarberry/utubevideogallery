@@ -1,17 +1,18 @@
 import React from 'react';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
-const Button = (props) =>
+const Button = ({classes, title, onClick}) =>
 {
-  const {
-    classes,
-    title,
-    onClick
-  } = props;
-
   return (
     <button className={classnames(classes)} onClick={onClick}>{title}</button>
   );
+}
+
+Button.propTypes = {
+  classes: PropTypes.array,
+  title: PropTypes.string,
+  onClick: PropTypes.func
 }
 
 export default Button;

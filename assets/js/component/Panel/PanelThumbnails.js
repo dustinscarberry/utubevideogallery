@@ -1,5 +1,4 @@
 import React from 'react';
-import Thumbnails from '../shared/Thumbnails';
 import ThumbnailsGrid from '../shared/ThumbnailsGrid';
 import Thumbnail from './Thumbnail';
 

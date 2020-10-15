@@ -47,7 +47,7 @@ class Bootstrap
 {
   private $options;
 
-  public function __construct()
+  function __construct()
   {
     // register autoloader
     spl_autoload_register([$this, 'autoloader']);
@@ -70,7 +70,7 @@ class Bootstrap
   }
 
   // activate plugin
-  public function activate($network)
+  function activate($network)
   {
     // multisite activation
     if (
@@ -97,7 +97,7 @@ class Bootstrap
   }
 
   // hook apis
-  public function hookAPIs()
+  function hookAPIs()
   {
     new GalleryAPIv1();
     new AlbumAPIv1();
@@ -138,7 +138,7 @@ class Bootstrap
       new App();
   }
 
-  public function autoloader($className)
+  function autoloader($className)
   {
     if (strpos($className, 'CodeClouds\UTubeVideoGallery') !== false)
     {
@@ -463,7 +463,7 @@ class Bootstrap
       return;
   }
 
-  public function saveThumbnail($sourceURL, $destFilename, $thumbType, $suppressErrors = false)
+  function saveThumbnail($sourceURL, $destFilename, $thumbType, $suppressErrors = false)
   {
     $basePath = wp_upload_dir();
     $basePath = $basePath['basedir'] . '/utubevideo-cache/';
@@ -524,7 +524,7 @@ class Bootstrap
       return true;
   }
 
-  public function queryAPI($query)
+  function queryAPI($query)
   {
     $data = wp_remote_get($query);
     return json_decode($data['body'], true);

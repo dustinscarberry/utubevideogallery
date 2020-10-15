@@ -1,16 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Breadcrumbs = ({crumbs}) =>
 {
   let crumbsNodes = [];
 
-  for (let i = 0; i < crumbs.length; i++)
-  {
-    //add separater
+  for (let i = 0; i < crumbs.length; i++) {
+    // add separater
     if (i != 0)
       crumbsNodes.push(<i key={'chevron' + i} className="utv-breadcrumb-divider fas fa-chevron-right"></i>);
 
-    //add breadcrumb
+    // add breadcrumb
     if (crumbs[i].onClick)
       crumbsNodes.push(<a key={i} className="utv-breadcrumb-link" onClick={crumbs[i].onClick}>{crumbs[i].text}</a>);
     else
@@ -22,6 +22,10 @@ const Breadcrumbs = ({crumbs}) =>
       {crumbsNodes}
     </div>
   );
+}
+
+Breadcrumbs.propTypes = {
+  crumbs: PropTypes.array
 }
 
 export default Breadcrumbs;
