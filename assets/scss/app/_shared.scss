@@ -6,11 +6,10 @@
   align-items: start;
   grid-gap: 20px; // default
   padding: 20px; // default
-}
 
-.utv-panel-thumbnails img,
-.utv-video-gallery-thumbnails img {
-  display: block;
+  img {
+    display: block;
+  }
 }
 
 .utv-gallery .utv-thumbnail,
@@ -19,30 +18,28 @@
   margin: 0;
   vertical-align: top;
   padding: 0;
-}
 
-.utv-gallery .utv-thumbnail a,
-.utv-panel .utv-thumbnail a{
-  background-color: #000;
-  display: block;
-  cursor: pointer;
-  position: relative;
-}
+  a {
+    background-color: #000;
+    display: block;
+    cursor: pointer;
+    position: relative;
+  }
 
-.utv-gallery .utv-thumbnail span,
-.utv-panel .utv-thumbnail span{
-  font-size: 16px;
-  display: block;
-  line-height: 1.6em;
-  margin-top: 4px;
-  margin-left: 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  span  {
+    font-size: 16px;
+    display: block;
+    line-height: 1.6em;
+    margin-top: 4px;
+    margin-left: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .utv-gallery .utv-play-btn,
-.utv-panel .utv-play-btn{
+.utv-panel .utv-play-btn {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -54,25 +51,25 @@
 }
 
 .utv-gallery .utv-thumbnail:hover .utv-play-btn,
-.utv-panel .utv-thumbnail:hover .utv-play-btn{
+.utv-panel .utv-thumbnail:hover .utv-play-btn {
   opacity: .85;
 }
 
-.utv-icon-default .utv-thumbnail .utv-play-btn{
+.utv-icon-default .utv-play-btn{
   width: 48px;
   height: 48px;
   margin: -24px 0 0 -24px;
   background: transparent url('../img/play_icon.png') no-repeat 0 0;
 }
 
-.utv-icon-blue .utv-thumbnail .utv-play-btn{
+.utv-icon-blue .utv-play-btn{
   width: 48px;
   height: 34px;
   margin: -17px 0 0 -24px;
   background: transparent url('../img/play_icon_blue.png') no-repeat 0 0;
 }
 
-.utv-icon-red .utv-thumbnail .utv-play-btn{
+.utv-icon-red .utv-play-btn{
   width: 48px;
   height: 34px;
   margin: -17px 0 0 -24px;

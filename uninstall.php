@@ -3,8 +3,7 @@
 if (defined('WP_UNINSTALL_PLUGIN'))
 {
   // multisite uninstall
-  if (function_exists('is_multisite') && is_multisite())
-  {
+  if (function_exists('is_multisite') && is_multisite()) {
     global $wpdb;
     $old_blog =  $wpdb->blogid;
 

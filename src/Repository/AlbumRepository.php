@@ -6,6 +6,7 @@ use CodeClouds\UTubeVideoGallery\Entity\Album;
 
 class AlbumRepository
 {
+  // get album
   static function getItem(int $albumID)
   {
     global $wpdb;
@@ -42,6 +43,7 @@ class AlbumRepository
     return false;
   }
 
+  // get all albums
   static function getItems()
   {
     global $wpdb;
@@ -53,8 +55,7 @@ class AlbumRepository
       ORDER BY ALB_POS'
     );
 
-    foreach ($albumsData as $albumData)
-    {
+    foreach ($albumsData as $albumData) {
       $videoCount = $wpdb->get_var(
         'SELECT count(VID_ID) as VIDEO_COUNT
         FROM ' . $wpdb->prefix . 'utubevideo_video
@@ -71,6 +72,7 @@ class AlbumRepository
     return $data;
   }
 
+  // create album
   static function createItem(
     $title,
     $slug,
@@ -83,7 +85,7 @@ class AlbumRepository
 
     $currentTime = current_time('timestamp');
 
-    //insert new album
+    // insert new album
     if ($wpdb->insert(
       $wpdb->prefix . 'utubevideo_album',
       [
@@ -101,11 +103,12 @@ class AlbumRepository
     return false;
   }
 
+  // delete album
   static function deleteItem(int $albumID)
   {
     global $wpdb;
 
-    //delete album from database
+    // delete album from database
     if ($wpdb->delete(
       $wpdb->prefix . 'utubevideo_album',
       ['ALB_ID' => $albumID]
@@ -115,14 +118,15 @@ class AlbumRepository
     return false;
   }
 
+  // update album
   static function updateItem($form)
   {
     global $wpdb;
 
-    //create updatedFields array
+    // create updatedFields array
     $updatedFields = [];
 
-    //set optional update fields
+    // set optional update fields
     if ($form->getTitle() != null)
       $updatedFields['ALB_NAME'] = $form->getTitle();
 
@@ -138,7 +142,7 @@ class AlbumRepository
     if ($form->getGalleryID() != null)
       $updatedFields['DATA_ID'] = $form->getGalleryID();
 
-    //set required update fields
+    // set required update fields
     $updatedFields['ALB_UPDATEDATE'] = current_time('timestamp');
 
     if ($wpdb->update(
@@ -151,6 +155,7 @@ class AlbumRepository
     return false;
   }
 
+  // update album sort position
   static function updateItemPosition(int $albumID, $position)
   {
     global $wpdb;
@@ -162,6 +167,7 @@ class AlbumRepository
     );
   }
 
+  // get all albums in a gallery
   static function getItemsByGallery(int $galleryID)
   {
     global $wpdb;
@@ -180,8 +186,7 @@ class AlbumRepository
 
     $albumsData = $wpdb->get_results($albumsQuery);
 
-    foreach ($albumsData as $albumData)
-    {
+    foreach ($albumsData as $albumData) {
       $videoCount = $wpdb->get_var(
         'SELECT count(VID_ID) as VIDEO_COUNT
         FROM ' . $wpdb->prefix . 'utubevideo_video
@@ -198,6 +203,7 @@ class AlbumRepository
     return $data;
   }
 
+  // get all published albums in a gallery
   static function getPublishedItemsByGallery(int $galleryID, string $sortDirection = 'desc')
   {
     global $wpdb;
@@ -217,8 +223,7 @@ class AlbumRepository
 
     $albumsData = $wpdb->get_results($albumsQuery);
 
-    foreach ($albumsData as $albumData)
-    {
+    foreach ($albumsData as $albumData) {
       $videoCount = $wpdb->get_var(
         'SELECT count(VID_ID) as VIDEO_COUNT
         FROM ' . $wpdb->prefix . 'utubevideo_video
@@ -235,6 +240,7 @@ class AlbumRepository
     return $data;
   }
 
+  // delete all albums in a gallery
   static function deleteItemsByGallery(int $galleryID)
   {
     global $wpdb;
@@ -248,11 +254,12 @@ class AlbumRepository
     return false;
   }
 
+  // get next album sort position in a gallery
   static function getNextSortPositionByGallery(int $galleryID)
   {
     global $wpdb;
 
-    //check for valid galleryID
+    // check for valid galleryID
     if (!$galleryID)
       return false;
 
@@ -263,7 +270,7 @@ class AlbumRepository
       $galleryID
     );
 
-    //get next sort position for gallery
+    // get next sort position for gallery
     $nextSortPosition = $wpdb->get_var($query);
 
     if (!$nextSortPosition)

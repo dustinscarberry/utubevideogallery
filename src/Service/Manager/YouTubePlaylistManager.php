@@ -11,7 +11,7 @@ use DateInterval;
 
 class YouTubePlaylistManager
 {
-  public static function getPlaylistData(YouTubePlaylistType $form)
+  static function getPlaylistData(YouTubePlaylistType $form)
   {
     //get settings
     $settings = new Settings();

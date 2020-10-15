@@ -66,7 +66,7 @@
   cursor: pointer;
 }
 
-.ccgriddle-table th.sortable:before,
+.ccgriddle-table th.sortable::before,
 .ccgriddle-table th.sortable:after{
   position: absolute;
   bottom: 11px;
@@ -75,7 +75,7 @@
   font-size: 1.3em;
 }
 
-.ccgriddle-table th.sortable:before{
+.ccgriddle-table th.sortable::before{
   right: 1em;
   content: "\2191";
 }
@@ -86,7 +86,7 @@
 }
 
 .ccgriddle-table th.sortable-desc:after,
-.ccgriddle-table th.sortable-asc:before{
+.ccgriddle-table th.sortable-asc::before{
   opacity: 1;
 }
 
@@ -165,19 +165,19 @@
   opacity: .6;
 }
 
-.ccgriddle-table-pagination-first:before{
+.ccgriddle-table-pagination-first::before{
   content: "\f053\f053";
 }
 
-.ccgriddle-table-pagination-previous:before{
+.ccgriddle-table-pagination-previous::before{
   content: "\f053";
 }
 
-.ccgriddle-table-pagination-next:before{
+.ccgriddle-table-pagination-next::before{
   content: "\f054";
 }
 
-.ccgriddle-table-pagination-last:before{
+.ccgriddle-table-pagination-last::before{
   content: "\f054\f054";
 }
 
@@ -201,7 +201,7 @@
   display: inline-block;
 }
 
-.ccgriddle-reorder-handle:before{
+.ccgriddle-reorder-handle::before{
   font-weight: 900;
   font-family: "Font Awesome 5 Free";
   -moz-osx-font-smoothing: grayscale;
@@ -255,7 +255,7 @@
     padding-left: 35%;
   }
 
-  .ccgriddle-table .ccgriddle-row-expanded td:not(.ccgriddle-action-cell):before{
+  .ccgriddle-table .ccgriddle-row-expanded td:not(.ccgriddle-action-cell)::before{
     content: attr(data-columnname);
     width: 32%;
     text-overflow: ellipsis;
@@ -274,7 +274,7 @@
     padding: 12px 18px 12px!important;
   }
 
-  .ccgriddle-table td.ccgriddle-column-primary:before{
+  .ccgriddle-table td.ccgriddle-column-primary::before{
     content: ''!important;
     width: auto!important;
   }
@@ -293,7 +293,7 @@
     cursor: pointer;
   }
 
-  .ccgriddle-toggle-row:before{
+  .ccgriddle-toggle-row::before{
     border-radius: 50%;
     display: block;
     padding: 1px 2px 1px 0;
@@ -305,7 +305,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  .ccgriddle-row-expanded .ccgriddle-toggle-row:before{
+  .ccgriddle-row-expanded .ccgriddle-toggle-row::before{
     content: "\f142";
   }
 }

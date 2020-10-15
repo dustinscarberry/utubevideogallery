@@ -10,7 +10,7 @@ use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
 class GalleryDataManager
 {
-  public static function getGalleryData(GalleryDataType $form)
+  static function getGalleryData(GalleryDataType $form)
   {
     //initialize variables
     $thumbnailDirectory = wp_upload_dir();

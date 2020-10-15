@@ -10,7 +10,7 @@ use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
 class GalleryManager
 {
-  public static function getGallery(int $galleryID)
+  static function getGallery(int $galleryID)
   {
     //get gallery
     $gallery = GalleryRepository::getItem($galleryID);
@@ -22,12 +22,12 @@ class GalleryManager
     return $gallery;
   }
 
-  public static function getGalleries()
+  static function getGalleries()
   {
     return GalleryRepository::getItems();
   }
 
-  public static function createGallery(GalleryType $form)
+  static function createGallery(GalleryType $form)
   {
     //insert new gallery
     $galleryID = GalleryRepository::createItem(
@@ -41,14 +41,14 @@ class GalleryManager
       throw new UserMessageException(__('A database error has occurred', 'utvg'));
   }
 
-  public static function updateGallery(GalleryType $form)
+  static function updateGallery(GalleryType $form)
   {
     //update gallery
     if (!GalleryRepository::updateItem($form))
       throw new UserMessageException(__('A database error has occurred', 'utvg'));
   }
 
-  public static function deleteGallery(int $galleryID)
+  static function deleteGallery(int $galleryID)
   {
     //get videos for thumbnail deletion
     $videos = VideoRepository::getItemsByGallery($galleryID);

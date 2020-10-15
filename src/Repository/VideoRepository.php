@@ -6,7 +6,8 @@ use CodeClouds\UTubeVideoGallery\Entity\Video;
 
 class VideoRepository
 {
-  static function getItem($videoID)
+  // get video
+  static function getItem(int $videoID)
   {
     global $wpdb;
 
@@ -30,6 +31,7 @@ class VideoRepository
     return false;
   }
 
+  // get videos
   static function getItems()
   {
     global $wpdb;
@@ -47,7 +49,8 @@ class VideoRepository
     return $data;
   }
 
-  static function createItem($form, $nextSortPosition, $thumbnailType)
+  // create video
+  static function createItem($form, int $nextSortPosition, $thumbnailType)
   {
     global $wpdb;
 
@@ -75,7 +78,8 @@ class VideoRepository
     return false;
   }
 
-  static function deleteItem($videoID)
+  // delete video
+  static function deleteItem(int $videoID)
   {
     global $wpdb;
 
@@ -89,14 +93,15 @@ class VideoRepository
     return false;
   }
 
+  // update video
   static function updateItem($form)
   {
     global $wpdb;
 
-    //list of fields to update [patch]
+    // list of fields to update [patch]
     $updatedFields = [];
 
-    //set optional update fields
+    // set optional update fields
     if ($form->getTitle() != null)
       $updatedFields['VID_NAME'] = $form->getTitle();
 
@@ -115,15 +120,14 @@ class VideoRepository
     if ($form->getAlbumID() != null)
       $updatedFields['ALB_ID'] = $form->getAlbumID();
 
-    //set required update fields
+    // set required update fields
     $updatedFields['VID_UPDATEDATE'] = current_time('timestamp');
     $updatedFields['VID_THUMBTYPE'] = 'default';
 
-    //set semi required update fields
+    // set semi required update fields
     $updatedFields['VID_STARTTIME'] = $form->getStartTime();
     $updatedFields['VID_ENDTIME'] = $form->getEndTime();
 
-    //update query
     if ($wpdb->update(
       $wpdb->prefix . 'utubevideo_video',
       $updatedFields,
@@ -134,7 +138,8 @@ class VideoRepository
     return false;
   }
 
-  static function updateItemPosition($videoID, $position)
+  // update video sort position
+  static function updateItemPosition(int $videoID, int $position)
   {
     global $wpdb;
 
@@ -145,12 +150,13 @@ class VideoRepository
     );
   }
 
-  static function getItemsByAlbum($albumID)
+  // get all videos in an album
+  static function getItemsByAlbum(int $albumID)
   {
     global $wpdb;
     $data = [];
 
-    //check for valid albumID
+    // check for valid albumID
     if (!$albumID)
       return false;
 
@@ -170,12 +176,13 @@ class VideoRepository
     return $data;
   }
 
-  static function getPublishedItemsByAlbum($albumID, $sortDirection = 'desc')
+  // get all published videos in an album
+  static function getPublishedItemsByAlbum(int $albumID, $sortDirection = 'desc')
   {
     global $wpdb;
     $data = [];
 
-    //check for valid albumID
+    // check for valid albumID
     if (!$albumID)
       return false;
 
@@ -196,7 +203,8 @@ class VideoRepository
     return $data;
   }
 
-  static function getItemsByPlaylist($playlistID)
+  // get all videos in a playlist
+  static function getItemsByPlaylist(int $playlistID)
   {
     global $wpdb;
     $data = [];
@@ -220,7 +228,8 @@ class VideoRepository
     return $data;
   }
 
-  static function getItemsByGallery($galleryID)
+  // get all videos in a gallery
+  static function getItemsByGallery(int $galleryID)
   {
     global $wpdb;
     $data = [];
@@ -253,11 +262,12 @@ class VideoRepository
     return $data;
   }
 
-  static function getNextSortPositionByAlbum($albumID)
+  // get next video sort position in an album
+  static function getNextSortPositionByAlbum(int $albumID)
   {
     global $wpdb;
 
-    //check for valid albumID
+    // check for valid albumID
     if ($albumID === false)
       return false;
 
@@ -268,7 +278,7 @@ class VideoRepository
       $albumID
     );
 
-    //get next sort position for album
+    // get next sort position for album
     $nextSortPosition = $wpdb->get_var($query);
 
     if ($nextSortPosition === false)
@@ -277,11 +287,12 @@ class VideoRepository
     return $nextSortPosition;
   }
 
+  // get video thumbnail type for album
   static function getThumbnailTypeByAlbum($albumID = false)
   {
     global $wpdb;
 
-    //check for valid albumID
+    // check for valid albumID
     if ($albumID === false)
       return false;
 
@@ -301,6 +312,7 @@ class VideoRepository
     return $thumbnailType;
   }
 
+  // delete all videos in an album
   static function deleteItemsByAlbum($albumID = false)
   {
     global $wpdb;
@@ -315,6 +327,7 @@ class VideoRepository
     return false;
   }
 
+  // delete all video in a gallery
   static function deleteItemsByGallery($galleryID)
   {
     global $wpdb;
@@ -326,7 +339,7 @@ class VideoRepository
       $galleryID
     );
 
-    //get albums in gallery
+    // get albums in gallery
     $albumIDsData = $wpdb->get_results($albumIDsQuery);
     $albumIDs = [-1];
 

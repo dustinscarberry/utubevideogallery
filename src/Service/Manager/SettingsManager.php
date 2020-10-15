@@ -8,12 +8,12 @@ use WP_REST_Request;
 
 class SettingsManager
 {
-  public static function getSettings()
+  static function getSettings()
   {
     return new Settings();
   }
 
-  public static function updateSettings(WP_REST_Request $req)
+  static function updateSettings(WP_REST_Request $req)
   {
     $settings = new Settings();
 

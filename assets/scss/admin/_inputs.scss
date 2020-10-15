@@ -115,8 +115,8 @@ button.utv-cancel:hover{
   font-size: 1em
 }
 
-.ui.checkbox .box:before,
-.ui.checkbox label:before {
+.ui.checkbox .box::before,
+.ui.checkbox label::before {
   position: absolute;
   top: 0;
   left: 0;
@@ -186,8 +186,8 @@ button.utv-cancel:hover{
   color: rgba(0, 0, 0, .95)
 }
 
-.ui.checkbox input:focus~.box:before,
-.ui.checkbox input:focus~label:before {
+.ui.checkbox input:focus~.box::before,
+.ui.checkbox input:focus~label::before {
   background: #fff;
   border-color: #96c8da
 }
@@ -201,8 +201,8 @@ button.utv-cancel:hover{
   color: rgba(0, 0, 0, .95)
 }
 
-.ui.checkbox input:checked~.box:before,
-.ui.checkbox input:checked~label:before {
+.ui.checkbox input:checked~.box::before,
+.ui.checkbox input:checked~label::before {
   background: #fff;
   border-color: rgba(34, 36, 38, .35)
 }
@@ -213,8 +213,8 @@ button.utv-cancel:hover{
   color: rgba(0, 0, 0, .95)
 }
 
-.ui.checkbox input:checked:focus~.box:before,
-.ui.checkbox input:checked:focus~label:before{
+.ui.checkbox input:checked:focus~.box::before,
+.ui.checkbox input:checked:focus~label::before{
   background: #fff;
   border-color: #96c8da
 }
@@ -270,8 +270,8 @@ button.utv-cancel:hover{
   margin: 0;
 }
 
-.ui.toggle.checkbox .box:before,
-.ui.toggle.checkbox label:before {
+.ui.toggle.checkbox .box::before,
+.ui.toggle.checkbox label::before {
   display: block;
   position: absolute;
   content: '';
@@ -310,8 +310,8 @@ button.utv-cancel:hover{
   box-shadow: none
 }
 
-.ui.toggle.checkbox input:focus~.box:before,
-.ui.toggle.checkbox input:focus~label:before {
+.ui.toggle.checkbox input:focus~.box::before,
+.ui.toggle.checkbox input:focus~label::before {
   background-color: rgba(0, 0, 0, .15);
   border: none
 }
@@ -327,8 +327,8 @@ button.utv-cancel:hover{
   color: rgba(0, 0, 0, .95)!important
 }
 
-.ui.toggle.checkbox input:checked~.box:before,
-.ui.toggle.checkbox input:checked~label:before {
+.ui.toggle.checkbox input:checked~.box::before,
+.ui.toggle.checkbox input:checked~label::before {
   background-color: #2185d0!important
 }
 
@@ -343,8 +343,8 @@ button.utv-cancel:hover{
   color: rgba(0, 0, 0, .95)!important
 }
 
-.ui.toggle.checkbox input:focus:checked~.box:before,
-.ui.toggle.checkbox input:focus:checked~label:before {
+.ui.toggle.checkbox input:focus:checked~.box::before,
+.ui.toggle.checkbox input:focus:checked~label::before {
   background-color: #0d71bb!important
 }
 

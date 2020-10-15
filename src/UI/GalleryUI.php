@@ -11,9 +11,9 @@ class GalleryUI
     $this->mapAttributes($atts);
   }
 
+  // map shortcode attributes
   private function mapAttributes($atts)
   {
-    //map default attributes
     $this->atts = shortcode_atts([
       'id' => null,
       'panelvideocount' => 14, //video count per panel view / page

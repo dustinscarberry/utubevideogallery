@@ -6,9 +6,8 @@ use CodeClouds\UTubeVideoGallery\Entity\Playlist;
 
 class PlaylistRepository
 {
-  /* Playlist Items contain album name from album table */
-
-  public static function getItem(int $playlistID)
+  // get playlist
+  static function getItem(int $playlistID)
   {
     global $wpdb;
 
@@ -31,7 +30,8 @@ class PlaylistRepository
     return false;
   }
 
-  public static function getItems()
+  // get playlists
+  static function getItems()
   {
     global $wpdb;
     $data = [];
@@ -49,7 +49,8 @@ class PlaylistRepository
     return $data;
   }
 
-  public static function createItem(
+  // create playlist
+  static function createItem(
     $title,
     $source,
     $sourceID,
@@ -80,7 +81,8 @@ class PlaylistRepository
     return false;
   }
 
-  public static function deleteItem(int $playlistID)
+  // delete playlist
+  static function deleteItem(int $playlistID)
   {
     global $wpdb;
 
@@ -93,14 +95,15 @@ class PlaylistRepository
     return false;
   }
 
-  public static function updateItem($form)
+  // update playlist
+  static function updateItem($form)
   {
     global $wpdb;
 
-    //create updatedFields array
+    // create updatedFields array
     $updatedFields = [];
 
-    //set optional update fields
+    // set optional update fields
     if ($form->getTitle() != null)
       $updatedFields['PLAY_TITLE'] = $form->getTitle();
 
@@ -110,7 +113,7 @@ class PlaylistRepository
     if ($form->getShowControls() != null)
       $updatedFields['PLAY_CHROME'] = $form->getShowControls();
 
-    //set required update fields
+    // set required update fields
     $updatedFields['PLAY_UPDATEDATE'] = current_time('timestamp');
 
     if ($wpdb->update(

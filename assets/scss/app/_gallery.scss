@@ -1,23 +1,24 @@
-/* Gallery View */
-.utv-gallery{
+// gallery view
+.utv-gallery {
   width: auto;
   margin: 0 auto;
 }
 
-.utv-breadcrumb{
+// breadcrumbs
+.utv-breadcrumb {
   margin-bottom: 10px;
-}
 
-.utv-breadcrumb span{
-  font-size: 16px;
-}
+  span {
+    font-size: 16px;
+  }
 
-.utv-breadcrumb .utv-albumcrumb{
-  font-weight: bold;
-}
+  .utv-albumcrumb {
+    font-weight: bold;
+  }
 
-.utv-breadcrumb .utv-albumscrumb{
-  cursor: pointer;
+  .utv-albumscrumb {
+    cursor: pointer;
+  }
 }
 
 .utv-gallery .utv-album{

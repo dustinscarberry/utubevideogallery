@@ -11,7 +11,7 @@ use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 class VideoManager
 {
   //get video
-  public static function getVideo(int $videoID)
+  static function getVideo(int $videoID)
   {
     //get video
     $video = VideoRepository::getItem($videoID);
@@ -24,25 +24,25 @@ class VideoManager
   }
 
   //get all videos
-  public static function getVideos()
+  static function getVideos()
   {
     return VideoRepository::getItems();
   }
 
   //get videos in album
-  public static function getAlbumVideos(int $albumID)
+  static function getAlbumVideos(int $albumID)
   {
     return VideoRepository::getItemsByAlbum($albumID);
   }
 
   //get videos in galllery
-  public static function getGalleryVideos(int $galleryID)
+  static function getGalleryVideos(int $galleryID)
   {
     return VideoRepository::getItemsByGallery($galleryID);
   }
 
   //create video
-  public static function createVideo(VideoType $form)
+  static function createVideo(VideoType $form)
   {
     //get next video sort position
     $nextSortPosition = VideoRepository::getNextSortPositionByAlbum($form->getAlbumID());
@@ -79,7 +79,7 @@ class VideoManager
   }
 
   //update video
-  public static function updateVideo(VideoType $form)
+  static function updateVideo(VideoType $form)
   {
     //update video
     if (VideoRepository::updateItem($form))
@@ -96,7 +96,7 @@ class VideoManager
   }
 
   //update videos order in album
-  public static function updateVideosOrder(VideoOrderType $form)
+  static function updateVideosOrder(VideoOrderType $form)
   {
     $videoCount = count($form->getVideoIDs());
 
@@ -105,7 +105,7 @@ class VideoManager
   }
 
   //delete video
-  public static function deleteVideo(int $videoID)
+  static function deleteVideo(int $videoID)
   {
     //get video
     $video = VideoRepository::getItem($videoID);

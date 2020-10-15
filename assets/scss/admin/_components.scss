@@ -38,7 +38,7 @@
   display: block;
 }
 
-.utv-status:before{
+.utv-status::before{
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   -webkit-font-smoothing: antialiased;
@@ -51,17 +51,17 @@
   margin-right: 10px;
 }
 
-.utv-status-active:before{
+.utv-status-active::before{
   content: "\f00c";
   color: #2d8034;
 }
 
-.utv-status-inactive:before{
+.utv-status-inactive::before{
   content: "\f05e";
   color: #aa0114;
 }
 
-.utv-status-warning:before{
+.utv-status-warning::before{
   content: "\f071";
   color: #ffa400;
 }

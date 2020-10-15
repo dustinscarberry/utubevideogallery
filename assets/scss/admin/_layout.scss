@@ -28,20 +28,20 @@
 
   @media screen and (max-width: 1200px)
   {
-    .utv-left-one-thirds-column{
+    .utv-left-one-thirds-column {
       float: none;
       width: 100%;
     }
 
-    .utv-right-two-thirds-column{
+    .utv-right-two-thirds-column {
       margin-left: 0;
     }
 
-    .utv-left-two-thirds-column{
+    .utv-left-two-thirds-column {
       margin-right: 0;
     }
 
-    .utv-right-one-third-column{
+    .utv-right-one-third-column {
       float: none;
       width: 100%;
     }
@@ -49,14 +49,14 @@
 
   @media screen and (max-width: 1000px)
   {
-    .utv-left-fixed-single-column{
+    .utv-left-fixed-single-column {
       width: 100%;
     }
   }
 }
 
 /* Cards */
-.utv-card{
+.utv-card {
   position: relative;
   padding: .7em 2em 1em;
   max-width: 100%;
@@ -66,7 +66,7 @@
   box-sizing: border-box;
   margin-bottom: 20px;
 
-  &.utv-even-padding{
+  &.utv-even-padding {
     padding: 15px;
   }
 }

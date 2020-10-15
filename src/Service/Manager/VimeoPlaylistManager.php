@@ -8,7 +8,7 @@ use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
 class VimeoPlaylistManager
 {
-  public static function getPlaylistData(VimeoPlaylistType $form)
+  static function getPlaylistData(VimeoPlaylistType $form)
   {
     //initialize return object
     $playlistData = new \stdClass();

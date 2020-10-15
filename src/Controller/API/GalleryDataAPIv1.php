@@ -11,11 +11,6 @@ use WP_REST_Server;
 
 class GalleryDataAPIv1 extends APIv1
 {
-  function __construct()
-  {
-    add_action('rest_api_init', [$this, 'registerRoutes']);
-  }
-
   // register api routes
   function registerRoutes()
   {

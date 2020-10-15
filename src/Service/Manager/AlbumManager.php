@@ -11,7 +11,7 @@ use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 class AlbumManager
 {
   //get album
-  public static function getAlbum(int $albumID)
+  static function getAlbum(int $albumID)
   {
     //get album
     $album = AlbumRepository::getItem($albumID);
@@ -24,19 +24,19 @@ class AlbumManager
   }
 
   //get all albums
-  public static function getAlbums()
+  static function getAlbums()
   {
     return AlbumRepository::getItems();
   }
 
   //get albums in gallery
-  public static function getGalleryAlbums(int $galleryID)
+  static function getGalleryAlbums(int $galleryID)
   {
     return AlbumRepository::getItemsByGallery($galleryID);
   }
 
   //create album
-  public static function createAlbum(AlbumType $form)
+  static function createAlbum(AlbumType $form)
   {
     //get next album sort position
     $nextSortPosition = AlbumRepository::getNextSortPositionByGallery($form->getGalleryID());
@@ -59,7 +59,7 @@ class AlbumManager
   }
 
   //update album
-  public static function updateAlbum(AlbumType $form)
+  static function updateAlbum(AlbumType $form)
   {
     //update album
     if (!AlbumRepository::updateItem($form))
@@ -67,7 +67,7 @@ class AlbumManager
   }
 
   //update albums order in gallery
-  public static function updateAlbumsOrder(AlbumOrderType $form)
+  static function updateAlbumsOrder(AlbumOrderType $form)
   {
     $albumCount = count($form->getAlbumIDs());
 
@@ -76,7 +76,7 @@ class AlbumManager
   }
 
   //delete album
-  public static function deleteAlbum(int $albumID)
+  static function deleteAlbum(int $albumID)
   {
     //get all videos in album
     $albumVideos = VideoRepository::getItemsByAlbum($albumID);

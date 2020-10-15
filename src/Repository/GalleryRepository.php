@@ -6,6 +6,7 @@ use CodeClouds\UTubeVideoGallery\Entity\Gallery;
 
 class GalleryRepository
 {
+  // get gallery
   public static function getItem(int $galleryID)
   {
     global $wpdb;
@@ -33,8 +34,7 @@ class GalleryRepository
     if (!$albumCount)
       $albumCount = 0;
 
-    if ($galleryData)
-    {
+    if ($galleryData) {
       $galleryData->ALBUM_COUNT = $albumCount;
       return new Gallery($galleryData);
     }
@@ -42,6 +42,7 @@ class GalleryRepository
     return false;
   }
 
+  // get all galleries
   public static function getItems()
   {
     global $wpdb;
@@ -53,8 +54,7 @@ class GalleryRepository
       ORDER BY DATA_ID'
     );
 
-    foreach ($galleriesData as $galleryData)
-    {
+    foreach ($galleriesData as $galleryData) {
       $albumCount = $wpdb->get_var(
         'SELECT COUNT(ALB_ID) AS ALBUM_COUNT
         FROM ' . $wpdb->prefix . 'utubevideo_album
@@ -71,6 +71,7 @@ class GalleryRepository
     return $data;
   }
 
+  // create gallery
   public static function createItem(
     $title,
     $albumSorting,
@@ -98,6 +99,7 @@ class GalleryRepository
     return false;
   }
 
+  // delete gallery
   public static function deleteItem(int $galleryID)
   {
     global $wpdb;
@@ -111,14 +113,15 @@ class GalleryRepository
     return false;
   }
 
+  // update gallery
   public static function updateItem($form)
   {
     global $wpdb;
 
-    //create updatedFields array
+    // create updatedFields array
     $updatedFields = [];
 
-    //set optional update fields
+    // set optional update fields
     if ($form->getTitle() != null)
       $updatedFields['DATA_NAME'] = $form->getTitle();
 
@@ -131,10 +134,10 @@ class GalleryRepository
     if ($form->getAlbumSorting() != null)
       $updatedFields['DATA_SORT'] = $form->getAlbumSorting();
 
-    //set required update fields
+    // set required update fields
     $updatedFields['DATA_UPDATEDATE'] = current_time('timestamp');
 
-    //update database entry
+    // update database entry
     if ($wpdb->update(
       $wpdb->prefix . 'utubevideo_dataset',
       $updatedFields,

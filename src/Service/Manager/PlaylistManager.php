@@ -9,7 +9,7 @@ use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
 class PlaylistManager
 {
-  public static function getPlaylist(int $playlistID)
+  static function getPlaylist(int $playlistID)
   {
     //get playlist
     $playlist = PlaylistRepository::getItem($playlistID);
@@ -21,12 +21,12 @@ class PlaylistManager
     return $playlist;
   }
 
-  public static function getPlaylists()
+  static function getPlaylists()
   {
     return PlaylistRepository::getItems();
   }
 
-  public static function createPlaylist(PlaylistType $form)
+  static function createPlaylist(PlaylistType $form)
   {
     //create playlist
     $playlistID = PlaylistRepository::createItem(
@@ -45,13 +45,13 @@ class PlaylistManager
     return $playlistID;
   }
 
-  public static function updatePlaylist(PlaylistType $form)
+  static function updatePlaylist(PlaylistType $form)
   {
     if (!PlaylistRepository::updateItem($form))
       throw new UserMessageException(__('A database error has occurred', 'utvg'));
   }
 
-  public static function deletePlaylist(int $playlistID)
+  static function deletePlaylist(int $playlistID)
   {
     //get playlist
     $playlist = PlaylistRepository::getItem($playlistID);
