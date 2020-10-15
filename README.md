@@ -149,6 +149,10 @@ Galleries are now based on React and therefore do not cause a page reload. In do
 
 A user must be an editor or above in order to manage video galleries and change settings.
 
+#### Issues with thumbnails?
+
+Under the settings tab click the button to rebuild / refresh thumbnails
+
 ## License
 
 This project is licensed under the GPL2 License - see the [LICENSE.md](LICENSE.md) file for details.
