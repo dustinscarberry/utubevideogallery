@@ -11,8 +11,8 @@ class Gallery extends React.Component
     super(props);
 
     this.state = {
-      albums: [],//object of albums and there videos
-      videos: [],//object of just videos
+      albums: [], // object of albums and there videos
+      videos: [], // object of just videos
       thumbnailType: undefined,
       displayType: undefined,
       currentPage: 1

@@ -1,8 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const TextBoxInput = (props) =>
-{
+const TextBoxInput = (props) => {
   const {
     classes,
     name,

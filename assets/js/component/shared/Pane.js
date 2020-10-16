@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Pane = (props) =>
-{
-  return (
-    <div>
-      {props.children}
-    </div>
-  );
+const Pane = ({children}) => {
+  return <div>{children}</div>;
+}
+
+Pane.propTypes = {
+  children: PropTypes.node
 }
 
 export default Pane;

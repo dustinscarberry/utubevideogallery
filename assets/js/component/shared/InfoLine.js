@@ -2,8 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const InfoLine = ({text, icon}) =>
-{
+const InfoLine = ({text, icon}) => {
   const classes = ['utv-infoline'];
 
   if (icon) {

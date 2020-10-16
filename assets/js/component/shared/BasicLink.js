@@ -2,8 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const BasicLink = ({classes, text, children, onClick}) =>
-{
+const BasicLink = ({classes, text, children, onClick}) => {
   return <a
     onClick={onClick}
     className={classnames(classes)}

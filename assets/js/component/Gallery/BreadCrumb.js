@@ -1,7 +1,6 @@
 import React from 'react';
 
-const BreadCrumb = ({albumName, changeAlbum}) =>
-{
+const Breadcrumb = ({albumName, changeAlbum}) => {
   let crumbNodes;
 
   if (!albumName)
@@ -17,4 +16,4 @@ const BreadCrumb = ({albumName, changeAlbum}) =>
   return crumbNodes;
 }
 
-export default BreadCrumb;
+export default Breadcrumb;

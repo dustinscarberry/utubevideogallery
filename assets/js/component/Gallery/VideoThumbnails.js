@@ -3,8 +3,7 @@ import ThumbnailsGrid from '../shared/ThumbnailsGrid';
 import VideoThumbnail from './VideoThumbnail';
 import galleryService from '../../service/GalleryService';
 
-const VideoThumbnails = (props) =>
-{
+const VideoThumbnails = (props) => {
   const {
     videos,
     onOpenVideo,

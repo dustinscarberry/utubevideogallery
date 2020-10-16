@@ -1,13 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const PlaylistMultiSelect = (props) =>
-{
-  const {
-    videos,
-    toggleAllVideosSelection
-  } = props;
-
+const PlaylistMultiSelect = ({videos, toggleAllVideosSelection}) => {
   //short circuit if no videos
   if (!videos || videos.length < 1)
     return null;

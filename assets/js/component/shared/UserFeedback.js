@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const UserFeedback = ({message, type}) =>
-{
+const UserFeedback = ({message, type}) => {
   if (!message || !type)
     return null;
 

@@ -1,21 +1,13 @@
 import React from 'react';
 
-const PlaylistPreviewItem = (props) =>
-{
-  const {
-    video,
-    index,
-    toggleVideoSelection,
-    changeVideoTitle
-  } = props;
-
-  //set thumbnail classes
+const PlaylistPreviewItem = ({video, index, toggleVideoSelection, changeVideoTitle}) => {
+  // set thumbnail classes
   const thumbnailClasses = ['utv-playlist-item-thumbnail'];
 
   if (video.selected)
     thumbnailClasses.push('utv-playlist-item-thumbnail-active');
 
-  //set legend classes
+  // set legend classes
   const legendClasses = [];
 
   if (video.legend == 'local')

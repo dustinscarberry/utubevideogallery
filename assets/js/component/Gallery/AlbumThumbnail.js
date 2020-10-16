@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const AlbumThumbnail = ({title, image, value, onChangeAlbum}) =>
 {
@@ -8,6 +9,16 @@ const AlbumThumbnail = ({title, image, value, onChangeAlbum}) =>
       <span>{title}</span>
     </div>
   );
+}
+
+AlbumThumbnail.propTypes = {
+  title: PropTypes.string,
+  image: PropTypes.string,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  onChangeAlbum: PropTypes.func
 }
 
 export default AlbumThumbnail;

@@ -3,8 +3,7 @@ import Iframe from './Iframe';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const ResponsiveIframe = ({src, classes}) =>
-{
+const ResponsiveIframe = ({src, classes}) => {
   return (
     <div className={classnames('utv-flexvideo utv-flexvideo-16x9', classes)}>
       <Iframe src={src}/>

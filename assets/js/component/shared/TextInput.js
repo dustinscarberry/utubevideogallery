@@ -1,8 +1,8 @@
 import React from 'react';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 
-const TextInput = ({classes, name, value, required, disabled, onChange}) =>
-{
+const TextInput = ({classes, name, value, required, disabled, onChange}) => {
   return <input
     className={classnames(classes)}
     style={{'display': 'block'}}
@@ -13,6 +13,18 @@ const TextInput = ({classes, name, value, required, disabled, onChange}) =>
     required={required}
     disabled={disabled}
   />;
+}
+
+TextInput.propTypes = {
+  classes: PropTypes.array,
+  name: PropTypes.string,
+  value: PropTypes.oneOfAny([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  required: PropTypes.bool,
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func
 }
 
 export default TextInput;

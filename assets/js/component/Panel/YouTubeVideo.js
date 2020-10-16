@@ -2,8 +2,7 @@ import React from 'react';
 import Iframe from '../shared/Iframe';
 import sharedService from '../../service/SharedService';
 
-const YouTubeVideo = ({videoData, controls, forceNoAutoplay}) =>
-{
+const YouTubeVideo = ({videoData, controls, forceNoAutoplay}) => {
   const source = sharedService.getYouTubeEmbedURL(
     videoData.slugID,
     utvJSData.setting.youtubeDetailsHide,

@@ -21,14 +21,11 @@ class Form extends React.Component
     let form = this.refs.form;
     let formValid = form.checkValidity() || false;
 
-    for (let i = 0; i < form.length; i++)
-    {
+    for (let i = 0; i < form.length; i++) {
       let element = form[i];
 
-      if (element.nodeName.toLowerCase() !== 'button')
-      {
-        if (!formValid && !element.validity.valid)
-        {
+      if (element.nodeName.toLowerCase() !== 'button') {
+        if (!formValid && !element.validity.valid) {
           let errorNode = element.parentNode.querySelector('.utv-invalid-feedback');
 
           if (errorNode)
@@ -39,8 +36,7 @@ class Form extends React.Component
           errorNode.className = this.props.errorclass;
           element.parentNode.insertBefore(errorNode, element.nextSibling);
         }
-        else
-        {
+        else {
           let errorNode = element.parentNode.querySelector('.utv-invalid-feedback');
 
           if (errorNode)
@@ -52,9 +48,9 @@ class Form extends React.Component
     return formValid;
   }
 
-  onSubmit(event)
+  onSubmit(e)
   {
-    event.preventDefault();
+    e.preventDefault();
 
     if (this.validate() && this.props.submit)
       this.props.submit();
@@ -64,7 +60,7 @@ class Form extends React.Component
 
   render()
   {
-    let classNames = classnames(
+    const classNames = classnames(
       this.props.classes,
       {'was-validated': this.state.isValidated}
     );

@@ -2,8 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const SelectBox = ({classes, name, value, onChange, choices = [], blankChoice = false}) =>
-{
+const SelectBox = ({classes, name, value, onChange, choices = [], blankChoice = false}) => {
   // create options
   const options = choices.map(e =>
     <option key={e.value} value={e.value}>{e.name}</option>

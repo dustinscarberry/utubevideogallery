@@ -1,14 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 
-const Cell = (props) =>
-{
-  const {
-    data,
-    classes,
-    columnName
-  } = props;
-
+const Cell = ({data, classes, columnName}) => {
   return <td className={classnames(classes)} data-columnname={columnName}>{data}</td>;
 }
 

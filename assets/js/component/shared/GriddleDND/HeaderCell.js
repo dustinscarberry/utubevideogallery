@@ -1,14 +1,6 @@
 import React from 'react';
 
-const HeaderCell = (props) =>
-{
-  const {
-    data,
-    classes,
-    styles,
-    updateColumnSort
-  } = props;
-
+const HeaderCell = ({data, classes, styles, updateColumnSort}) => {
   return (
     <th
       className={classes.join(' ')}

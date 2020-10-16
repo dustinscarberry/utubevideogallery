@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const SectionHeader = ({text}) =>
-{
+const SectionHeader = ({text}) => {
   return <h3 className="utv-section-header">{text}</h3>;
 }
 

@@ -2,8 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const NumberInput = ({classes, name, value, required, onChange}) =>
-{
+const NumberInput = ({classes, name, value, required, onChange}) => {
   return <input
     className={classnames(classes)}
     style={{'display': 'block'}}

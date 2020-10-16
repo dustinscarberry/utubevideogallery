@@ -1,8 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-const PlaylistLegend = (props) =>
-{
+const PlaylistLegend = (props) => {
   return (
     <ul className="utv-playlist-legend">
       <li className="utv-playlist-legend-local">

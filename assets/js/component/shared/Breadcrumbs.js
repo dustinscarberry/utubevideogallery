@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Breadcrumbs = ({crumbs}) =>
-{
-  let crumbsNodes = [];
+const Breadcrumbs = ({crumbs}) => {
+  const crumbsNodes = [];
 
   for (let i = 0; i < crumbs.length; i++) {
     // add separater

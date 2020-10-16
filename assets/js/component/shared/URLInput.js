@@ -2,8 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const URLInput = ({classes, name, value, required = false, onChange}) =>
-{
+const URLInput = ({classes, name, value, required = false, onChange}) => {
   return <input
     className={classnames(classes)}
     style={{'display': 'block'}}

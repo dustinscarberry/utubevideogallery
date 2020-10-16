@@ -2,8 +2,7 @@ import React from 'react';
 import YouTubeVideo from './YouTubeVideo';
 import VimeoVideo from './VimeoVideo';
 
-const VideoPlayer = ({videoData, controls, forceNoAutoplay}) =>
-{
+const VideoPlayer = ({videoData, controls, forceNoAutoplay}) => {
   let videoNode;
 
   if (videoData.source == 'youtube')

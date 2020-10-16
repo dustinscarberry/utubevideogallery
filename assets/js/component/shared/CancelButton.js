@@ -2,8 +2,7 @@ import React from 'react';
 import Button from './Button';
 import PropTypes from 'prop-types';
 
-const CancelButton = ({title, onClick}) =>
-{
+const CancelButton = ({title, onClick}) => {
   return <Button
     classes="utv-cancel"
     onClick={onClick}

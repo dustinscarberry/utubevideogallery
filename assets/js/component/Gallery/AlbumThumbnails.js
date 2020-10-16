@@ -3,8 +3,7 @@ import ThumbnailsGrid from '../shared/ThumbnailsGrid';
 import AlbumThumbnail from './AlbumThumbnail';
 import galleryService from '../../service/GalleryService';
 
-const AlbumThumbnails = (props) =>
-{
+const AlbumThumbnails = (props) => {
   const {
     albums,
     onChangeAlbum,

@@ -1,8 +1,7 @@
 import React from 'react';
 import PageHandle from './PageHandle';
 
-const Paging = ({currentPage, totalPages, onChangePage}) =>
-{
+const Paging = ({currentPage, totalPages, onChangePage}) => {
   const pageHandleNodes = [];
 
   if (totalPages > 1)

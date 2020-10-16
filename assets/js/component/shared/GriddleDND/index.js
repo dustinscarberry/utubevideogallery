@@ -35,16 +35,7 @@ class GriddleDND extends React.Component
     this.loadData();
     this.setState({loading: false});
   }
-
-  /*
-  //migrated to componentDidUpdate()
-  componentWillReceiveProps(nextProps)
-  {
-    if (this.props.apiLoadPath != nextProps.apiLoadPath)
-      this.loadData();
-  }
-  */
-
+  
   componentDidUpdate(prevProps, prevState, snapshot)
   {
     if (this.props.apiLoadPath != prevProps.apiLoadPath)
