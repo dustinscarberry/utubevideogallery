@@ -63,7 +63,7 @@ class AlbumView extends React.Component
 
   getPagingNode()
   {
-    //return if pagination not enabled
+    // return if pagination not enabled
     if (!this.props.thumbnailsPerPage)
       return null;
 
@@ -73,8 +73,8 @@ class AlbumView extends React.Component
       onChangePage
     } = this.props;
 
-    //get total pages
-    let totalPages = undefined;
+    // get total pages
+    let totalPages;
     const thumbnailsPerPage = parseInt(this.props.thumbnailsPerPage);
 
     if (this.state.selectedAlbum != undefined)
@@ -82,7 +82,7 @@ class AlbumView extends React.Component
     else
       totalPages = Math.ceil(albums.length / thumbnailsPerPage);
 
-    //return paging component
+    // return paging component
     return <Paging
       currentPage={currentPage}
       totalPages={totalPages}

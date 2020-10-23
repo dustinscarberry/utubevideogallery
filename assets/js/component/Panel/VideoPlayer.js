@@ -17,11 +17,7 @@ const VideoPlayer = ({videoData, controls, forceNoAutoplay}) => {
       forceNoAutoplay={forceNoAutoplay}
     />;
 
-  return (
-    <div className="utv-panel-player">
-      {videoNode}
-    </div>
-  );
+  return <div className="utv-panel-player">{videoNode}</div>;
 }
 
 export default VideoPlayer;

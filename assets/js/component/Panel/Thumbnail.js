@@ -1,15 +1,7 @@
 import React from 'react';
 
-const Thumbnail = (props) =>
+const Thumbnail = ({title, image, value, selected, onChangeVideo}) =>
 {
-  const {
-    title,
-    image,
-    value,
-    selected,
-    onChangeVideo
-  } = props;
-
   const thumbnailClasses = ['utv-thumbnail'];
 
   if (selected)

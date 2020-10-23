@@ -87,14 +87,12 @@ class PlaylistEditTabView extends React.Component
     const localVideos = await actions.fetchLocalPlaylistVideos(albumID);
 
     //check for errors
-    if (utility.isErrorResponse(remoteVideos))
-    {
+    if (utility.isErrorResponse(remoteVideos)) {
       this.props.setFeedbackMessage(utility.getErrorMessage(remoteVideos), 'error');
       return;
     }
 
-    if (utility.isErrorResponse(localVideos))
-    {
+    if (utility.isErrorResponse(localVideos)) {
       this.props.setFeedbackMessage(utility.getErrorMessage(localVideos), 'error');
       return;
     }
@@ -192,7 +190,7 @@ class PlaylistEditTabView extends React.Component
     if (this.state.loading)
       return <Loader/>;
 
-    let playlistNode = undefined;
+    let playlistNode;
     if (this.state.playlistLoading)
       playlistNode = <Loader/>;
     else

@@ -3,15 +3,7 @@ import ThumbnailsGrid from '../shared/ThumbnailsGrid';
 import AlbumThumbnail from './AlbumThumbnail';
 import galleryService from '../../service/GalleryService';
 
-const AlbumThumbnails = (props) => {
-  const {
-    albums,
-    onChangeAlbum,
-    thumbnailType,
-    currentPage,
-    thumbnailsPerPage
-  } = props;
-
+const AlbumThumbnails = ({albums, onChangeAlbum, thumbnailType, currentPage, thumbnailsPerPage}) => {
   const thumbnailsClasses = galleryService.getThumbnailsClasses(thumbnailType);
   let startIndex;
   let endIndex;

@@ -18,7 +18,7 @@ const TextInput = ({classes, name, value, required, disabled, onChange}) => {
 TextInput.propTypes = {
   classes: PropTypes.array,
   name: PropTypes.string,
-  value: PropTypes.oneOfAny([
+  value: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number
   ]),

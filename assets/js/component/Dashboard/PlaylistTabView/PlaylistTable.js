@@ -50,8 +50,7 @@ class PlaylistTable extends React.Component
         title: 'Source',
         sortable: true,
         sortDirection: '',
-        formatter: (row, cellData) =>
-        {
+        formatter: (row, cellData) => {
           if (cellData == 'youtube')
             return 'YouTube';
           else if (cellData == 'vimeo')

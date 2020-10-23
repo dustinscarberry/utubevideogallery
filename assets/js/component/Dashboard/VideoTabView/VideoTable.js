@@ -24,8 +24,7 @@ class VideoTable extends React.Component
         sortDirection: '',
         width: '150px',
         primary: true,
-        formatter: (row, cellData) =>
-        {
+        formatter: (row, cellData) => {
           return <img
             onClick={() => this.props.changeView('editVideo', row.id)}
             src={utvJSData.thumbnailCacheDirectory + cellData + '.jpg'}
@@ -38,8 +37,7 @@ class VideoTable extends React.Component
         title: utvJSData.localization.title,
         sortable: true,
         sortDirection: '',
-        formatter: (row, cellData) =>
-        {
+        formatter: (row, cellData) => {
           const watchLink = row.source == 'youtube' ? 'https://youtu.be/' + row.sourceID : 'https://vimeo.com/' + row.sourceID;
 
           return (
@@ -80,8 +78,7 @@ class VideoTable extends React.Component
         title: utvJSData.localization.lastUpdated,
         sortable: true,
         sortDirection: '',
-        formatter: (row, cellData) =>
-        {
+        formatter: (row, cellData) => {
           return sharedService.getFormattedDate(cellData);
         }
       }
@@ -142,8 +139,7 @@ class VideoTable extends React.Component
   {
     let newData = [];
 
-    for (let item of data)
-    {
+    for (let item of data) {
       let record = {};
       record.id = item.id;
       record.thumbnail = item.thumbnail;

@@ -81,8 +81,7 @@ class GalleryEditTabView extends React.Component
     //update thumbnails if format changed
     if (utility.isValidResponse(rsp)
       && this.state.thumbnailType != this.state.originalThumbnailType
-    )
-    {
+    ) {
       await this.rebuildThumbnails();
       this.setState({originalThumbnailType: this.state.thumbnailType});
     }
@@ -103,12 +102,10 @@ class GalleryEditTabView extends React.Component
   {
     const videosData = await actions.fetchGalleryVideos(this.props.currentViewID);
 
-    if (utility.isValidResponse(videosData))
-    {
+    if (utility.isValidResponse(videosData)) {
       const videos = videosData.data.data;
 
-      for (let video of videos)
-      {
+      for (let video of videos) {
         //update video thumbnail
         const rsp = await actions.updateVideoThumbnail(video.id);
 

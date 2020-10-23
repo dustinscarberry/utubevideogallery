@@ -108,8 +108,7 @@ class Panel extends React.Component
       const data = apiData.data.data;
       let videos = [];
 
-      for (const album of data.albums)
-      {
+      for (const album of data.albums) {
         for (const video of album.videos)
           videos.push(video);
       }

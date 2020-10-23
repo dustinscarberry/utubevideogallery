@@ -25,8 +25,7 @@ class AlbumTable extends React.Component
         sortDirection: '',
         width: '150px',
         primary: true,
-        formatter: (row, cellData) =>
-        {
+        formatter: (row, cellData) => {
           return <img
             onClick={() => this.props.changeAlbum(row.id, row.title)}
             src={utvJSData.thumbnailCacheDirectory + cellData + '.jpg'}
@@ -83,8 +82,7 @@ class AlbumTable extends React.Component
         title: utvJSData.localization.lastUpdated,
         sortable: true,
         sortDirection: '',
-        formatter: (row, cellData) =>
-        {
+        formatter: (row, cellData) => {
           return sharedService.getFormattedDate(cellData);
         }
       },

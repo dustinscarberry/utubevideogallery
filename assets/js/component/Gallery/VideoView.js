@@ -20,7 +20,7 @@ class VideoView extends React.Component
 
   getPagingNode()
   {
-    //return if pagination not enabled
+    // return if pagination not enabled
     if (!this.props.thumbnailsPerPage)
       return null;
 
@@ -30,10 +30,9 @@ class VideoView extends React.Component
       onChangePage
     } = this.props;
 
-    //get total pages
-    let totalPages = Math.ceil(videos.length / parseInt(this.props.thumbnailsPerPage));
+    // get total pages
+    const totalPages = Math.ceil(videos.length / parseInt(this.props.thumbnailsPerPage));
 
-    //return paging component
     return <Paging
       currentPage={currentPage}
       totalPages={totalPages}

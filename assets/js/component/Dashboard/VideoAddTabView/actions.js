@@ -23,22 +23,19 @@ export function parseURL(rawURL)
 {
   //normalize url
   rawURL = rawURL.trim();
-  
+
   //get url parts
-  if (rawURL)
-  {
+  if (rawURL) {
     if (
       rawURL.indexOf('youtube') !== -1
       || rawURL.indexOf('youtu.be') !== -1
-    )
-    {
+    ) {
       let matches = rawURL.match(/(?:https?:\/{2})?(?:w{3}\.)?youtu(?:be)?\.(?:com|be)(?:\/watch\?v=|\/)([^\s&]+)/);
 
       if (matches)
         return {source: 'youtube', sourceID: matches[1]};
     }
-    else if (rawURL.indexOf('vimeo') !== -1)
-    {
+    else if (rawURL.indexOf('vimeo') !== -1) {
       let matches = rawURL.match(/https?:\/\/(www\.)?vimeo.com\/(\d+)($|\/)/);
 
       if (matches)
@@ -53,8 +50,7 @@ export function getVideoPreview(source, sourceID, startTime, endTime)
 {
   let src = '';
 
-  if (source == 'youtube')
-  {
+  if (source == 'youtube') {
     src = 'https://www.youtube.com/embed/';
     src += sourceID;
     src += '?modestbranding=1';
@@ -67,9 +63,7 @@ export function getVideoPreview(source, sourceID, startTime, endTime)
     src += '&autoplay=0';
     src += '&start=' + startTime;
     src += '&end=' + endTime;
-  }
-  else if (source == 'vimeo')
-  {
+  } else if (source == 'vimeo') {
     src = 'https://player.vimeo.com/video/';
     src += sourceID;
     src += '?title=0';

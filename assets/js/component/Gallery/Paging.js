@@ -15,11 +15,7 @@ const Paging = ({currentPage, totalPages, onChangePage}) => {
         />
       );
 
-  return (
-    <div className="utv-gallery-paging">
-      {pageHandleNodes}
-    </div>
-  );
+  return <div className="utv-gallery-paging">{pageHandleNodes}</div>;
 }
 
 export default Paging;

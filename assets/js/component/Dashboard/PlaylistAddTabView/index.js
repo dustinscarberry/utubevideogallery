@@ -60,13 +60,11 @@ class PlaylistAddTabView extends React.Component
   {
     const rsp = await actions.fetchAlbums();
 
-    if (utility.isValidResponse(rsp))
-    {
+    if (utility.isValidResponse(rsp)) {
       const data = utility.getAPIData(rsp);
       const albums = actions.parseAlbumsData(data);
       this.setState({albums});
-    }
-    else if (utility.isErrorResponse(rsp))
+    } else if (utility.isErrorResponse(rsp))
       this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
   }
 
@@ -118,8 +116,7 @@ class PlaylistAddTabView extends React.Component
     const url = e.target.value;
     this.setState({url});
 
-    if (url)
-    {
+    if (url) {
       const urlParts = actions.parsePlaylistURL(url);
 
       if (urlParts)
@@ -179,10 +176,8 @@ class PlaylistAddTabView extends React.Component
   async addPlaylistVideoData(playlistID)
   {
     //create all videos that selected
-    for (let video of this.state.playlistVideos)
-    {
-      if (video.selected)
-      {
+    for (let video of this.state.playlistVideos) {
+      if (video.selected) {
         //create video
         const rsp = await actions.createVideo(
           video.sourceID,

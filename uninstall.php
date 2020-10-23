@@ -1,7 +1,6 @@
 <?php
 
-if (defined('WP_UNINSTALL_PLUGIN'))
-{
+if (defined('WP_UNINSTALL_PLUGIN')) {
   // multisite uninstall
   if (function_exists('is_multisite') && is_multisite()) {
     global $wpdb;

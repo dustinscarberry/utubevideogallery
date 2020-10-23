@@ -1,4 +1,5 @@
 <?php
 
-// configuration constants
+// plugin config
 const CC_UTUBEVIDEOGALLERY_VERSION = '2.0.6';
+const CC_UTUBEVIDEOGALLERY_MIN_PHP_VERSION = '7.0.0';

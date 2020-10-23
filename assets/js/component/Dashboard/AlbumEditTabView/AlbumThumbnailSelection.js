@@ -1,13 +1,7 @@
 import React from 'react';
 
-const AlbumThumbnailSelection = (props) =>
+const AlbumThumbnailSelection = ({currentThumbnail, thumbnails, updateThumbnail}) =>
 {
-  const {
-    currentThumbnail,
-    thumbnails,
-    updateThumbnail
-  } = props;
-
   const thumbnailNodes = thumbnails.map(thumbnail =>
   {
     const thumbnailClasses = ['utv-album-thumbnail-choice'];
