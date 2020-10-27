@@ -1,12 +1,12 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Manager;
+namespace CodeClouds\UTubeVideoGallery\Service\Factory;
 
 use CodeClouds\UTubeVideoGallery\Model\Settings;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 
-class SettingsManager
+class SettingsFactory
 {
   static function getSettings()
   {

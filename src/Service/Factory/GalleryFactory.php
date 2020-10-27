@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Manager;
+namespace CodeClouds\UTubeVideoGallery\Service\Factory;
 
 use CodeClouds\UTubeVideoGallery\Repository\GalleryRepository;
 use CodeClouds\UTubeVideoGallery\Repository\AlbumRepository;
@@ -8,7 +8,7 @@ use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
 use CodeClouds\UTubeVideoGallery\Form\GalleryType;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
-class GalleryManager
+class GalleryFactory
 {
   static function getGallery(int $galleryID)
   {

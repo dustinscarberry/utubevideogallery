@@ -4,7 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Controller\API;
 
 use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
 use CodeClouds\UTubeVideoGallery\Form\GalleryType;
-use CodeClouds\UTubeVideoGallery\Service\Manager\GalleryManager;
+use CodeClouds\UTubeVideoGallery\Service\Factory\GalleryFactory;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -76,7 +76,7 @@ class GalleryAPIv1 extends APIv1
       $form = new GalleryType($req);
       $form->validate('get');
 
-      $gallery = GalleryManager::getGallery($form->getGalleryID());
+      $gallery = GalleryFactory::getGallery($form->getGalleryID());
 
       return $this->respond($gallery);
     } catch (UserMessageException $e) {
@@ -88,7 +88,7 @@ class GalleryAPIv1 extends APIv1
   {
     try {
       //get galleries
-      $galleries = GalleryManager::getGalleries();
+      $galleries = GalleryFactory::getGalleries();
 
       return $this->respond($galleries);
     } catch (UserMessageException $e) {
@@ -102,7 +102,7 @@ class GalleryAPIv1 extends APIv1
       $form = new GalleryType($req);
       $form->validate('create');
 
-      GalleryManager::createGallery($form);
+      GalleryFactory::createGallery($form);
 
       return $this->respond($galleryID, 201);
     } catch (UserMessageException $e) {
@@ -116,7 +116,7 @@ class GalleryAPIv1 extends APIv1
       $form = new GalleryType($req);
       $form->validate('update');
 
-      GalleryManager::updateGallery($form);
+      GalleryFactory::updateGallery($form);
 
       return $this->respond(null);
     } catch (UserMessageException $e) {
@@ -130,7 +130,7 @@ class GalleryAPIv1 extends APIv1
       $form = new GalleryType($req);
       $form->validate('delete');
 
-      GalleryManager::deleteGallery($form->getGalleryID());
+      GalleryFactory::deleteGallery($form->getGalleryID());
 
       return $this->respond(null);
     } catch (UserMessageException $e) {

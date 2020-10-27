@@ -4,7 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Controller\API;
 
 use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
 use CodeClouds\UTubeVideoGallery\Form\PlaylistType;
-use CodeClouds\UTubeVideoGallery\Service\Manager\PlaylistManager;
+use CodeClouds\UTubeVideoGallery\Service\Factory\PlaylistFactory;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -77,7 +77,7 @@ class PlaylistAPIv1 extends APIv1
       $form = new PlaylistType($req);
       $form->validate('get');
 
-      $playlist = PlaylistManager::getPlaylist($form->getPlaylistID());
+      $playlist = PlaylistFactory::getPlaylist($form->getPlaylistID());
 
       return $this->respond($playlist);
     } catch (UserMessageException $e) {
@@ -89,7 +89,7 @@ class PlaylistAPIv1 extends APIv1
   function getItems(WP_REST_Request $req)
   {
     try {
-      $playlists = PlaylistManager::getPlaylists();
+      $playlists = PlaylistFactory::getPlaylists();
 
       return $this->respond($playlists);
     } catch (UserMessageException $e) {
@@ -104,7 +104,7 @@ class PlaylistAPIv1 extends APIv1
       $form = new PlaylistType($req);
       $form->validate('create');
 
-      $playlistID = PlaylistManager::createPlaylist($form);
+      $playlistID = PlaylistFactory::createPlaylist($form);
 
       return $this->respond((object)['id' => $playlistID], 201);
     } catch (UserMessageException $e) {
@@ -119,7 +119,7 @@ class PlaylistAPIv1 extends APIv1
       $form = new PlaylistType($req);
       $form->validate('update');
 
-      PlaylistManager::updatePlaylist($form);
+      PlaylistFactory::updatePlaylist($form);
 
       return $this->respond(null);
     } catch (UserMessageException $e) {
@@ -134,7 +134,7 @@ class PlaylistAPIv1 extends APIv1
       $form = new PlaylistType($req);
       $form->validate('delete');
 
-      PlaylistManager::deletePlaylist($form->getPlaylistID());
+      PlaylistFactory::deletePlaylist($form->getPlaylistID());
 
       return $this->respond(null);
     } catch (UserMessageException $e) {

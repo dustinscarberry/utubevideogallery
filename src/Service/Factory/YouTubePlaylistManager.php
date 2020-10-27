@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Manager;
+namespace CodeClouds\UTubeVideoGallery\Service\Factory;
 
 use CodeClouds\UTubeVideoGallery\Service\Utility;
 use CodeClouds\UTubeVideoGallery\Model\Settings;
@@ -9,7 +9,7 @@ use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use DateTime;
 use DateInterval;
 
-class YouTubePlaylistManager
+class YouTubePlaylistFactory
 {
   static function getPlaylistData(YouTubePlaylistType $form)
   {

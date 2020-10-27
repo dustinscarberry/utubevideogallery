@@ -1,12 +1,12 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Manager;
+namespace CodeClouds\UTubeVideoGallery\Service\Factory;
 
 use CodeClouds\UTubeVideoGallery\Service\Utility;
 use CodeClouds\UTubeVideoGallery\Form\VimeoPlaylistType;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
-class VimeoPlaylistManager
+class VimeoPlaylistFactory
 {
   static function getPlaylistData(VimeoPlaylistType $form)
   {

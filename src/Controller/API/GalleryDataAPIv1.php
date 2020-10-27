@@ -4,7 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Controller\API;
 
 use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
 use CodeClouds\UTubeVideoGallery\Form\GalleryDataType;
-use CodeClouds\UTubeVideoGallery\Service\Manager\GalleryDataManager;
+use CodeClouds\UTubeVideoGallery\Service\Factory\GalleryDataFactory;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -33,7 +33,7 @@ class GalleryDataAPIv1 extends APIv1
       $form = new GalleryDataType($req);
       $form->validate();
 
-      $galleryData = GalleryDataManager::getGalleryData($form);
+      $galleryData = GalleryDataFactory::getGalleryData($form);
 
       return $this->respond($galleryData);
     } catch (UserMessageException $e) {

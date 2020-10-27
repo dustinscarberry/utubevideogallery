@@ -4,7 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Controller\API;
 
 use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
 use CodeClouds\UTubeVideoGallery\Form\AlbumType;
-use CodeClouds\UTubeVideoGallery\Service\Manager\AlbumManager;
+use CodeClouds\UTubeVideoGallery\Service\Factory\AlbumFactory;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -92,7 +92,7 @@ class AlbumAPIv1 extends APIv1
       $form = new AlbumType($req);
       $form->validate('get');
 
-      $album = AlbumManager::getAlbum($form->getAlbumID());
+      $album = AlbumFactory::getAlbum($form->getAlbumID());
 
       return $this->respond($album);
     } catch (UserMessageException $e) {
@@ -106,7 +106,7 @@ class AlbumAPIv1 extends APIv1
     try
     {
       //get albums
-      $albums = AlbumManager::getAlbums();
+      $albums = AlbumFactory::getAlbums();
       return $this->respond($albums);
     }
     catch (UserMessageException $e)
@@ -123,7 +123,7 @@ class AlbumAPIv1 extends APIv1
       $form->validate('getGallery');
 
       //get albums
-      $albums = AlbumManager::getGalleryAlbums($form->getGalleryID());
+      $albums = AlbumFactory::getGalleryAlbums($form->getGalleryID());
 
       //respond
       return $this->respond($albums);
@@ -139,7 +139,7 @@ class AlbumAPIv1 extends APIv1
       $form = new AlbumType($req);
       $form->validate('create');
 
-      AlbumManager::createAlbum($form);
+      AlbumFactory::createAlbum($form);
 
       return $this->respond(null, 201);
     } catch (UserMessageException $e) {
@@ -154,7 +154,7 @@ class AlbumAPIv1 extends APIv1
       $form = new AlbumType($req);
       $form->validate('update');
 
-      AlbumManager::updateAlbum($form);
+      AlbumFactory::updateAlbum($form);
 
       return $this->respond(null);
     } catch (UserMessageException $e) {
@@ -169,7 +169,7 @@ class AlbumAPIv1 extends APIv1
       $form = new AlbumType($req);
       $form->validate('delete');
 
-      AlbumManager::deleteAlbum($form->getAlbumID());
+      AlbumFactory::deleteAlbum($form->getAlbumID());
 
       return $this->respond(null);
     } catch (UserMessageException $e) {

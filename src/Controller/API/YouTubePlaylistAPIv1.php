@@ -4,7 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Controller\API;
 
 use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
 use CodeClouds\UTubeVideoGallery\Form\YouTubePlaylistType;
-use CodeClouds\UTubeVideoGallery\Service\Manager\YouTubePlaylistManager;
+use CodeClouds\UTubeVideoGallery\Service\Factory\YouTubePlaylistFactory;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -37,7 +37,7 @@ class YouTubePlaylistAPIv1 extends APIv1
       $form = new YouTubePlaylistType($req);
       $form->validate();
 
-      $playlistData = YouTubePlaylistManager::getPlaylistData($form);
+      $playlistData = YouTubePlaylistFactory::getPlaylistData($form);
 
       return $this->respond($playlistData);
     } catch (UserMessageException $e) {

@@ -4,7 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Controller\API;
 
 use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
 use CodeClouds\UTubeVideoGallery\Model\Settings;
-use CodeClouds\UTubeVideoGallery\Service\Manager\SettingsManager;
+use CodeClouds\UTubeVideoGallery\Service\Factory\SettingsFactory;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -41,7 +41,7 @@ class SettingsAPIv1 extends APIv1
   function getItem(WP_REST_Request $req)
   {
     try {
-      return $this->respond(SettingsManager::getSettings());
+      return $this->respond(SettingsFactory::getSettings());
     } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
@@ -51,8 +51,7 @@ class SettingsAPIv1 extends APIv1
   public function updateItem(WP_REST_Request $req)
   {
     try {
-      SettingsManager::updateSettings($req);
-
+      SettingsFactory::updateSettings($req);
       return $this->respond(null);
     } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());

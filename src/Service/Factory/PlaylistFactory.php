@@ -1,13 +1,13 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Manager;
+namespace CodeClouds\UTubeVideoGallery\Service\Factory;
 
 use CodeClouds\UTubeVideoGallery\Repository\PlaylistRepository;
 use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
 use CodeClouds\UTubeVideoGallery\Form\PlaylistType;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
-class PlaylistManager
+class PlaylistFactory
 {
   static function getPlaylist(int $playlistID)
   {

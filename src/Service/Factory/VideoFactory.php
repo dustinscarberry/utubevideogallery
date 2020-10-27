@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Manager;
+namespace CodeClouds\UTubeVideoGallery\Service\Factory;
 
 use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
 use CodeClouds\UTubeVideoGallery\Service\Factory\ThumbnailFactory;
@@ -8,7 +8,7 @@ use CodeClouds\UTubeVideoGallery\Form\VideoType;
 use CodeClouds\UTubeVideoGallery\Form\VideoOrderType;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 
-class VideoManager
+class VideoFactory
 {
   //get video
   static function getVideo(int $videoID)

@@ -4,7 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Controller\API;
 
 use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
 use CodeClouds\UTubeVideoGallery\Form\VimeoPlaylistType;
-use CodeClouds\UTubeVideoGallery\Service\Manager\VimeoPlaylistManager;
+use CodeClouds\UTubeVideoGallery\Service\Factory\VimeoPlaylistFactory;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -38,7 +38,7 @@ class VimeoPlaylistAPIv1 extends APIv1
       $form = new VimeoPlaylistType($req);
       $form->validate();
 
-      $playlistData = VimeoPlaylistManager::getPlaylistData($form);
+      $playlistData = VimeoPlaylistFactory::getPlaylistData($form);
 
       return $this->respond($playlistData);
     } catch (UserMessageException $e) {

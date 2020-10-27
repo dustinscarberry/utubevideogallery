@@ -4,7 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Controller\API;
 
 use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
 use CodeClouds\UTubeVideoGallery\Form\VideoOrderType;
-use CodeClouds\UTubeVideoGallery\Service\Manager\VideoManager;
+use CodeClouds\UTubeVideoGallery\Service\Factory\VideoFactory;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -33,7 +33,7 @@ class VideoOrderAPIv1 extends APIv1
       $form = new VideoOrderType($req);
       $form->validate();
 
-      VideoManager::updateVideosOrder($form);
+      VideoFactory::updateVideosOrder($form);
 
       return $this->respond(null);
     } catch (UserMessageException $e) {

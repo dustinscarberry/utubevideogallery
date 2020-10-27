@@ -4,7 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Controller\API;
 
 use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
 use CodeClouds\UTubeVideoGallery\Form\VideoType;
-use CodeClouds\UTubeVideoGallery\Service\Manager\VideoManager;
+use CodeClouds\UTubeVideoGallery\Service\Factory\VideoFactory;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
@@ -109,7 +109,7 @@ class VideoAPIv1 extends APIv1
       $form = new VideoType($req);
       $form->validate('get');
 
-      $video = VideoManager::getVideo($form->getVideoID());
+      $video = VideoFactory::getVideo($form->getVideoID());
 
       return $this->respond($video);
     } catch (UserMessageException $e) {
@@ -121,7 +121,7 @@ class VideoAPIv1 extends APIv1
   function getItems(WP_REST_Request $req)
   {
     try {
-      $videos = VideoManager::getVideos();
+      $videos = VideoFactory::getVideos();
       return $this->respond($videos);
     } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
@@ -136,7 +136,7 @@ class VideoAPIv1 extends APIv1
       $form->validate('getAlbum');
 
       //get videos
-      $videos = VideoManager::getAlbumVideos($form->getAlbumID());
+      $videos = VideoFactory::getAlbumVideos($form->getAlbumID());
 
       //respond
       return $this->respond($videos);
@@ -153,7 +153,7 @@ class VideoAPIv1 extends APIv1
       $form->validate('getGallery');
 
       // get videos
-      $videos = VideoManager::getGalleryVideos($form->getGalleryID());
+      $videos = VideoFactory::getGalleryVideos($form->getGalleryID());
       
       return $this->respond($videos);
     } catch (UserMessageException $e) {
@@ -168,7 +168,7 @@ class VideoAPIv1 extends APIv1
       $form = new VideoType($req);
       $form->validate('create');
 
-      if (VideoManager::createVideo($form))
+      if (VideoFactory::createVideo($form))
         return $this->respond(null, 201);
       else
         return $this->respondWithError(__('An unknown error has occurred', 'utvg'));
@@ -184,7 +184,7 @@ class VideoAPIv1 extends APIv1
       $form = new VideoType($req);
       $form->validate('update');
 
-      VideoManager::updateVideo($form);
+      VideoFactory::updateVideo($form);
       return $this->respond(null);
     } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
@@ -198,7 +198,7 @@ class VideoAPIv1 extends APIv1
       $form = new VideoType($req);
       $form->validate('delete');
 
-      VideoManager::deleteVideo($form->getVideoID());
+      VideoFactory::deleteVideo($form->getVideoID());
       return $this->respond(null);
     } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
