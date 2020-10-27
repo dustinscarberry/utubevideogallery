@@ -4,6 +4,7 @@ namespace CodeClouds\UTubeVideoGallery\Service\Api;
 
 use CodeClouds\UTubeVideoGallery\Service\Utility;
 use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Exception;
 
 class YouTubeApi
 {
@@ -13,6 +14,10 @@ class YouTubeApi
 
     if (!$data)
       throw new UserMessageException(__('Thumbnail Error: Can\'t contact the YouTube API. Ensure your API key is set.', 'utvg'));
+
+    // check for valid response
+    if (isset($data->error))
+      throw new UserMessageException(__('Invalid API key or video ID', 'utvg'));
 
     $thumbnailSources = $data->items[0]->snippet->thumbnails;
 

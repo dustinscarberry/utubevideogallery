@@ -1,7 +1,7 @@
 export function isValidResponse(rsp)
 {
   return (rsp
-    && rsp.status == 200 || rsp.status == 201
+    && (rsp.status == 200 || rsp.status == 201)
     && !rsp.data.error
   );
 }

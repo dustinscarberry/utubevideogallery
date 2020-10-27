@@ -285,7 +285,7 @@ class SettingsTabView extends React.Component
                   text={this.state.youtubeAPIKeyValidMessage}
                   icon={this.state.youtubeAPIKeyValid ? 'active' : 'inactive'}
                 />
-                <FieldHint text={this.state.youtubeAPIKeyValidMessage}/>
+              <FieldHint text="Youtube API Key"/>
                 <Label text={utvJSData.localization.youtubeControlsTheme}/>
                 <SelectBox
                   name="playerControlsTheme"

@@ -61,12 +61,12 @@ class ThumbnailFactory
   {
     // save retina image
     $image->resize($thumbnailWidth * 2, $thumbnailWidth * 2, true);
-    $image->set_quality(RETINA_IMAGE_QUALITY);
+    $image->set_quality(self::RETINA_IMAGE_QUALITY);
     $image->save($destinationPath . $filename . '@2x.jpg');
 
     // save regular image
     $image->resize($thumbnailWidth, $thumbnailWidth, true);
-    $image->set_quality(IMAGE_QUALITY);
+    $image->set_quality(self::IMAGE_QUALITY);
     $image->save($destinationPath . $filename . '.jpg');
   }
 
@@ -87,12 +87,12 @@ class ThumbnailFactory
 
     // save retina image
     $image->resize($thumbnailWidth * 2, $thumbnailWidth * 2);
-    $image->set_quality(RETINA_IMAGE_QUALITY);
+    $image->set_quality(self::RETINA_IMAGE_QUALITY);
     $image->save($destinationPath . $filename . '@2x.jpg');
 
     // save regular image
     $image->resize($thumbnailWidth, $thumbnailWidth);
-    $image->set_quality(IMAGE_QUALITY);
+    $image->set_quality(self::IMAGE_QUALITY);
     $image->save($destinationPath . $filename . '.jpg');
   }
 

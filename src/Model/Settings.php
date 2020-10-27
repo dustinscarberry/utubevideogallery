@@ -258,23 +258,22 @@ class Settings implements \JsonSerializable
 
   private function loadDynamicSettings()
   {
-    //get php version
-    preg_match('/^(.*?)-(.*)/', PHP_VERSION, $matches);
-    $this->phpVersion = isset($matches[1]) ? $matches[1] : '';
+    // get php version
+    $this->phpVersion = PHP_VERSION;
 
-    //get WordPress version
+    // get WordPress version
     $this->wpVersion = get_bloginfo('version');
 
-    //get gd status
+    // get gd status
     $this->gdEnabled = extension_loaded('gd');
 
-    //get gd version
+    // get gd version
     $this->gdVersion = gd_info()['GD Version'];
 
-    //get imagemagick status
+    // get imagemagick status
     $this->imageMagickEnabled = extension_loaded('imagick');
 
-    //get imagemagick version
+    // get imagemagick version
     $version = \Imagick::getVersion()['versionString'];
     $version = str_replace('ImageMagick', '', $version);
     $version = str_replace('https://www.imagemagick.org', '', $version);

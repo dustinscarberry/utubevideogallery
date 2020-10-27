@@ -121,7 +121,6 @@ class VideoAPIv1 extends APIv1
   function getItems(WP_REST_Request $req)
   {
     try {
-      //get videos
       $videos = VideoManager::getVideos();
       return $this->respond($videos);
     } catch (UserMessageException $e) {
@@ -153,10 +152,9 @@ class VideoAPIv1 extends APIv1
       $form = new VideoType($req);
       $form->validate('getGallery');
 
-      //get videos
+      // get videos
       $videos = VideoManager::getGalleryVideos($form->getGalleryID());
-
-      //respond
+      
       return $this->respond($videos);
     } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());

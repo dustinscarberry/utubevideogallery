@@ -69,16 +69,14 @@ class VideoAddTabView extends React.Component
 
   addVideo = async() =>
   {
-    //create video
+    // create video
     const rsp = await actions.createVideo(this.state, this.props.selectedAlbum);
 
-    //user feedback
-    if (utility.isValidResponse(rsp))
-    {
+    // user feedback
+    if (utility.isValidResponse(rsp)) {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoAdded);
-    }
-    else if (utility.isErrorResponse(rsp))
+    } else if (utility.isErrorResponse(rsp))
       this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
   }
 

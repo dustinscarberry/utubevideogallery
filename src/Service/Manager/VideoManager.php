@@ -56,12 +56,10 @@ class VideoManager
       $videoID = VideoRepository::createItem($form, $nextSortPosition, $thumbnailType);
 
       //if successfull video creation..
-      if ($videoID)
-      {
+      if ($videoID) {
         ThumbnailFactory::createThumbnailFromId($videoID);
         return true;
-      }
-      else
+      } else
         throw new UserMessageException(__('Database Error: Video creation failed', 'utvg'));
     }
     catch (\Exception $e)
