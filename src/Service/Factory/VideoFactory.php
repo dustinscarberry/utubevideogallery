@@ -76,24 +76,19 @@ class VideoFactory
     }
   }
 
-  //update video
+  // update video
   static function updateVideo(VideoType $form)
   {
-    //update video
-    if (VideoRepository::updateItem($form))
-    {
-      if (!$form->getSkipThumbnailRender())
-      {
-        //refresh video thumbnail
-        $thumbnail = new Thumbnail($form->getVideoID());
-        $thumbnail->save();
-      }
-    }
-    else
+    // update video info
+    if (!VideoRepository::updateItem($form))
       throw new UserMessageException(__('Database Error: Failed to update video', 'utvg'));
+
+    // refresh video thumbnail
+    if (!$form->getSkipThumbnailRender())
+      ThumbnailFactory::createThumbnailFromId($form->getVideoID());
   }
 
-  //update videos order in album
+  // update videos order in album
   static function updateVideosOrder(VideoOrderType $form)
   {
     $videoCount = count($form->getVideoIDs());
@@ -102,7 +97,7 @@ class VideoFactory
       VideoRepository::updateItemPosition($form->getVideoIDs()[$i], $i);
   }
 
-  //delete video
+  // delete video
   static function deleteVideo(int $videoID)
   {
     //get video

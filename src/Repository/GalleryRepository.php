@@ -7,7 +7,7 @@ use CodeClouds\UTubeVideoGallery\Entity\Gallery;
 class GalleryRepository
 {
   // get gallery
-  public static function getItem(int $galleryID)
+  static function getItem(int $galleryID)
   {
     global $wpdb;
 
@@ -34,16 +34,15 @@ class GalleryRepository
     if (!$albumCount)
       $albumCount = 0;
 
-    if ($galleryData) {
-      $galleryData->ALBUM_COUNT = $albumCount;
-      return new Gallery($galleryData);
-    }
+    if (!$galleryData)
+      return false;
 
-    return false;
+    $galleryData->ALBUM_COUNT = $albumCount;
+    return new Gallery($galleryData);
   }
 
   // get all galleries
-  public static function getItems()
+  static function getItems()
   {
     global $wpdb;
     $data = [];
@@ -72,7 +71,7 @@ class GalleryRepository
   }
 
   // create gallery
-  public static function createItem(
+  static function createItem(
     $title,
     $albumSorting,
     $thumbnailType,
@@ -81,9 +80,7 @@ class GalleryRepository
   {
     global $wpdb;
 
-    $currentTime = current_time('timestamp');
-
-    //insert new gallery
+    // insert new gallery
     if ($wpdb->insert(
       $wpdb->prefix . 'utubevideo_dataset',
       [
@@ -91,7 +88,7 @@ class GalleryRepository
         'DATA_SORT' => $albumSorting,
         'DATA_THUMBTYPE' => $thumbnailType,
         'DATA_DISPLAYTYPE' => $displayType,
-        'DATA_UPDATEDATE' => $currentTime
+        'DATA_UPDATEDATE' => current_time('timestamp')
       ]
     ))
       return $wpdb->insert_id;
@@ -100,7 +97,7 @@ class GalleryRepository
   }
 
   // delete gallery
-  public static function deleteItem(int $galleryID)
+  static function deleteItem(int $galleryID)
   {
     global $wpdb;
 
@@ -114,7 +111,7 @@ class GalleryRepository
   }
 
   // update gallery
-  public static function updateItem($form)
+  static function updateItem($form)
   {
     global $wpdb;
 

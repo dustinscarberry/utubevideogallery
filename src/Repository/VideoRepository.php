@@ -25,10 +25,10 @@ class VideoRepository
 
     $videoData = $wpdb->get_row($query);
 
-    if ($videoData)
-      return new Video($videoData);
+    if (!$videoData)
+      return false;
 
-    return false;
+    return new Video($videoData);
   }
 
   // get videos
@@ -83,7 +83,7 @@ class VideoRepository
   {
     global $wpdb;
 
-    //delete video from database
+    // delete video from database
     if ($wpdb->delete(
       $wpdb->prefix . 'utubevideo_video',
       ['VID_ID' => $videoID]
@@ -143,11 +143,14 @@ class VideoRepository
   {
     global $wpdb;
 
-    $wpdb->update(
+    if ($wpdb->update(
       $wpdb->prefix . 'utubevideo_video',
       ['VID_POS' => $position],
       ['VID_ID' => $videoID]
-    );
+    ) !== false)
+      return true;
+
+    return false;
   }
 
   // get all videos in an album
@@ -241,7 +244,7 @@ class VideoRepository
       $galleryID
     );
 
-    //get albums in gallery
+    // get albums in gallery
     $albumIDsData = $wpdb->get_results($albumIDsQuery);
     $albumIDs = [-1];
 

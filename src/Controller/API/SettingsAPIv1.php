@@ -48,7 +48,7 @@ class SettingsAPIv1 extends APIv1
   }
 
   // update plugin settings
-  public function updateItem(WP_REST_Request $req)
+  function updateItem(WP_REST_Request $req)
   {
     try {
       SettingsFactory::updateSettings($req);

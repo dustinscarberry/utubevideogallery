@@ -1,9 +1,9 @@
 import React from 'react';
-import GriddleDND from '../../shared/GriddleDND';
-import TableRowActions from '../../shared/TableRowActions';
-import BasicLink from '../../shared/BasicLink';
-import sharedService from '../../../service/SharedService';
 import axios from 'axios';
+import GriddleDND from 'component/shared/GriddleDND';
+import TableRowActions from 'component/shared/TableRowActions';
+import BasicLink from 'component/shared/BasicLink';
+import { getFormattedDate } from 'helpers/datetime-helpers';
 
 class PlaylistTable extends React.Component
 {
@@ -70,7 +70,7 @@ class PlaylistTable extends React.Component
         sortDirection: '',
         formatter: (row, cellData) =>
         {
-          return sharedService.getFormattedDate(cellData);
+          return getFormattedDate(cellData);
         }
       }
     ];

@@ -1,7 +1,7 @@
 import React from 'react';
 import VideoThumbnails from './VideoThumbnails';
 import Paging from './Paging';
-import galleryService from '../../service/GalleryService';
+import galleryService from 'helpers/GalleryService';
 
 class VideoView extends React.Component
 {

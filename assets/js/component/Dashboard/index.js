@@ -1,6 +1,6 @@
 import React from 'react';
-import Tabs from '../shared/Tabs';
-import Pane from '../shared/Pane';
+import Tabs from 'component/shared/Tabs';
+import Pane from 'component/shared/Pane';
 import GalleryTabView from './GalleryTabView';
 import AlbumTabView from './AlbumTabView';
 import VideoTabView from './VideoTabView';
@@ -15,7 +15,7 @@ import PlaylistAddTabView from './PlaylistAddTabView';
 import PlaylistEditTabView from './PlaylistEditTabView';
 import SettingsTabView from './SettingsTabView';
 import DocumentationTabView from './DocumentationTabView';
-import UserFeedback from '../shared/UserFeedback';
+import UserFeedback from 'component/shared/UserFeedback';
 
 class Dashboard extends React.Component
 {

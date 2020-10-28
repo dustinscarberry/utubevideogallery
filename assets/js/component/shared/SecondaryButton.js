@@ -3,7 +3,7 @@ import Button from './Button';
 
 const SecondaryButton = ({title, onClick}) => {
   return <Button
-    classes="button-secondary"
+    classes={["button-secondary"]}
     onClick={onClick}
     title={title}
   />;

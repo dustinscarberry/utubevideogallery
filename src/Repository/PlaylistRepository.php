@@ -24,10 +24,10 @@ class PlaylistRepository
 
     $playlistData = $wpdb->get_row($query);
 
-    if ($playlistData)
-      return new Playlist($playlistData);
+    if (!$playlistData)
+      return false;
 
-    return false;
+    return new Playlist($playlistData);
   }
 
   // get playlists
@@ -61,9 +61,7 @@ class PlaylistRepository
   {
     global $wpdb;
 
-    $currentTime = current_time('timestamp');
-
-    //insert new playlist
+    // insert new playlist
     if ($wpdb->insert(
       $wpdb->prefix . 'utubevideo_playlist',
       [
@@ -72,7 +70,7 @@ class PlaylistRepository
         'PLAY_SOURCEID' => $sourceID,
         'PLAY_QUALITY' => $videoQuality,
         'PLAY_CHROME' => $showControls,
-        'PLAY_UPDATEDATE' => $currentTime,
+        'PLAY_UPDATEDATE' => current_time('timestamp'),
         'ALB_ID' => $albumID
       ]
     ))

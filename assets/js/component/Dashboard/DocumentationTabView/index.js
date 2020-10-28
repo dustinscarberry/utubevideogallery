@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import actions from './actions';
-import utility from '../../shared/utility';
-import Card from '../../shared/Card';
-import SectionHeader from '../../shared/SectionHeader';
-import Loader from '../../shared/Loader';
+import utility from 'component/shared/utility';
+import Card from 'component/shared/Card';
+import SectionHeader from 'component/shared/SectionHeader';
+import Loader from 'component/shared/Loader';
 
 class DocumentationTabView extends React.Component
 {

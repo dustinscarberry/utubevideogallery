@@ -3,7 +3,7 @@ import AlbumThumbnails from './AlbumThumbnails';
 import VideoThumbnails from './VideoThumbnails';
 import BreadCrumb from './BreadCrumb';
 import Paging from './Paging';
-import galleryService from '../../service/GalleryService';
+import galleryService from 'helpers/GalleryService';
 
 class AlbumView extends React.Component
 {

@@ -133,7 +133,7 @@ class AlbumAPIv1 extends APIv1
   }
 
   // create album
-  public function createItem(WP_REST_Request $req)
+  function createItem(WP_REST_Request $req)
   {
     try {
       $form = new AlbumType($req);

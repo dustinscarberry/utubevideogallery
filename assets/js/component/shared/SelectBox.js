@@ -8,6 +8,8 @@ const SelectBox = ({classes, name, value, onChange, choices = [], blankChoice = 
     <option key={e.value} value={e.value}>{e.name}</option>
   );
 
+  console.log();
+
   // add empty option
   if (blankChoice)
     options.unshift(<option key={'__blank'} value=""></option>);

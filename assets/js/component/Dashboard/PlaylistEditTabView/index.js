@@ -1,24 +1,24 @@
 import React from 'react';
 import actions from './actions';
-import utility from '../../shared/utility';
-import Card from '../../shared/Card';
-import Columns from '../../shared/Columns';
-import Column from '../../shared/Column';
-import SectionHeader from '../../shared/SectionHeader';
-import Breadcrumbs from '../../shared/Breadcrumbs';
-import Form from '../../shared/Form';
-import FormField from '../../shared/FormField';
-import Label from '../../shared/Label';
-import FieldHint from '../../shared/FieldHint';
-import TextInput from '../../shared/TextInput';
-import SelectBox from '../../shared/SelectBox';
-import Toggle from '../../shared/Toggle';
-import SubmitButton from '../../shared/SubmitButton';
-import CancelButton from '../../shared/CancelButton';
-import PlaylistLegend from '../../shared/PlaylistLegend';
-import PlaylistMultiSelect from '../../shared/PlaylistMultiSelect';
-import PlaylistVideoSelection from '../../shared/PlaylistVideoSelection';
-import Loader from '../../shared/Loader';
+import utility from 'component/shared/utility';
+import Card from 'component/shared/Card';
+import Columns from 'component/shared/Columns';
+import Column from 'component/shared/Column';
+import SectionHeader from 'component/shared/SectionHeader';
+import Breadcrumbs from 'component/shared/Breadcrumbs';
+import Form from 'component/shared/Form';
+import FormField from 'component/shared/FormField';
+import Label from 'component/shared/Label';
+import FieldHint from 'component/shared/FieldHint';
+import TextInput from 'component/shared/TextInput';
+import SelectBox from 'component/shared/SelectBox';
+import Toggle from 'component/shared/Toggle';
+import SubmitButton from 'component/shared/SubmitButton';
+import CancelButton from 'component/shared/CancelButton';
+import PlaylistLegend from 'component/shared/PlaylistLegend';
+import PlaylistMultiSelect from 'component/shared/PlaylistMultiSelect';
+import PlaylistVideoSelection from 'component/shared/PlaylistVideoSelection';
+import Loader from 'component/shared/Loader';
 
 class PlaylistEditTabView extends React.Component
 {
@@ -248,7 +248,7 @@ class PlaylistEditTabView extends React.Component
                     name="videoQuality"
                     value={this.state.videoQuality}
                     onChange={this.changeValue}
-                    data={[
+                    choices={[
                       {name: '480p', value: 'large'},
                       {name: '720p', value: 'hd720'},
                       {name: '1080p', value: 'hd1080'}
@@ -278,7 +278,7 @@ class PlaylistEditTabView extends React.Component
                     name="syncMethod"
                     value={this.state.syncMethod}
                     onChange={this.changeValue}
-                    data={[
+                    choices={[
                       {name: utvJSData.localization.syncSelected, value: 'syncSelected'},
                       {name: utvJSData.localization.syncNew, value: 'syncNew'},
                       {name: utvJSData.localization.syncAll, value: 'syncAll'}

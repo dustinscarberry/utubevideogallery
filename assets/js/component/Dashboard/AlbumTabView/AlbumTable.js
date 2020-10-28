@@ -1,8 +1,8 @@
 import React from 'react';
-import GriddleDND from '../../shared/GriddleDND';
-import TableRowActions from '../../shared/TableRowActions';
-import sharedService from '../../../service/SharedService';
 import axios from 'axios';
+import GriddleDND from 'component/shared/GriddleDND';
+import TableRowActions from 'component/shared/TableRowActions';
+import { getFormattedDate } from 'helpers/datetime-helpers';
 
 class AlbumTable extends React.Component
 {
@@ -83,7 +83,7 @@ class AlbumTable extends React.Component
         sortable: true,
         sortDirection: '',
         formatter: (row, cellData) => {
-          return sharedService.getFormattedDate(cellData);
+          return getFormattedDate(cellData);
         }
       },
       {

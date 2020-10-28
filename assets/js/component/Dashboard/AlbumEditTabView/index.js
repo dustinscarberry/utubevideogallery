@@ -1,21 +1,21 @@
 import React from 'react';
-import Card from '../../shared/Card';
-import Columns from '../../shared/Columns';
-import Column from '../../shared/Column';
-import SectionHeader from '../../shared/SectionHeader';
-import Breadcrumbs from '../../shared/Breadcrumbs';
-import Form from '../../shared/Form';
-import FormField from '../../shared/FormField';
-import Label from '../../shared/Label';
-import FieldHint from '../../shared/FieldHint';
-import TextInput from '../../shared/TextInput';
-import SelectBox from '../../shared/SelectBox';
-import SubmitButton from '../../shared/SubmitButton';
-import CancelButton from '../../shared/CancelButton';
-import Loader from '../../shared/Loader';
+import Card from 'component/shared/Card';
+import Columns from 'component/shared/Columns';
+import Column from 'component/shared/Column';
+import SectionHeader from 'component/shared/SectionHeader';
+import Breadcrumbs from 'component/shared/Breadcrumbs';
+import Form from 'component/shared/Form';
+import FormField from 'component/shared/FormField';
+import Label from 'component/shared/Label';
+import FieldHint from 'component/shared/FieldHint';
+import TextInput from 'component/shared/TextInput';
+import SelectBox from 'component/shared/SelectBox';
+import SubmitButton from 'component/shared/SubmitButton';
+import CancelButton from 'component/shared/CancelButton';
+import Loader from 'component/shared/Loader';
 import AlbumThumbnailSelection from './AlbumThumbnailSelection';
 import actions from './actions';
-import utility from '../../shared/utility';
+import utility from 'component/shared/utility';
 
 class AlbumEditTabView extends React.Component
 {
@@ -175,7 +175,7 @@ class AlbumEditTabView extends React.Component
                     name="gallery"
                     value={this.state.gallery}
                     onChange={this.changeValue}
-                    data={this.state.galleries}
+                    choices={this.state.galleries}
                   />
                 </FormField>
                 <FormField>
@@ -184,7 +184,7 @@ class AlbumEditTabView extends React.Component
                     name="videoSorting"
                     value={this.state.videoSorting}
                     onChange={this.changeValue}
-                    data={[
+                    choices={[
                       {name: utvJSData.localization.ascending, value: 'asc'},
                       {name: utvJSData.localization.descending, value: 'desc'}
                     ]}

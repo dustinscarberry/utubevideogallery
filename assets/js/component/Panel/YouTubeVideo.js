@@ -1,9 +1,9 @@
 import React from 'react';
-import Iframe from '../shared/Iframe';
-import sharedService from '../../service/SharedService';
+import Iframe from 'component/shared/Iframe';
+import { getYouTubeEmbedURL } from 'helpers/youtube-helpers';
 
 const YouTubeVideo = ({videoData, controls, forceNoAutoplay}) => {
-  const source = sharedService.getYouTubeEmbedURL(
+  const source = getYouTubeEmbedURL(
     videoData.slugID,
     utvJSData.setting.youtubeDetailsHide,
     controls,
@@ -14,12 +14,10 @@ const YouTubeVideo = ({videoData, controls, forceNoAutoplay}) => {
     videoData.endTime
   );
 
-  return (
-    <Iframe
-      classes={['utv-panel-iframe']}
-      src={source}
-    />
-  );
+  return <Iframe
+    classes={['utv-panel-iframe']}
+    src={source}
+  />;
 }
 
 export default YouTubeVideo;

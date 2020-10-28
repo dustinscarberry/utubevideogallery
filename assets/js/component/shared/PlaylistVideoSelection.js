@@ -1,5 +1,5 @@
 import React from 'react';
-import PlaylistPreviewItem from '../shared/PlaylistPreviewItem';
+import PlaylistPreviewItem from 'component/shared/PlaylistPreviewItem';
 
 const PlaylistVideoSelection = ({videos, toggleVideoSelection, changeVideoTitle}) => {
   const previewItemNodes = videos.map((video, index) => {

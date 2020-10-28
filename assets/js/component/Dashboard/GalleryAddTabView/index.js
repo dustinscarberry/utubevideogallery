@@ -1,18 +1,18 @@
 import React from 'react';
 import actions from './actions';
-import utility from '../../shared/utility';
-import Card from '../../shared/Card';
-import Columns from '../../shared/Columns';
-import Column from '../../shared/Column';
-import SectionHeader from '../../shared/SectionHeader';
-import Breadcrumbs from '../../shared/Breadcrumbs';
-import Form from '../../shared/Form';
-import FormField from '../../shared/FormField';
-import Label from '../../shared/Label';
-import TextInput from '../../shared/TextInput';
-import SelectBox from '../../shared/SelectBox';
-import SubmitButton from '../../shared/SubmitButton';
-import CancelButton from '../../shared/CancelButton';
+import utility from 'component/shared/utility';
+import Card from 'component/shared/Card';
+import Columns from 'component/shared/Columns';
+import Column from 'component/shared/Column';
+import SectionHeader from 'component/shared/SectionHeader';
+import Breadcrumbs from 'component/shared/Breadcrumbs';
+import Form from 'component/shared/Form';
+import FormField from 'component/shared/FormField';
+import Label from 'component/shared/Label';
+import TextInput from 'component/shared/TextInput';
+import SelectBox from 'component/shared/SelectBox';
+import SubmitButton from 'component/shared/SubmitButton';
+import CancelButton from 'component/shared/CancelButton';
 
 class GalleryAddTabView extends React.Component
 {
@@ -77,7 +77,7 @@ class GalleryAddTabView extends React.Component
                     name="albumSorting"
                     value={this.state.albumSorting}
                     onChange={this.changeValue}
-                    data={[
+                    choices={[
                       {name: utvJSData.localization.ascending, value: 'asc'},
                       {name: utvJSData.localization.descending, value: 'desc'}
                     ]}
@@ -90,7 +90,7 @@ class GalleryAddTabView extends React.Component
                     name="thumbnailType"
                     value={this.state.thumbnailType}
                     onChange={this.changeValue}
-                    data={[
+                    choices={[
                       {name: utvJSData.localization.rectangle, value: 'rectangle'},
                       {name: utvJSData.localization.square, value: 'square'}
                     ]}
@@ -103,14 +103,14 @@ class GalleryAddTabView extends React.Component
                     name="displayType"
                     value={this.state.displayType}
                     onChange={this.changeValue}
-                    data={[
+                    choices={[
                       {name: utvJSData.localization.albums, value: 'album'},
                       {name: utvJSData.localization.justVideos, value: 'video'}
                     ]}
                     required={true}
                   />
                 </FormField>
-                <FormField classes="utv-formfield-action">
+                <FormField classes={["utv-formfield-action"]}>
                   <SubmitButton
                     title={utvJSData.localization.addGallery}
                   />

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const CancelButton = ({title, onClick}) => {
   return <Button
-    classes="utv-cancel"
+    classes={["utv-cancel"]}
     onClick={onClick}
     title={title}
   />;

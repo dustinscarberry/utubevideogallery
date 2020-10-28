@@ -1,7 +1,7 @@
 import React from 'react';
-import ThumbnailsGrid from '../shared/ThumbnailsGrid';
+import ThumbnailsGrid from 'component/shared/ThumbnailsGrid';
 import AlbumThumbnail from './AlbumThumbnail';
-import galleryService from '../../service/GalleryService';
+import galleryService from 'helpers/GalleryService';
 
 const AlbumThumbnails = ({albums, onChangeAlbum, thumbnailType, currentPage, thumbnailsPerPage}) => {
   const thumbnailsClasses = galleryService.getThumbnailsClasses(thumbnailType);

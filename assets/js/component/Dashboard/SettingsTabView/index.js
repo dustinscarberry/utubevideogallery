@@ -1,21 +1,21 @@
 import React from 'react';
 import actions from './actions';
-import utility from '../../shared/utility';
-import Card from '../../shared/Card';
-import Form from '../../shared/Form';
-import FormField from '../../shared/FormField';
-import TextInput from '../../shared/TextInput';
-import FieldHint from '../../shared/FieldHint';
-import Label from '../../shared/Label';
-import Columns from '../../shared/Columns';
-import Column from '../../shared/Column';
-import SectionHeader from '../../shared/SectionHeader';
-import Toggle from '../../shared/Toggle';
-import SelectBox from '../../shared/SelectBox';
-import SecondaryButton from '../../shared/SecondaryButton';
-import SubmitButton from '../../shared/SubmitButton';
-import InfoLine from '../../shared/InfoLine';
-import Loader from '../../shared/Loader';
+import utility from 'component/shared/utility';
+import Card from 'component/shared/Card';
+import Form from 'component/shared/Form';
+import FormField from 'component/shared/FormField';
+import TextInput from 'component/shared/TextInput';
+import FieldHint from 'component/shared/FieldHint';
+import Label from 'component/shared/Label';
+import Columns from 'component/shared/Columns';
+import Column from 'component/shared/Column';
+import SectionHeader from 'component/shared/SectionHeader';
+import Toggle from 'component/shared/Toggle';
+import SelectBox from 'component/shared/SelectBox';
+import SecondaryButton from 'component/shared/SecondaryButton';
+import SubmitButton from 'component/shared/SubmitButton';
+import InfoLine from 'component/shared/InfoLine';
+import Loader from 'component/shared/Loader';
 
 class SettingsTabView extends React.Component
 {
@@ -291,7 +291,7 @@ class SettingsTabView extends React.Component
                   name="playerControlsTheme"
                   value={this.state.playerControlsTheme}
                   onChange={this.changeValue}
-                  data={[
+                  choices={[
                     {name: utvJSData.localization.light, value: 'light'},
                     {name: utvJSData.localization.dark, value: 'dark'}
                   ]}
@@ -301,7 +301,7 @@ class SettingsTabView extends React.Component
                   name="playerControlsColor"
                   value={this.state.playerControlsColor}
                   onChange={this.changeValue}
-                  data={[
+                  choices={[
                     {name: utvJSData.localization.red, value: 'red'},
                     {name: utvJSData.localization.white, value: 'white'}
                   ]}

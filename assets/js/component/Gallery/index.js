@@ -1,8 +1,10 @@
 import React from 'react';
-import axios from 'axios';
 import AlbumView from './AlbumView';
 import VideoView from './VideoView';
-import sharedService from '../../service/SharedService';
+import Loader from 'component/shared/Loader';
+import { fetchGalleryData } from './actions';
+import { getYouTubeEmbedURL } from 'helpers/youtube-helpers';
+import { getVimeoEmbedURL } from 'helpers/vimeo-helpers';
 
 class Gallery extends React.Component
 {
@@ -11,13 +13,17 @@ class Gallery extends React.Component
     super(props);
 
     this.state = {
+      isLoading: true,
       albums: [], // object of albums and there videos
       videos: [], // object of just videos
       thumbnailType: undefined,
       displayType: undefined,
       currentPage: 1
     };
+  }
 
+  componentDidMount()
+  {
     this.loadAPIData();
   }
 
@@ -29,87 +35,43 @@ class Gallery extends React.Component
       maxVideos
     } = this.props;
 
-    const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/galleriesdata/'
-      + id
-    );
+    const galleryData = await fetchGalleryData(id, maxAlbums, maxVideos);
 
-    if (apiData.status == 200 && !apiData.data.error) {
-      const data = apiData.data.data;
-      let albums = [];
-      let videos = [];
-
-      if (data.displaytype == 'video') {
-        for (const album of data.albums) {
-          for (const video of album.videos)
-            videos.push(video);
-        }
-
-        if (maxVideos)
-          videos = videos.slice(0, maxVideos);
-      }
-      else if (data.displaytype == 'album')
-      {
-        albums = data.albums;
-
-        // filter on maxalbums and maxvideos if specified
-        if (maxAlbums)
-          albums = albums.slice(0, maxAlbums);
-
-        if (maxVideos) {
-          data.albums = data.albums.map(album => {
-            album.videos = album.videos.slice(0, maxVideos);
-            return album;
-          });
-        }
-      }
-
-      this.setState({
-        albums: albums || [],
-        videos: videos,
-        thumbnailType: data.thumbnailType || undefined,
-        displayType: (data.displaytype == 'album' ? 'albums' : 'videos')
-      });
+    if (galleryData) {
+      this.setState(galleryData);
+      this.setState({isLoading: false});
     }
   }
 
-  getYouTubeURL(video)
+  getVideoEmbedURL(video)
   {
-    return sharedService.getYouTubeEmbedURL(
-      video.slugID,
-      utvJSData.setting.youtubeDetailsHide,
-      video.chrome,
-      utvJSData.setting.playerControlTheme,
-      utvJSData.setting.playerProgressColor,
-      utvJSData.setting.youtubeAutoplay,
-      video.startTime,
-      video.endTime
-    );
-  }
-
-  getVimeoURL(video)
-  {
-    return sharedService.getVimeoEmbedURL(
-      video.slugID,
-      utvJSData.setting.vimeoAutoplay,
-      utvJSData.setting.vimeoDetailsHide,
-      video.startTime
-    );
+    if (video.source == 'youtube')
+      return getYouTubeEmbedURL(
+        video.slugID,
+        utvJSData.setting.youtubeDetailsHide,
+        video.chrome,
+        utvJSData.setting.playerControlTheme,
+        utvJSData.setting.playerProgressColor,
+        utvJSData.setting.youtubeAutoplay,
+        video.startTime,
+        video.endTime
+      );
+    else if (video.source == 'vimeo')
+      return getVimeoEmbedURL(
+        video.slugID,
+        utvJSData.setting.vimeoAutoplay,
+        utvJSData.setting.vimeoDetailsHide,
+        video.startTime
+      );
   }
 
   openVideoPopup = (video) =>
   {
-    let url;
+    const embedURL = this.getVideoEmbedURL(video);
 
-    if (video.source == 'youtube')
-      url = this.getYouTubeURL(video);
-    else if (video.source == 'vimeo')
-      url = this.getVimeoURL(video);
-
-    jQuery.magnificPopup.open(
-    {
+    jQuery.magnificPopup.open({
       items: {
-        src: url
+        src: embedURL
       },
       type: 'iframe',
       iframe: {
@@ -123,8 +85,7 @@ class Gallery extends React.Component
       },
       key: 'utvid',
       callbacks: {
-        open: () =>
-        {
+        open: () => {
           const popup = document.querySelector('.mfp-container');
           popup.querySelector('.mfp-content').style.maxWidth = utvJSData.setting.playerWidth + 'px';
           popup.querySelector('.mfp-title').innerText = video.title;
@@ -132,12 +93,10 @@ class Gallery extends React.Component
           overlay.style.background = utvJSData.setting.lightboxOverlayColor;
           overlay.style.opacity = utvJSData.setting.lightboxOverlayOpacity;
 
-          if (video.description && utvJSData.setting.showVideoDescription)
-          {
+          if (video.description && utvJSData.setting.showVideoDescription) {
             popup.querySelector('.mfp-description').innerText = video.description;
             popup.classList.add('mfp-has-meta');
-          }
-          else
+          } else
             popup.querySelector('.mfp-description').innerText = '';
         }
       }
@@ -152,12 +111,16 @@ class Gallery extends React.Component
   render()
   {
     const {
+      isLoading,
       albums,
       videos,
       thumbnailType,
       displayType,
       currentPage
     } = this.state;
+
+    if (isLoading)
+      return <Loader/>;
 
     if (displayType == 'albums' && albums.length)
       return <AlbumView

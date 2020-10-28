@@ -44,5 +44,8 @@ module.exports = {
       }),
       new OptimizeCssAssetsPlugin({})
     ]
+  },
+  resolve: {
+    modules: ['assets/js', 'node_modules']
   }
 };

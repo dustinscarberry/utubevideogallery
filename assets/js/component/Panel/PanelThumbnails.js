@@ -1,5 +1,5 @@
 import React from 'react';
-import ThumbnailsGrid from '../shared/ThumbnailsGrid';
+import ThumbnailsGrid from 'component/shared/ThumbnailsGrid';
 import Thumbnail from './Thumbnail';
 
 const PanelThumbnails = (props) =>

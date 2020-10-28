@@ -34,13 +34,11 @@ class AlbumRepository
     if (!$videoCount)
       $videoCount = 0;
 
-    if ($albumData)
-    {
-      $albumData->VIDEO_COUNT = $videoCount;
-      return new Album($albumData);
-    }
+    if (!$albumData)
+      return false;
 
-    return false;
+    $albumData->VIDEO_COUNT = $videoCount;
+    return new Album($albumData);
   }
 
   // get all albums
@@ -83,8 +81,6 @@ class AlbumRepository
   {
     global $wpdb;
 
-    $currentTime = current_time('timestamp');
-
     // insert new album
     if ($wpdb->insert(
       $wpdb->prefix . 'utubevideo_album',
@@ -93,7 +89,7 @@ class AlbumRepository
         'ALB_SLUG' => $slug,
         'ALB_THUMB' => 'missing',
         'ALB_SORT' => $videoSorting,
-        'ALB_UPDATEDATE' => $currentTime,
+        'ALB_UPDATEDATE' => current_time('timestamp'),
         'ALB_POS' => $nextSortPosition,
         'DATA_ID' => $galleryID
       ]
@@ -156,15 +152,18 @@ class AlbumRepository
   }
 
   // update album sort position
-  static function updateItemPosition(int $albumID, $position)
+  static function updateItemPosition(int $albumID, int $position)
   {
     global $wpdb;
 
-    $wpdb->update(
+    if ($wpdb->update(
       $wpdb->prefix . 'utubevideo_album',
       ['ALB_POS' => $position],
       ['ALB_ID' => $albumID]
-    );
+    ) !== false)
+      return true;
+
+    return false;
   }
 
   // get all albums in a gallery

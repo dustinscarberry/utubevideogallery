@@ -1,8 +1,8 @@
 import React from 'react';
 import AlbumTable from './AlbumTable';
-import ActionBar from '../../shared/ActionBar';
-import Breadcrumbs from '../../shared/Breadcrumbs';
-import SecondaryButton from '../../shared/SecondaryButton';
+import ActionBar from 'component/shared/ActionBar';
+import Breadcrumbs from 'component/shared/Breadcrumbs';
+import SecondaryButton from 'component/shared/SecondaryButton';
 
 const AlbumTabView = (props) =>
 {

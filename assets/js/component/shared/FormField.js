@@ -11,7 +11,10 @@ const FormField = ({classes, children}) => {
 }
 
 FormField.propTypes = {
-  classes: PropTypes.array,
+  classes: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.string
+  ]),
   children: PropTypes.node
 }
 
