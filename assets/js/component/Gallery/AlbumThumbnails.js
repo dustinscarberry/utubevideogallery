@@ -1,10 +1,9 @@
 import React from 'react';
 import ThumbnailsGrid from 'component/shared/ThumbnailsGrid';
 import AlbumThumbnail from './AlbumThumbnail';
-import galleryService from 'helpers/GalleryService';
+import { getThumbnailsClasses } from 'helpers/gallery-helpers';
 
 const AlbumThumbnails = ({albums, onChangeAlbum, thumbnailType, currentPage, thumbnailsPerPage}) => {
-  const thumbnailsClasses = galleryService.getThumbnailsClasses(thumbnailType);
   let startIndex;
   let endIndex;
 
@@ -34,7 +33,7 @@ const AlbumThumbnails = ({albums, onChangeAlbum, thumbnailType, currentPage, thu
   });
 
   return (
-    <ThumbnailsGrid className={thumbnailsClasses.join(' ')}>
+    <ThumbnailsGrid classes={getThumbnailsClasses(thumbnailType)}>
       {albumThumbnailNodes}
     </ThumbnailsGrid>
   );

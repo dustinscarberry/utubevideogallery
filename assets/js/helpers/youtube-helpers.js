@@ -23,3 +23,7 @@ export function getYouTubeEmbedURL(
   source += '&end=' + endTime;
   return source;
 }
+
+export default {
+  getYouTubeEmbedURL
+}

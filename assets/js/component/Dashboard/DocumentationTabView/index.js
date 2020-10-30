@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import actions from './actions';
-import utility from 'component/shared/utility';
+import apiHelper from 'helpers/api-helpers';
 import Card from 'component/shared/Card';
 import SectionHeader from 'component/shared/SectionHeader';
 import Loader from 'component/shared/Loader';
@@ -28,14 +28,14 @@ class DocumentationTabView extends React.Component
   {
     const apiData = await actions.fetchDocumentation();
 
-    if (utility.isValidResponse(apiData)) {
-      const data = utility.getAPIData(apiData);
+    if (apiHelper.isValidResponse(apiData)) {
+      const data = apiHelper.getAPIData(apiData);
 
       this.setState({
         documentation: data
       });
-    } else if (utility.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
+    } else if (apiHelper.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
   render()

@@ -1,12 +1,13 @@
 import React from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const ThumbnailsGrid = ({className, children}) => {
-  return <div className={className}>{children}</div>;
+const ThumbnailsGrid = ({classes, children}) => {
+  return <div className={classnames(classes)}>{children}</div>;
 }
 
 ThumbnailsGrid.propTypes = {
-  className: PropTypes.string,
+  classes: PropTypes.array,
   children: PropTypes.node
 }
 

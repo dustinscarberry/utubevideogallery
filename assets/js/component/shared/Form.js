@@ -11,12 +11,9 @@ class Form extends React.Component
     this.state = {
       isValidated: false
     };
-
-    this.onSubmit = this.onSubmit.bind(this);
-    this.validate = this.validate.bind(this);
   }
 
-  validate()
+  validate = () =>
   {
     let form = this.refs.form;
     let formValid = form.checkValidity() || false;
@@ -48,7 +45,7 @@ class Form extends React.Component
     return formValid;
   }
 
-  onSubmit(e)
+  onSubmit = (e) =>
   {
     e.preventDefault();
 

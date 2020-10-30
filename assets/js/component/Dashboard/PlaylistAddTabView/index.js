@@ -1,6 +1,6 @@
 import React from 'react';
 import actions from './actions';
-import utility from 'component/shared/utility';
+import apiHelper from 'helpers/api-helpers';
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';
@@ -60,12 +60,12 @@ class PlaylistAddTabView extends React.Component
   {
     const rsp = await actions.fetchAlbums();
 
-    if (utility.isValidResponse(rsp)) {
-      const data = utility.getAPIData(rsp);
+    if (apiHelper.isValidResponse(rsp)) {
+      const data = apiHelper.getAPIData(rsp);
       const albums = actions.parseAlbumsData(data);
       this.setState({albums});
-    } else if (utility.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
+    } else if (apiHelper.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
   //load remote playlist
@@ -76,10 +76,10 @@ class PlaylistAddTabView extends React.Component
     //fetch remote playlist data
     let remoteVideos = await actions.fetchRemotePlaylist(source, sourceID);
 
-    if (utility.isValidResponse(remoteVideos))
+    if (apiHelper.isValidResponse(remoteVideos))
     {
       //augment remote videos data
-      remoteVideos = utility.getAPIData(remoteVideos);
+      remoteVideos = apiHelper.getAPIData(remoteVideos);
       remoteVideos = actions.parseRemotePlaylistData(remoteVideos);
 
       //add remote videos to state
@@ -89,8 +89,8 @@ class PlaylistAddTabView extends React.Component
         playlistLoading: false
       });
     }
-    else if (utility.isErrorResponse(remoteVideos))
-      this.props.setFeedbackMessage(utility.getErrorMessage(remoteVideos), 'error');
+    else if (apiHelper.isErrorResponse(remoteVideos))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(remoteVideos), 'error');
   }
 
   changeValue = (e) =>
@@ -155,10 +155,10 @@ class PlaylistAddTabView extends React.Component
     //save base playlist
     const basePlaylist = await actions.createPlaylist(this.state);
 
-    if (utility.isValidResponse(basePlaylist))
+    if (apiHelper.isValidResponse(basePlaylist))
     {
       //get playlist id
-      let playlistID = utility.getAPIData(basePlaylist);
+      let playlistID = apiHelper.getAPIData(basePlaylist);
       playlistID = playlistID.id;
 
       //save playlist videos
@@ -166,8 +166,8 @@ class PlaylistAddTabView extends React.Component
 
       this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAdded);
     }
-    else if (utility.isErrorResponse(basePlaylist))
-      this.props.setFeedbackMessage(utility.getErrorMessage(basePlaylist), 'error');
+    else if (apiHelper.isErrorResponse(basePlaylist))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(basePlaylist), 'error');
 
     this.props.changeView();
   }

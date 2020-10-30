@@ -12,3 +12,7 @@ export function getVimeoEmbedURL(
   source += '#t=' + startTime;
   return source;
 }
+
+export default {
+  getVimeoEmbedURL
+}

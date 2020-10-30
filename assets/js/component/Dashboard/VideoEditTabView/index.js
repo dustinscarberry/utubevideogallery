@@ -1,6 +1,7 @@
 import React from 'react';
 import actions from './actions';
-import utility from 'component/shared/utility';
+import apiHelper from 'helpers/api-helpers';
+import { getFormattedDateTime } from 'helpers/datetime-helpers';
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';
@@ -60,9 +61,9 @@ class VideoEditTabView extends React.Component
     //get video
     const apiData = await actions.fetchVideo(this.props.currentViewID);
 
-    if (utility.isValidResponse(apiData))
+    if (apiHelper.isValidResponse(apiData))
     {
-      const data = utility.getAPIData(apiData);
+      const data = apiHelper.getAPIData(apiData);
 
       this.setState({
         thumbnail: data.thumbnail,
@@ -79,8 +80,8 @@ class VideoEditTabView extends React.Component
         loading: false
       });
     }
-    else if (utility.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
+    else if (apiHelper.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
   async loadAlbums()
@@ -88,14 +89,14 @@ class VideoEditTabView extends React.Component
     //get albums
     const apiData = await actions.fetchGalleryAlbums(this.props.selectedGallery);
 
-    if (utility.isValidResponse(apiData))
+    if (apiHelper.isValidResponse(apiData))
     {
-      const data = utility.getAPIData(apiData);
+      const data = apiHelper.getAPIData(apiData);
       const albums = actions.parseAlbumsData(data);
       this.setState({albums});
     }
-    else if (utility.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
+    else if (apiHelper.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
   changeValue = (e) =>
@@ -113,13 +114,13 @@ class VideoEditTabView extends React.Component
     //update video
     const rsp = await actions.updateVideo(this.props.currentViewID, this.state);
 
-    if (utility.isValidResponse(rsp))
+    if (apiHelper.isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoSaved);
     }
-    else if (utility.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
+    else if (apiHelper.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
   render()
@@ -223,7 +224,7 @@ class VideoEditTabView extends React.Component
                   <Label text={utvJSData.localization.lastUpdated}/>
                   <TextInput
                     name="updateDateFormatted"
-                    value={utility.getFormattedDateTime(this.state.updateDate)}
+                    value={getFormattedDateTime(this.state.updateDate)}
                     disabled={true}
                   />
                 </FormField>

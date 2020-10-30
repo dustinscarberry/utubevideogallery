@@ -22,3 +22,8 @@ export function getFormattedDateTime(timestamp)
     }
   );
 }
+
+export default {
+  getFormattedDate,
+  getFormattedDateTime
+}

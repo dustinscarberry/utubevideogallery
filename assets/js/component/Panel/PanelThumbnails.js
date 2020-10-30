@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import ThumbnailsGrid from 'component/shared/ThumbnailsGrid';
 import Thumbnail from './Thumbnail';
 
@@ -24,7 +25,6 @@ const PanelThumbnails = (props) =>
     thumbnailsClasses.push('utv-thumbnails-rectangle');
 
   const thumbnailNodes = videos.map((video, i) => {
-    console.log(video.thumbnail);
     if (i >= startIndex && i < endIndex)
       return (<Thumbnail
         key={i}
@@ -37,7 +37,7 @@ const PanelThumbnails = (props) =>
   });
 
   return (
-    <ThumbnailsGrid className={thumbnailsClasses.join(' ')}>
+    <ThumbnailsGrid classes={classnames(thumbnailsClasses)}>
       {thumbnailNodes}
     </ThumbnailsGrid>
   );

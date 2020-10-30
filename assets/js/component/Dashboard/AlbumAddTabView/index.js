@@ -12,7 +12,7 @@ import SelectBox from 'component/shared/SelectBox';
 import SubmitButton from 'component/shared/SubmitButton';
 import CancelButton from 'component/shared/CancelButton';
 import actions from './actions';
-import utility from 'component/shared/utility';
+import apiHelper from 'helpers/api-helpers';
 
 class AlbumAddTabView extends React.Component
 {
@@ -39,13 +39,13 @@ class AlbumAddTabView extends React.Component
       this.props.selectedGallery
     );
 
-    if (utility.isValidResponse(rsp))
+    if (apiHelper.isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumCreated);
     }
-    else if (utility.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
+    else if (apiHelper.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
   render()

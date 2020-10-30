@@ -1,6 +1,6 @@
 import React from 'react';
 import actions from './actions';
-import utility from 'component/shared/utility';
+import apiHelper from 'helpers/api-helpers';
 import Card from 'component/shared/Card';
 import Form from 'component/shared/Form';
 import FormField from 'component/shared/FormField';
@@ -65,9 +65,9 @@ class SettingsTabView extends React.Component
   {
     const apiData = await actions.fetchSettings();
 
-    if (utility.isValidResponse(apiData))
+    if (apiHelper.isValidResponse(apiData))
     {
-      const data = utility.getAPIData(apiData);
+      const data = apiHelper.getAPIData(apiData);
 
       this.setState({
         gdEnabled: data.gdEnabled,
@@ -98,8 +98,8 @@ class SettingsTabView extends React.Component
         youtubeHideDetails: data.youtubeHideDetails
       });
     }
-    else if (utility.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
+    else if (apiHelper.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
   saveSettings = async() =>
@@ -120,10 +120,10 @@ class SettingsTabView extends React.Component
     await this.loadData();
 
     //user feedback
-    if (utility.isValidResponse(rsp))
+    if (apiHelper.isValidResponse(rsp))
       this.props.setFeedbackMessage(utvJSData.localization.feedbackSettingsSaved);
-    else if (utility.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
+    else if (apiHelper.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
 
     this.setState({loading: false});
   }
@@ -135,9 +135,9 @@ class SettingsTabView extends React.Component
     //get all videos
     const videosData = await actions.fetchAllVideos();
 
-    if (utility.isValidResponse(videosData))
+    if (apiHelper.isValidResponse(videosData))
     {
-      const videos = utility.getAPIData(videosData);
+      const videos = apiHelper.getAPIData(videosData);
 
       for (let video of videos)
       {
@@ -148,8 +148,8 @@ class SettingsTabView extends React.Component
         this.props.setFeedbackMessage(actions.getThumbnailUpdateMessage(video.title));
       }
     }
-    else if (utility.isErrorResponse(videosData))
-      this.props.setFeedbackMessage(utility.getErrorMessage(videosData), 'error');
+    else if (apiHelper.isErrorResponse(videosData))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(videosData), 'error');
 
     this.setState({loading: false});
   }

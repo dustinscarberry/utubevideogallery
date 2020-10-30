@@ -1,6 +1,7 @@
 import React from 'react';
 import actions from './actions';
-import utility from 'component/shared/utility';
+import apiHelper from 'helpers/api-helpers';
+import { getFormattedDateTime } from 'helpers/datetime-helpers';
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';
@@ -57,9 +58,9 @@ class PlaylistEditTabView extends React.Component
   {
     const rsp = await actions.fetchPlaylist(this.props.currentViewID);
 
-    if (utility.isValidResponse(rsp))
+    if (apiHelper.isValidResponse(rsp))
     {
-      const data = utility.getAPIData(rsp);
+      const data = apiHelper.getAPIData(rsp);
 
       this.setState({
         title: data.title,
@@ -72,8 +73,8 @@ class PlaylistEditTabView extends React.Component
         albumName: data.albumName
       });
     }
-    else if (utility.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
+    else if (apiHelper.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
   async loadPlaylistVideos()
@@ -87,19 +88,19 @@ class PlaylistEditTabView extends React.Component
     const localVideos = await actions.fetchLocalPlaylistVideos(albumID);
 
     //check for errors
-    if (utility.isErrorResponse(remoteVideos)) {
-      this.props.setFeedbackMessage(utility.getErrorMessage(remoteVideos), 'error');
+    if (apiHelper.isErrorResponse(remoteVideos)) {
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(remoteVideos), 'error');
       return;
     }
 
-    if (utility.isErrorResponse(localVideos)) {
-      this.props.setFeedbackMessage(utility.getErrorMessage(localVideos), 'error');
+    if (apiHelper.isErrorResponse(localVideos)) {
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(localVideos), 'error');
       return;
     }
 
     //if all is good filter playlist data
-    const remoteData = utility.getAPIData(remoteVideos);
-    let localData = utility.getAPIData(localVideos);
+    const remoteData = apiHelper.getAPIData(remoteVideos);
+    let localData = apiHelper.getAPIData(localVideos);
 
     //// TODO: remove this and switch to correct query above instead
     //filter local playlist videos
@@ -268,7 +269,7 @@ class PlaylistEditTabView extends React.Component
                   <Label text={utvJSData.localization.lastUpdated}/>
                   <TextInput
                     name="updateDate"
-                    value={utility.getFormattedDateTime(this.state.updateDate)}
+                    value={getFormattedDateTime(this.state.updateDate)}
                     disabled={true}
                   />
                 </FormField>

@@ -1,10 +1,9 @@
 import React from 'react';
 import ThumbnailsGrid from 'component/shared/ThumbnailsGrid';
 import VideoThumbnail from './VideoThumbnail';
-import galleryService from 'helpers/GalleryService';
+import { getThumbnailsClasses } from 'helpers/gallery-helpers';
 
 const VideoThumbnails = ({videos, onOpenVideo, thumbnailType, currentPage, thumbnailsPerPage}) => {
-  const thumbnailsClasses = galleryService.getThumbnailsClasses(thumbnailType);
   let startIndex;
   let endIndex;
 
@@ -34,7 +33,7 @@ const VideoThumbnails = ({videos, onOpenVideo, thumbnailType, currentPage, thumb
   });
 
   return (
-    <ThumbnailsGrid className={thumbnailsClasses.join(' ')}>
+    <ThumbnailsGrid classes={getThumbnailsClasses(thumbnailType)}>
       {videoThumbnailNodes}
     </ThumbnailsGrid>
   );

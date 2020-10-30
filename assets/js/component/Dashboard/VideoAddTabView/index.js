@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import actions from './actions';
-import utility from 'component/shared/utility';
+import apiHelper from 'helpers/api-helpers';
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';
@@ -73,11 +73,11 @@ class VideoAddTabView extends React.Component
     const rsp = await actions.createVideo(this.state, this.props.selectedAlbum);
 
     // user feedback
-    if (utility.isValidResponse(rsp)) {
+    if (apiHelper.isValidResponse(rsp)) {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoAdded);
-    } else if (utility.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
+    } else if (apiHelper.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
   render()

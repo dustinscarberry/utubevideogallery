@@ -1,7 +1,8 @@
 import React from 'react';
+import classnames from 'classnames';
 import VideoThumbnails from './VideoThumbnails';
 import Paging from './Paging';
-import galleryService from 'helpers/GalleryService';
+import { getGalleryClasses } from 'helpers/gallery-helpers';
 
 class VideoView extends React.Component
 {
@@ -51,10 +52,8 @@ class VideoView extends React.Component
       onChangePage
     } = this.props;
 
-    const galleryClasses = galleryService.getGalleryClasses(iconType);
-
     return (
-      <div className={galleryClasses.join(' ')}>
+      <div className={classnames(getGalleryClasses(iconType))}>
         <VideoThumbnails
           videos={videos}
           onOpenVideo={this.openVideo}

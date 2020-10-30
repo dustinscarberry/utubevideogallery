@@ -15,7 +15,8 @@ import CancelButton from 'component/shared/CancelButton';
 import Loader from 'component/shared/Loader';
 import AlbumThumbnailSelection from './AlbumThumbnailSelection';
 import actions from './actions';
-import utility from 'component/shared/utility';
+import apiHelper from 'helpers/api-helpers';
+import { getFormattedDateTime } from 'helpers/datetime-helpers';
 
 class AlbumEditTabView extends React.Component
 {
@@ -52,9 +53,9 @@ class AlbumEditTabView extends React.Component
   {
     const apiData = await actions.fetchAlbum(this.props.currentViewID);
 
-    if (utility.isValidResponse(apiData))
+    if (apiHelper.isValidResponse(apiData))
     {
-      const data = utility.getAPIData(apiData);
+      const data = apiHelper.getAPIData(apiData);
 
       this.setState({
         thumbnail: data.thumbnail,
@@ -64,17 +65,17 @@ class AlbumEditTabView extends React.Component
         gallery: data.galleryID
       });
     }
-    else if (utility.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
+    else if (apiHelper.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
   async loadGalleries()
   {
     const apiData = await actions.fetchGalleries();
 
-    if (utility.isValidResponse(apiData))
+    if (apiHelper.isValidResponse(apiData))
     {
-      const data = utility.getAPIData(apiData);
+      const data = apiHelper.getAPIData(apiData);
       const galleries = actions.parseGalleriesData(data);
       this.setState({galleries});
     }
@@ -84,13 +85,13 @@ class AlbumEditTabView extends React.Component
   {
     const apiData = await actions.fetchThumbnails(this.props.currentViewID);
 
-    if (utility.isValidResponse(apiData))
+    if (apiHelper.isValidResponse(apiData))
     {
-      const data = utility.getAPIData(apiData);
+      const data = apiHelper.getAPIData(apiData);
       const thumbnails = actions.parseThumbnailsData(data);
       this.setState({thumbnails});
     }
-    else if (utility.isErrorResponse(apiData))
+    else if (apiHelper.isErrorResponse(apiData))
       this.props.setFeedbackMessage('Loading album thumbnails failed', 'error');
   }
 
@@ -124,13 +125,13 @@ class AlbumEditTabView extends React.Component
       this.state.gallery
     );
 
-    if (utility.isValidResponse(rsp))
+    if (apiHelper.isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumSaved);
     }
-    else if (utility.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
+    else if (apiHelper.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
   render()
@@ -194,7 +195,7 @@ class AlbumEditTabView extends React.Component
                   <Label text={utvJSData.localization.lastUpdated}/>
                   <TextInput
                     name="updateDate"
-                    value={utility.getFormattedDateTime(this.state.updateDate)}
+                    value={getFormattedDateTime(this.state.updateDate)}
                     disabled={true}
                   />
                 </FormField>

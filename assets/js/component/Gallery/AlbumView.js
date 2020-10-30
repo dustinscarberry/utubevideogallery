@@ -1,9 +1,10 @@
 import React from 'react';
+import classnames from 'classnames';
 import AlbumThumbnails from './AlbumThumbnails';
 import VideoThumbnails from './VideoThumbnails';
 import BreadCrumb from './BreadCrumb';
 import Paging from './Paging';
-import galleryService from 'helpers/GalleryService';
+import { getGalleryClasses } from 'helpers/gallery-helpers';
 
 class AlbumView extends React.Component
 {
@@ -110,13 +111,13 @@ class AlbumView extends React.Component
       onChangePage
     } = this.props;
 
-    const galleryClasses = galleryService.getGalleryClasses(
+    const galleryClasses = getGalleryClasses(
       iconType,
       this.state.selectedAlbum
     );
 
     return (
-      <div className={galleryClasses.join(' ')}>
+      <div className={classnames(galleryClasses)}>
         <BreadCrumb
           albumName={this.getSelectedAlbumName()}
           changeAlbum={this.changeAlbum}

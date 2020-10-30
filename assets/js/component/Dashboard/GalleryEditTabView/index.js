@@ -1,6 +1,7 @@
 import React from 'react';
 import actions from './actions';
-import utility from 'component/shared/utility';
+import apiHelper from 'helpers/api-helpers';
+import { getFormattedDateTime } from 'helpers/datetime-helpers';
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';
@@ -45,9 +46,9 @@ class GalleryEditTabView extends React.Component
   {
     const apiData = await actions.fetchGallery(this.props.currentViewID);
 
-    if (utility.isValidResponse(apiData))
+    if (apiHelper.isValidResponse(apiData))
     {
-      const data = utility.getAPIData(apiData);
+      const data = apiHelper.getAPIData(apiData);
 
       this.setState({
         title: data.title,
@@ -58,8 +59,8 @@ class GalleryEditTabView extends React.Component
         updateDate: data.updateDate
       });
     }
-    else if (utility.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(utility.getErrorMessage(apiData), 'error');
+    else if (apiHelper.isErrorResponse(apiData))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
   changeValue = (e) =>
@@ -79,7 +80,7 @@ class GalleryEditTabView extends React.Component
     const rsp = await actions.updateGallery(this.props.currentViewID, this.state);
 
     //update thumbnails if format changed
-    if (utility.isValidResponse(rsp)
+    if (apiHelper.isValidResponse(rsp)
       && this.state.thumbnailType != this.state.originalThumbnailType
     ) {
       await this.rebuildThumbnails();
@@ -87,13 +88,13 @@ class GalleryEditTabView extends React.Component
     }
 
     //user feedback
-    if (utility.isValidResponse(rsp))
+    if (apiHelper.isValidResponse(rsp))
     {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackGallerySaved);
     }
-    else if (utility.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
+    else if (apiHelper.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
 
     this.setState({loading: false});
   }
@@ -102,7 +103,7 @@ class GalleryEditTabView extends React.Component
   {
     const videosData = await actions.fetchGalleryVideos(this.props.currentViewID);
 
-    if (utility.isValidResponse(videosData)) {
+    if (apiHelper.isValidResponse(videosData)) {
       const videos = videosData.data.data;
 
       for (let video of videos) {
@@ -113,8 +114,8 @@ class GalleryEditTabView extends React.Component
         this.props.setFeedbackMessage(actions.getThumbnailUpdateMessage(video.title));
       }
     }
-    else if (utility.isErrorResponse(videosData))
-      this.props.setFeedbackMessage(utility.getErrorMessage(videosData), 'error');
+    else if (apiHelper.isErrorResponse(videosData))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(videosData), 'error');
   }
 
   render()
@@ -189,7 +190,7 @@ class GalleryEditTabView extends React.Component
                   <Label text={utvJSData.localization.lastUpdated}/>
                   <TextInput
                     name="updateDate"
-                    value={utility.getFormattedDateTime(this.state.updateDate)}
+                    value={getFormattedDateTime(this.state.updateDate)}
                     disabled={true}
                   />
                 </FormField>

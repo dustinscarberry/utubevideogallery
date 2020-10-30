@@ -1,6 +1,6 @@
 import React from 'react';
 import actions from './actions';
-import utility from 'component/shared/utility';
+import apiHelper from 'helpers/api-helpers';
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';
@@ -37,12 +37,12 @@ class GalleryAddTabView extends React.Component
   {
     const rsp = await actions.createGallery(this.state);
 
-    if (utility.isValidResponse(rsp)) {
+    if (apiHelper.isValidResponse(rsp)) {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackGalleryCreated);
     }
-    else if (utility.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(utility.getErrorMessage(rsp), 'error');
+    else if (apiHelper.isErrorResponse(rsp))
+      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
   render()
