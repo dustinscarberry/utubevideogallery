@@ -5,6 +5,8 @@ import TitleControls from './TitleControls';
 import Description from './Description';
 import PanelThumbnails from './PanelThumbnails';
 import Paging from './Paging';
+import Loader from 'component/shared/Loader';
+import { fetchPanelData } from './actions';
 
 class Panel extends React.Component
 {
@@ -13,6 +15,7 @@ class Panel extends React.Component
     super(props);
 
     this.state = {
+      isLoading: true,
       videos: [],
       thumbnailType: undefined,
       selectedVideo: 0,
@@ -21,9 +24,29 @@ class Panel extends React.Component
       forceNoAutoplay: true
     }
 
+    // create ref for player auto scroll
     this.panel = React.createRef();
+  }
 
+  componentDidMount()
+  {
     this.loadAPIData();
+  }
+
+  loadAPIData = async() =>
+  {
+    const {
+      id,
+      videosPerPage,
+      maxVideos
+    } = this.props;
+
+    const panelData = await fetchPanelData(id, videosPerPage, maxVideos);
+
+    if (panelData) {
+      this.setState(panelData);
+      this.setState({isLoading: false});
+    }
   }
 
   turnOnAutoplay()
@@ -90,45 +113,10 @@ class Panel extends React.Component
     return panelClasses.join(' ');
   }
 
-  loadAPIData = async() =>
-  {
-    const {
-      id,
-      videosPerPage,
-      maxVideos
-    } = this.props;
-
-    const apiData = await axios.get(
-      '/wp-json/utubevideogallery/v1/galleriesdata/'
-      + id
-    );
-
-    if (apiData.status == 200 && !apiData.data.error)
-    {
-      const data = apiData.data.data;
-      let videos = [];
-
-      for (const album of data.albums) {
-        for (const video of album.videos)
-          videos.push(video);
-      }
-
-      if (maxVideos)
-        videos = videos.slice(0, maxVideos);
-
-      const totalPages = Math.ceil(videos.length / videosPerPage);
-
-      this.setState({
-        videos: videos,
-        thumbnailType: data.thumbnailType,
-        totalPages: totalPages
-      });
-    }
-  }
-
   render()
   {
     const {
+      isLoading,
       videos,
       forceNoAutoplay,
       selectedVideo,
@@ -136,6 +124,9 @@ class Panel extends React.Component
       totalPages,
       thumbnailType
     } = this.state;
+
+    if (isLoading)
+      return <Loader/>;
 
     if (videos.length == 0)
       return null;

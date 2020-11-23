@@ -1,5 +1,4 @@
 import React from 'react';
-import classnames from 'classnames';
 import ThumbnailsGrid from 'component/shared/ThumbnailsGrid';
 import Thumbnail from './Thumbnail';
 
@@ -37,7 +36,7 @@ const PanelThumbnails = (props) =>
   });
 
   return (
-    <ThumbnailsGrid classes={classnames(thumbnailsClasses)}>
+    <ThumbnailsGrid classes={thumbnailsClasses}>
       {thumbnailNodes}
     </ThumbnailsGrid>
   );
