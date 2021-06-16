@@ -46,7 +46,7 @@ class DocumentationTabView extends React.Component
     return (
       <Card>
         <SectionHeader text={utvJSData.localization.documentation}/>
-        <ReactMarkdown source={this.state.documentation} />
+        <ReactMarkdown>{this.state.documentation}</ReactMarkdown>
       </Card>
     );
   }

@@ -1,7 +1,8 @@
+const webpack = require('webpack');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require("terser-webpack-plugin");
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const destDir = path.resolve(__dirname, 'public/js');
 const sourceDir = path.resolve(__dirname, 'assets/js');
@@ -35,14 +36,16 @@ module.exports = {
     ]
   },
   plugins: [
-    new MiniCssExtractPlugin({filename: '../css/[name].min.css'})
+    new MiniCssExtractPlugin({filename: '../css/[name].min.css'}),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    })
   ],
   optimization: {
+    minimize: true,
     minimizer: [
-      new UglifyJsPlugin({
-        sourceMap: true
-      }),
-      new OptimizeCssAssetsPlugin({})
+      new TerserPlugin(),
+      new CssMinimizerPlugin({})
     ]
   },
   resolve: {
