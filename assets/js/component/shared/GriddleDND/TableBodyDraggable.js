@@ -1,8 +1,11 @@
 import React from 'react';
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
+//import HTML5Backend from 'react-dnd-html5-backend';
+//import { DragDropContext } from 'react-dnd';
 import Row from './Row';
 import RowDraggable from './RowDraggable';
+
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 
 const TableBodyDraggable = (props) =>
 {
@@ -31,8 +34,10 @@ const TableBodyDraggable = (props) =>
   );
 
   return (
-    <tbody>{rows}</tbody>
+    <DndProvider backend={HTML5Backend}>
+      <tbody>{rows}</tbody>
+    </DndProvider>
   );
 }
 
-export default DragDropContext(HTML5Backend)(TableBodyDraggable);
+export default TableBodyDraggable;
