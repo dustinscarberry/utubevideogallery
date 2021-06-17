@@ -17,7 +17,7 @@ const YouTubeVideo = ({videoData, controls, forceNoAutoplay}) => {
   return <Iframe
     classes={['utv-panel-iframe']}
     src={source}
-  />;
+  />
 }
 
 export default YouTubeVideo;

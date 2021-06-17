@@ -4,17 +4,14 @@ import PropTypes from 'prop-types';
 
 class Form extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
       isValidated: false
     };
   }
 
-  validate = () =>
-  {
+  validate = () => {
     let form = this.refs.form;
     let formValid = form.checkValidity() || false;
 
@@ -32,8 +29,7 @@ class Form extends React.Component
           errorNode.textContent = element.validationMessage;
           errorNode.className = this.props.errorclass;
           element.parentNode.insertBefore(errorNode, element.nextSibling);
-        }
-        else {
+        } else {
           let errorNode = element.parentNode.querySelector('.utv-invalid-feedback');
 
           if (errorNode)
@@ -45,8 +41,7 @@ class Form extends React.Component
     return formValid;
   }
 
-  onSubmit = (e) =>
-  {
+  onSubmit = (e) => {
     e.preventDefault();
 
     if (this.validate() && this.props.submit)
@@ -55,23 +50,18 @@ class Form extends React.Component
     this.setState({isValidated: true});
   }
 
-  render()
-  {
-    const classNames = classnames(
-      this.props.classes,
-      {'was-validated': this.state.isValidated}
-    );
+  render() {
+    const { classes } = this.props;
+    const { isValidated } = this.state;
 
-    return (
-      <form
-        ref="form"
-        onSubmit={this.onSubmit}
-        className={classNames}
-        noValidate
-      >
-        {this.props.children}
-      </form>
-    );
+    return <form
+      ref="form"
+      onSubmit={this.onSubmit}
+      className={classnames(classes, {'was-validated': isValidated})}
+      noValidate
+    >
+      {this.props.children}
+    </form>
   }
 }
 

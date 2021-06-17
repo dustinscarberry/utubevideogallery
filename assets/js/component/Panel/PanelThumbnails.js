@@ -1,23 +1,20 @@
 import React from 'react';
+import classnames from 'classnames';
 import ThumbnailsGrid from 'component/shared/ThumbnailsGrid';
 import Thumbnail from './Thumbnail';
 
-const PanelThumbnails = (props) =>
-{
-  const {
-    videos,
-    selectedVideo,
-    currentPage,
-    videosPerPage,
-    onChangeVideo,
-    thumbnailType
-  } = props;
-
+const PanelThumbnails = ({
+  videos,
+  selectedVideo,
+  currentPage,
+  videosPerPage,
+  onChangeVideo,
+  thumbnailType
+}) => {
   const startIndex = (currentPage - 1) * parseInt(videosPerPage);
   const endIndex = startIndex + parseInt(videosPerPage);
 
   const thumbnailsClasses = ['utv-panel-thumbnails', 'utv-align-center'];
-
   if (thumbnailType == 'square')
     thumbnailsClasses.push('utv-thumbnails-square');
   else
@@ -35,17 +32,9 @@ const PanelThumbnails = (props) =>
       />);
   });
 
-  return (
-    <ThumbnailsGrid classes={thumbnailsClasses}>
-      {thumbnailNodes}
-    </ThumbnailsGrid>
-  );
-
-  return (
-    <Thumbnails className={thumbnailsClasses.join(' ')}>
-      {thumbnailNodes}
-    </Thumbnails>
-  );
+  return <ThumbnailsGrid classes={classnames(thumbnailsClasses)}>
+    {thumbnailNodes}
+  </ThumbnailsGrid>
 }
 
 export default PanelThumbnails;

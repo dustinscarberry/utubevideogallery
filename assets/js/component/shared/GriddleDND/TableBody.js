@@ -1,33 +1,28 @@
 import React from 'react';
 import Row from './Row';
 
-const TableBody = (props) =>
-{
-  const {
-    data,
-    headers,
-    useBulkActions,
-    enableBulkActions,
-    toggleRowCheckbox,
-    rowKey,
-    moveRow
-  } = props;
-
-  const rows = data.map((row, i) =>
-    <Row
-      key={row.id}
-      dataIndex={i}
-      rowData={row}
-      headers={headers}
-      enableBulkActions={enableBulkActions}
-      toggleRowCheckbox={toggleRowCheckbox}
-      moveRow={moveRow}
-    />
-  );
-
-  return (
-    <tbody>{rows}</tbody>
-  );
+const TableBody = ({
+  data,
+  headers,
+  useBulkActions,
+  enableBulkActions,
+  toggleRowCheckbox,
+  rowKey,
+  moveRow
+}) => {
+  return <tbody>
+    {data.map((row, i) =>
+      <Row
+        key={row.id}
+        dataIndex={i}
+        rowData={row}
+        headers={headers}
+        enableBulkActions={enableBulkActions}
+        toggleRowCheckbox={toggleRowCheckbox}
+        moveRow={moveRow}
+      />
+    )}
+  </tbody>
 }
 
 export default TableBody;

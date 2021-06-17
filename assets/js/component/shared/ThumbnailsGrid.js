@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const ThumbnailsGrid = ({classes, children}) => {
-  return <div className={classnames(classes)}>{children}</div>;
+  return <div className={classnames(classes)}>{children}</div>
 }
 
 ThumbnailsGrid.propTypes = {

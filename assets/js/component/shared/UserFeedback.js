@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 
 const UserFeedback = ({message, type}) => {
   if (!message || !type)
     return null;
 
   const classes = ['notice'];
-
   if (type == 'success')
     classes.push('notice-success');
   else if (type == 'warning')
@@ -16,11 +16,9 @@ const UserFeedback = ({message, type}) => {
   else
     classes.push('notice-error');
 
-  return (
-    <div className={classes.join(' ')}>
-      <p>{message}</p>
-    </div>
-  );
+  return <div className={classnames(classes)}>
+    <p>{message}</p>
+  </div>
 }
 
 UserFeedback.propTypes = {

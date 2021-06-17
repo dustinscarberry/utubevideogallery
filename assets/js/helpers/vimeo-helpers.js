@@ -1,9 +1,9 @@
-export function getVimeoEmbedURL(
+export const getVimeoEmbedURL = (
   sourceID,
   autoplay,
   hideDetails,
   startTime
-) {
+) => {
   let source = 'https://player.vimeo.com/video/';
   source += sourceID;
   source += '?autoplay=' + autoplay;
@@ -15,4 +15,4 @@ export function getVimeoEmbedURL(
 
 export default {
   getVimeoEmbedURL
-}
+};

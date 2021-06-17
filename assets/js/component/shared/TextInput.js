@@ -12,7 +12,7 @@ const TextInput = ({classes, name, value, required, disabled, onChange}) => {
     onChange={onChange}
     required={required}
     disabled={disabled}
-  />;
+  />
 }
 
 TextInput.propTypes = {

@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import Cell from './Cell';
 import ActionCell from './ActionCell';
 import { DragSource } from 'react-dnd';
@@ -7,26 +8,20 @@ import { findDOMNode } from 'react-dom';
 
 const itemType = 'row';
 
-const rowSource =
-{
-  beginDrag(props)
-  {
-    return {
-      dataIndex: props.dataIndex
-    }
+const rowSource = {
+  beginDrag(props) {
+    return {dataIndex: props.dataIndex};
   }
 };
 
-const rowSourceCollect = (connect, monitor) =>
-{
+const rowSourceCollect = (connect, monitor) => {
   return {
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
   };
 }
 
-const rowTarget =
-{
+const rowTarget = {
   drop(props, monitor, component)
   {
     props.reorderRows();
@@ -76,32 +71,24 @@ const rowTarget =
   }
 };
 
-const rowTargetCollect = (connect, monitor) =>
-{
-  return {
-    connectDropTarget: connect.dropTarget()
-  };
+const rowTargetCollect = (connect, monitor) => {
+  return {connectDropTarget: connect.dropTarget()};
 }
 
 class RowDraggable extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
     this.state = {
       expanded: false
     };
-
-    this.toggleRow = this.toggleRow.bind(this);
   }
 
-  toggleRow()
-  {
+  toggleRow = () => {
     this.setState({expanded: !this.state.expanded});
   }
 
-  render()
-  {
+  render() {
     const {
       headers,
       rowData,
@@ -113,22 +100,17 @@ class RowDraggable extends React.Component
       isDragging
     } = this.props;
 
-    const rowClasses = [];
+    const { expanded } = this.state;
 
-    if (this.state.expanded)
-      rowClasses.push('ccgriddle-row-expanded');
-
-    //build array of cells for row
-    let cells = headers.map(header =>
-    {
+    // build array of cells for row
+    let cells = headers.map(header => {
       let cellData = rowData[header.key];
       let classes = [];
 
       if (header.formatter)
         cellData = header.formatter(rowData, cellData);
 
-      if (header.primary)
-      {
+      if (header.primary) {
         cellData = <div>
           {cellData}
           <button className="ccgriddle-toggle-row" onClick={this.toggleRow}></button>
@@ -137,7 +119,12 @@ class RowDraggable extends React.Component
         classes.push('ccgriddle-column-primary');
       }
 
-      return (<Cell key={header.key} data={cellData} classes={classes} columnName={header.title}/>);
+      return <Cell
+        key={header.key}
+        data={cellData}
+        classes={classnames(classes)}
+        columnName={header.title}
+      />
     });
 
     cells.unshift(
@@ -157,7 +144,7 @@ class RowDraggable extends React.Component
 			connectDropTarget &&
       connectDragSource(
   		connectDropTarget(
-        <tr className={rowClasses.join(' ')} style={{opacity}}>
+        <tr className={classnames({'ccgriddle-row-expanded': expanded})} style={{opacity}}>
           {cells}
         </tr>
       )
@@ -166,5 +153,7 @@ class RowDraggable extends React.Component
 }
 
 export default DragSource(itemType, rowSource, rowSourceCollect, {arePropsEqual: (props, otherProps) => {return false;}})(
-  DropTarget(itemType, rowTarget, rowTargetCollect, {arePropsEqual: (props, otherProps) => {return false;}})(RowDraggable)
+  DropTarget(itemType, rowTarget, rowTargetCollect, {arePropsEqual: (props, otherProps) => {return false;}})(
+    RowDraggable
+  )
 );

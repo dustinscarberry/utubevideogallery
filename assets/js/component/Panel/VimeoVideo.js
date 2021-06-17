@@ -10,12 +10,10 @@ const VimeoVideo = ({videoData, forceNoAutoplay}) => {
     videoData.startTime
   );
 
-  return (
-    <Iframe
-      classes={['utv-panel-iframe']}
-      src={source}
-    />
-  );
+  return <Iframe
+    classes={['utv-panel-iframe']}
+    src={source}
+  />
 }
 
 export default VimeoVideo;

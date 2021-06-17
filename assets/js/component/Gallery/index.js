@@ -8,8 +8,7 @@ import { getVimeoEmbedURL } from 'helpers/vimeo-helpers';
 
 class Gallery extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
 
     this.state = {

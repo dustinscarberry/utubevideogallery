@@ -1,35 +1,26 @@
 import React from 'react';
+import classnames from 'classnames';
 
-const ActionHeaderCell = (props) =>
-{
-  const {
-    toggleAllRowCheckboxes,
-    enableDragNDrop,
-    enableBulkActions,
-    toggleAllCheckbox
-  } = props;
-
-  const headerClasses = ['ccgriddle-action-header', 'ccgriddle-column-primary'];
-  let checkboxNode = undefined;
-
-  if (enableDragNDrop)
-    headerClasses.push('ccgriddle-action-dragndrop')
-
-  if (enableBulkActions)
-  {
-    headerClasses.push('ccgriddle-action-bulkaction');
-    checkboxNode = <input
-      type="checkbox"
-      checked={toggleAllCheckbox}
-      onChange={toggleAllRowCheckboxes}
-    />;
-  }
-
-  return (
-    <th className={headerClasses.join(' ')}>
-      {checkboxNode}
-    </th>
-  );
+const ActionHeaderCell = ({
+  toggleAllRowCheckboxes,
+  enableDragNDrop,
+  enableBulkActions,
+  toggleAllCheckbox
+}) => {
+  return <th className={classnames({
+    'ccgriddle-action-header': true,
+    'ccgriddle-column-primary': true,
+    'ccgriddle-action-dragndrop': enableDragNDrop,
+    'ccgriddle-action-bulkaction': enableBulkActions
+  })}>
+    {enableBulkActions &&
+      <input
+        type="checkbox"
+        checked={toggleAllCheckbox}
+        onChange={toggleAllRowCheckboxes}
+      />
+    }
+  </th>
 }
 
 export default ActionHeaderCell;

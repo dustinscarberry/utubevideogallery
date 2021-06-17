@@ -1,5 +1,4 @@
-export function getGalleryClasses(iconType, selectedAlbum = undefined)
-{
+export const getGalleryClasses = (iconType, selectedAlbum = undefined) => {
   const classes = ['utv-gallery'];
 
   if (iconType == 'red')
@@ -15,8 +14,7 @@ export function getGalleryClasses(iconType, selectedAlbum = undefined)
   return classes;
 }
 
-export function getThumbnailsClasses(thumbnailType)
-{
+export const getThumbnailsClasses = (thumbnailType) => {
   const classes = [
     'utv-video-gallery-thumbnails',
     'utv-align-center'
@@ -33,4 +31,4 @@ export function getThumbnailsClasses(thumbnailType)
 export default {
   getGalleryClasses,
   getThumbnailsClasses
-}
+};

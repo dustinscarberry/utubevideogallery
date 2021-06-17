@@ -1,26 +1,22 @@
 import React from 'react';
+import classnames from 'classnames';
 import Cell from './Cell';
 import ActionCell from './ActionCell';
 
 class Row extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
     this.state = {
       expanded: false
     };
-
-    this.toggleRow = this.toggleRow.bind(this);
   }
 
-  toggleRow()
-  {
+  toggleRow = () => {
     this.setState({expanded: !this.state.expanded});
   }
 
-  render()
-  {
+  render() {
     const {
       headers,
       rowData,
@@ -29,23 +25,17 @@ class Row extends React.Component
       toggleRowCheckbox
     } = this.props;
 
-    const rowClasses = [];
+    const { expanded } = this.state;
 
-    if (this.state.expanded)
-      rowClasses.push('ccgriddle-row-expanded');
-
-    //build array of cells for row
-    const cells = headers.map(header =>
-    {
+    // get table cells for row
+    const cells = headers.map(header => {
       let cellData = rowData[header.key];
-
       let classes = [];
 
       if (header.formatter)
         cellData = header.formatter(rowData, cellData);
 
-      if (header.primary)
-      {
+      if (header.primary) {
         cellData = <div>
           {cellData}
           <button className="ccgriddle-toggle-row" onClick={this.toggleRow}></button>
@@ -54,9 +44,15 @@ class Row extends React.Component
         classes.push('ccgriddle-column-primary');
       }
 
-      return (<Cell key={header.key} data={cellData} classes={classes} columnName={header.title}/>);
+      return <Cell
+        key={header.key}
+        data={cellData}
+        classes={classnames(classes)}
+        columnName={header.title}
+      />
     });
 
+    // add action cell to row
     cells.unshift(
       <ActionCell
         key={dataIndex}
@@ -67,11 +63,9 @@ class Row extends React.Component
       />
     );
 
-    return (
-      <tr className={rowClasses.join(' ')}>
-        {cells}
-      </tr>
-    );
+    return <tr className={classnames({'ccgriddle-row-expanded': expanded})}>
+      {cells}
+    </tr>
   }
 }
 

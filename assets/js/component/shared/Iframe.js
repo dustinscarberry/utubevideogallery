@@ -3,13 +3,11 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const Iframe = ({src, classes = []}) => {
-  return (
-    <iframe
-      src={src}
-      className={classnames(classes)}
-      allowFullScreen>
-    </iframe>
-  );
+  return <iframe
+    src={src}
+    className={classnames(classes)}
+    allowFullScreen>
+  </iframe>
 }
 
 Iframe.propTypes = {

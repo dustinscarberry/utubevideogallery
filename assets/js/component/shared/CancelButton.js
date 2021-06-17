@@ -7,7 +7,7 @@ const CancelButton = ({title, onClick}) => {
     classes={["utv-cancel"]}
     onClick={onClick}
     title={title}
-  />;
+  />
 }
 
 CancelButton.propTypes = {

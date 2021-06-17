@@ -16,9 +16,7 @@ const InfoLine = ({text, icon}) => {
       classes.push('utv-status-warning');
   }
 
-  return (
-    <span className={classnames(classes)}>{text}</span>
-  );
+  return <span className={classnames(classes)}>{text}</span>
 }
 
 InfoLine.propTypes = {

@@ -11,7 +11,7 @@ const NumberInput = ({classes, name, value, required, onChange}) => {
     value={value}
     onChange={onChange}
     required={required}
-  />;
+  />
 }
 
 NumberInput.propTypes = {

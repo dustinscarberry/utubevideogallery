@@ -3,11 +3,9 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 const FormField = ({classes, children}) => {
-  return (
-    <div className={classnames('utv-formfield', classes)}>
-      {children}
-    </div>
-  );
+  return <div className={classnames('utv-formfield', classes)}>
+    {children}
+  </div>
 }
 
 FormField.propTypes = {

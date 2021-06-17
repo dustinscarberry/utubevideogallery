@@ -11,7 +11,7 @@ const URLInput = ({classes, name, value, required = false, onChange}) => {
     value={value}
     onChange={onChange}
     required={required}
-  />;
+  />
 }
 
 URLInput.propTypes = {

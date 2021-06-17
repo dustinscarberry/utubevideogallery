@@ -4,7 +4,6 @@ import VimeoVideo from './VimeoVideo';
 
 const VideoPlayer = ({videoData, controls, forceNoAutoplay}) => {
   let videoNode;
-
   if (videoData.source == 'youtube')
     videoNode = <YouTubeVideo
       videoData={videoData}
@@ -17,7 +16,7 @@ const VideoPlayer = ({videoData, controls, forceNoAutoplay}) => {
       forceNoAutoplay={forceNoAutoplay}
     />;
 
-  return <div className="utv-panel-player">{videoNode}</div>;
+  return <div className="utv-panel-player">{videoNode}</div>
 }
 
 export default VideoPlayer;

@@ -1,14 +1,11 @@
-export function getFormattedDate(timestamp)
-{
+export const getFormattedDate = (timestamp) => {
   const date = new Date(timestamp * 1000);
-
   return date.getFullYear()
     + '/' + (date.getMonth() + 1)
     + '/' + date.getDate();
 }
 
-export function getFormattedDateTime(timestamp)
-{
+export const getFormattedDateTime = (timestamp) => {
   const date = new Date(timestamp * 1000);
   return date.toLocaleString(
     'en-US',
@@ -26,4 +23,4 @@ export function getFormattedDateTime(timestamp)
 export default {
   getFormattedDate,
   getFormattedDateTime
-}
+};

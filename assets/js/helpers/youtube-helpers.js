@@ -1,4 +1,4 @@
-export function getYouTubeEmbedURL(
+export const getYouTubeEmbedURL = (
   sourceID,
   hideDetails,
   showControls,
@@ -7,7 +7,7 @@ export function getYouTubeEmbedURL(
   autoplay,
   startTime,
   endTime
-) {
+) => {
   let source = 'https://www.youtube.com/embed/';
   source += sourceID;
   source += '?modestbranding=1';
@@ -26,4 +26,4 @@ export function getYouTubeEmbedURL(
 
 export default {
   getYouTubeEmbedURL
-}
+};

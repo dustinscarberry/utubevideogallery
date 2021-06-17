@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import classnames from 'classnames';
 import VideoPlayer from './VideoPlayer';
 import TitleControls from './TitleControls';
 import Description from './Description';
@@ -10,10 +10,8 @@ import { fetchPanelData } from './actions';
 
 class Panel extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
       isLoading: true,
       videos: [],
@@ -28,13 +26,11 @@ class Panel extends React.Component
     this.panel = React.createRef();
   }
 
-  componentDidMount()
-  {
+  componentDidMount() {
     this.loadAPIData();
   }
 
-  loadAPIData = async() =>
-  {
+  loadAPIData = async() => {
     const {
       id,
       videosPerPage,
@@ -49,53 +45,50 @@ class Panel extends React.Component
     }
   }
 
-  turnOnAutoplay()
-  {
+  turnOnAutoplay = () => {
     this.setState({forceNoAutoplay: false});
   }
 
-  previousVideo = () =>
-  {
-    if (this.state.selectedVideo > 0) {
-      this.changeVideo(this.state.selectedVideo - 1);
-      this.changePage(Math.ceil(this.state.selectedVideo / this.props.videosPerPage));
+  previousVideo = () => {
+    const { selectedVideo } = this.state;
+    const { videosPerPage } = this.props;
+
+    if (selectedVideo > 0) {
+      this.changeVideo(selectedVideo - 1);
+      this.changePage(Math.ceil(selectedVideo / videosPerPage));
     }
   }
 
-  nextVideo = () =>
-  {
-    if (this.state.selectedVideo < this.state.videos.length - 1) {
-      this.changeVideo(this.state.selectedVideo + 1);
-      this.changePage(Math.ceil((this.state.selectedVideo + 2) / this.props.videosPerPage));
+  nextVideo = () => {
+    const { selectedVideo, videos } = this.state;
+    const { videosPerPage } = this.props;
+
+    if (selectedVideo < videos.length - 1) {
+      this.changeVideo(selectedVideo + 1);
+      this.changePage(Math.ceil((selectedVideo + 2) / videosPerPage));
     }
   }
 
-  changeVideo = (videoIndex) =>
-  {
+  changeVideo = (videoIndex) => {
     if (this.state.forceNoAutoplay)
       this.turnOnAutoplay();
 
     this.setState({selectedVideo: videoIndex});
-
     this.scrollToPanel();
   }
 
-  changePage = (page) =>
-  {
+  changePage = (page) => {
     this.setState({currentPage: page});
   }
 
-  scrollToPanel = () => window.scrollTo(0, this.panel.current.offsetTop - 30)
+  scrollToPanel = () => {
+    window.scrollTo(0, this.panel.current.offsetTop - 30);
+  }
 
-  getPanelClasses()
-  {
-    const {
-      theme,
-      icon
-    } = this.props;
+  getPanelClasses = () => {
+    const {theme, icon} = this.props;
 
     const panelClasses = ['utv-panel'];
-
     if (theme == 'light')
       panelClasses.push('utv-panel-light');
     else if (theme == 'dark')
@@ -110,11 +103,10 @@ class Panel extends React.Component
     else
       panelClasses.push('utv-icon-default');
 
-    return panelClasses.join(' ');
+    return panelClasses;
   }
 
-  render()
-  {
+  render() {
     const {
       isLoading,
       videos,
@@ -131,36 +123,34 @@ class Panel extends React.Component
     if (videos.length == 0)
       return null;
 
-    return (
-      <div ref={this.panel} className={this.getPanelClasses()}>
-        <VideoPlayer
-          videoData={videos[selectedVideo]}
-          controls={this.props.controls}
-          forceNoAutoplay={forceNoAutoplay}
-        />
-        <TitleControls
-          videoData={videos[selectedVideo]}
-          onPreviousVideo={this.previousVideo}
-          onNextVideo={this.nextVideo}
-        />
-        <Description
-          text={videos[selectedVideo].description}
-        />
-        <PanelThumbnails
-          videos={videos}
-          selectedVideo={selectedVideo}
-          onChangeVideo={this.changeVideo}
-          currentPage={currentPage}
-          videosPerPage={this.props.videosPerPage}
-          thumbnailType={thumbnailType}
-        />
-        <Paging
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onChangePage={this.changePage}
-        />
-      </div>
-    );
+    return <div ref={this.panel} className={classnames(this.getPanelClasses())}>
+      <VideoPlayer
+        videoData={videos[selectedVideo]}
+        controls={this.props.controls}
+        forceNoAutoplay={forceNoAutoplay}
+      />
+      <TitleControls
+        videoData={videos[selectedVideo]}
+        onPreviousVideo={this.previousVideo}
+        onNextVideo={this.nextVideo}
+      />
+      <Description
+        text={videos[selectedVideo].description}
+      />
+      <PanelThumbnails
+        videos={videos}
+        selectedVideo={selectedVideo}
+        onChangeVideo={this.changeVideo}
+        currentPage={currentPage}
+        videosPerPage={this.props.videosPerPage}
+        thumbnailType={thumbnailType}
+      />
+      <Paging
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onChangePage={this.changePage}
+      />
+    </div>
   }
 }
 

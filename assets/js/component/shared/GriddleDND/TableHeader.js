@@ -1,31 +1,27 @@
 import React from 'react';
+import classnames from 'classnames';
 import HeaderCell from './HeaderCell';
 import ActionHeaderCell from './ActionHeaderCell';
 
-const TableHeader = (props) =>
-{
-  const {
-    headers,
-    enableBulkActions,
-    enableDragNDrop,
-    toggleAllRowCheckboxes,
-    updateColumnSort,
-    sortKey,
-    sortOrder,
-    toggleAllCheckbox
-  } = props;
-
-  const headerCells = headers.map(header =>
-  {
+const TableHeader = ({
+  headers,
+  enableBulkActions,
+  enableDragNDrop,
+  toggleAllRowCheckboxes,
+  updateColumnSort,
+  sortKey,
+  sortOrder,
+  toggleAllCheckbox
+}) => {
+  const headerCells = headers.map(header => {
     const classes = [];
     const styles = {};
-    let updateColumnSortFunc = undefined;
 
     if (header.width)
       styles.width = header.width;
 
-    if (header.sortable)
-    {
+    let updateColumnSortFunc = undefined;
+    if (header.sortable) {
       classes.push('sortable');
       updateColumnSortFunc = () => updateColumnSort(header.key);
 
@@ -36,13 +32,13 @@ const TableHeader = (props) =>
     if (header.primary)
       classes.push('ccgriddle-column-primary');
 
-    return (<HeaderCell
+    return <HeaderCell
       key={header.key}
       data={header.title}
-      classes={classes}
+      classes={classnames(classes)}
       styles={styles}
       updateColumnSort={updateColumnSortFunc}
-    />);
+    />
   });
 
   headerCells.unshift(<ActionHeaderCell
@@ -53,13 +49,11 @@ const TableHeader = (props) =>
     toggleAllCheckbox={toggleAllCheckbox}
   />);
 
-  return (
-    <thead>
-      <tr>
-        {headerCells}
-      </tr>
-    </thead>
-  );
+  return <thead>
+    <tr>
+      {headerCells}
+    </tr>
+  </thead>
 }
 
 export default TableHeader;

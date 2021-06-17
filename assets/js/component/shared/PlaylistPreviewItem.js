@@ -1,15 +1,19 @@
 import React from 'react';
+import classnames from 'classnames';
 
-const PlaylistPreviewItem = ({video, index, toggleVideoSelection, changeVideoTitle}) => {
+const PlaylistPreviewItem = ({
+  video,
+  index,
+  toggleVideoSelection,
+  changeVideoTitle
+}) => {
   // set thumbnail classes
   const thumbnailClasses = ['utv-playlist-item-thumbnail'];
-
   if (video.selected)
     thumbnailClasses.push('utv-playlist-item-thumbnail-active');
 
   // set legend classes
   const legendClasses = [];
-
   if (video.legend == 'local')
     legendClasses.push('utv-playlist-item-legend-local');
   else if (video.legend == 'web')
@@ -18,12 +22,10 @@ const PlaylistPreviewItem = ({video, index, toggleVideoSelection, changeVideoTit
     legendClasses.push('utv-playlist-item-legend-both');
 
   return (
-    <div
-      className="utv-playlist-item"
-    >
+    <div className="utv-playlist-item">
       <span className="utv-playlist-item-number">{index + 1})</span>
       <div
-        className={thumbnailClasses.join(' ')}
+        className={classnames(thumbnailClasses)}
         onClick={() => toggleVideoSelection(index)}
       >
         <img src={video.thumbnail}/>
@@ -36,7 +38,7 @@ const PlaylistPreviewItem = ({video, index, toggleVideoSelection, changeVideoTit
           value={video.title}
           onChange={(e) => changeVideoTitle(index, e)}
         />
-        <span className={legendClasses.join(' ')}></span>
+      <span className={classnames(legendClasses)}></span>
       </div>
     </div>
   );

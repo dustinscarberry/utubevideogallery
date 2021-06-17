@@ -6,7 +6,7 @@ const SecondaryButton = ({title, onClick}) => {
     classes={["button-secondary"]}
     onClick={onClick}
     title={title}
-  />;
+  />
 }
 
 export default SecondaryButton;

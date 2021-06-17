@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-export async function fetchPanelData(galleryId, videosPerPage, maxVideos = undefined)
-{
+export const fetchPanelData = async (galleryId, videosPerPage, maxVideos = undefined) => {
   const apiData = await axios.get('/wp-json/utubevideogallery/v1/galleriesdata/' + galleryId);
 
   if (!(apiData.status == 200 && !apiData.data.error))

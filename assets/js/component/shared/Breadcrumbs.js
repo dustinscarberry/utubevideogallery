@@ -16,11 +16,9 @@ const Breadcrumbs = ({crumbs}) => {
       crumbsNodes.push(<span key={i} className="utv-breadcrumb-static">{crumbs[i].text}</span>);
   }
 
-  return (
-    <div className="utv-breadcrumbs">
-      {crumbsNodes}
-    </div>
-  );
+  return <div className="utv-breadcrumbs">
+    {crumbsNodes}
+  </div>
 }
 
 Breadcrumbs.propTypes = {
