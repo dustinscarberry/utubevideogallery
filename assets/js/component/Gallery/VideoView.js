@@ -6,22 +6,18 @@ import { getGalleryClasses } from 'helpers/gallery-helpers';
 
 class VideoView extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
   }
 
-  openVideo = (value) =>
-  {
+  openVideo = (value) => {
     const selectedVideo = this.props.videos[value];
-
     if (selectedVideo)
       this.props.onOpenVideoPopup(selectedVideo);
   }
 
-  getPagingNode()
-  {
-    // return if pagination not enabled
+  getPagingNode() {
+    // is pagination enabled
     if (!this.props.thumbnailsPerPage)
       return null;
 
@@ -38,11 +34,10 @@ class VideoView extends React.Component
       currentPage={currentPage}
       totalPages={totalPages}
       onChangePage={onChangePage}
-    />;
+    />
   }
 
-  render()
-  {
+  render() {
     const {
       iconType,
       thumbnailType,
@@ -52,18 +47,16 @@ class VideoView extends React.Component
       onChangePage
     } = this.props;
 
-    return (
-      <div className={classnames(getGalleryClasses(iconType))}>
-        <VideoThumbnails
-          videos={videos}
-          onOpenVideo={this.openVideo}
-          thumbnailType={thumbnailType}
-          currentPage={currentPage}
-          thumbnailsPerPage={thumbnailsPerPage}
-        />
-        {this.getPagingNode()}
-      </div>
-    );
+    return <div className={classnames(getGalleryClasses(iconType))}>
+      <VideoThumbnails
+        videos={videos}
+        onOpenVideo={this.openVideo}
+        thumbnailType={thumbnailType}
+        currentPage={currentPage}
+        thumbnailsPerPage={thumbnailsPerPage}
+      />
+      {this.getPagingNode()}
+    </div>
   }
 }
 

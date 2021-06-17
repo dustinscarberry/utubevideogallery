@@ -1,10 +1,10 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Factory;
+namespace Dscarberry\UTubeVideoGallery\Service\Factory;
 
-use CodeClouds\UTubeVideoGallery\Service\Api\YouTubeApi;
-use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Service\Api\YouTubeApi;
+use Dscarberry\UTubeVideoGallery\Repository\VideoRepository;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 
 class ThumbnailFactory
 {

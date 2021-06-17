@@ -1,6 +1,6 @@
 <?php
 /**
- * CodeClouds\UTubeVideoGallery\Dashboard - Admin panel for uTubeVideo Gallery
+ * Dscarberry\UTubeVideoGallery\Dashboard - Admin panel for uTubeVideo Gallery
  *
  * @package uTubeVideo Gallery
  * @author Dustin Scarberry
@@ -8,7 +8,7 @@
  * @since 1.3
  */
 
-namespace CodeClouds\UTubeVideoGallery\Controller\View;
+namespace Dscarberry\UTubeVideoGallery\Controller\View;
 
 class Dashboard
 {

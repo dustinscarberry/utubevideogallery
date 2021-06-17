@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service;
+namespace Dscarberry\UTubeVideoGallery\Service;
 
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 
 class Utility
 {

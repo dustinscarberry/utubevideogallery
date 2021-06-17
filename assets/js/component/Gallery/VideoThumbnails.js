@@ -32,11 +32,9 @@ const VideoThumbnails = ({videos, onOpenVideo, thumbnailType, currentPage, thumb
       />;
   });
 
-  return (
-    <ThumbnailsGrid classes={getThumbnailsClasses(thumbnailType)}>
-      {videoThumbnailNodes}
-    </ThumbnailsGrid>
-  );
+  return <ThumbnailsGrid classes={getThumbnailsClasses(thumbnailType)}>
+    {videoThumbnailNodes}
+  </ThumbnailsGrid>
 }
 
 export default VideoThumbnails;

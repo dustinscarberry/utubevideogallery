@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service;
+namespace Dscarberry\UTubeVideoGallery\Service;
 
 class Maintenance
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Controller\API;
+namespace Dscarberry\UTubeVideoGallery\Controller\API;
 
-use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
-use CodeClouds\UTubeVideoGallery\Form\AlbumType;
-use CodeClouds\UTubeVideoGallery\Service\Factory\AlbumFactory;
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Controller\API\APIv1;
+use Dscarberry\UTubeVideoGallery\Form\AlbumType;
+use Dscarberry\UTubeVideoGallery\Service\Factory\AlbumFactory;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
 
@@ -103,14 +103,10 @@ class AlbumAPIv1 extends APIv1
   // get all albums
   function getItems(WP_REST_Request $req)
   {
-    try
-    {
-      //get albums
+    try {
       $albums = AlbumFactory::getAlbums();
       return $this->respond($albums);
-    }
-    catch (UserMessageException $e)
-    {
+    } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());
     }
   }

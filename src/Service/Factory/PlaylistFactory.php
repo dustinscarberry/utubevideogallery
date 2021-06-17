@@ -1,11 +1,11 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Factory;
+namespace Dscarberry\UTubeVideoGallery\Service\Factory;
 
-use CodeClouds\UTubeVideoGallery\Repository\PlaylistRepository;
-use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
-use CodeClouds\UTubeVideoGallery\Form\PlaylistType;
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Repository\PlaylistRepository;
+use Dscarberry\UTubeVideoGallery\Repository\VideoRepository;
+use Dscarberry\UTubeVideoGallery\Form\PlaylistType;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 
 class PlaylistFactory
 {

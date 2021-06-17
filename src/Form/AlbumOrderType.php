@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Form;
+namespace Dscarberry\UTubeVideoGallery\Form;
 
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 
 class AlbumOrderType
 {

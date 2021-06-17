@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Entity;
+namespace Dscarberry\UTubeVideoGallery\Entity;
 
 use JsonSerializable;
 

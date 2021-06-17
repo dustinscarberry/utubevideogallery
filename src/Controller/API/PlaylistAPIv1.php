@@ -1,11 +1,11 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Controller\API;
+namespace Dscarberry\UTubeVideoGallery\Controller\API;
 
-use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
-use CodeClouds\UTubeVideoGallery\Form\PlaylistType;
-use CodeClouds\UTubeVideoGallery\Service\Factory\PlaylistFactory;
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Controller\API\APIv1;
+use Dscarberry\UTubeVideoGallery\Form\PlaylistType;
+use Dscarberry\UTubeVideoGallery\Service\Factory\PlaylistFactory;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
 
@@ -90,7 +90,6 @@ class PlaylistAPIv1 extends APIv1
   {
     try {
       $playlists = PlaylistFactory::getPlaylists();
-
       return $this->respond($playlists);
     } catch (UserMessageException $e) {
       return $this->respondWithError($e->getMessage());

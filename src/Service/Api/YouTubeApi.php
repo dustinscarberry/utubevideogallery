@@ -1,9 +1,9 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Api;
+namespace Dscarberry\UTubeVideoGallery\Service\Api;
 
-use CodeClouds\UTubeVideoGallery\Service\Utility;
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Service\Utility;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 use Exception;
 
 class YouTubeApi

@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Controller\API;
+namespace Dscarberry\UTubeVideoGallery\Controller\API;
 
 use WP_REST_Response;
 

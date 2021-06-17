@@ -32,11 +32,9 @@ const AlbumThumbnails = ({albums, onChangeAlbum, thumbnailType, currentPage, thu
       />;
   });
 
-  return (
-    <ThumbnailsGrid classes={getThumbnailsClasses(thumbnailType)}>
-      {albumThumbnailNodes}
-    </ThumbnailsGrid>
-  );
+  return <ThumbnailsGrid classes={getThumbnailsClasses(thumbnailType)}>
+    {albumThumbnailNodes}
+  </ThumbnailsGrid>
 }
 
 export default AlbumThumbnails;

@@ -8,33 +8,28 @@ import { getGalleryClasses } from 'helpers/gallery-helpers';
 
 class AlbumView extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
       selectedAlbum: undefined
     };
   }
 
-  changeAlbum = (albumIndex) =>
-  {
+  changeAlbum = (albumIndex) => {
     this.setState({selectedAlbum: albumIndex});
 
-    //reset current page to 1
+    // reset current page to 1
     this.props.onChangePage(1);
   }
 
-  openVideo = (value) =>
-  {
+  openVideo = (value) => {
     let selectedVideo = this.props.albums[this.state.selectedAlbum].videos[value];
 
     if (selectedVideo)
       this.props.onOpenVideoPopup(selectedVideo);
   }
 
-  getThumbnailsNode()
-  {
+  getThumbnailsNode = () => {
     const {
       thumbnailType,
       albums,
@@ -62,8 +57,7 @@ class AlbumView extends React.Component
       />;
   }
 
-  getPagingNode()
-  {
+  getPagingNode = () => {
     // return if pagination not enabled
     if (!this.props.thumbnailsPerPage)
       return null;
@@ -88,11 +82,10 @@ class AlbumView extends React.Component
       currentPage={currentPage}
       totalPages={totalPages}
       onChangePage={onChangePage}
-    />;
+    />
   }
 
-  getSelectedAlbumName()
-  {
+  getSelectedAlbumName = () => {
     const album = this.props.albums[this.state.selectedAlbum];
 
     if (album)
@@ -101,8 +94,7 @@ class AlbumView extends React.Component
     return undefined;
   }
 
-  render()
-  {
+  render() {
     const {
       iconType,
       thumbnailType,
@@ -116,16 +108,14 @@ class AlbumView extends React.Component
       this.state.selectedAlbum
     );
 
-    return (
-      <div className={classnames(galleryClasses)}>
-        <BreadCrumb
-          albumName={this.getSelectedAlbumName()}
-          changeAlbum={this.changeAlbum}
-        />
-        {this.getThumbnailsNode()}
-        {this.getPagingNode()}
-      </div>
-    );
+    return <div className={classnames(galleryClasses)}>
+      <BreadCrumb
+        albumName={this.getSelectedAlbumName()}
+        changeAlbum={this.changeAlbum}
+      />
+      {this.getThumbnailsNode()}
+      {this.getPagingNode()}
+    </div>
   }
 }
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Factory;
+namespace Dscarberry\UTubeVideoGallery\Service\Factory;
 
-use CodeClouds\UTubeVideoGallery\Model\Settings;
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Model\Settings;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 
 class SettingsFactory

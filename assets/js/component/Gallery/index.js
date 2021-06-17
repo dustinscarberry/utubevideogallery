@@ -10,10 +10,9 @@ class Gallery extends React.Component
 {
   constructor(props) {
     super(props);
-
     this.state = {
       isLoading: true,
-      albums: [], // object of albums and there videos
+      albums: [], // object of albums and videos
       videos: [], // object of just videos
       thumbnailType: undefined,
       displayType: undefined,
@@ -21,29 +20,18 @@ class Gallery extends React.Component
     };
   }
 
-  componentDidMount()
-  {
+  componentDidMount() {
     this.loadAPIData();
   }
 
-  loadAPIData = async () =>
-  {
-    const {
-      id,
-      maxAlbums,
-      maxVideos
-    } = this.props;
-
+  loadAPIData = async () => {
+    const { id, maxAlbums, maxVideos } = this.props;
     const galleryData = await fetchGalleryData(id, maxAlbums, maxVideos);
-
-    if (galleryData) {
-      this.setState(galleryData);
-      this.setState({isLoading: false});
-    }
+    if (galleryData)
+      this.setState({galleryData: galleryData, isLoading: false});
   }
 
-  getVideoEmbedURL(video)
-  {
+  getVideoEmbedURL = (video) => {
     if (video.source == 'youtube')
       return getYouTubeEmbedURL(
         video.slugID,
@@ -64,8 +52,7 @@ class Gallery extends React.Component
       );
   }
 
-  openVideoPopup = (video) =>
-  {
+  openVideoPopup = (video) => {
     const embedURL = this.getVideoEmbedURL(video);
 
     jQuery.magnificPopup.open({
@@ -102,13 +89,11 @@ class Gallery extends React.Component
     });
   }
 
-  changePage = (page) =>
-  {
+  changePage = (page) => {
     this.setState({currentPage: page});
   }
 
-  render()
-  {
+  render() {
     const {
       isLoading,
       albums,

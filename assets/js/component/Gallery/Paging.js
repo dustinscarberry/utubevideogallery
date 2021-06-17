@@ -3,7 +3,6 @@ import PageHandle from './PageHandle';
 
 const Paging = ({currentPage, totalPages, onChangePage}) => {
   const pageHandleNodes = [];
-
   if (totalPages > 1)
     for (let i = 1; i <= totalPages; i++)
       pageHandleNodes.push(
@@ -15,7 +14,7 @@ const Paging = ({currentPage, totalPages, onChangePage}) => {
         />
       );
 
-  return <div className="utv-gallery-paging">{pageHandleNodes}</div>;
+  return <div className="utv-gallery-paging">{pageHandleNodes}</div>
 }
 
 export default Paging;

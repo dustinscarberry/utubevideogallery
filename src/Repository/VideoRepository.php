@@ -1,8 +1,8 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Repository;
+namespace Dscarberry\UTubeVideoGallery\Repository;
 
-use CodeClouds\UTubeVideoGallery\Entity\Video;
+use Dscarberry\UTubeVideoGallery\Entity\Video;
 
 class VideoRepository
 {

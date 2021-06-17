@@ -1,6 +1,6 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\UI;
+namespace Dscarberry\UTubeVideoGallery\UI;
 
 class PanelUI
 {

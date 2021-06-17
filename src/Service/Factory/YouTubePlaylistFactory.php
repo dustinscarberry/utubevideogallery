@@ -1,11 +1,11 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Factory;
+namespace Dscarberry\UTubeVideoGallery\Service\Factory;
 
-use CodeClouds\UTubeVideoGallery\Service\Utility;
-use CodeClouds\UTubeVideoGallery\Model\Settings;
-use CodeClouds\UTubeVideoGallery\Form\YouTubePlaylistType;
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Service\Utility;
+use Dscarberry\UTubeVideoGallery\Model\Settings;
+use Dscarberry\UTubeVideoGallery\Form\YouTubePlaylistType;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 use DateTime;
 use DateInterval;
 

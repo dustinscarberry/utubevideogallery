@@ -1,6 +1,6 @@
 === uTubeVideo Gallery ===
 Contributors: dman25560
-Donate link: https://www.codeclouds.net/utubevideo-gallery/
+Donate link: https://www.dscarberry.com/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
 Requires at least: 4.9.0
 Requires PHP: 7.0

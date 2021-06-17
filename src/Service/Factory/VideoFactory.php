@@ -1,12 +1,12 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Service\Factory;
+namespace Dscarberry\UTubeVideoGallery\Service\Factory;
 
-use CodeClouds\UTubeVideoGallery\Repository\VideoRepository;
-use CodeClouds\UTubeVideoGallery\Service\Factory\ThumbnailFactory;
-use CodeClouds\UTubeVideoGallery\Form\VideoType;
-use CodeClouds\UTubeVideoGallery\Form\VideoOrderType;
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Repository\VideoRepository;
+use Dscarberry\UTubeVideoGallery\Service\Factory\ThumbnailFactory;
+use Dscarberry\UTubeVideoGallery\Form\VideoType;
+use Dscarberry\UTubeVideoGallery\Form\VideoOrderType;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 
 class VideoFactory
 {

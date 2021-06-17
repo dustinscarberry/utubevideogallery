@@ -1,6 +1,6 @@
 <?php
 /**
- * CodeClouds\UTubeVideoGallery\UI - Frontend for uTubeVideo Gallery
+ * Dscarberry\UTubeVideoGallery\UI - Frontend for uTubeVideo Gallery
  *
  * @package uTubeVideo Gallery
  * @author Dustin Scarberry
@@ -8,10 +8,10 @@
  * @since 1.3
  */
 
-namespace CodeClouds\UTubeVideoGallery\Controller\View;
+namespace Dscarberry\UTubeVideoGallery\Controller\View;
 
-use CodeClouds\UTubeVideoGallery\UI\PanelUI;
-use CodeClouds\UTubeVideoGallery\UI\GalleryUI;
+use Dscarberry\UTubeVideoGallery\UI\PanelUI;
+use Dscarberry\UTubeVideoGallery\UI\GalleryUI;
 
 class App
 {
@@ -49,7 +49,7 @@ class App
 
     // add embedded thumbnail sizing css
     $css = '.utv-panel-thumbnails{padding:' . $this->options['thumbnailPadding'] . 'px;grid-gap:' . $this->options['thumbnailPadding'] . 'px}';
-    
+
     // add thumbnail border radius if defined
     if ($this->options['thumbnailBorderRadius'] > 0)
       $css .= '.utv-thumbnail>a,.utv-thumbnail img{border-radius:' . $this->options['thumbnailBorderRadius'] . 'px!important}';
@@ -109,14 +109,14 @@ class App
   {
     wp_enqueue_script('jquery');
     wp_enqueue_script(
-      'codeclouds-mp-js',
+      'dscarberry-mp-js',
       'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js',
       ['jquery'],
       null,
       true
     );
     wp_enqueue_style(
-      'codeclouds-mp-css',
+      'dscarberry-mp-css',
       'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css',
       false,
       null

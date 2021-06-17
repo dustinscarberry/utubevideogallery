@@ -1,11 +1,11 @@
 <?php
 
-namespace CodeClouds\UTubeVideoGallery\Controller\API;
+namespace Dscarberry\UTubeVideoGallery\Controller\API;
 
-use CodeClouds\UTubeVideoGallery\Controller\API\APIv1;
-use CodeClouds\UTubeVideoGallery\Form\VimeoPlaylistType;
-use CodeClouds\UTubeVideoGallery\Service\Factory\VimeoPlaylistFactory;
-use CodeClouds\UTubeVideoGallery\Exception\UserMessageException;
+use Dscarberry\UTubeVideoGallery\Controller\API\APIv1;
+use Dscarberry\UTubeVideoGallery\Form\VimeoPlaylistType;
+use Dscarberry\UTubeVideoGallery\Service\Factory\VimeoPlaylistFactory;
+use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 use WP_REST_Request;
 use WP_REST_Server;
 
