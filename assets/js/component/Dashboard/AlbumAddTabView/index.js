@@ -11,104 +11,95 @@ import TextInput from 'component/shared/TextInput';
 import SelectBox from 'component/shared/SelectBox';
 import SubmitButton from 'component/shared/SubmitButton';
 import CancelButton from 'component/shared/CancelButton';
-import actions from './actions';
+import logic from './logic';
 import apiHelper from 'helpers/api-helpers';
 
 class AlbumAddTabView extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
       title: '',
       videoSorting: 'asc'
     };
   }
 
-  changeValue = (e) =>
-  {
+  changeValue = (e) => {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  addAlbum = async() =>
-  {
-    const rsp = await actions.createAlbum(
-      this.state.title,
-      this.state.videoSorting,
-      this.props.selectedGallery
-    );
+  addAlbum = async() => {
+    const rsp = await logic.createAlbum({
+      title: this.state.title,
+      videoSorting: this.state.videoSorting,
+      galleryID: this.props.selectedGallery
+    });
 
-    if (apiHelper.isValidResponse(rsp))
-    {
+    if (apiHelper.isValidResponse(rsp)) {
       this.props.changeView();
       this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumCreated);
-    }
-    else if (apiHelper.isErrorResponse(rsp))
+    } else if (apiHelper.isErrorResponse(rsp))
       this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
-  render()
-  {
-    return (
-      <div>
-        <Breadcrumbs
-          crumbs={[
-            {
-              text: utvJSData.localization.galleries,
-              onClick: () => this.props.changeGallery()
-            },
-            {
-              text: this.props.selectedGalleryTitle,
-              onClick: () => this.props.changeView()
-            }
-          ]}
-        />
-        <Columns>
-          <Column className="utv-left-fixed-single-column">
-            <Card>
-              <SectionHeader text="Add Album"/>
-              <Form
-                submit={this.addAlbum}
-                errorclass="utv-invalid-feedback"
-              >
-                <FormField>
-                  <Label text={utvJSData.localization.title}/>
-                  <TextInput
-                    name="title"
-                    value={this.state.title}
-                    onChange={this.changeValue}
-                    required={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.videoSorting}/>
-                  <SelectBox
-                    name="videoSorting"
-                    value={this.state.videoSorting}
-                    onChange={this.changeValue}
-                    choices={[
-                      {name: utvJSData.localization.ascending, value: 'asc'},
-                      {name: utvJSData.localization.descending, value: 'desc'}
-                    ]}
-                    required={true}
-                  />
-                </FormField>
-                <FormField classes="utv-formfield-action">
-                  <SubmitButton
-                    title={utvJSData.localization.addAlbum}
-                  />
-                  <CancelButton
-                    title={utvJSData.localization.cancel}
-                    onClick={() => this.props.changeView()}
-                  />
-                </FormField>
-              </Form>
-            </Card>
-          </Column>
-        </Columns>
-      </div>
-    );
+  render() {
+
+
+
+    return <div>
+      <Breadcrumbs
+        crumbs={[{
+          text: utvJSData.localization.galleries,
+          onClick: () => this.props.changeGallery()
+        }, {
+          text: this.props.selectedGalleryTitle,
+          onClick: () => this.props.changeView()
+        }]}
+      />
+      <Columns>
+        <Column className="utv-left-fixed-single-column">
+          <Card>
+            <SectionHeader text="Add Album"/>
+            <Form
+              submit={this.addAlbum}
+              errorclass="utv-invalid-feedback"
+            >
+              <FormField>
+                <Label text={utvJSData.localization.title}/>
+                <TextInput
+                  name="title"
+                  value={this.state.title}
+                  onChange={this.changeValue}
+                  required={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.videoSorting}/>
+                <SelectBox
+                  name="videoSorting"
+                  value={this.state.videoSorting}
+                  onChange={this.changeValue}
+                  choices={[
+                    {name: utvJSData.localization.ascending, value: 'asc'},
+                    {name: utvJSData.localization.descending, value: 'desc'}
+                  ]}
+                  required={true}
+                />
+              </FormField>
+              <FormField classes="utv-formfield-action">
+                <SubmitButton
+                  title={utvJSData.localization.addAlbum}
+                />
+                <CancelButton
+                  title={utvJSData.localization.cancel}
+                  onClick={() => this.props.changeView()}
+                />
+              </FormField>
+            </Form>
+          </Card>
+        </Column>
+      </Columns>
+    </div>
   }
 }
 

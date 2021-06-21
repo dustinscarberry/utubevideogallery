@@ -19,10 +19,8 @@ import UserFeedback from 'component/shared/UserFeedback';
 
 class Dashboard extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
       selectedGallery: undefined,
       selectedGalleryTitle: undefined,
@@ -37,41 +35,31 @@ class Dashboard extends React.Component
     this.feedbackTimeout = undefined;
   }
 
-  changeGallery = (id = undefined, title = undefined) =>
-  {
+  changeGallery = (id = undefined, title = undefined) => {
     this.setState({
       selectedGallery: id,
       selectedGalleryTitle: title,
       selectedAlbum: undefined,
       currentView: undefined
     });
-
     scroll(0, 0);
   }
 
-  changeAlbum = (id = undefined, title = undefined) =>
-  {
+  changeAlbum = (id = undefined, title = undefined) => {
     this.setState({
       selectedAlbum: id,
       selectedAlbumTitle: title,
       currentView: undefined
     });
-
     scroll(0, 0);
   }
 
-  changeView = (view = undefined, id = undefined) =>
-  {
-    this.setState({
-      currentView: view,
-      currentViewID: id
-    });
-
+  changeView = (view = undefined, id = undefined) => {
+    this.setState({currentView: view, currentViewID: id});
     scroll(0, 0);
   }
 
-  getGalleriesTab()
-  {
+  getGalleriesTab = () => {
     const {
       currentView,
       currentViewID,
@@ -155,8 +143,7 @@ class Dashboard extends React.Component
       />
   }
 
-  getPlaylistsTab()
-  {
+  getPlaylistsTab = () => {
     const {
       currentView,
       currentViewID,
@@ -179,56 +166,41 @@ class Dashboard extends React.Component
       />
   }
 
-  setFeedbackMessage = (message, type = 'success', timeout = 5000) =>
-  {
-    //set message
+  setFeedbackMessage = (message, type = 'success', timeout = 5000) => {
+    // set message
     this.setState({feedbackMessage: message, feedbackType: type});
 
-    //clear past timeout if need be
+    // clear past timeout if need be
     clearTimeout(this.feedbackTimeout);
 
-    //timeout to remove message
-    this.feedbackTimeout = setTimeout(
-      () => {
-        this.setState(
-        {
-          feedbackMessage: undefined,
-          feedbackType: undefined
-        });
-      },
-      timeout
-    );
+    // timeout to remove message
+    this.feedbackTimeout = setTimeout(() => {
+      this.setState({feedbackMessage: undefined, feedbackType: undefined});
+    }, timeout);
   }
 
-  render()
-  {
-    return (
-      <div className="wrap utv-dashboard">
-        <h2 id="utv-masthead">uTubeVideo Gallery</h2>
-        <UserFeedback
-          message={this.state.feedbackMessage}
-          type={this.state.feedbackType}
-        />
-        <Tabs>
-          <Pane label={utvJSData.localization.galleries} iconClass="tabs-icon-grid">
-            {this.getGalleriesTab()}
-          </Pane>
-          <Pane label={utvJSData.localization.savedPlaylists} iconClass="tabs-icon-list">
-            {this.getPlaylistsTab()}
-          </Pane>
-          <Pane label={utvJSData.localization.settings} iconClass="tabs-icon-cog">
-            <SettingsTabView
-              setFeedbackMessage={this.setFeedbackMessage}
-            />
-          </Pane>
-          <Pane label={utvJSData.localization.documentation} iconClass="tabs-icon-book">
-            <DocumentationTabView
-              setFeedbackMessage={this.setFeedbackMessage}
-            />
-          </Pane>
-        </Tabs>
-      </div>
-    );
+  render() {
+    return <div className="wrap utv-dashboard">
+      <h2 id="utv-masthead">uTubeVideo Gallery</h2>
+      <UserFeedback
+        message={this.state.feedbackMessage}
+        type={this.state.feedbackType}
+      />
+      <Tabs>
+        <Pane label={utvJSData.localization.galleries} iconClass="tabs-icon-grid">
+          {this.getGalleriesTab()}
+        </Pane>
+        <Pane label={utvJSData.localization.savedPlaylists} iconClass="tabs-icon-list">
+          {this.getPlaylistsTab()}
+        </Pane>
+        <Pane label={utvJSData.localization.settings} iconClass="tabs-icon-cog">
+          <SettingsTabView setFeedbackMessage={this.setFeedbackMessage}/>
+        </Pane>
+        <Pane label={utvJSData.localization.documentation} iconClass="tabs-icon-book">
+          <DocumentationTabView setFeedbackMessage={this.setFeedbackMessage}/>
+        </Pane>
+      </Tabs>
+    </div>
   }
 }
 

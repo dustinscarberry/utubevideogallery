@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import Table from './Table';
 import TableStatus from './TableStatus';
 import BulkActions from './BulkActions';

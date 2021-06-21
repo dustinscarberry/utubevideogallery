@@ -27,8 +27,11 @@ class Gallery extends React.Component
   loadAPIData = async () => {
     const { id, maxAlbums, maxVideos } = this.props;
     const galleryData = await fetchGalleryData(id, maxAlbums, maxVideos);
-    if (galleryData)
-      this.setState({galleryData: galleryData, isLoading: false});
+
+    if (galleryData) {
+      this.setState(galleryData);
+      this.setState({isLoading: false});
+    }
   }
 
   getVideoEmbedURL = (video) => {

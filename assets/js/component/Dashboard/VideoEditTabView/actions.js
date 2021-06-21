@@ -1,32 +1,23 @@
 import axios from 'axios';
+import apiHelper from 'helpers/api-helpers';
 
-export function fetchVideo(videoID)
-{
-  return axios.get(
-    '/wp-json/utubevideogallery/v1/videos/' + videoID,
-    {
-      headers: {'X-WP-Nonce': utvJSData.restNonce}
-    }
-  );
+export const fetchVideo = async (videoID) => {
+  const rsp = await axios.get('/wp-json/utubevideogallery/v1/videos/' + videoID, {
+    headers: {'X-WP-Nonce': utvJSData.restNonce}
+  });
+
+
 }
 
-export function updateVideo(videoID, state)
-{
-  return axios.patch(
-    '/wp-json/utubevideogallery/v1/videos/' + videoID,
-    {
-      title: state.title,
-      description: state.description,
-      quality: state.quality,
-      showControls: state.showControls,
-      startTime: state.startTime,
-      endTime: state.endTime,
-      albumID: state.album
-    },
-    {
-      headers: {'X-WP-Nonce': utvJSData.restNonce}
-    }
+export const updateVideo = async (videoID, videoData) => {
+  const rsp = await axios.patch('/wp-json/utubevideogallery/v1/videos/' + videoID,
+    videoData,
+    {headers: {'X-WP-Nonce': utvJSData.restNonce}}
   );
+
+  if (apiHelper.isValidResponse(rsp)) return true;
+  if (apiHelper.isErrorResponse(rsp)) return apiHelper.getErrorMessage(rsp);
+  return false;
 }
 
 export function getVideoPreview(source, sourceID, startTime, endTime)

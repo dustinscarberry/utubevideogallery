@@ -1,4 +1,5 @@
 import React from 'react';
+import cloneDeep from 'lodash/cloneDeep';
 import actions from './actions';
 import apiHelper from 'helpers/api-helpers';
 import { getFormattedDateTime } from 'helpers/datetime-helpers';
@@ -23,46 +24,44 @@ import Loader from 'component/shared/Loader';
 
 class VideoEditTabView extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
-      thumbnail: undefined,
-      source: undefined,
-      sourceID: undefined,
-      title: undefined,
-      description: undefined,
-      quality: undefined,
-      showControls: undefined,
-      startTime: '',
-      endTime: '',
-      updateDate: undefined,
-      album: undefined,
-      albums: undefined,
-      loading: true
+      videoData: {
+        thumbnail: undefined,
+        source: undefined,
+        sourceID: undefined,
+        title: undefined,
+        description: undefined,
+        quality: undefined,
+        showControls: undefined,
+        startTime: '',
+        endTime: '',
+        updateDate: undefined,
+        album: undefined
+      },
+      sharedData: {
+        albums: undefined
+      },
+      isLoading: true
     };
   }
 
-  async componentDidMount()
-  {
-    //load api data
+  async componentDidMount() {
+    // load api data
     await Promise.all([
       this.loadData(),
       this.loadAlbums()
     ]);
 
-    //set loading state
-    this.setState({loading: false});
+    this.setState({isLoading: false});
   }
 
-  async loadData()
-  {
-    //get video
+  loadData = async () => {
+    // get video
     const apiData = await actions.fetchVideo(this.props.currentViewID);
 
-    if (apiHelper.isValidResponse(apiData))
-    {
+    if (apiHelper.isValidResponse(apiData)) {
       const data = apiHelper.getAPIData(apiData);
 
       this.setState({
@@ -77,16 +76,15 @@ class VideoEditTabView extends React.Component
         endTime: data.endTime ? data.endTime : '',
         updateDate: data.updateDate,
         album: data.albumID,
-        loading: false
+        isLoading: false
       });
     }
     else if (apiHelper.isErrorResponse(apiData))
       this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
-  async loadAlbums()
-  {
-    //get albums
+  loadAlbums = async () => {
+    // get albums
     const apiData = await actions.fetchGalleryAlbums(this.props.selectedGallery);
 
     if (apiHelper.isValidResponse(apiData))
@@ -99,160 +97,188 @@ class VideoEditTabView extends React.Component
       this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
-  changeValue = (e) =>
-  {
+  handleUpdateField = (e) => {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  changeCheckboxValue = (e) =>
-  {
+  handleUpdateToggleField = (e) => {
     this.setState({[e.target.name]: !this.state[e.target.name]});
   }
 
-  saveVideo = async() =>
-  {
-    //update video
-    const rsp = await actions.updateVideo(this.props.currentViewID, this.state);
+  handleUpdateVideo = async () => {
+    const { changeView, setFeedbackMessage } = this.props;
 
-    if (apiHelper.isValidResponse(rsp))
-    {
-      this.props.changeView();
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackVideoSaved);
-    }
-    else if (apiHelper.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
+    // update video
+    const rsp = await actions.updateVideo(this.props.currentViewID, {
+      title: this.state.title,
+      description: this.state.description,
+      quality: this.state.quality,
+      showControls: this.state.showControls,
+      startTime: this.state.startTime,
+      endTime: this.state.endTime,
+      albumID: this.state.album
+    });
+
+    if (rsp === true) {
+      changeView();
+      setFeedbackMessage(utvJSData.localization.feedbackVideoSaved, 'success');
+    } else
+      setFeedbackMessage(rsp, 'error');
   }
 
-  render()
-  {
-    //show loader while form is loading
-    if (this.state.loading)
-      return <Loader/>;
+  render() {
+    const { isLoading } = this.state;
 
-    return (
-      <div>
-        <Breadcrumbs
-          crumbs={[
-            {text: utvJSData.localization.galleries, onClick: () => this.props.changeGallery()},
-            {text: this.props.selectedGalleryTitle, onClick: () => this.props.changeAlbum()},
-            {text: this.props.selectedAlbumTitle, onClick: () => this.props.changeView()}
-          ]}
-        />
-        <Columns>
-          <Column className="utv-left-one-thirds-column">
-            <Card>
-              <SectionHeader text={utvJSData.localization.editVideo}/>
-              <Form
-                submit={this.saveVideo}
-                errorclass="utv-invalid-feedback"
-              >
-                <FormField>
-                  <Label text={utvJSData.localization.source}/>
-                  <TextInput
-                    name="source"
-                    value={actions.getFormattedSource(this.state.source)}
-                    disabled={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.title}/>
-                  <TextInput
-                    name="title"
-                    value={this.state.title}
-                    onChange={this.changeValue}
-                    required={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.description}/>
-                  <TextBoxInput
-                    name="description"
-                    value={this.state.description}
-                    onChange={this.changeValue}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.album}/>
-                  <SelectBox
-                    name="album"
-                    value={this.state.album}
-                    onChange={this.changeValue}
-                    choices={this.state.albums}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.quality}/>
-                  <SelectBox
-                    name="quality"
-                    value={this.state.quality}
-                    onChange={this.changeValue}
-                    choices={[
-                      {name: '1080p', value: 'hd1080'},
-                      {name: '720p', value: 'hd720'},
-                      {name: '480p', value: 'large'}
-                    ]}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.controls}/>
-                  <Toggle
-                    name="showControls"
-                    value={this.state.showControls}
-                    onChange={this.changeCheckboxValue}
-                  />
-                  <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.startTime}/>
-                  <NumberInput
-                    name="startTime"
-                    value={this.state.startTime}
-                    onChange={this.changeValue}
-                  />
-                  <FieldHint text={utvJSData.localization.startTimeHint}/>
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.endTime}/>
-                  <NumberInput
-                    name="endTime"
-                    value={this.state.endTime}
-                    onChange={this.changeValue}
-                  />
-                  <FieldHint text={utvJSData.localization.endTimeHint}/>
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.lastUpdated}/>
-                  <TextInput
-                    name="updateDateFormatted"
-                    value={getFormattedDateTime(this.state.updateDate)}
-                    disabled={true}
-                  />
-                </FormField>
-                <FormField classes="utv-formfield-action">
-                  <SubmitButton
-                    title={utvJSData.localization.saveVideo}
-                  />
-                  <CancelButton
-                    title={utvJSData.localization.cancel}
-                    onClick={() => this.props.changeView()}
-                  />
-                </FormField>
-              </Form>
-            </Card>
-          </Column>
-          <Column className="utv-right-two-thirds-column">
-            <Card classes="utv-even-padding">
-              <ResponsiveIframe src={actions.getVideoPreview(
-                this.state.source,
-                this.state.sourceID,
-                this.state.startTime,
-                this.state.endTime
-              )}/>
-            </Card>
-          </Column>
-        </Columns>
-      </div>
-    );
+    if (isLoading) return <Loader/>;
+/*
+description: undefined,
+title: undefined,
+quality: undefined,
+showControls: undefined,
+startTime: '',
+endTime: '',
+album: undefined,
+source: undefined,
+updateDate: undefined
+  sourceID: undefined,
+
+
+
+
+    thumbnail: undefined,
+
+
+
+
+
+  albums: undefined
+    */
+
+
+
+
+    return <>
+      <Breadcrumbs
+        crumbs={[
+          {text: utvJSData.localization.galleries, onClick: () => this.props.changeGallery()},
+          {text: this.props.selectedGalleryTitle, onClick: () => this.props.changeAlbum()},
+          {text: this.props.selectedAlbumTitle, onClick: () => this.props.changeView()}
+        ]}
+      />
+      <Columns>
+        <Column className="utv-left-one-thirds-column">
+          <Card>
+            <SectionHeader text={utvJSData.localization.editVideo}/>
+            <Form
+              submit={this.handleUpdateVideo}
+              errorclass="utv-invalid-feedback"
+            >
+              <FormField>
+                <Label text={utvJSData.localization.source}/>
+                <TextInput
+                  name="source"
+                  value={actions.getFormattedSource(this.state.source)}
+                  disabled={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.title}/>
+                <TextInput
+                  name="title"
+                  value={this.state.title}
+                  onChange={this.handleUpdateField}
+                  required={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.description}/>
+                <TextBoxInput
+                  name="description"
+                  value={this.state.description}
+                  onChange={this.handleUpdateField}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.album}/>
+                <SelectBox
+                  name="album"
+                  value={this.state.album}
+                  onChange={this.handleUpdateField}
+                  choices={this.state.albums}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.quality}/>
+                <SelectBox
+                  name="quality"
+                  value={this.state.quality}
+                  onChange={this.handleUpdateField}
+                  choices={[
+                    {name: '1080p', value: 'hd1080'},
+                    {name: '720p', value: 'hd720'},
+                    {name: '480p', value: 'large'}
+                  ]}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.controls}/>
+                <Toggle
+                  name="showControls"
+                  value={this.state.showControls}
+                  onChange={this.handleUpdateToggleField}
+                />
+                <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.startTime}/>
+                <NumberInput
+                  name="startTime"
+                  value={this.state.startTime}
+                  onChange={this.handleUpdateField}
+                />
+                <FieldHint text={utvJSData.localization.startTimeHint}/>
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.endTime}/>
+                <NumberInput
+                  name="endTime"
+                  value={this.state.endTime}
+                  onChange={this.handleUpdateField}
+                />
+                <FieldHint text={utvJSData.localization.endTimeHint}/>
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.lastUpdated}/>
+                <TextInput
+                  name="updateDateFormatted"
+                  value={getFormattedDateTime(this.state.updateDate)}
+                  disabled={true}
+                />
+              </FormField>
+              <FormField classes="utv-formfield-action">
+                <SubmitButton
+                  title={utvJSData.localization.saveVideo}
+                />
+                <CancelButton
+                  title={utvJSData.localization.cancel}
+                  onClick={() => this.props.changeView()}
+                />
+              </FormField>
+            </Form>
+          </Card>
+        </Column>
+        <Column className="utv-right-two-thirds-column">
+          <Card classes="utv-even-padding">
+            <ResponsiveIframe src={actions.getVideoPreview(
+              this.state.source,
+              this.state.sourceID,
+              this.state.startTime,
+              this.state.endTime
+            )}/>
+          </Card>
+        </Column>
+      </Columns>
+    </>
   }
 }
 

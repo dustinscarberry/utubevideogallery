@@ -6,104 +6,88 @@ import { getFormattedDate } from 'helpers/datetime-helpers';
 
 class VideoTable extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
     this.state = {
       rand: undefined
     };
   }
 
-  getHeaders()
-  {
-    return [
-      {
-        key: 'thumbnail',
-        title: utvJSData.localization.thumbnail,
-        sortable: false,
-        sortDirection: '',
-        width: '150px',
-        primary: true,
-        formatter: (row, cellData) => {
-          return <img
-            onClick={() => this.props.changeView('editVideo', row.id)}
-            src={utvJSData.thumbnailCacheDirectory + cellData + '.jpg'}
-            className="utv-preview-thumbnail utv-is-clickable"
-          />
-        }
-      },
-      {
-        key: 'title',
-        title: utvJSData.localization.title,
-        sortable: true,
-        sortDirection: '',
-        formatter: (row, cellData) => {
-          const watchLink = row.source == 'youtube' ? 'https://youtu.be/' + row.sourceID : 'https://vimeo.com/' + row.sourceID;
-
-          return (
-            <div>
-              <span className="utv-row-title">{cellData}</span>
-              <TableRowActions
-                actions={[
-                  {text: utvJSData.localization.edit, onClick: () => this.props.changeView('editVideo', row.id)},
-                  {text: utvJSData.localization.watch, link: watchLink},
-                  {text: utvJSData.localization.delete, onClick: () => this.deleteVideoPrompt([row.id])}
-                ]}
-              />
-            </div>
-          );
-        }
-      },
-      {
-        key: 'published',
-        title: utvJSData.localization.published,
-        sortable: true,
-        sortDirection: '',
-        formatter: (row, cellData) =>
-        {
-          if (cellData == 1)
-            return <i
-              onClick={() => this.togglePublishStatus(row.id, 0)}
-              className="utv-published-icon utv-is-clickable far fa-check-circle"
-            ></i>
-          else
-            return <i
-              onClick={() => this.togglePublishStatus(row.id, 1)}
-              className="utv-unpublished-icon utv-is-clickable far fa-times-circle"
-            ></i>
-        }
-      },
-      {
-        key: 'updateDate',
-        title: utvJSData.localization.lastUpdated,
-        sortable: true,
-        sortDirection: '',
-        formatter: (row, cellData) => {
-          return getFormattedDate(cellData);
-        }
+  getHeaders = () => {
+    return [{
+      key: 'thumbnail',
+      title: utvJSData.localization.thumbnail,
+      sortable: false,
+      sortDirection: '',
+      width: '150px',
+      primary: true,
+      formatter: (row, cellData) => {
+        return <img
+          onClick={() => this.props.changeView('editVideo', row.id)}
+          src={utvJSData.thumbnailCacheDirectory + cellData + '.jpg'}
+          className="utv-preview-thumbnail utv-is-clickable"
+        />
       }
-    ];
+    }, {
+      key: 'title',
+      title: utvJSData.localization.title,
+      sortable: true,
+      sortDirection: '',
+      formatter: (row, cellData) => {
+        const watchLink = row.source == 'youtube' ? 'https://youtu.be/' + row.sourceID : 'https://vimeo.com/' + row.sourceID;
+
+        return <div>
+          <span className="utv-row-title">{cellData}</span>
+          <TableRowActions
+            actions={[
+              {text: utvJSData.localization.edit, onClick: () => this.props.changeView('editVideo', row.id)},
+              {text: utvJSData.localization.watch, link: watchLink},
+              {text: utvJSData.localization.delete, onClick: () => this.deleteVideoPrompt([row.id])}
+            ]}
+          />
+        </div>
+      }
+    }, {
+      key: 'published',
+      title: utvJSData.localization.published,
+      sortable: true,
+      sortDirection: '',
+      formatter: (row, cellData) => {
+        if (cellData == 1)
+          return <i
+            onClick={() => this.togglePublishStatus(row.id, 0)}
+            className="utv-published-icon utv-is-clickable far fa-check-circle"
+          ></i>
+        else
+          return <i
+            onClick={() => this.togglePublishStatus(row.id, 1)}
+            className="utv-unpublished-icon utv-is-clickable far fa-times-circle"
+          ></i>
+      }
+    }, {
+      key: 'updateDate',
+      title: utvJSData.localization.lastUpdated,
+      sortable: true,
+      sortDirection: '',
+      formatter: (row, cellData) => {
+        return getFormattedDate(cellData);
+      }
+    }];
   }
 
-  getBulkActions()
-  {
+  getBulkActions = () => {
     return {
-      options: [
-        {
-          name: utvJSData.localization.delete,
-          value: 'delete'
-        },
-        {
-          name: utvJSData.localization.publish,
-          value: 'publish'
-        },
-        {
-          name: utvJSData.localization.unPublish,
-          value: 'unpublish'
-        }
-      ],
-      callback: (key, items) =>
-      {
+      options: [{
+        name: utvJSData.localization.delete,
+        value: 'delete'
+      }, {
+        name: utvJSData.localization.publish,
+        value: 'publish'
+      }, {
+        name: utvJSData.localization.unPublish,
+        value: 'unpublish'
+      }],
+      callback: (key, items) => {
         if (key == 'delete')
           this.deleteVideosPrompt(items);
         else if (key == 'publish')
@@ -114,32 +98,26 @@ class VideoTable extends React.Component
     };
   }
 
-  deleteVideosPrompt = (items) =>
-  {
-    if (confirm(utvJSData.localization.confirmVideosDelete))
-    {
+  deleteVideosPrompt = (items) => {
+    if (confirm(utvJSData.localization.confirmVideosDelete)) {
       for (let item of items)
         this.deleteVideo(item.id);
     }
   }
 
-  publishVideos = (items) =>
-  {
+  publishVideos = (items) => {
     for (let item of items)
       this.togglePublishStatus(item.id, 1);
   }
 
-  unpublishVideos = (items) =>
-  {
+  unpublishVideos = (items) => {
     for (let item of items)
       this.togglePublishStatus(item.id, 0);
   }
 
-  getDataMapping(data)
-  {
-    let newData = [];
-
-    for (let item of data) {
+  getDataMapping = (data) => {
+    const newData = [];
+    for (const item of data) {
       let record = {};
       record.id = item.id;
       record.thumbnail = item.thumbnail;
@@ -154,11 +132,9 @@ class VideoTable extends React.Component
     return newData;
   }
 
-  togglePublishStatus = async(videoID, changeTo) =>
-  {
+  togglePublishStatus = async(videoID, changeTo) => {
     const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/videos/'
-      + videoID,
+      '/wp-json/utubevideogallery/v1/videos/' + videoID,
       {
         published: changeTo,
         skipThumbnailRender: true
@@ -172,14 +148,12 @@ class VideoTable extends React.Component
       this.setState({rand: Math.random()});
   }
 
-  deleteVideoPrompt = (videoID) =>
-  {
+  deleteVideoPrompt = (videoID) => {
     if (confirm(utvJSData.localization.confirmVideoDelete))
       this.deleteVideo(videoID);
   }
 
-  deleteVideo = async(videoID) =>
-  {
+  deleteVideo = async (videoID) => {
     const rsp = await axios.delete(
       '/wp-json/utubevideogallery/v1/videos/' + videoID,
       {
@@ -191,10 +165,8 @@ class VideoTable extends React.Component
       this.setState({rand: Math.random()});
   }
 
-  async reorderRows(tableData)
-  {
-    if (!tableData)
-      return;
+  reorderRows = async (tableData) => {
+    if (!tableData) return;
 
     const videoIDs = tableData.map(item => item.id);
 
@@ -209,8 +181,7 @@ class VideoTable extends React.Component
     );
   }
 
-  render()
-  {
+  render() {
     return <GriddleDND
       headers={this.getHeaders()}
       recordLabel={utvJSData.localization.videos}

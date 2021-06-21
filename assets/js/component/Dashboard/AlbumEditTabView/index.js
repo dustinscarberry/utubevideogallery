@@ -32,12 +32,11 @@ class AlbumEditTabView extends React.Component
       gallery: undefined,
       galleries: undefined,
       thumbnails: undefined,
-      loading: true
+      isLoading: true
     };
   }
 
-  async componentDidMount()
-  {
+  async componentDidMount() {
     //load api data
     await Promise.all([
       this.loadData(),
@@ -46,11 +45,10 @@ class AlbumEditTabView extends React.Component
     ]);
 
     //set loading state
-    this.setState({loading: false});
+    this.setState({isLoading: false});
   }
 
-  async loadData()
-  {
+  loadData = async () => {
     const apiData = await actions.fetchAlbum(this.props.currentViewID);
 
     if (apiHelper.isValidResponse(apiData))
@@ -69,8 +67,7 @@ class AlbumEditTabView extends React.Component
       this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
-  async loadGalleries()
-  {
+  loadGalleries = async () => {
     const apiData = await actions.fetchGalleries();
 
     if (apiHelper.isValidResponse(apiData))
@@ -81,8 +78,7 @@ class AlbumEditTabView extends React.Component
     }
   }
 
-  async loadThumbnails()
-  {
+  loadThumbnails = async () => {
     const apiData = await actions.fetchThumbnails(this.props.currentViewID);
 
     if (apiHelper.isValidResponse(apiData))
@@ -95,24 +91,20 @@ class AlbumEditTabView extends React.Component
       this.props.setFeedbackMessage('Loading album thumbnails failed', 'error');
   }
 
-  changeValue = (e) =>
-  {
+  changeValue = (e) => {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  changeCheckboxValue = (e) =>
-  {
+  changeCheckboxValue = (e) => {
     this.setState({[e.target.name]: !this.state[e.target.name]});
   }
 
-  updateThumbnailValue = (thumbnail) =>
-  {
+  updateThumbnailValue = (thumbnail) => {
     if (thumbnail)
       this.setState({thumbnail});
   }
 
-  saveAlbum = async() =>
-  {
+  saveAlbum = async () => {
     //clean thumbnail url before sending
     let cleanedThumbnail = actions.getCleanThumbnail(this.state.thumbnail);
 
@@ -134,96 +126,103 @@ class AlbumEditTabView extends React.Component
       this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
-  render()
-  {
-    if (this.state.loading)
-      return <Loader/>;
+  render() {
+    const {
+      isLoading,
+      title,
+      gallery,
+      galleries,
+      videoSorting,
+      updateDate,
+      thumbnail,
+      thumbnails
+    } = this.state;
 
-    return (
-      <div>
-        <Breadcrumbs
-          crumbs={[
-            {
-              text: utvJSData.localization.galleries,
-              onClick: () => this.props.changeGallery()
-            },
-            {
-              text: this.props.selectedGalleryTitle,
-              onClick: () => this.props.changeAlbum()
-            }
-          ]}
-        />
-        <Columns>
-          <Column className="utv-left-one-thirds-column">
-            <Card>
-              <SectionHeader text={utvJSData.localization.editAlbum}/>
-              <Form
-                submit={this.saveAlbum}
-                errorclass="utv-invalid-feedback"
-              >
-                <FormField>
-                  <Label text={utvJSData.localization.title}/>
-                  <TextInput
-                    name="title"
-                    value={this.state.title}
-                    onChange={this.changeValue}
-                    required={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.gallery}/>
-                  <SelectBox
-                    name="gallery"
-                    value={this.state.gallery}
-                    onChange={this.changeValue}
-                    choices={this.state.galleries}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.videoSorting}/>
-                  <SelectBox
-                    name="videoSorting"
-                    value={this.state.videoSorting}
-                    onChange={this.changeValue}
-                    choices={[
-                      {name: utvJSData.localization.ascending, value: 'asc'},
-                      {name: utvJSData.localization.descending, value: 'desc'}
-                    ]}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.lastUpdated}/>
-                  <TextInput
-                    name="updateDate"
-                    value={getFormattedDateTime(this.state.updateDate)}
-                    disabled={true}
-                  />
-                </FormField>
-                <FormField classes="utv-formfield-action">
-                  <SubmitButton
-                    title={utvJSData.localization.saveAlbum}
-                  />
-                  <CancelButton
-                    title={utvJSData.localization.cancel}
-                    onClick={() => this.props.changeView()}
-                  />
-                </FormField>
-              </Form>
-            </Card>
-          </Column>
-          <Column className="utv-right-two-thirds-column">
-            <Card>
-              <SectionHeader text={utvJSData.localization.albumThumbnail}/>
-              <AlbumThumbnailSelection
-                currentThumbnail={this.state.thumbnail}
-                thumbnails={this.state.thumbnails}
-                updateThumbnail={this.updateThumbnailValue}
-              />
-            </Card>
-          </Column>
-        </Columns>
-      </div>
-    );
+    const { changeGallery, changeAlbum, changeView } = this.props;
+
+    if (isLoading)
+      return <Loader/>
+
+    return <div>
+      <Breadcrumbs
+        crumbs={[{
+          text: utvJSData.localization.galleries,
+          onClick: () => changeGallery()
+        }, {
+          text: this.props.selectedGalleryTitle,
+          onClick: () => changeAlbum()
+        }]}
+      />
+      <Columns>
+        <Column className="utv-left-one-thirds-column">
+          <Card>
+            <SectionHeader text={utvJSData.localization.editAlbum}/>
+            <Form
+              submit={this.saveAlbum}
+              errorclass="utv-invalid-feedback"
+            >
+              <FormField>
+                <Label text={utvJSData.localization.title}/>
+                <TextInput
+                  name="title"
+                  value={title}
+                  onChange={this.changeValue}
+                  required={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.gallery}/>
+                <SelectBox
+                  name="gallery"
+                  value={gallery}
+                  onChange={this.changeValue}
+                  choices={galleries}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.videoSorting}/>
+                <SelectBox
+                  name="videoSorting"
+                  value={videoSorting}
+                  onChange={this.changeValue}
+                  choices={[
+                    {name: utvJSData.localization.ascending, value: 'asc'},
+                    {name: utvJSData.localization.descending, value: 'desc'}
+                  ]}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.lastUpdated}/>
+                <TextInput
+                  name="updateDate"
+                  value={getFormattedDateTime(updateDate)}
+                  disabled={true}
+                />
+              </FormField>
+              <FormField classes="utv-formfield-action">
+                <SubmitButton
+                  title={utvJSData.localization.saveAlbum}
+                />
+                <CancelButton
+                  title={utvJSData.localization.cancel}
+                  onClick={() => changeView()}
+                />
+              </FormField>
+            </Form>
+          </Card>
+        </Column>
+        <Column className="utv-right-two-thirds-column">
+          <Card>
+            <SectionHeader text={utvJSData.localization.albumThumbnail}/>
+            <AlbumThumbnailSelection
+              currentThumbnail={thumbnail}
+              thumbnails={thumbnails}
+              updateThumbnail={this.updateThumbnailValue}
+            />
+          </Card>
+        </Column>
+      </Columns>
+    </div>
   }
 }
 
