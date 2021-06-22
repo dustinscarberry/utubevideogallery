@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import GriddleDND from 'component/shared/GriddleDND';
 import TableRowActions from 'component/shared/TableRowActions';
+import PublishedIcon from 'component/shared/PublishedIcon';
 import { getFormattedDate } from 'helpers/datetime-helpers';
 
 class VideoTable extends React.Component
@@ -9,7 +10,7 @@ class VideoTable extends React.Component
   constructor(props) {
     super(props);
     this.state = {
-      rand: undefined
+      rand: Math.random()
     };
   }
 
@@ -53,25 +54,17 @@ class VideoTable extends React.Component
       sortable: true,
       sortDirection: '',
       formatter: (row, cellData) => {
-        if (cellData == 1)
-          return <i
-            onClick={() => this.togglePublishStatus(row.id, 0)}
-            className="utv-published-icon utv-is-clickable far fa-check-circle"
-          ></i>
-        else
-          return <i
-            onClick={() => this.togglePublishStatus(row.id, 1)}
-            className="utv-unpublished-icon utv-is-clickable far fa-times-circle"
-          ></i>
+        return <PublishedIcon
+          isPublished={!!parseInt(cellData)}
+          togglePublishStatus={() => this.togglePublishStatus(row.id, (parseInt(cellData) ? 0 : 1))}
+        />
       }
     }, {
       key: 'updateDate',
       title: utvJSData.localization.lastUpdated,
       sortable: true,
       sortDirection: '',
-      formatter: (row, cellData) => {
-        return getFormattedDate(cellData);
-      }
+      formatter: (row, cellData) => getFormattedDate(cellData)
     }];
   }
 
@@ -100,52 +93,44 @@ class VideoTable extends React.Component
 
   deleteVideosPrompt = (items) => {
     if (confirm(utvJSData.localization.confirmVideosDelete)) {
-      for (let item of items)
+      for (const item of items)
         this.deleteVideo(item.id);
     }
   }
 
   publishVideos = (items) => {
-    for (let item of items)
+    for (const item of items)
       this.togglePublishStatus(item.id, 1);
   }
 
   unpublishVideos = (items) => {
-    for (let item of items)
+    for (const item of items)
       this.togglePublishStatus(item.id, 0);
   }
 
   getDataMapping = (data) => {
-    const newData = [];
-    for (const item of data) {
-      let record = {};
-      record.id = item.id;
-      record.thumbnail = item.thumbnail;
-      record.title = item.title;
-      record.source = item.source;
-      record.sourceID = item.sourceID;
-      record.published = item.published;
-      record.updateDate = item.updateDate;
-      newData.push(record);
-    }
-
-    return newData;
+    return data.map(item => {
+      return {
+        id: item.id,
+        thumbnail: item.thumbnail,
+        title: item.title,
+        source: item.source,
+        sourceID: item.sourceID,
+        published: item.published,
+        updateDate: item.updateDate
+      };
+    });
   }
 
-  togglePublishStatus = async(videoID, changeTo) => {
-    const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/videos/' + videoID,
-      {
-        published: changeTo,
-        skipThumbnailRender: true
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+  togglePublishStatus = async (videoID, publishStatus) => {
+    await axios.patch('/wp-json/utubevideogallery/v1/videos/' + videoID, {
+      published: publishStatus,
+      skipThumbnailRender: true
+    }, {
+      headers: {'X-WP-Nonce': utvJSData.restNonce}
+    });
 
-    if (rsp.status == 200)
-      this.setState({rand: Math.random()});
+    this.setState({rand: Math.random()});
   }
 
   deleteVideoPrompt = (videoID) => {
@@ -154,15 +139,11 @@ class VideoTable extends React.Component
   }
 
   deleteVideo = async (videoID) => {
-    const rsp = await axios.delete(
-      '/wp-json/utubevideogallery/v1/videos/' + videoID,
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    await axios.delete('/wp-json/utubevideogallery/v1/videos/' + videoID, {
+      headers: {'X-WP-Nonce': utvJSData.restNonce}
+    });
 
-    if (rsp.status == 200)
-      this.setState({rand: Math.random()});
+    this.setState({rand: Math.random()});
   }
 
   reorderRows = async (tableData) => {
@@ -170,27 +151,21 @@ class VideoTable extends React.Component
 
     const videoIDs = tableData.map(item => item.id);
 
-    const rsp = await axios.patch(
-      '/wp-json/utubevideogallery/v1/videosorder',
-      {
-        videoids: videoIDs
-      },
-      {
-        headers: {'X-WP-Nonce': utvJSData.restNonce}
-      }
-    );
+    // keep await to prevent out of order updates from happening (maybe)
+    await axios.patch('/wp-json/utubevideogallery/v1/videosorder', {
+      videoids: videoIDs
+    }, {
+      headers: {'X-WP-Nonce': utvJSData.restNonce}
+    });
   }
 
   render() {
+    const { selectedAlbum } = this.props;
+
     return <GriddleDND
       headers={this.getHeaders()}
       recordLabel={utvJSData.localization.videos}
-      apiLoadPath={
-        '/wp-json/utubevideogallery/v1/albums/'
-        + this.props.selectedAlbum
-        + '/videos?'
-        + this.state.rand
-      }
+      apiLoadPath={`/wp-json/utubevideogallery/v1/albums/${selectedAlbum}/videos?${Math.random()}`}
       dataMapper={this.getDataMapping}
       enableBulkActions={true}
       bulkActionsData={this.getBulkActions()}
