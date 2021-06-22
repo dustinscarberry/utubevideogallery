@@ -1,5 +1,6 @@
 import React from 'react';
-import actions from './actions';
+import cloneDeep from 'lodash/cloneDeep';
+import logic from './logic';
 import apiHelper from 'helpers/api-helpers';
 import { getFormattedDateTime } from 'helpers/datetime-helpers';
 import Card from 'component/shared/Card';
@@ -18,197 +19,188 @@ import Loader from 'component/shared/Loader';
 
 class GalleryEditTabView extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
-      title: '',
-      albumSorting: undefined,
-      thumbnailType: undefined,
-      originalThumbnailType: undefined,
-      displayType: undefined,
-      updateDate: undefined,
-      loading: true
+      gallery: {
+        title: '',
+        albumSorting: undefined,
+        thumbnailType: undefined,
+        originalThumbnailType: undefined,
+        displayType: undefined,
+        updateDate: undefined
+      },
+      isLoading: true
     };
   }
 
-  async componentDidMount()
-  {
-    //load api data
+  async componentDidMount() {
+    // load api data
     await this.loadData();
-
-    //set loading state
-    this.setState({loading: false});
+    this.setState({isLoading: false});
   }
 
-  async loadData()
-  {
-    const apiData = await actions.fetchGallery(this.props.currentViewID);
+  loadData = async () => {
+    const { setFeedbackMessage } = this.props;
 
-    if (apiHelper.isValidResponse(apiData))
-    {
-      const data = apiHelper.getAPIData(apiData);
+    const apiData = await logic.fetchGallery(this.props.currentViewID);
 
+    if (apiHelper.isValidResponse(apiData)) {
+      const data = apiData.data.data;
       this.setState({
-        title: data.title,
-        albumSorting: data.sortDirection,
-        thumbnailType: data.thumbnailType,
-        originalThumbnailType: data.thumbnailType,
-        displayType: data.displayType,
-        updateDate: data.updateDate
+        gallery: {
+          title: data.title,
+          albumSorting: data.sortDirection,
+          thumbnailType: data.thumbnailType,
+          originalThumbnailType: data.thumbnailType,
+          displayType: data.displayType,
+          updateDate: data.updateDate
+        }
       });
     }
     else if (apiHelper.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
+      setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
-  changeValue = (e) =>
-  {
-    this.setState({[e.target.name]: e.target.value});
+  handleUpdateField = (e) => {
+    const gallery = cloneDeep(this.state.gallery);
+    gallery[e.target.name] = e.target.value;
+    this.setState({gallery});
   }
 
-  changeCheckboxValue = (e) =>
-  {
-    this.setState({[e.target.name]: !this.state[e.target.name]});
-  }
+  saveGallery = async () => {
+    const { currentViewID, changeView, setFeedbackMessage } = this.props;
+    const { gallery } = this.state;
 
-  saveGallery = async() =>
-  {
-    this.setState({loading: true});
+    this.setState({isLoading: true});
 
-    const rsp = await actions.updateGallery(this.props.currentViewID, this.state);
+    const rsp = await logic.updateGallery(currentViewID, gallery);
 
-    //update thumbnails if format changed
+    // update thumbnails if format changed
     if (apiHelper.isValidResponse(rsp)
-      && this.state.thumbnailType != this.state.originalThumbnailType
+      && gallery.thumbnailType != gallery.originalThumbnailType
     ) {
       await this.rebuildThumbnails();
-      this.setState({originalThumbnailType: this.state.thumbnailType});
+      const gallery = cloneDeep(gallery);
+      gallery.originalThumbnailType = gallery.thumbnailType;
+      this.setState({gallery});
     }
 
-    //user feedback
-    if (apiHelper.isValidResponse(rsp))
-    {
-      this.props.changeView();
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackGallerySaved);
-    }
-    else if (apiHelper.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
+    // user feedback
+    if (apiHelper.isValidResponse(rsp)) {
+      changeView();
+      setFeedbackMessage(utvJSData.localization.feedbackGallerySaved);
+    } else if (apiHelper.isErrorResponse(rsp))
+      setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
 
-    this.setState({loading: false});
+    this.setState({isLoading: false});
   }
 
-  async rebuildThumbnails()
-  {
-    const videosData = await actions.fetchGalleryVideos(this.props.currentViewID);
+  rebuildThumbnails = async () => {
+    const { currentViewID, setFeedbackMessage } = this.props;
+
+    const videosData = await logic.fetchGalleryVideos(currentViewID);
 
     if (apiHelper.isValidResponse(videosData)) {
       const videos = videosData.data.data;
 
-      for (let video of videos) {
-        //update video thumbnail
-        const rsp = await actions.updateVideoThumbnail(video.id);
-
-        //user feedback for thumbnail update
-        this.props.setFeedbackMessage(actions.getThumbnailUpdateMessage(video.title));
+      for (const video of videos) {
+        // update video thumbnail
+        const rsp = await logic.updateVideoThumbnail(video.id);
+        setFeedbackMessage(logic.getThumbnailUpdateMessage(video.title));
       }
-    }
-    else if (apiHelper.isErrorResponse(videosData))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(videosData), 'error');
+    } else if (apiHelper.isErrorResponse(videosData))
+      tsetFeedbackMessage(apiHelper.getErrorMessage(videosData), 'error');
   }
 
-  render()
-  {
-    if (this.state.loading)
-      return <Loader/>;
+  render() {
+    const { isLoading, gallery } = this.state;
+    const { changeView } = this.props;
 
-    return (
-      <div>
-        <Breadcrumbs
-          crumbs={[
-            {
-              text: utvJSData.localization.galleries,
-              onClick: () => this.props.changeView()
-            }
-          ]}
-        />
-        <Columns>
-          <Column className="utv-left-fixed-single-column">
-            <Card>
-              <SectionHeader text={utvJSData.localization.editGallery}/>
-              <Form
-                submit={this.saveGallery}
-                errorclass="utv-invalid-feedback"
-              >
-                <FormField>
-                  <Label text={utvJSData.localization.title}/>
-                  <TextInput
-                    name="title"
-                    value={this.state.title}
-                    onChange={this.changeValue}
-                    required={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.albumSorting}/>
-                  <SelectBox
-                    name="albumSorting"
-                    value={this.state.albumSorting}
-                    onChange={this.changeValue}
-                    choices={[
-                      {name: utvJSData.localization.ascending, value: 'asc'},
-                      {name: utvJSData.localization.descending, value: 'desc'}
-                    ]}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.thumbnailType}/>
-                  <SelectBox
-                    name="thumbnailType"
-                    value={this.state.thumbnailType}
-                    onChange={this.changeValue}
-                    choices={[
-                      {name: utvJSData.localization.rectangle, value: 'rectangle'},
-                      {name: utvJSData.localization.square, value: 'square'}
-                    ]}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.displayType}/>
-                  <SelectBox
-                    name="displayType"
-                    value={this.state.displayType}
-                    onChange={this.changeValue}
-                    choices={[
-                      {name: utvJSData.localization.albums, value: 'album'},
-                      {name: utvJSData.localization.justVideos, value: 'video'}
-                    ]}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.lastUpdated}/>
-                  <TextInput
-                    name="updateDate"
-                    value={getFormattedDateTime(this.state.updateDate)}
-                    disabled={true}
-                  />
-                </FormField>
-                <FormField classes="utv-formfield-action">
-                  <SubmitButton
-                    title={utvJSData.localization.saveGallery}
-                  />
-                  <CancelButton
-                    title={utvJSData.localization.cancel}
-                    onClick={() => this.props.changeView()}
-                  />
-                </FormField>
-              </Form>
-            </Card>
-          </Column>
-        </Columns>
-      </div>
-    );
+    if (isLoading) return <Loader/>
+
+    return <>
+      <Breadcrumbs
+        crumbs={[{
+          text: utvJSData.localization.galleries,
+          onClick: () => changeView()
+        }]}
+      />
+      <Columns>
+        <Column className="utv-left-fixed-single-column">
+          <Card>
+            <SectionHeader text={utvJSData.localization.editGallery}/>
+            <Form
+              submit={this.saveGallery}
+              errorclass="utv-invalid-feedback"
+            >
+              <FormField>
+                <Label text={utvJSData.localization.title}/>
+                <TextInput
+                  name="title"
+                  value={gallery.title}
+                  onChange={this.handleUpdateField}
+                  required={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.albumSorting}/>
+                <SelectBox
+                  name="albumSorting"
+                  value={gallery.albumSorting}
+                  onChange={this.handleUpdateField}
+                  choices={[
+                    {name: utvJSData.localization.ascending, value: 'asc'},
+                    {name: utvJSData.localization.descending, value: 'desc'}
+                  ]}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.thumbnailType}/>
+                <SelectBox
+                  name="thumbnailType"
+                  value={gallery.thumbnailType}
+                  onChange={this.handleUpdateField}
+                  choices={[
+                    {name: utvJSData.localization.rectangle, value: 'rectangle'},
+                    {name: utvJSData.localization.square, value: 'square'}
+                  ]}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.displayType}/>
+                <SelectBox
+                  name="displayType"
+                  value={gallery.displayType}
+                  onChange={this.handleUpdateField}
+                  choices={[
+                    {name: utvJSData.localization.albums, value: 'album'},
+                    {name: utvJSData.localization.justVideos, value: 'video'}
+                  ]}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.lastUpdated}/>
+                <TextInput
+                  name="updateDate"
+                  value={getFormattedDateTime(gallery.updateDate)}
+                  disabled={true}
+                />
+              </FormField>
+              <FormField classes="utv-formfield-action">
+                <SubmitButton
+                  title={utvJSData.localization.saveGallery}
+                />
+                <CancelButton
+                  title={utvJSData.localization.cancel}
+                  onClick={() => changeView()}
+                />
+              </FormField>
+            </Form>
+          </Card>
+        </Column>
+      </Columns>
+    </>
   }
 }
 

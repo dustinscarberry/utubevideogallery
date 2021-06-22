@@ -161,11 +161,12 @@ class VideoTable extends React.Component
 
   render() {
     const { selectedAlbum } = this.props;
+    const { rand } = this.state;
 
     return <GriddleDND
       headers={this.getHeaders()}
       recordLabel={utvJSData.localization.videos}
-      apiLoadPath={`/wp-json/utubevideogallery/v1/albums/${selectedAlbum}/videos?${Math.random()}`}
+      apiLoadPath={`/wp-json/utubevideogallery/v1/albums/${selectedAlbum}/videos?${rand}`}
       dataMapper={this.getDataMapping}
       enableBulkActions={true}
       bulkActionsData={this.getBulkActions()}

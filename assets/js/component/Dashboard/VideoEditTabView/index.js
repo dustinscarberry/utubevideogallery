@@ -27,7 +27,7 @@ class VideoEditTabView extends React.Component
   constructor(props) {
     super(props);
     this.state = {
-      videoData: {
+      video: {
         thumbnail: undefined,
         source: undefined,
         sourceID: undefined,
@@ -64,7 +64,7 @@ class VideoEditTabView extends React.Component
 
     if (apiHelper.isValidResponse(rsp)) {
       const data = rsp.data.data;
-      const videoData = {
+      const video = {
         thumbnail: data.thumbnail,
         source: data.source,
         sourceID: data.sourceID,
@@ -78,7 +78,7 @@ class VideoEditTabView extends React.Component
         album: data.albumID,
         isLoading: false
       };
-      this.setState({videoData});
+      this.setState({video});
     } else if (apiHelper.isErrorResponse(apiData))
       setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
@@ -97,23 +97,23 @@ class VideoEditTabView extends React.Component
   }
 
   handleUpdateField = (e) => {
-    const videoData = cloneDeep(this.state.videoData);
-    videoData[e.target.name] = e.target.value;
-    this.setState({videoData});
+    const video = cloneDeep(this.state.video);
+    video[e.target.name] = e.target.value;
+    this.setState({video});
   }
 
   handleUpdateToggleField = (e) => {
-    const videoData = cloneDeep(this.state.videoData);
-    videoData[e.target.name] = !videoData[e.target.value];
-    this.setState({videoData});
+    const video = cloneDeep(this.state.video);
+    video[e.target.name] = !video[e.target.value];
+    this.setState({video});
   }
 
   handleUpdateVideo = async () => {
     const { currentViewID, changeView, setFeedbackMessage } = this.props;
-    const { videoData } = this.state;
+    const { video } = this.state;
 
     // update video
-    const rsp = await logic.updateVideo(currentViewID, videoData);
+    const rsp = await logic.updateVideo(currentViewID, video);
 
     if (apiHelper.isValidResponse(rsp)) {
       changeView();
@@ -123,7 +123,7 @@ class VideoEditTabView extends React.Component
   }
 
   render() {
-    const { isLoading, videoData, supportData } = this.state;
+    const { isLoading, video, supportData } = this.state;
     const { selectedGalleryTitle, selectedAlbumTitle, changeGallery, changeAlbum, changeView } = this.props;
 
     if (isLoading) return <Loader/>;
@@ -148,7 +148,7 @@ class VideoEditTabView extends React.Component
                 <Label text={utvJSData.localization.source}/>
                 <TextInput
                   name="source"
-                  value={logic.getFormattedSource(videoData.source)}
+                  value={logic.getFormattedSource(video.source)}
                   disabled={true}
                 />
               </FormField>
@@ -156,7 +156,7 @@ class VideoEditTabView extends React.Component
                 <Label text={utvJSData.localization.title}/>
                 <TextInput
                   name="title"
-                  value={videoData.title}
+                  value={video.title}
                   onChange={this.handleUpdateField}
                   required={true}
                 />
@@ -165,7 +165,7 @@ class VideoEditTabView extends React.Component
                 <Label text={utvJSData.localization.description}/>
                 <TextBoxInput
                   name="description"
-                  value={videoData.description}
+                  value={video.description}
                   onChange={this.handleUpdateField}
                 />
               </FormField>
@@ -173,7 +173,7 @@ class VideoEditTabView extends React.Component
                 <Label text={utvJSData.localization.album}/>
                 <SelectBox
                   name="album"
-                  value={videoData.album}
+                  value={video.album}
                   onChange={this.handleUpdateField}
                   choices={supportData.albums}
                 />
@@ -182,7 +182,7 @@ class VideoEditTabView extends React.Component
                 <Label text={utvJSData.localization.quality}/>
                 <SelectBox
                   name="quality"
-                  value={videoData.quality}
+                  value={video.quality}
                   onChange={this.handleUpdateField}
                   choices={[
                     {name: '1080p', value: 'hd1080'},
@@ -195,7 +195,7 @@ class VideoEditTabView extends React.Component
                 <Label text={utvJSData.localization.controls}/>
                 <Toggle
                   name="showControls"
-                  value={videoData.showControls}
+                  value={video.showControls}
                   onChange={this.handleUpdateToggleField}
                 />
                 <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
@@ -204,7 +204,7 @@ class VideoEditTabView extends React.Component
                 <Label text={utvJSData.localization.startTime}/>
                 <NumberInput
                   name="startTime"
-                  value={videoData.startTime}
+                  value={video.startTime}
                   onChange={this.handleUpdateField}
                 />
                 <FieldHint text={utvJSData.localization.startTimeHint}/>
@@ -213,7 +213,7 @@ class VideoEditTabView extends React.Component
                 <Label text={utvJSData.localization.endTime}/>
                 <NumberInput
                   name="endTime"
-                  value={videoData.endTime}
+                  value={video.endTime}
                   onChange={this.handleUpdateField}
                 />
                 <FieldHint text={utvJSData.localization.endTimeHint}/>
@@ -222,7 +222,7 @@ class VideoEditTabView extends React.Component
                 <Label text={utvJSData.localization.lastUpdated}/>
                 <TextInput
                   name="updateDateFormatted"
-                  value={getFormattedDateTime(videoData.updateDate)}
+                  value={getFormattedDateTime(video.updateDate)}
                   disabled={true}
                 />
               </FormField>
@@ -241,10 +241,10 @@ class VideoEditTabView extends React.Component
         <Column className="utv-right-two-thirds-column">
           <Card classes="utv-even-padding">
             <ResponsiveIframe src={logic.getVideoPreview(
-              videoData.source,
-              videoData.sourceID,
-              videoData.startTime,
-              videoData.endTime
+              video.source,
+              video.sourceID,
+              video.startTime,
+              video.endTime
             )}/>
           </Card>
         </Column>

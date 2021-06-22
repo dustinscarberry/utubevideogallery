@@ -1,5 +1,6 @@
 import React from 'react';
-import actions from './actions';
+import cloneDeep from 'lodash/cloneDeep';
+import logic from './logic';
 import apiHelper from 'helpers/api-helpers';
 import Card from 'component/shared/Card';
 import Form from 'component/shared/Form';
@@ -19,57 +20,53 @@ import Loader from 'component/shared/Loader';
 
 class SettingsTabView extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
-      gdEnabled: undefined,
-      gdVersion: undefined,
-      imageMagickEnabled: undefined,
-      imageMagickVersion: undefined,
-      phpVersion: undefined,
-      version: undefined,
-      wpVersion: undefined,
-      playerControlsColor: undefined,
-      playerControlsTheme: undefined,
-      popupPlayerWidth: undefined,
-      popupPlayerOverlayColor: undefined,
-      popupPlayerOverlayOpacity: undefined,
-      removeVideoPopupScript: undefined,
-      thumbnailBorderRadius: undefined,
-      thumbnailWidth: undefined,
-      originalThumbnailWidth: undefined,
-      thumbnailHorizontalPadding: undefined,
-      thumbnailVerticalPadding: undefined,
-      showVideoDescription: undefined,
-      vimeoAutoplay: undefined,
-      vimeoHideDetails: undefined,
-      youtubeAPIKey: undefined,
-      youtubeAPIKeyValid: undefined,
-      youtubeAPIKeyValidMessage: undefined,
-      youtubeAutoplay: undefined,
-      youtubeHideDetails: undefined,
-      loading: true
+      settings: {
+        gdEnabled: undefined,
+        gdVersion: undefined,
+        imageMagickEnabled: undefined,
+        imageMagickVersion: undefined,
+        phpVersion: undefined,
+        version: undefined,
+        wpVersion: undefined,
+        playerControlsColor: undefined,
+        playerControlsTheme: undefined,
+        popupPlayerWidth: undefined,
+        popupPlayerOverlayColor: undefined,
+        popupPlayerOverlayOpacity: undefined,
+        removeVideoPopupScript: undefined,
+        thumbnailBorderRadius: undefined,
+        thumbnailWidth: undefined,
+        originalThumbnailWidth: undefined,
+        thumbnailHorizontalPadding: undefined,
+        thumbnailVerticalPadding: undefined,
+        showVideoDescription: undefined,
+        vimeoAutoplay: undefined,
+        vimeoHideDetails: undefined,
+        youtubeAPIKey: undefined,
+        youtubeAPIKeyValid: undefined,
+        youtubeAPIKeyValidMessage: undefined,
+        youtubeAutoplay: undefined,
+        youtubeHideDetails: undefined
+      },
+      isLoading: true
     };
   }
 
-  async componentDidMount()
-  {
+  async componentDidMount() {
     await this.loadData();
-
-    this.setState({loading: false});
+    this.setState({isLoading: false});
   }
 
-  async loadData()
-  {
-    const apiData = await actions.fetchSettings();
+  loadData = async () => {
+    const apiData = await logic.fetchSettings();
 
-    if (apiHelper.isValidResponse(apiData))
-    {
-      const data = apiHelper.getAPIData(apiData);
+    if (apiHelper.isValidResponse(apiData)) {
+      const data = apiData.data.data;
 
-      this.setState({
+      this.setState({settings: {
         gdEnabled: data.gdEnabled,
         gdVersion: data.gdVersion,
         imageMagickEnabled: data.imageMagickEnabled,
@@ -96,251 +93,249 @@ class SettingsTabView extends React.Component
         youtubeAPIKeyValidMessage: data.youtubeApiKeyValidMessage,
         youtubeAutoplay: data.youtubeAutoplay,
         youtubeHideDetails: data.youtubeHideDetails
-      });
-    }
-    else if (apiHelper.isErrorResponse(apiData))
+      }});
+    } else if (apiHelper.isErrorResponse(apiData))
       this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
-  saveSettings = async() =>
-  {
-    this.setState({loading: true});
+  saveSettings = async () => {
+    const { settings } = this.state;
+    const { setFeedbackMessage } = this.props;
 
-    //update settings
-    const rsp = await actions.updateSettings(this.state);
+    this.setState({isLoading: true});
 
-    //update thumbnails if width changed
-    if (this.state.thumbnailWidth != this.state.originalThumbnailWidth)
-    {
+    // update settings
+    const rsp = await logic.updateSettings(settings);
+
+    // update thumbnails if width setting changed
+    if (settings.thumbnailWidth != settings.originalThumbnailWidth) {
       await this.rebuildThumbnails();
-      this.setState({originalThumbnailWidth: this.state.thumbnailWidth});
+      const settings = cloneDeep(settings);
+      settings.originalThumbnailWidth = settings.thumbnailWidth;
+      this.setState({settings});
     }
 
     // reload settings
     await this.loadData();
 
-    //user feedback
+    // user feedback
     if (apiHelper.isValidResponse(rsp))
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackSettingsSaved);
+      setFeedbackMessage(utvJSData.localization.feedbackSettingsSaved);
     else if (apiHelper.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
+      setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
 
-    this.setState({loading: false});
+    this.setState({isLoading: false});
   }
 
-  rebuildThumbnails = async() =>
-  {
-    this.setState({loading: true});
+  rebuildThumbnails = async () => {
+    const { setFeedbackMessage } = this.props;
 
-    //get all videos
-    const videosData = await actions.fetchAllVideos();
+    this.setState({isLoading: true});
 
-    if (apiHelper.isValidResponse(videosData))
-    {
-      const videos = apiHelper.getAPIData(videosData);
+    // get all videos
+    const videosData = await logic.fetchAllVideos();
 
-      for (let video of videos)
-      {
-        //update video thumbnail
-        const rsp = await actions.updateVideoThumbnail(video.id);
+    if (apiHelper.isValidResponse(videosData)) {
+      const videos = videosData.data.data;
 
-        //user feedback for thumbnail update
-        this.props.setFeedbackMessage(actions.getThumbnailUpdateMessage(video.title));
+      for (let video of videos) {
+        // update video thumbnail
+        const rsp = await logic.updateVideoThumbnail(video.id);
+        setFeedbackMessage(logic.getThumbnailUpdateMessage(video.title));
       }
-    }
-    else if (apiHelper.isErrorResponse(videosData))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(videosData), 'error');
+    } else if (apiHelper.isErrorResponse(videosData))
+      setFeedbackMessage(apiHelper.getErrorMessage(videosData), 'error');
 
-    this.setState({loading: false});
+    this.setState({isLoading: false});
   }
 
-  changeValue = (e) =>
-  {
-    this.setState({[e.target.name]: e.target.value});
+  handleUpdateField = (e) => {
+    const settings = cloneDeep(this.state.settings);
+    settings[e.target.name] = e.target.value;
+    this.setState({settings});
   }
 
-  changeCheckboxValue = (e) =>
-  {
-    this.setState({[e.target.name]: !this.state[e.target.name]});
+  handleUpdateToggleField = (e) => {
+    const settings = cloneDeep(this.state.settings);
+    settings[e.target.name] = !settings[e.target.name];
+    this.setState({settings});
   }
 
-  render()
-  {
-    if (this.state.loading)
-      return <Loader/>;
+  render() {
+    const { isLoading, settings } = this.state;
 
-    return (
-      <Form
-        submit={this.saveSettings}
-        errorclass="utv-invalid-feedback"
-      >
-        <Columns>
-          <Column className="utv-right-one-third-column">
-            <Card>
-              <SectionHeader text={utvJSData.localization.serverInformation}/>
-              <InfoLine text={utvJSData.localization.phpVersion + ': ' + this.state.phpVersion}/>
-              <InfoLine text={utvJSData.localization.pluginVersion + ': ' + this.state.version}/>
-              <InfoLine text={utvJSData.localization.wpVersion + ': ' + this.state.wpVersion}/>
-              <SectionHeader text={utvJSData.localization.status}/>
-              <InfoLine
-                text={'ImageMagick - ' + this.state.imageMagickVersion}
-                icon={this.state.imageMagickEnabled ? 'active' : 'inactive'}
+    if (isLoading) return <Loader/>
+
+    return <Form
+      submit={this.saveSettings}
+      errorclass="utv-invalid-feedback"
+    >
+      <Columns>
+        <Column className="utv-right-one-third-column">
+          <Card>
+            <SectionHeader text={utvJSData.localization.serverInformation}/>
+            <InfoLine text={utvJSData.localization.phpVersion + ': ' + settings.phpVersion}/>
+            <InfoLine text={utvJSData.localization.pluginVersion + ': ' + settings.version}/>
+            <InfoLine text={utvJSData.localization.wpVersion + ': ' + settings.wpVersion}/>
+            <SectionHeader text={utvJSData.localization.status}/>
+            <InfoLine
+              text={'ImageMagick - ' + settings.imageMagickVersion}
+              icon={settings.imageMagickEnabled ? 'active' : 'inactive'}
+            />
+            <InfoLine
+              text={'GD - ' + settings.gdVersion}
+              icon={settings.gdEnabled ? 'active' : 'inactive'}
+            />
+            <FormField classes="utv-formfield-action">
+              <SubmitButton
+                title={utvJSData.localization.updateSettings}
+                classes="button-primary"
+              />
+              <SecondaryButton
+                title={utvJSData.localization.resyncThumbnails}
+                onClick={this.rebuildThumbnails}
+              />
+            </FormField>
+          </Card>
+        </Column>
+        <Column className="utv-left-two-thirds-column">
+          <Card>
+            <SectionHeader text={utvJSData.localization.general}/>
+            <FormField>
+              <Label text={utvJSData.localization.maxPlayerWidth}/>
+              <TextInput
+                name="popupPlayerWidth"
+                value={settings.popupPlayerWidth}
+                onChange={this.handleUpdateField}
+              />
+            </FormField>
+            <FormField>
+              <Label text={utvJSData.localization.thumbnailWidth}/>
+              <TextInput
+                name="thumbnailWidth"
+                value={settings.thumbnailWidth}
+                onChange={this.handleUpdateField}
+              />
+            <FormField>
+            </FormField>
+              <Label text={utvJSData.localization.thumbnailPadding}/>
+              <TextInput
+                name="thumbnailHorizontalPadding"
+                value={settings.thumbnailHorizontalPadding}
+                onChange={this.handleUpdateField}
+              />
+            </FormField>
+            <FormField>
+              <Label text={utvJSData.localization.thumbnailBorderRadius}/>
+              <TextInput
+                name="thumbnailBorderRadius"
+                value={settings.thumbnailBorderRadius}
+                onChange={this.handleUpdateField}
+              />
+            </FormField>
+            <FormField>
+              <Label text={utvJSData.localization.overlayColor}/>
+              <TextInput
+                name="popupPlayerOverlayColor"
+                value={settings.popupPlayerOverlayColor}
+                onChange={this.handleUpdateField}
+              />
+            </FormField>
+            <FormField>
+              <Label text={utvJSData.localization.overlayOpactiy}/>
+              <TextInput
+                name="popupPlayerOverlayOpacity"
+                value={settings.popupPlayerOverlayOpacity}
+                onChange={this.handleUpdateField}
+              />
+            </FormField>
+            <FormField>
+              <Label text={utvJSData.localization.showVideoDescription}/>
+              <Toggle
+                name="showVideoDescription"
+                value={settings.showVideoDescription}
+                onChange={this.handleUpdateToggleField}
+              />
+              <FieldHint text={utvJSData.localization.showVideoDescriptionHint}/>
+            </FormField>
+            <FormField>
+              <Label text={utvJSData.localization.removeVideoPopupScripts}/>
+              <Toggle
+                name="removeVideoPopupScript"
+                value={settings.removeVideoPopupScript}
+                onChange={this.handleUpdateToggleField}
+              />
+              <FieldHint text={utvJSData.localization.removeVideoPopupScriptsHint}/>
+            </FormField>
+          </Card>
+          <Card>
+            <SectionHeader text="YouTube"/>
+            <FormField>
+              <Label text={utvJSData.localization.apiKey}/>
+              <TextInput
+                name="youtubeAPIKey"
+                value={settings.youtubeAPIKey}
+                onChange={this.handleUpdateField}
               />
               <InfoLine
-                text={'GD - ' + this.state.gdVersion}
-                icon={this.state.gdEnabled ? 'active' : 'inactive'}
+                text={settings.youtubeAPIKeyValidMessage}
+                icon={settings.youtubeAPIKeyValid ? 'active' : 'inactive'}
               />
-              <FormField classes="utv-formfield-action">
-                <SubmitButton
-                  title={utvJSData.localization.updateSettings}
-                  classes="button-primary"
-                />
-                <SecondaryButton
-                  title={utvJSData.localization.resyncThumbnails}
-                  onClick={this.rebuildThumbnails}
-                />
-              </FormField>
-            </Card>
-          </Column>
-          <Column className="utv-left-two-thirds-column">
-            <Card>
-              <SectionHeader text={utvJSData.localization.general}/>
-              <FormField>
-                <Label text={utvJSData.localization.maxPlayerWidth}/>
-                <TextInput
-                  name="popupPlayerWidth"
-                  value={this.state.popupPlayerWidth}
-                  onChange={this.changeValue}
-                />
-              </FormField>
-              <FormField>
-                <Label text={utvJSData.localization.thumbnailWidth}/>
-                <TextInput
-                  name="thumbnailWidth"
-                  value={this.state.thumbnailWidth}
-                  onChange={this.changeValue}
-                />
-              <FormField>
-              </FormField>
-                <Label text={utvJSData.localization.thumbnailPadding}/>
-                <TextInput
-                  name="thumbnailHorizontalPadding"
-                  value={this.state.thumbnailHorizontalPadding}
-                  onChange={this.changeValue}
-                />
-              </FormField>
-              <FormField>
-                <Label text={utvJSData.localization.thumbnailBorderRadius}/>
-                <TextInput
-                  name="thumbnailBorderRadius"
-                  value={this.state.thumbnailBorderRadius}
-                  onChange={this.changeValue}
-                />
-              </FormField>
-              <FormField>
-                <Label text={utvJSData.localization.overlayColor}/>
-                <TextInput
-                  name="popupPlayerOverlayColor"
-                  value={this.state.popupPlayerOverlayColor}
-                  onChange={this.changeValue}
-                />
-              </FormField>
-              <FormField>
-                <Label text={utvJSData.localization.overlayOpactiy}/>
-                <TextInput
-                  name="popupPlayerOverlayOpacity"
-                  value={this.state.popupPlayerOverlayOpacity}
-                  onChange={this.changeValue}
-                />
-              </FormField>
-              <FormField>
-                <Label text={utvJSData.localization.showVideoDescription}/>
-                <Toggle
-                  name="showVideoDescription"
-                  value={this.state.showVideoDescription}
-                  onChange={this.changeCheckboxValue}
-                />
-                <FieldHint text={utvJSData.localization.showVideoDescriptionHint}/>
-              </FormField>
-              <FormField>
-                <Label text={utvJSData.localization.removeVideoPopupScripts}/>
-                <Toggle
-                  name="removeVideoPopupScript"
-                  value={this.state.removeVideoPopupScript}
-                  onChange={this.changeCheckboxValue}
-                />
-                <FieldHint text={utvJSData.localization.removeVideoPopupScriptsHint}/>
-              </FormField>
+            <FieldHint text="Youtube API Key"/>
+              <Label text={utvJSData.localization.youtubeControlsTheme}/>
+              <SelectBox
+                name="playerControlsTheme"
+                value={settings.playerControlsTheme}
+                onChange={this.handleUpdateField}
+                choices={[
+                  {name: utvJSData.localization.light, value: 'light'},
+                  {name: utvJSData.localization.dark, value: 'dark'}
+                ]}
+              />
+              <Label text={utvJSData.localization.youtubeControlsColor}/>
+              <SelectBox
+                name="playerControlsColor"
+                value={settings.playerControlsColor}
+                onChange={this.handleUpdateField}
+                choices={[
+                  {name: utvJSData.localization.red, value: 'red'},
+                  {name: utvJSData.localization.white, value: 'white'}
+                ]}
+              />
+              <Label text={utvJSData.localization.autoplayVideos}/>
+              <Toggle
+                name="youtubeAutoplay"
+                value={settings.youtubeAutoplay}
+                onChange={this.handleUpdateToggleField}
+              />
+              <Label text={utvJSData.localization.hideVideoDetails}/>
+              <Toggle
+                name="youtubeHideDetails"
+                value={settings.youtubeHideDetails}
+                onChange={this.handleUpdateToggleField}
+              />
+            </FormField>
             </Card>
             <Card>
-              <SectionHeader text="YouTube"/>
-              <FormField>
-                <Label text={utvJSData.localization.apiKey}/>
-                <TextInput
-                  name="youtubeAPIKey"
-                  value={this.state.youtubeAPIKey}
-                  onChange={this.changeValue}
-                />
-                <InfoLine
-                  text={this.state.youtubeAPIKeyValidMessage}
-                  icon={this.state.youtubeAPIKeyValid ? 'active' : 'inactive'}
-                />
-              <FieldHint text="Youtube API Key"/>
-                <Label text={utvJSData.localization.youtubeControlsTheme}/>
-                <SelectBox
-                  name="playerControlsTheme"
-                  value={this.state.playerControlsTheme}
-                  onChange={this.changeValue}
-                  choices={[
-                    {name: utvJSData.localization.light, value: 'light'},
-                    {name: utvJSData.localization.dark, value: 'dark'}
-                  ]}
-                />
-                <Label text={utvJSData.localization.youtubeControlsColor}/>
-                <SelectBox
-                  name="playerControlsColor"
-                  value={this.state.playerControlsColor}
-                  onChange={this.changeValue}
-                  choices={[
-                    {name: utvJSData.localization.red, value: 'red'},
-                    {name: utvJSData.localization.white, value: 'white'}
-                  ]}
-                />
-                <Label text={utvJSData.localization.autoplayVideos}/>
-                <Toggle
-                  name="youtubeAutoplay"
-                  value={this.state.youtubeAutoplay}
-                  onChange={this.changeCheckboxValue}
-                />
-                <Label text={utvJSData.localization.hideVideoDetails}/>
-                <Toggle
-                  name="youtubeHideDetails"
-                  value={this.state.youtubeHideDetails}
-                  onChange={this.changeCheckboxValue}
-                />
-              </FormField>
-              </Card>
-              <Card>
-              <SectionHeader text="Vimeo"/>
-              <FormField>
-                <Label text={utvJSData.localization.autoplayVideos}/>
-                <Toggle
-                  name="vimeoAutoplay"
-                  value={this.state.vimeoAutoplay}
-                  onChange={this.changeCheckboxValue}
-                />
-                <Label text={utvJSData.localization.hideVideoDetails}/>
-                <Toggle
-                  name="vimeoHideDetails"
-                  value={this.state.vimeoHideDetails}
-                  onChange={this.changeCheckboxValue}
-                />
-              </FormField>
-              </Card>
-          </Column>
-        </Columns>
-      </Form>
-    );
+            <SectionHeader text="Vimeo"/>
+            <FormField>
+              <Label text={utvJSData.localization.autoplayVideos}/>
+              <Toggle
+                name="vimeoAutoplay"
+                value={settings.vimeoAutoplay}
+                onChange={this.handleUpdateToggleField}
+              />
+              <Label text={utvJSData.localization.hideVideoDetails}/>
+              <Toggle
+                name="vimeoHideDetails"
+                value={settings.vimeoHideDetails}
+                onChange={this.handleUpdateToggleField}
+              />
+            </FormField>
+            </Card>
+        </Column>
+      </Columns>
+    </Form>
   }
 }
 
