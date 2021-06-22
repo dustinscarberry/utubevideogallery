@@ -1,6 +1,6 @@
 import React from 'react';
 import cloneDeep from 'lodash/cloneDeep';
-import actions from './actions';
+import logic from './logic';
 import apiHelper from 'helpers/api-helpers';
 import { getFormattedDateTime } from 'helpers/datetime-helpers';
 import Card from 'component/shared/Card';
@@ -40,7 +40,7 @@ class VideoEditTabView extends React.Component
         updateDate: undefined,
         album: undefined
       },
-      sharedData: {
+      supportData: {
         albums: undefined
       },
       isLoading: true
@@ -58,13 +58,13 @@ class VideoEditTabView extends React.Component
   }
 
   loadData = async () => {
+    const { currentViewID, setFeedbackMessage } = this.props;
     // get video
-    const apiData = await actions.fetchVideo(this.props.currentViewID);
+    const rsp = await logic.fetchVideo(currentViewID);
 
-    if (apiHelper.isValidResponse(apiData)) {
-      const data = apiHelper.getAPIData(apiData);
-
-      this.setState({
+    if (apiHelper.isValidResponse(rsp)) {
+      const data = rsp.data.data;
+      const videoData = {
         thumbnail: data.thumbnail,
         source: data.source,
         sourceID: data.sourceID,
@@ -77,92 +77,63 @@ class VideoEditTabView extends React.Component
         updateDate: data.updateDate,
         album: data.albumID,
         isLoading: false
-      });
-    }
-    else if (apiHelper.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
+      };
+      this.setState({videoData});
+    } else if (apiHelper.isErrorResponse(apiData))
+      setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
   loadAlbums = async () => {
+    const { selectedGallery, setFeedbackMessage } = this.props;
     // get albums
-    const apiData = await actions.fetchGalleryAlbums(this.props.selectedGallery);
+    const rsp = await logic.fetchGalleryAlbums(selectedGallery);
 
-    if (apiHelper.isValidResponse(apiData))
-    {
-      const data = apiHelper.getAPIData(apiData);
-      const albums = actions.parseAlbumsData(data);
-      this.setState({albums});
-    }
-    else if (apiHelper.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
+    if (apiHelper.isValidResponse(rsp)) {
+      const supportData = cloneDeep(this.state.supportData);
+      supportData.albums = logic.parseAlbumsData(rsp.data.data);
+      this.setState({supportData});
+    } else if (apiHelper.isErrorResponse(rsp))
+      setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
   handleUpdateField = (e) => {
-    this.setState({[e.target.name]: e.target.value});
+    const videoData = cloneDeep(this.state.videoData);
+    videoData[e.target.name] = e.target.value;
+    this.setState({videoData});
   }
 
   handleUpdateToggleField = (e) => {
-    this.setState({[e.target.name]: !this.state[e.target.name]});
+    const videoData = cloneDeep(this.state.videoData);
+    videoData[e.target.name] = !videoData[e.target.value];
+    this.setState({videoData});
   }
 
   handleUpdateVideo = async () => {
-    const { changeView, setFeedbackMessage } = this.props;
+    const { currentViewID, changeView, setFeedbackMessage } = this.props;
+    const { videoData } = this.state;
 
     // update video
-    const rsp = await actions.updateVideo(this.props.currentViewID, {
-      title: this.state.title,
-      description: this.state.description,
-      quality: this.state.quality,
-      showControls: this.state.showControls,
-      startTime: this.state.startTime,
-      endTime: this.state.endTime,
-      albumID: this.state.album
-    });
+    const rsp = await logic.updateVideo(currentViewID, videoData);
 
-    if (rsp === true) {
+    if (apiHelper.isValidResponse(rsp)) {
       changeView();
       setFeedbackMessage(utvJSData.localization.feedbackVideoSaved, 'success');
-    } else
+    } else if (apiHelper.isErrorResponse(rsp))
       setFeedbackMessage(rsp, 'error');
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, videoData, supportData } = this.state;
+    const { selectedGalleryTitle, selectedAlbumTitle, changeGallery, changeAlbum, changeView } = this.props;
 
     if (isLoading) return <Loader/>;
-/*
-description: undefined,
-title: undefined,
-quality: undefined,
-showControls: undefined,
-startTime: '',
-endTime: '',
-album: undefined,
-source: undefined,
-updateDate: undefined
-  sourceID: undefined,
-
-
-
-
-    thumbnail: undefined,
-
-
-
-
-
-  albums: undefined
-    */
-
-
-
 
     return <>
       <Breadcrumbs
         crumbs={[
-          {text: utvJSData.localization.galleries, onClick: () => this.props.changeGallery()},
-          {text: this.props.selectedGalleryTitle, onClick: () => this.props.changeAlbum()},
-          {text: this.props.selectedAlbumTitle, onClick: () => this.props.changeView()}
+          {text: utvJSData.localization.galleries, onClick: () => changeGallery()},
+          {text: selectedGalleryTitle, onClick: () => changeAlbum()},
+          {text: selectedAlbumTitle, onClick: () => changeView()}
         ]}
       />
       <Columns>
@@ -177,7 +148,7 @@ updateDate: undefined
                 <Label text={utvJSData.localization.source}/>
                 <TextInput
                   name="source"
-                  value={actions.getFormattedSource(this.state.source)}
+                  value={logic.getFormattedSource(videoData.source)}
                   disabled={true}
                 />
               </FormField>
@@ -185,7 +156,7 @@ updateDate: undefined
                 <Label text={utvJSData.localization.title}/>
                 <TextInput
                   name="title"
-                  value={this.state.title}
+                  value={videoData.title}
                   onChange={this.handleUpdateField}
                   required={true}
                 />
@@ -194,7 +165,7 @@ updateDate: undefined
                 <Label text={utvJSData.localization.description}/>
                 <TextBoxInput
                   name="description"
-                  value={this.state.description}
+                  value={videoData.description}
                   onChange={this.handleUpdateField}
                 />
               </FormField>
@@ -202,16 +173,16 @@ updateDate: undefined
                 <Label text={utvJSData.localization.album}/>
                 <SelectBox
                   name="album"
-                  value={this.state.album}
+                  value={videoData.album}
                   onChange={this.handleUpdateField}
-                  choices={this.state.albums}
+                  choices={supportData.albums}
                 />
               </FormField>
               <FormField>
                 <Label text={utvJSData.localization.quality}/>
                 <SelectBox
                   name="quality"
-                  value={this.state.quality}
+                  value={videoData.quality}
                   onChange={this.handleUpdateField}
                   choices={[
                     {name: '1080p', value: 'hd1080'},
@@ -224,7 +195,7 @@ updateDate: undefined
                 <Label text={utvJSData.localization.controls}/>
                 <Toggle
                   name="showControls"
-                  value={this.state.showControls}
+                  value={videoData.showControls}
                   onChange={this.handleUpdateToggleField}
                 />
                 <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
@@ -233,7 +204,7 @@ updateDate: undefined
                 <Label text={utvJSData.localization.startTime}/>
                 <NumberInput
                   name="startTime"
-                  value={this.state.startTime}
+                  value={videoData.startTime}
                   onChange={this.handleUpdateField}
                 />
                 <FieldHint text={utvJSData.localization.startTimeHint}/>
@@ -242,7 +213,7 @@ updateDate: undefined
                 <Label text={utvJSData.localization.endTime}/>
                 <NumberInput
                   name="endTime"
-                  value={this.state.endTime}
+                  value={videoData.endTime}
                   onChange={this.handleUpdateField}
                 />
                 <FieldHint text={utvJSData.localization.endTimeHint}/>
@@ -251,7 +222,7 @@ updateDate: undefined
                 <Label text={utvJSData.localization.lastUpdated}/>
                 <TextInput
                   name="updateDateFormatted"
-                  value={getFormattedDateTime(this.state.updateDate)}
+                  value={getFormattedDateTime(videoData.updateDate)}
                   disabled={true}
                 />
               </FormField>
@@ -261,7 +232,7 @@ updateDate: undefined
                 />
                 <CancelButton
                   title={utvJSData.localization.cancel}
-                  onClick={() => this.props.changeView()}
+                  onClick={() => changeView()}
                 />
               </FormField>
             </Form>
@@ -269,11 +240,11 @@ updateDate: undefined
         </Column>
         <Column className="utv-right-two-thirds-column">
           <Card classes="utv-even-padding">
-            <ResponsiveIframe src={actions.getVideoPreview(
-              this.state.source,
-              this.state.sourceID,
-              this.state.startTime,
-              this.state.endTime
+            <ResponsiveIframe src={logic.getVideoPreview(
+              videoData.source,
+              videoData.sourceID,
+              videoData.startTime,
+              videoData.endTime
             )}/>
           </Card>
         </Column>
