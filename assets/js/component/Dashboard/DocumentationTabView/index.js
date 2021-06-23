@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import actions from './actions';
+import logic from './logic';
 import apiHelper from 'helpers/api-helpers';
 import Card from 'component/shared/Card';
 import SectionHeader from 'component/shared/SectionHeader';
@@ -8,47 +8,38 @@ import Loader from 'component/shared/Loader';
 
 class DocumentationTabView extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
       isLoading: true
     };
   }
 
-  async componentDidMount()
-  {
+  async componentDidMount() {
     await this.loadData();
-
     this.setState({isLoading: false});
   }
 
-  async loadData()
-  {
-    const apiData = await actions.fetchDocumentation();
+  loadData = async () => {
+    const { setFeedbackMessage } = this.props;
+
+    const apiData = await logic.fetchDocumentation();
 
     if (apiHelper.isValidResponse(apiData)) {
-      const data = apiHelper.getAPIData(apiData);
-
-      this.setState({
-        documentation: data
-      });
+      this.setState({documentation: apiData.data.data});
     } else if (apiHelper.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
+      setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
-  render()
-  {
-    if (this.state.isLoading)
-      return <Loader/>;
+  render() {
+    const { isLoading, documentation } = this.state;
 
-    return (
-      <Card>
-        <SectionHeader text={utvJSData.localization.documentation}/>
-        <ReactMarkdown>{this.state.documentation}</ReactMarkdown>
-      </Card>
-    );
+    if (isLoading) return <Loader/>
+
+    return <Card>
+      <SectionHeader text={utvJSData.localization.documentation}/>
+      <ReactMarkdown>{documentation}</ReactMarkdown>
+    </Card>
   }
 }
 

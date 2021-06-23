@@ -1,4 +1,9 @@
 import React from 'react';
+import cloneDeep from 'lodash/cloneDeep';
+import logic from './logic';
+import apiHelper from 'helpers/api-helpers';
+import { getFormattedDateTime } from 'helpers/datetime-helpers';
+
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';
@@ -14,136 +19,120 @@ import SubmitButton from 'component/shared/SubmitButton';
 import CancelButton from 'component/shared/CancelButton';
 import Loader from 'component/shared/Loader';
 import AlbumThumbnailSelection from './AlbumThumbnailSelection';
-import actions from './actions';
-import apiHelper from 'helpers/api-helpers';
-import { getFormattedDateTime } from 'helpers/datetime-helpers';
 
 class AlbumEditTabView extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
-      thumbnail: undefined,
-      title: '',
-      videoSorting: undefined,
-      updateDate: undefined,
-      gallery: undefined,
-      galleries: undefined,
-      thumbnails: undefined,
+      album: {
+        thumbnail: undefined,
+        title: '',
+        videoSorting: undefined,
+        updateDate: undefined,
+        gallery: undefined
+      },
+      supportData: {
+        galleries: undefined,
+        thumbnails: undefined
+      },
       isLoading: true
     };
   }
 
   async componentDidMount() {
-    //load api data
+    // load api data
     await Promise.all([
       this.loadData(),
       this.loadGalleries(),
       this.loadThumbnails()
     ]);
-
-    //set loading state
     this.setState({isLoading: false});
   }
 
   loadData = async () => {
-    const apiData = await actions.fetchAlbum(this.props.currentViewID);
+    const { currentViewID, setFeedbackMessage } = this.props;
 
-    if (apiHelper.isValidResponse(apiData))
-    {
-      const data = apiHelper.getAPIData(apiData);
+    const apiData = await logic.fetchAlbum(currentViewID);
 
+    if (apiHelper.isValidResponse(apiData)) {
+      const data = apiData.data.data;
       this.setState({
-        thumbnail: data.thumbnail,
-        title: data.title,
-        videoSorting: data.sortDirection,
-        updateDate: data.updateDate,
-        gallery: data.galleryID
+        album: {
+          thumbnail: data.thumbnail,
+          title: data.title,
+          videoSorting: data.sortDirection,
+          updateDate: data.updateDate,
+          gallery: data.galleryID
+        }
       });
-    }
-    else if (apiHelper.isErrorResponse(apiData))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
+    } else if (apiHelper.isErrorResponse(apiData))
+      setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
   loadGalleries = async () => {
-    const apiData = await actions.fetchGalleries();
+    const apiData = await logic.fetchGalleries();
 
-    if (apiHelper.isValidResponse(apiData))
-    {
-      const data = apiHelper.getAPIData(apiData);
-      const galleries = actions.parseGalleriesData(data);
-      this.setState({galleries});
+    if (apiHelper.isValidResponse(apiData)) {
+      const galleries = logic.parseGalleriesData(apiData.data.data);
+      const supportData = cloneDeep(this.state.supportData);
+      supportData.galleries = galleries;
+      this.setState({supportData});
     }
   }
 
   loadThumbnails = async () => {
-    const apiData = await actions.fetchThumbnails(this.props.currentViewID);
+    const { currentViewID, setFeedbackMessage } = this.props;
 
-    if (apiHelper.isValidResponse(apiData))
-    {
-      const data = apiHelper.getAPIData(apiData);
-      const thumbnails = actions.parseThumbnailsData(data);
-      this.setState({thumbnails});
-    }
-    else if (apiHelper.isErrorResponse(apiData))
-      this.props.setFeedbackMessage('Loading album thumbnails failed', 'error');
-  }
+    const apiData = await logic.fetchThumbnails(currentViewID);
 
-  changeValue = (e) => {
-    this.setState({[e.target.name]: e.target.value});
-  }
-
-  changeCheckboxValue = (e) => {
-    this.setState({[e.target.name]: !this.state[e.target.name]});
-  }
-
-  updateThumbnailValue = (thumbnail) => {
-    if (thumbnail)
-      this.setState({thumbnail});
+    if (apiHelper.isValidResponse(apiData)) {
+      const thumbnails = logic.parseThumbnailsData(apiData.data.data);
+      const supportData = cloneDeep(this.state.supportData);
+      supportData.thumbnails = thumbnails;
+      this.setState({supportData});
+    } else if (apiHelper.isErrorResponse(apiData))
+      setFeedbackMessage('Loading album thumbnails failed', 'error');
   }
 
   saveAlbum = async () => {
-    //clean thumbnail url before sending
-    let cleanedThumbnail = actions.getCleanThumbnail(this.state.thumbnail);
+    const { currentViewID, changeView, setFeedbackMessage } = this.props;
+    const { album } = this.state;
 
-    //update album
-    const rsp = await actions.updateAlbum(
-      this.props.currentViewID,
-      this.state.title,
-      cleanedThumbnail,
-      this.state.videoSorting,
-      this.state.gallery
-    );
+    // clean thumbnail url
+    let cleanedThumbnail = logic.getCleanThumbnail(album.thumbnail);
 
-    if (apiHelper.isValidResponse(rsp))
-    {
-      this.props.changeView();
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumSaved);
+    // update album
+    const rsp = await logic.updateAlbum(currentViewID, album, cleanedThumbnail);
+
+    if (apiHelper.isValidResponse(rsp)) {
+      changeView();
+      setFeedbackMessage(utvJSData.localization.feedbackAlbumSaved);
+    } else if (apiHelper.isErrorResponse(rsp))
+      setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
+  }
+
+  handleUpdateField = (e) => {
+    const album = cloneDeep(this.state.album);
+    album[e.target.name] = e.target.value;
+    this.setState({album});
+  }
+
+  handleUpdateThumbnailField = (thumbnail) => {
+    if (thumbnail) {
+      const album = cloneDeep(this.state.album);
+      album.thumbnail = thumbnail;
+      this.setState({album});
     }
-    else if (apiHelper.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
   render() {
-    const {
-      isLoading,
-      title,
-      gallery,
-      galleries,
-      videoSorting,
-      updateDate,
-      thumbnail,
-      thumbnails
-    } = this.state;
-
+    const { album, supportData, isLoading } = this.state;
     const { changeGallery, changeAlbum, changeView } = this.props;
 
-    if (isLoading)
-      return <Loader/>
+    if (isLoading) return <Loader/>
 
-    return <div>
+    return <>
       <Breadcrumbs
         crumbs={[{
           text: utvJSData.localization.galleries,
@@ -165,8 +154,8 @@ class AlbumEditTabView extends React.Component
                 <Label text={utvJSData.localization.title}/>
                 <TextInput
                   name="title"
-                  value={title}
-                  onChange={this.changeValue}
+                  value={album.title}
+                  onChange={this.handleUpdateField}
                   required={true}
                 />
               </FormField>
@@ -174,17 +163,17 @@ class AlbumEditTabView extends React.Component
                 <Label text={utvJSData.localization.gallery}/>
                 <SelectBox
                   name="gallery"
-                  value={gallery}
-                  onChange={this.changeValue}
-                  choices={galleries}
+                  value={album.gallery}
+                  onChange={this.handleUpdateField}
+                  choices={supportData.galleries}
                 />
               </FormField>
               <FormField>
                 <Label text={utvJSData.localization.videoSorting}/>
                 <SelectBox
                   name="videoSorting"
-                  value={videoSorting}
-                  onChange={this.changeValue}
+                  value={album.videoSorting}
+                  onChange={this.handleUpdateField}
                   choices={[
                     {name: utvJSData.localization.ascending, value: 'asc'},
                     {name: utvJSData.localization.descending, value: 'desc'}
@@ -195,7 +184,7 @@ class AlbumEditTabView extends React.Component
                 <Label text={utvJSData.localization.lastUpdated}/>
                 <TextInput
                   name="updateDate"
-                  value={getFormattedDateTime(updateDate)}
+                  value={getFormattedDateTime(album.updateDate)}
                   disabled={true}
                 />
               </FormField>
@@ -215,14 +204,14 @@ class AlbumEditTabView extends React.Component
           <Card>
             <SectionHeader text={utvJSData.localization.albumThumbnail}/>
             <AlbumThumbnailSelection
-              currentThumbnail={thumbnail}
-              thumbnails={thumbnails}
-              updateThumbnail={this.updateThumbnailValue}
+              currentThumbnail={album.thumbnail}
+              thumbnails={supportData.thumbnails}
+              updateThumbnail={this.handleUpdateThumbnailField}
             />
           </Card>
         </Column>
       </Columns>
-    </div>
+    </>
   }
 }
 

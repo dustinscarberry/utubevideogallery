@@ -3,6 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import logic from './logic';
 import apiHelper from 'helpers/api-helpers';
 import { getFormattedDateTime } from 'helpers/datetime-helpers';
+
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';

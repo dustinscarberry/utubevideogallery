@@ -1,4 +1,5 @@
 import React from 'react';
+
 import AlbumTable from './AlbumTable';
 import ActionBar from 'component/shared/ActionBar';
 import Breadcrumbs from 'component/shared/Breadcrumbs';

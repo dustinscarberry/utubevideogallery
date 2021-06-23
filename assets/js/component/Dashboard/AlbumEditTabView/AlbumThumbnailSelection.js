@@ -1,33 +1,31 @@
 import React from 'react';
+import classnames from 'classnames';
 
-const AlbumThumbnailSelection = ({currentThumbnail, thumbnails, updateThumbnail}) =>
-{
-  const thumbnailNodes = thumbnails.map(thumbnail =>
-  {
-    const thumbnailClasses = ['utv-album-thumbnail-choice'];
+const AlbumThumbnailSelection = ({
+  currentThumbnail,
+  thumbnails,
+  updateThumbnail
+}) => {
+  return <div className="utv-album-thumbnail-selection">
 
-    if (thumbnail.thumbnail == currentThumbnail)
-      thumbnailClasses.push('utv-album-thumbnail-choice-active');
+    {thumbnails.map(thumbnail => {
+      return <div
+        className={classnames('utv-album-thumbnail-choice', {
+          'utv-album-thumbnail-choice-active': thumbnail.thumbnail == currentThumbnail
+        })}
+        key={thumbnail.thumbnail}
+        onClick={() => updateThumbnail(thumbnail.thumbnail)}
+      >
+        <img className="utv-preview-thumbnail" src={utvJSData.thumbnailCacheDirectory + thumbnail.thumbnail + '.jpg'}/>
+        <span className="utv-album-thumbnail-selected-overlay"></span>
+      </div>
+    })}
 
-    return <div
-      className={thumbnailClasses.join(' ')}
-      key={thumbnail.thumbnail}
-      onClick={() => updateThumbnail(thumbnail.thumbnail)}
-    >
-      <img src={utvJSData.thumbnailCacheDirectory + thumbnail.thumbnail + '.jpg'} className="utv-preview-thumbnail"/>
-      <span className="utv-album-thumbnail-selected-overlay"></span>
-    </div>
-  });
-
-  return (
-    <div className="utv-album-thumbnail-selection">
-      {thumbnailNodes}
-    </div>
-  );
+  </div>
 }
 
 AlbumThumbnailSelection.defaultProps = {
   thumbnails: []
-};
+}
 
 export default AlbumThumbnailSelection;

@@ -1,7 +1,8 @@
 import React from 'react';
-import actions from './actions';
+import logic from './logic';
 import apiHelper from 'helpers/api-helpers';
 import { getFormattedDateTime } from 'helpers/datetime-helpers';
+
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';
@@ -23,10 +24,8 @@ import Loader from 'component/shared/Loader';
 
 class PlaylistEditTabView extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
       title: undefined,
       source: undefined,
@@ -44,19 +43,16 @@ class PlaylistEditTabView extends React.Component
     };
   }
 
-  async componentDidMount()
-  {
-    //load api data
+  async componentDidMount() {
+    // load api data
     await this.loadPlaylist();
     this.loadPlaylistVideos();
-
-    //set loading state
     this.setState({loading: false});
   }
 
   async loadPlaylist()
   {
-    const rsp = await actions.fetchPlaylist(this.props.currentViewID);
+    const rsp = await logic.fetchPlaylist(this.props.currentViewID);
 
     if (apiHelper.isValidResponse(rsp))
     {
@@ -82,10 +78,10 @@ class PlaylistEditTabView extends React.Component
     const { source, sourceID, albumID } = this.state;
 
     //fetch remote playlist videos
-    const remoteVideos = await actions.fetchRemotePlaylist(source, sourceID);
+    const remoteVideos = await logic.fetchRemotePlaylist(source, sourceID);
 
     //fetch local playlist videos already created
-    const localVideos = await actions.fetchLocalPlaylistVideos(albumID);
+    const localVideos = await logic.fetchLocalPlaylistVideos(albumID);
 
     //check for errors
     if (apiHelper.isErrorResponse(remoteVideos)) {
@@ -109,7 +105,7 @@ class PlaylistEditTabView extends React.Component
     );
 
     //combine local and remote playlist videos
-    const combinedVideos = actions.combineVideos(localData, remoteData);
+    const combinedVideos = logic.combineVideos(localData, remoteData);
 
     this.setState({
       playlistTitle: remoteData.title,
@@ -162,7 +158,7 @@ class PlaylistEditTabView extends React.Component
     this.setState({loading: true});
 
     //save base playlist
-    await actions.updatePlaylist(this.props.currentViewID, this.state);
+    await logic.updatePlaylist(this.props.currentViewID, this.state);
 
     //save playlist videos
     await this.savePlaylistVideoData();
@@ -179,10 +175,10 @@ class PlaylistEditTabView extends React.Component
     for (let video of playlistVideos)
     {
       //sync video
-      await actions.syncVideo(syncMethod, this.props.currentViewID, video, this.state);
+      await logic.syncVideo(syncMethod, this.props.currentViewID, video, this.state);
 
       //user feedback for video created / updated / deleted
-      this.props.setFeedbackMessage(actions.getVideoUpdateMessage(video.title));
+      this.props.setFeedbackMessage(logic.getVideoUpdateMessage(video.title));
     }
   }
 
@@ -201,117 +197,115 @@ class PlaylistEditTabView extends React.Component
         changeVideoTitle={this.changeVideoTitle}
       />
 
-    return (
-      <div>
-        <Breadcrumbs
-          crumbs={[
-            {
-              text: utvJSData.localization.savedPlaylists,
-              onClick: () => this.props.changeView()
-            }
-          ]}
-        />
-        <Columns>
-          <Column className="utv-left-one-thirds-column">
-            <Card>
-              <SectionHeader text={utvJSData.localization.editSyncPlaylist}/>
-              <Form
-                submit={this.savePlaylist}
-                errorclass="utv-invalid-feedback"
-              >
-                <FormField>
-                  <Label text={utvJSData.localization.title}/>
-                  <TextInput
-                    name="title"
-                    value={this.state.title}
-                    disabled={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.source}/>
-                  <TextInput
-                    name="source"
-                    value={actions.getFormattedSource(this.state.source)}
-                    disabled={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.album}/>
-                  <TextInput
-                    name="albumName"
-                    value={this.state.albumName}
-                    disabled={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.quality}/>
-                  <SelectBox
-                    name="videoQuality"
-                    value={this.state.videoQuality}
-                    onChange={this.changeValue}
-                    choices={[
-                      {name: '480p', value: 'large'},
-                      {name: '720p', value: 'hd720'},
-                      {name: '1080p', value: 'hd1080'}
-                    ]}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.controls}/>
-                  <Toggle
-                    name="showControls"
-                    value={this.state.showControls}
-                    onChange={this.changeCheckboxValue}
-                  />
-                  <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.lastUpdated}/>
-                  <TextInput
-                    name="updateDate"
-                    value={getFormattedDateTime(this.state.updateDate)}
-                    disabled={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.syncMethod}/>
-                  <SelectBox
-                    name="syncMethod"
-                    value={this.state.syncMethod}
-                    onChange={this.changeValue}
-                    choices={[
-                      {name: utvJSData.localization.syncSelected, value: 'syncSelected'},
-                      {name: utvJSData.localization.syncNew, value: 'syncNew'},
-                      {name: utvJSData.localization.syncAll, value: 'syncAll'}
-                    ]}
-                  />
-                </FormField>
-                <FormField classes="utv-formfield-action">
-                  <SubmitButton
-                    title={utvJSData.localization.syncSaveChanges}
-                  />
-                  <CancelButton
-                    title={utvJSData.localization.cancel}
-                    onClick={() => this.props.changeView()}
-                  />
-                </FormField>
-              </Form>
-            </Card>
-          </Column>
-          <Column className="utv-right-two-thirds-column">
-            <Card>
-              <SectionHeader text={utvJSData.localization.playlistItems}/>
-              <PlaylistMultiSelect
-                toggleAllVideosSelection={this.toggleAllVideosSelection}
-                videos={this.state.playlistVideos}
-              />
-              <PlaylistLegend/>
-              {playlistNode}
-            </Card>
-          </Column>
-        </Columns>
-      </div>
-    );
+    return <>
+      <Breadcrumbs
+        crumbs={[
+          {
+            text: utvJSData.localization.savedPlaylists,
+            onClick: () => this.props.changeView()
+          }
+        ]}
+      />
+      <Columns>
+        <Column className="utv-left-one-thirds-column">
+          <Card>
+            <SectionHeader text={utvJSData.localization.editSyncPlaylist}/>
+            <Form
+              submit={this.savePlaylist}
+              errorclass="utv-invalid-feedback"
+            >
+              <FormField>
+                <Label text={utvJSData.localization.title}/>
+                <TextInput
+                  name="title"
+                  value={this.state.title}
+                  disabled={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.source}/>
+                <TextInput
+                  name="source"
+                  value={logic.getFormattedSource(this.state.source)}
+                  disabled={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.album}/>
+                <TextInput
+                  name="albumName"
+                  value={this.state.albumName}
+                  disabled={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.quality}/>
+                <SelectBox
+                  name="videoQuality"
+                  value={this.state.videoQuality}
+                  onChange={this.changeValue}
+                  choices={[
+                    {name: '480p', value: 'large'},
+                    {name: '720p', value: 'hd720'},
+                    {name: '1080p', value: 'hd1080'}
+                  ]}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.controls}/>
+                <Toggle
+                  name="showControls"
+                  value={this.state.showControls}
+                  onChange={this.changeCheckboxValue}
+                />
+                <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.lastUpdated}/>
+                <TextInput
+                  name="updateDate"
+                  value={getFormattedDateTime(this.state.updateDate)}
+                  disabled={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.syncMethod}/>
+                <SelectBox
+                  name="syncMethod"
+                  value={this.state.syncMethod}
+                  onChange={this.changeValue}
+                  choices={[
+                    {name: utvJSData.localization.syncSelected, value: 'syncSelected'},
+                    {name: utvJSData.localization.syncNew, value: 'syncNew'},
+                    {name: utvJSData.localization.syncAll, value: 'syncAll'}
+                  ]}
+                />
+              </FormField>
+              <FormField classes="utv-formfield-action">
+                <SubmitButton
+                  title={utvJSData.localization.syncSaveChanges}
+                />
+                <CancelButton
+                  title={utvJSData.localization.cancel}
+                  onClick={() => this.props.changeView()}
+                />
+              </FormField>
+            </Form>
+          </Card>
+        </Column>
+        <Column className="utv-right-two-thirds-column">
+          <Card>
+            <SectionHeader text={utvJSData.localization.playlistItems}/>
+            <PlaylistMultiSelect
+              toggleAllVideosSelection={this.toggleAllVideosSelection}
+              videos={this.state.playlistVideos}
+            />
+            <PlaylistLegend/>
+            {playlistNode}
+          </Card>
+        </Column>
+      </Columns>
+    </>
   }
 }
 

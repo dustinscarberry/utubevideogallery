@@ -1,4 +1,8 @@
 import React from 'react';
+import cloneDeep from 'lodash/cloneDeep';
+import logic from './logic';
+import apiHelper from 'helpers/api-helpers';
+
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';
@@ -11,49 +15,50 @@ import TextInput from 'component/shared/TextInput';
 import SelectBox from 'component/shared/SelectBox';
 import SubmitButton from 'component/shared/SubmitButton';
 import CancelButton from 'component/shared/CancelButton';
-import logic from './logic';
-import apiHelper from 'helpers/api-helpers';
 
 class AlbumAddTabView extends React.Component
 {
   constructor(props) {
     super(props);
     this.state = {
-      title: '',
-      videoSorting: 'asc'
+      album: {
+        title: '',
+        videoSorting: 'asc'
+      }
     };
   }
 
-  changeValue = (e) => {
-    this.setState({[e.target.name]: e.target.value});
-  }
-
   addAlbum = async() => {
-    const rsp = await logic.createAlbum({
-      title: this.state.title,
-      videoSorting: this.state.videoSorting,
-      galleryID: this.props.selectedGallery
-    });
+    const { album, changeView, setFeedbackMessage } = this.state;
+    const { selectedGallery } = this.props;
+
+    const rsp = await logic.createAlbum(selectedGallery, album);
 
     if (apiHelper.isValidResponse(rsp)) {
-      this.props.changeView();
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackAlbumCreated);
+      changeView();
+      setFeedbackMessage(utvJSData.localization.feedbackAlbumCreated);
     } else if (apiHelper.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
+      setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
+  }
+
+  handleUpdateField = (e) => {
+    const album = cloneDeep(this.state.album);
+    album[e.target.name] = e.target.value;
+    this.setState({album});
   }
 
   render() {
+    const { selectedGalleryTitle, changeView, changeGallery } = this.props;
+    const { album } = this.state;
 
-
-
-    return <div>
+    return <>
       <Breadcrumbs
         crumbs={[{
           text: utvJSData.localization.galleries,
-          onClick: () => this.props.changeGallery()
+          onClick: () => changeGallery()
         }, {
-          text: this.props.selectedGalleryTitle,
-          onClick: () => this.props.changeView()
+          text: selectedGalleryTitle,
+          onClick: () => changeView()
         }]}
       />
       <Columns>
@@ -68,8 +73,8 @@ class AlbumAddTabView extends React.Component
                 <Label text={utvJSData.localization.title}/>
                 <TextInput
                   name="title"
-                  value={this.state.title}
-                  onChange={this.changeValue}
+                  value={album.title}
+                  onChange={this.handleUpdateField}
                   required={true}
                 />
               </FormField>
@@ -77,8 +82,8 @@ class AlbumAddTabView extends React.Component
                 <Label text={utvJSData.localization.videoSorting}/>
                 <SelectBox
                   name="videoSorting"
-                  value={this.state.videoSorting}
-                  onChange={this.changeValue}
+                  value={album.videoSorting}
+                  onChange={this.handleUpdateField}
                   choices={[
                     {name: utvJSData.localization.ascending, value: 'asc'},
                     {name: utvJSData.localization.descending, value: 'desc'}
@@ -92,14 +97,14 @@ class AlbumAddTabView extends React.Component
                 />
                 <CancelButton
                   title={utvJSData.localization.cancel}
-                  onClick={() => this.props.changeView()}
+                  onClick={() => changeView()}
                 />
               </FormField>
             </Form>
           </Card>
         </Column>
       </Columns>
-    </div>
+    </>
   }
 }
 

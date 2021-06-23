@@ -1,9 +1,10 @@
 import React from 'react';
+import axios from 'axios';
+import { getFormattedDate } from 'helpers/datetime-helpers';
+
 import GriddleDND from 'component/shared/GriddleDND';
 import TableRowActions from 'component/shared/TableRowActions';
 import BasicLink from 'component/shared/BasicLink';
-import { getFormattedDate } from 'helpers/datetime-helpers';
-import axios from 'axios';
 
 class GalleryTable extends React.Component
 {

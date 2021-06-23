@@ -1,6 +1,7 @@
 import React from 'react';
-import actions from './actions';
+import logic from './logic';
 import apiHelper from 'helpers/api-helpers';
+
 import Card from 'component/shared/Card';
 import Columns from 'component/shared/Columns';
 import Column from 'component/shared/Column';
@@ -21,147 +22,87 @@ import Loader from 'component/shared/Loader';
 
 class PlaylistAddTabView extends React.Component
 {
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
-
     this.state = {
-      url: undefined,
-      videoQuality: 'hd1080',
-      showControls: false,
-      source: undefined,
-      sourceID: undefined,
-      playlistTitle: undefined,
-      playlistVideos: [],
+      playlist: {
+        url: undefined,
+        videoQuality: 'hd1080',
+        showControls: false,
+        source: undefined,
+        sourceID: undefined,
+        playlistTitle: undefined,
+        playlistVideos: []
+      },
+      supportData: {
+        albums: []
+      },
       playlistLoading: true,
-      loading: true
+      isLoading: true
     };
   }
 
-  //load api data on first load
-  async componentDidMount()
-  {
-    //load albums selection
+  async componentDidMount() {
+    // load albums selection
     await this.loadAlbums();
-
-    //set loading state
-    this.setState({loading: false});
+    this.setState({isLoading: false});
   }
 
-  //load playlist if url changes
-  componentDidUpdate(nextProps, nextState)
-  {
-    if (this.state.sourceID != nextState.sourceID)
+  componentDidUpdate(nextProps, nextState) {
+    // load playlist if url changes
+    if (this.state.playlist.sourceID != nextState.playlist.sourceID)
       this.loadPlaylistVideos();
   }
 
-  //load album list for selectbox
-  async loadAlbums()
-  {
-    const rsp = await actions.fetchAlbums();
+  // load album list for selectbox
+  loadAlbums = async () => {
+    const { setFeedbackMessage } = this.props;
+
+    const rsp = await logic.fetchAlbums();
 
     if (apiHelper.isValidResponse(rsp)) {
-      const data = apiHelper.getAPIData(rsp);
-      const albums = actions.parseAlbumsData(data);
-      this.setState({albums});
+      const supportData = cloneDeep(this.state.supportData);
+      supportData.albums = logic.parseAlbumsData(rsp.data.data);
+      this.setState({supportData});
     } else if (apiHelper.isErrorResponse(rsp))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
+      setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
-  //load remote playlist
-  async loadPlaylistVideos()
-  {
+  // load remote playlist
+  loadPlaylistVideos = async () => {
     const { source, sourceID } = this.state;
+    const { setFeedbackMessage } = this.props;
 
     //fetch remote playlist data
-    let remoteVideos = await actions.fetchRemotePlaylist(source, sourceID);
+    let remoteVideos = await logic.fetchRemotePlaylist(source, sourceID);
 
-    if (apiHelper.isValidResponse(remoteVideos))
-    {
-      //augment remote videos data
+    if (apiHelper.isValidResponse(remoteVideos)) {
+      // augment remote videos data
       remoteVideos = apiHelper.getAPIData(remoteVideos);
-      remoteVideos = actions.parseRemotePlaylistData(remoteVideos);
+      remoteVideos = logic.parseRemotePlaylistData(remoteVideos);
 
-      //add remote videos to state
       this.setState({
         playlistTitle: remoteVideos.title,
         playlistVideos: remoteVideos.videos,
         playlistLoading: false
       });
-    }
-    else if (apiHelper.isErrorResponse(remoteVideos))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(remoteVideos), 'error');
+    } else if (apiHelper.isErrorResponse(remoteVideos))
+      setFeedbackMessage(apiHelper.getErrorMessage(remoteVideos), 'error');
   }
 
-  changeValue = (e) =>
-  {
-    this.setState({[e.target.name]: e.target.value});
-  }
+  // add new playlist
+  addPlaylist = async () => {
+    this.setState({isLoading: true});
 
-  changeCheckboxValue = (e) =>
-  {
-    this.setState({[e.target.name]: !this.state[e.target.name]});
-  }
+    // save base playlist
+    const basePlaylist = await logic.createPlaylist(this.state);
 
-  changeVideoTitle = (dataIndex, e) =>
-  {
-    const { playlistVideos } = this.state;
-    playlistVideos[dataIndex].title = e.target.value;
-
-    this.setState({playlistVideos});
-  }
-
-  changePlaylistURL = (e) =>
-  {
-    const url = e.target.value;
-    this.setState({url});
-
-    if (url) {
-      const urlParts = actions.parsePlaylistURL(url);
-
-      if (urlParts)
-        this.setState(urlParts);
-    }
-  }
-
-  //toggle playlist video selection
-  toggleVideoSelection = (dataIndex) =>
-  {
-    let { playlistVideos } = this.state;
-    playlistVideos[dataIndex].selected = !playlistVideos[dataIndex].selected;
-
-    this.setState({playlistVideos});
-  }
-
-  //toggle selected state of all playlist videos
-  toggleAllVideosSelection = (toggleAll) =>
-  {
-    let { playlistVideos } = this.state;
-
-    playlistVideos = playlistVideos.map(video => {
-      video.selected = toggleAll;
-      return video;
-    });
-
-    this.setState({playlistVideos});
-  }
-
-  //add new playlist
-  addPlaylist = async() =>
-  {
-    //set loading
-    this.setState({loading: true});
-
-    //save base playlist
-    const basePlaylist = await actions.createPlaylist(this.state);
-
-    if (apiHelper.isValidResponse(basePlaylist))
-    {
-      //get playlist id
+    if (apiHelper.isValidResponse(basePlaylist)) {
+      // get playlist id
       let playlistID = apiHelper.getAPIData(basePlaylist);
       playlistID = playlistID.id;
 
-      //save playlist videos
+      // save playlist videos
       await this.addPlaylistVideoData(playlistID);
 
       this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAdded);
@@ -172,137 +113,192 @@ class PlaylistAddTabView extends React.Component
     this.props.changeView();
   }
 
-  //add each playlist video
-  async addPlaylistVideoData(playlistID)
-  {
-    //create all videos that selected
+  // add each playlist video
+  addPlaylistVideoData = async (playlistID) =>  {
+    // create all videos that are selected
     for (let video of this.state.playlistVideos) {
       if (video.selected) {
         //create video
-        const rsp = await actions.createVideo(
+        const rsp = await logic.createVideo(
           video.sourceID,
           video.title,
           playlistID,
           this.state
         );
 
-        //feedback of video creation
-        this.props.setFeedbackMessage(actions.getVideoCreateMessage(video.title));
+        // feedback of video creation
+        this.props.setFeedbackMessage(logic.getVideoCreateMessage(video.title));
       }
     }
   }
 
-  render()
-  {
-    //show view loader
-    if (this.state.loading)
-      return <Loader/>;
 
-    //show playlist videos or loader
+
+
+
+
+
+
+
+
+  handleUpdateField = (e) => {
+    this.setState({[e.target.name]: e.target.value});
+  }
+
+  handleUpdateToggleField = (e) => {
+    this.setState({[e.target.name]: !this.state[e.target.name]});
+  }
+
+  handleUpdateVideoTitle = (dataIndex, e) => {
+    const { playlistVideos } = this.state;
+    playlistVideos[dataIndex].title = e.target.value;
+    this.setState({playlistVideos});
+  }
+
+  handleUpdatePlaylistURL = (e) => {
+    const url = e.target.value;
+    this.setState({url});
+
+    if (url) {
+      const urlParts = logic.parsePlaylistURL(url);
+
+      if (urlParts)
+        this.setState(urlParts);
+    }
+  }
+
+
+
+
+
+
+
+  // toggle playlist video selection
+  toggleVideoSelection = (dataIndex) => {
+    let { playlistVideos } = this.state;
+    playlistVideos[dataIndex].selected = !playlistVideos[dataIndex].selected;
+
+    this.setState({playlistVideos});
+  }
+
+  // toggle selected state of all playlist videos
+  toggleAllVideosSelection = (toggleAll) => {
+    let { playlistVideos } = this.state;
+
+    playlistVideos = playlistVideos.map(video => {
+      video.selected = toggleAll;
+      return video;
+    });
+
+    this.setState({playlistVideos});
+  }
+
+  render() {
+    const { isLoading } = this.state;
+
+    if (isLoading) return <Loader/>
+
+    // show playlist videos or loader
     let playlistNode = undefined;
-    if (actions.isPlaylistLoading(this.state))
+    if (logic.isPlaylistLoading(this.state))
       playlistNode = <Loader/>;
     else
       playlistNode = <PlaylistVideoSelection
         videos={this.state.playlistVideos}
         toggleVideoSelection={this.toggleVideoSelection}
-        changeVideoTitle={this.changeVideoTitle}
+        changeVideoTitle={this.handleUpdateVideoTitle}
       />;
 
-    return (
-      <div>
-        <Breadcrumbs
-          crumbs={[
-            {
-              text: utvJSData.localization.savedPlaylists,
-              onClick: () => this.props.changeView()
-            }
-          ]}
-        />
-        <Columns>
-          <Column className="utv-left-one-thirds-column">
-            <Card>
-              <SectionHeader text={utvJSData.localization.addPlaylist}/>
-              <Form
-                submit={this.addPlaylist}
-                errorclass="utv-invalid-feedback"
-              >
-                <FormField>
-                  <Label text={utvJSData.localization.url}/>
-                  <TextInput
-                    name="url"
-                    value={this.state.url}
-                    onChange={this.changePlaylistURL}
-                    required={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.title}/>
-                  <TextInput
-                    name="title"
-                    value={this.state.playlistTitle}
-                    disabled={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.album}/>
-                  <SelectBox
-                    name="album"
-                    value={this.state.album}
-                    onChange={this.changeValue}
-                    choices={this.state.albums}
-                    required={true}
-                    blankEntry={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.quality}/>
-                  <SelectBox
-                    name="videoQuality"
-                    value={this.state.videoQuality}
-                    onChange={this.changeValue}
-                    choices={[
-                      {name: '1080p', value: 'hd1080'},
-                      {name: '720p', value: 'hd720'},
-                      {name: '480p', value: 'large'}
-                    ]}
-                    required={true}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.controls}/>
-                  <Toggle
-                    name="showControls"
-                    value={this.state.showControls}
-                    onChange={this.changeCheckboxValue}
-                  />
-                  <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
-                </FormField>
-                <FormField classes="utv-formfield-action">
-                  <SubmitButton
-                    title={utvJSData.localization.addPlaylist}
-                  />
-                  <CancelButton
-                    title={utvJSData.localization.cancel}
-                    onClick={() => this.props.changeView()}
-                  />
-                </FormField>
-              </Form>
-            </Card>
-          </Column>
-          <Column className="utv-right-two-thirds-column">
-            <Card>
-              <SectionHeader text={utvJSData.localization.playlistItems}/>
-              <PlaylistMultiSelect
-                toggleAllVideosSelection={this.toggleAllVideosSelection}
-                videos={this.state.playlistVideos}
-              />
-              {playlistNode}
-            </Card>
-          </Column>
-        </Columns>
-      </div>
-    );
+    return <>
+      <Breadcrumbs
+        crumbs={[{
+          text: utvJSData.localization.savedPlaylists,
+          onClick: () => this.props.changeView()
+        }]}
+      />
+      <Columns>
+        <Column className="utv-left-one-thirds-column">
+          <Card>
+            <SectionHeader text={utvJSData.localization.addPlaylist}/>
+            <Form
+              submit={this.addPlaylist}
+              errorclass="utv-invalid-feedback"
+            >
+              <FormField>
+                <Label text={utvJSData.localization.url}/>
+                <TextInput
+                  name="url"
+                  value={this.state.url}
+                  onChange={this.handleUpdatePlaylistURL}
+                  required={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.title}/>
+                <TextInput
+                  name="title"
+                  value={this.state.playlistTitle}
+                  disabled={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.album}/>
+                <SelectBox
+                  name="album"
+                  value={this.state.album}
+                  onChange={this.handleUpdateField}
+                  choices={this.state.albums}
+                  required={true}
+                  blankEntry={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.quality}/>
+                <SelectBox
+                  name="videoQuality"
+                  value={this.state.videoQuality}
+                  onChange={this.handleUpdateField}
+                  choices={[
+                    {name: '1080p', value: 'hd1080'},
+                    {name: '720p', value: 'hd720'},
+                    {name: '480p', value: 'large'}
+                  ]}
+                  required={true}
+                />
+              </FormField>
+              <FormField>
+                <Label text={utvJSData.localization.controls}/>
+                <Toggle
+                  name="showControls"
+                  value={this.state.showControls}
+                  onChange={this.handleUpdateToggleField}
+                />
+                <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
+              </FormField>
+              <FormField classes="utv-formfield-action">
+                <SubmitButton
+                  title={utvJSData.localization.addPlaylist}
+                />
+                <CancelButton
+                  title={utvJSData.localization.cancel}
+                  onClick={() => this.props.changeView()}
+                />
+              </FormField>
+            </Form>
+          </Card>
+        </Column>
+        <Column className="utv-right-two-thirds-column">
+          <Card>
+            <SectionHeader text={utvJSData.localization.playlistItems}/>
+            <PlaylistMultiSelect
+              toggleAllVideosSelection={this.toggleAllVideosSelection}
+              videos={this.state.playlistVideos}
+            />
+            {playlistNode}
+          </Card>
+        </Column>
+      </Columns>
+    </>
   }
 }
 
