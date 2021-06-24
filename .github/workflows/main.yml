@@ -1,6 +1,6 @@
-# This is a basic workflow to help you get started with Actions
+# PHPUnit Workflow
 
-name: Testing
+name: PHPUnit
 
 # Controls when the action will run.
 on:
@@ -30,3 +30,5 @@ jobs:
 
       - name: Build scripts
         run: npm run prod --if-present
+
+      - uses: php-actions/phpunit@v3
