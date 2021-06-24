@@ -31,4 +31,7 @@ jobs:
       - name: Build scripts
         run: npm run prod --if-present
 
-      - uses: php-actions/phpunit@v3
+      - name: PHPUnit tests
+        uses: php-actions/phpunit@v3
+        with:
+          configuration: phpunit.xml.dist
