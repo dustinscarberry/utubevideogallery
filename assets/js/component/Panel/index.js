@@ -1,12 +1,13 @@
 import React from 'react';
 import classnames from 'classnames';
+import { fetchPanelData } from './logic';
+
 import VideoPlayer from './VideoPlayer';
 import TitleControls from './TitleControls';
 import Description from './Description';
 import PanelThumbnails from './PanelThumbnails';
 import Paging from './Paging';
 import Loader from 'component/shared/Loader';
-import { fetchPanelData } from './actions';
 
 class Panel extends React.Component
 {

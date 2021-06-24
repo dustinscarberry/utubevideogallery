@@ -132,15 +132,6 @@ class PlaylistAddTabView extends React.Component
     }
   }
 
-
-
-
-
-
-
-
-
-
   handleUpdateField = (e) => {
     this.setState({[e.target.name]: e.target.value});
   }
@@ -166,12 +157,6 @@ class PlaylistAddTabView extends React.Component
         this.setState(urlParts);
     }
   }
-
-
-
-
-
-
 
   // toggle playlist video selection
   toggleVideoSelection = (dataIndex) => {

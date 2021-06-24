@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from 'axios';
+import { deletePlaylist } from './logic';
 import { getFormattedDate } from 'helpers/datetime-helpers';
 
 import GriddleDND from 'component/shared/GriddleDND';
@@ -16,6 +16,8 @@ class PlaylistTable extends React.Component
   }
 
   getHeaders = () => {
+    const { changeView } = this.props;
+
     return [{
       key: 'title',
       title: 'Title',
@@ -25,15 +27,15 @@ class PlaylistTable extends React.Component
       formatter: (row, cellData) => {
         return <>
           <BasicLink
-            onClick={() => this.props.changeView('editPlaylist', row.id)}
+            onClick={() => changeView('editPlaylist', row.id)}
             classes={['utv-row-title']}
             text={cellData}
           />
           <TableRowActions
             actions={[
-              {text: 'Edit / Sync', onClick: () => this.props.changeView('editPlaylist', row.id)},
+              {text: 'Edit / Sync', onClick: () => changeView('editPlaylist', row.id)},
               {text: 'View', link: 'https://www.youtube.com/playlist?list=' + row.sourceID},
-              {text: 'Delete', onClick: () => this.deletePlaylistPrompt(row.id)}
+              {text: 'Delete', onClick: () => this.removePlaylistPrompt(row.id)}
             ]}
           />
         </>
@@ -84,32 +86,31 @@ class PlaylistTable extends React.Component
       }],
       callback: (key, items) => {
         if (key == 'delete')
-          this.deletePlaylistsPrompt(items);
+          this.removePlaylistsPrompt(items);
       }
     };
   }
 
-  deletePlaylistsPrompt = (items) => {
+  removePlaylistsPrompt = (items) => {
     if (confirm('Are you sure you want to delete these playlists?')) {
       for (const item of items)
-        this.deletePlaylist(item.id);
+        this.removePlaylist(item.id);
     }
   }
 
-  deletePlaylistPrompt = (playlistID) => {
+  removePlaylistPrompt = (playlistID) => {
     if (confirm('Are you sure you want to delete this playlist?'))
-      this.deletePlaylist(playlistID);
+      this.removePlaylist(playlistID);
   }
 
-  deletePlaylist = async (playlistID) => {
-    const rsp = await axios.delete('/wp-json/utubevideogallery/v1/playlists/' + playlistID, {
-      headers: {'X-WP-Nonce': utvJSData.restNonce}
-    });
-
+  removePlaylist = async (playlistID) => {
+    await deletePlaylist(playlistID);
     this.setState({rand: Math.random()});
   }
 
   render() {
+    const { rand } = this.state;
+
     return <GriddleDND
       headers={this.getHeaders()}
       recordLabel="playlists"

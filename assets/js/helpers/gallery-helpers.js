@@ -31,4 +31,4 @@ export const getThumbnailsClasses = (thumbnailType) => {
 export default {
   getGalleryClasses,
   getThumbnailsClasses
-};
+}

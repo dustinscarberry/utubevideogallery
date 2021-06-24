@@ -1,10 +1,11 @@
 import React from 'react';
+import { fetchGalleryData } from './logic';
+import { getYouTubeEmbedURL } from 'helpers/youtube-helpers';
+import { getVimeoEmbedURL } from 'helpers/vimeo-helpers';
+
 import AlbumView from './AlbumView';
 import VideoView from './VideoView';
 import Loader from 'component/shared/Loader';
-import { fetchGalleryData } from './actions';
-import { getYouTubeEmbedURL } from 'helpers/youtube-helpers';
-import { getVimeoEmbedURL } from 'helpers/vimeo-helpers';
 
 class Gallery extends React.Component
 {

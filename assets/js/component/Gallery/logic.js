@@ -1,11 +1,15 @@
 import axios from 'axios';
+import apiHelper from 'helpers/api-helpers';
 
 // fetch and transform gallery data
-export async function fetchGalleryData(galleryId, maxAlbums = undefined, maxVideos = undefined)
-{
+export const fetchGalleryData = async (
+  galleryId,
+  maxAlbums = undefined,
+  maxVideos = undefined
+) => {
   const apiData = await axios.get('/wp-json/utubevideogallery/v1/galleriesdata/' + galleryId);
 
-  if (!(apiData.status == 200 && !apiData.data.error))
+  if (!apiHelper.isValidResponse(apiData))
     return false;
 
   const data = apiData.data.data;

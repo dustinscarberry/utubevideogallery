@@ -4,7 +4,7 @@ Donate link: https://www.dscarberry.com/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
 Requires at least: 4.9.0
 Requires PHP: 7.0
-Tested up to: 5.2.3
+Tested up to: 5.7.2
 Stable tag: 2.0.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html

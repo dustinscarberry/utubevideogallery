@@ -39,7 +39,7 @@ class PlaylistEditTabView extends React.Component
       playlistTitle: undefined,
       playlistVideos: [],
       playlistLoading: true,
-      loading: true
+      isLoading: true
     };
   }
 
@@ -47,15 +47,13 @@ class PlaylistEditTabView extends React.Component
     // load api data
     await this.loadPlaylist();
     this.loadPlaylistVideos();
-    this.setState({loading: false});
+    this.setState({isLoading: false});
   }
 
-  async loadPlaylist()
-  {
+  loadPlaylist = async () => {
     const rsp = await logic.fetchPlaylist(this.props.currentViewID);
 
-    if (apiHelper.isValidResponse(rsp))
-    {
+    if (apiHelper.isValidResponse(rsp)) {
       const data = apiHelper.getAPIData(rsp);
 
       this.setState({
@@ -73,17 +71,16 @@ class PlaylistEditTabView extends React.Component
       this.props.setFeedbackMessage(apiHelper.getErrorMessage(rsp), 'error');
   }
 
-  async loadPlaylistVideos()
-  {
+  loadPlaylistVideos = async () => {
     const { source, sourceID, albumID } = this.state;
 
-    //fetch remote playlist videos
+    // fetch remote playlist videos
     const remoteVideos = await logic.fetchRemotePlaylist(source, sourceID);
 
-    //fetch local playlist videos already created
+    // fetch local playlist videos already created
     const localVideos = await logic.fetchLocalPlaylistVideos(albumID);
 
-    //check for errors
+    // check for errors
     if (apiHelper.isErrorResponse(remoteVideos)) {
       this.props.setFeedbackMessage(apiHelper.getErrorMessage(remoteVideos), 'error');
       return;
@@ -94,17 +91,17 @@ class PlaylistEditTabView extends React.Component
       return;
     }
 
-    //if all is good filter playlist data
-    const remoteData = apiHelper.getAPIData(remoteVideos);
-    let localData = apiHelper.getAPIData(localVideos);
+    // if all is good filter playlist data
+    const remoteData = remoteVideos.data.data;
+    let localData = localVideos.data.data;
 
     //// TODO: remove this and switch to correct query above instead
-    //filter local playlist videos
+    // filter local playlist videos
     localData = localData.filter(localVideo =>
       localVideo.playlistID == this.props.currentViewID
     );
 
-    //combine local and remote playlist videos
+    // combine local and remote playlist videos
     const combinedVideos = logic.combineVideos(localData, remoteData);
 
     this.setState({
@@ -114,34 +111,55 @@ class PlaylistEditTabView extends React.Component
     });
   }
 
-  changeValue = (e) =>
-  {
+  savePlaylist = async () => {
+    const { currentViewID, changeView, setFeedbackMessage } = this.props;
+
+    this.setState({isLoading: true});
+
+    // save base playlist
+    await logic.updatePlaylist(currentViewID, this.state);
+
+    // save playlist videos
+    await this.savePlaylistVideoData();
+
+    changeView();
+    setFeedbackMessage(utvJSData.localization.feedbackPlaylistSynced);
+  }
+
+  savePlaylistVideoData = async () => {
+    const { currentViewID, setFeedbackMessage } = this.props;
+    const { playlistVideos, syncMethod } = this.state;
+
+    // create, update, or delete playlist videos based on sync method
+    for (const video of playlistVideos) {
+      await logic.syncVideo(syncMethod, currentViewID, video, this.state);
+      setFeedbackMessage(logic.getVideoUpdateMessage(video.title));
+    }
+  }
+
+  handleUpdateField = (e) => {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  changeCheckboxValue = (e) =>
-  {
+  handleUpdateToggleField = (e) => {
     this.setState({[e.target.name]: !this.state[e.target.name]});
   }
 
-  changeVideoTitle = (videoIndex, e) =>
-  {
+  changeVideoTitle = (videoIndex, e) => {
     let { playlistVideos } = this.state;
     playlistVideos[videoIndex].title = e.target.value;
     this.setState({playlistVideos});
   }
 
-  //toggle playlist video selection
-  toggleVideoSelection = (videoIndex) =>
-  {
+  // toggle playlist video selection
+  toggleVideoSelection = (videoIndex) => {
     const { playlistVideos } = this.state;
     playlistVideos[videoIndex].selected = !playlistVideos[videoIndex].selected;
     this.setState({playlistVideos});
   }
 
-  //toggle selected state of all playlist videos
-  toggleAllVideosSelection = (toggleAll) =>
-  {
+  // toggle selected state of all playlist videos
+  toggleAllVideosSelection = (toggleAll) => {
     let { playlistVideos } = this.state;
 
     playlistVideos = playlistVideos.map(video => {
@@ -152,40 +170,10 @@ class PlaylistEditTabView extends React.Component
     this.setState({playlistVideos});
   }
 
-  savePlaylist = async() =>
-  {
-    //set loading
-    this.setState({loading: true});
+  render() {
+    const { isLoading } = this.state;
 
-    //save base playlist
-    await logic.updatePlaylist(this.props.currentViewID, this.state);
-
-    //save playlist videos
-    await this.savePlaylistVideoData();
-
-    this.props.changeView();
-    this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistSynced);
-  }
-
-  async savePlaylistVideoData()
-  {
-    const { playlistVideos, syncMethod } = this.state;
-
-    //create, update, or delete playlist videos based on sync method
-    for (let video of playlistVideos)
-    {
-      //sync video
-      await logic.syncVideo(syncMethod, this.props.currentViewID, video, this.state);
-
-      //user feedback for video created / updated / deleted
-      this.props.setFeedbackMessage(logic.getVideoUpdateMessage(video.title));
-    }
-  }
-
-  render()
-  {
-    if (this.state.loading)
-      return <Loader/>;
+    if (isLoading) return <Loader/>
 
     let playlistNode;
     if (this.state.playlistLoading)
@@ -199,12 +187,10 @@ class PlaylistEditTabView extends React.Component
 
     return <>
       <Breadcrumbs
-        crumbs={[
-          {
-            text: utvJSData.localization.savedPlaylists,
-            onClick: () => this.props.changeView()
-          }
-        ]}
+        crumbs={[{
+          text: utvJSData.localization.savedPlaylists,
+          onClick: () => this.props.changeView()
+        }]}
       />
       <Columns>
         <Column className="utv-left-one-thirds-column">
@@ -243,7 +229,7 @@ class PlaylistEditTabView extends React.Component
                 <SelectBox
                   name="videoQuality"
                   value={this.state.videoQuality}
-                  onChange={this.changeValue}
+                  onChange={this.handleUpdateField}
                   choices={[
                     {name: '480p', value: 'large'},
                     {name: '720p', value: 'hd720'},
@@ -256,7 +242,7 @@ class PlaylistEditTabView extends React.Component
                 <Toggle
                   name="showControls"
                   value={this.state.showControls}
-                  onChange={this.changeCheckboxValue}
+                  onChange={this.handleUpdateToggleField}
                 />
                 <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
               </FormField>
@@ -273,7 +259,7 @@ class PlaylistEditTabView extends React.Component
                 <SelectBox
                   name="syncMethod"
                   value={this.state.syncMethod}
-                  onChange={this.changeValue}
+                  onChange={this.handleUpdateField}
                   choices={[
                     {name: utvJSData.localization.syncSelected, value: 'syncSelected'},
                     {name: utvJSData.localization.syncNew, value: 'syncNew'},

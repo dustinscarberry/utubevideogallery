@@ -7,7 +7,10 @@ const ThumbnailsGrid = ({classes, children}) => {
 }
 
 ThumbnailsGrid.propTypes = {
-  classes: PropTypes.array,
+  classes: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array
+  ]),
   children: PropTypes.node
 }
 

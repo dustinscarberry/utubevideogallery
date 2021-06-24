@@ -13,6 +13,4 @@ export const getVimeoEmbedURL = (
   return source;
 }
 
-export default {
-  getVimeoEmbedURL
-};
+export default { getVimeoEmbedURL }

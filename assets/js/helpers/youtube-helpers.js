@@ -24,6 +24,4 @@ export const getYouTubeEmbedURL = (
   return source;
 }
 
-export default {
-  getYouTubeEmbedURL
-};
+export default { getYouTubeEmbedURL }

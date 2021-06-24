@@ -1,9 +1,10 @@
 import axios from 'axios';
+import apiHelper from 'helpers/api-helpers';
 
 export const fetchPanelData = async (galleryId, videosPerPage, maxVideos = undefined) => {
   const apiData = await axios.get('/wp-json/utubevideogallery/v1/galleriesdata/' + galleryId);
 
-  if (!(apiData.status == 200 && !apiData.data.error))
+  if (!apiHelper.isValidResponse(apiData))
     return false;
 
   const data = apiData.data.data;
