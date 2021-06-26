@@ -110,9 +110,9 @@ class SettingsTabView extends React.Component
     // update thumbnails if width setting changed
     if (settings.thumbnailWidth != settings.originalThumbnailWidth) {
       await this.rebuildThumbnails();
-      const settings = cloneDeep(settings);
-      settings.originalThumbnailWidth = settings.thumbnailWidth;
-      this.setState({settings});
+      const settingsClone = cloneDeep(settings);
+      settingsClone.originalThumbnailWidth = settingsClone.thumbnailWidth;
+      this.setState({settings: settingsClone});
     }
 
     // reload settings
@@ -138,8 +138,8 @@ class SettingsTabView extends React.Component
     if (apiHelper.isValidResponse(videosData)) {
       const videos = videosData.data.data;
 
-      for (let video of videos) {
-        // update video thumbnail
+      // update each video thumbnail
+      for (const video of videos) {
         const rsp = await logic.updateVideoThumbnail(video.id);
         setFeedbackMessage(logic.getThumbnailUpdateMessage(video.title));
       }
@@ -280,6 +280,7 @@ class SettingsTabView extends React.Component
               <InfoLine
                 text={settings.youtubeAPIKeyValidMessage}
                 icon={settings.youtubeAPIKeyValid ? 'active' : 'inactive'}
+                isHTML={true}
               />
             <FieldHint text="Youtube API Key"/>
               <Label text={utvJSData.localization.youtubeControlsTheme}/>

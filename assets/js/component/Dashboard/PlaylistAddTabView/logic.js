@@ -88,7 +88,7 @@ export const getVideoCreateMessage = (videoTitle) => {
 
 // is remote playlist loading
 export const isPlaylistLoading = (state) => {
-  return (state.playlistLoading && state.url && state.url != '');
+  return (state.playlistLoading && state.playlist.url && state.playlist.url != '');
 }
 
 export default {

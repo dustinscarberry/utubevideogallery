@@ -1,4 +1,5 @@
 import React from 'react';
+import cloneDeep from 'lodash/cloneDeep';
 import logic from './logic';
 import apiHelper from 'helpers/api-helpers';
 
@@ -70,24 +71,25 @@ class PlaylistAddTabView extends React.Component
 
   // load remote playlist
   loadPlaylistVideos = async () => {
-    const { source, sourceID } = this.state;
+    const { source, sourceID } = this.state.playlist;
     const { setFeedbackMessage } = this.props;
 
-    //fetch remote playlist data
-    let remoteVideos = await logic.fetchRemotePlaylist(source, sourceID);
+    // fetch remote playlist data
+    let apiData = await logic.fetchRemotePlaylist(source, sourceID);
 
-    if (apiHelper.isValidResponse(remoteVideos)) {
+    if (apiHelper.isValidResponse(apiData)) {
       // augment remote videos data
-      remoteVideos = apiHelper.getAPIData(remoteVideos);
+      let remoteVideos = apiData.data.data;
       remoteVideos = logic.parseRemotePlaylistData(remoteVideos);
 
-      this.setState({
-        playlistTitle: remoteVideos.title,
-        playlistVideos: remoteVideos.videos,
-        playlistLoading: false
-      });
-    } else if (apiHelper.isErrorResponse(remoteVideos))
-      setFeedbackMessage(apiHelper.getErrorMessage(remoteVideos), 'error');
+      console.log(remoteVideos);
+
+      const playlist = cloneDeep(this.state.playlist);
+      playlist.playlistTitle = remoteVideos.title;
+      playlist.playlistVideos = remoteVideos.videos;
+      this.setState({playlist: playlist, playlistLoading: false});
+    } else if (apiHelper.isErrorResponse(apiData))
+      setFeedbackMessage(apiHelper.getErrorMessage(apiData), 'error');
   }
 
   // add new playlist
@@ -116,7 +118,7 @@ class PlaylistAddTabView extends React.Component
   // add each playlist video
   addPlaylistVideoData = async (playlistID) =>  {
     // create all videos that are selected
-    for (let video of this.state.playlistVideos) {
+    for (let video of this.state.playlist.playlistVideos) {
       if (video.selected) {
         //create video
         const rsp = await logic.createVideo(
@@ -133,53 +135,62 @@ class PlaylistAddTabView extends React.Component
   }
 
   handleUpdateField = (e) => {
-    this.setState({[e.target.name]: e.target.value});
+    const playlist = cloneDeep(this.state.playlist);
+    playlist[e.target.name] = e.target.value;
+    this.setState({playlist});
   }
 
   handleUpdateToggleField = (e) => {
-    this.setState({[e.target.name]: !this.state[e.target.name]});
+    const playlist = cloneDeep(this.state.playlist);
+    playlist[e.target.name] = !playlist[e.target.name];
+    this.setState({playlist});
   }
 
   handleUpdateVideoTitle = (dataIndex, e) => {
-    const { playlistVideos } = this.state;
-    playlistVideos[dataIndex].title = e.target.value;
-    this.setState({playlistVideos});
+    const playlist = cloneDeep(this.state.playlist);
+    playlist.playlistVideos[dataIndex].title = e.target.value;
+    this.setState({playlist});
   }
 
   handleUpdatePlaylistURL = (e) => {
-    const url = e.target.value;
-    this.setState({url});
+    const playlist = cloneDeep(this.state.playlist);
+    playlist.url = e.target.value;
+    this.setState({playlist});
 
-    if (url) {
-      const urlParts = logic.parsePlaylistURL(url);
+    if (e.target.value) {
+      const urlParts = logic.parsePlaylistURL(e.target.value);
 
-      if (urlParts)
-        this.setState(urlParts);
+      if (urlParts) {
+        const playlist = cloneDeep(this.state.playlist);
+        playlist.source = urlParts.source;
+        playlist.sourceID = urlParts.sourceID;
+        this.setState({playlist});
+      }
     }
   }
 
   // toggle playlist video selection
   toggleVideoSelection = (dataIndex) => {
-    let { playlistVideos } = this.state;
-    playlistVideos[dataIndex].selected = !playlistVideos[dataIndex].selected;
-
-    this.setState({playlistVideos});
+    const playlist = cloneDeep(this.state.playlist);
+    playlist.playlistVideos[dataIndex].selected = !playlist.playlistVideos[dataIndex].selected;
+    this.setState({playlist});
   }
 
   // toggle selected state of all playlist videos
   toggleAllVideosSelection = (toggleAll) => {
-    let { playlistVideos } = this.state;
+    const playlist = cloneDeep(this.state.playlist);
 
-    playlistVideos = playlistVideos.map(video => {
+    playlist.playlistVideos = playlist.playlistVideos.map(video => {
       video.selected = toggleAll;
       return video;
     });
 
-    this.setState({playlistVideos});
+    this.setState({playlist});
   }
 
   render() {
-    const { isLoading } = this.state;
+    const { isLoading, playlist, supportData } = this.state;
+    const { changeView } = this.props;
 
     if (isLoading) return <Loader/>
 
@@ -189,7 +200,7 @@ class PlaylistAddTabView extends React.Component
       playlistNode = <Loader/>;
     else
       playlistNode = <PlaylistVideoSelection
-        videos={this.state.playlistVideos}
+        videos={playlist.playlistVideos}
         toggleVideoSelection={this.toggleVideoSelection}
         changeVideoTitle={this.handleUpdateVideoTitle}
       />;
@@ -198,7 +209,7 @@ class PlaylistAddTabView extends React.Component
       <Breadcrumbs
         crumbs={[{
           text: utvJSData.localization.savedPlaylists,
-          onClick: () => this.props.changeView()
+          onClick: () => changeView()
         }]}
       />
       <Columns>
@@ -213,7 +224,7 @@ class PlaylistAddTabView extends React.Component
                 <Label text={utvJSData.localization.url}/>
                 <TextInput
                   name="url"
-                  value={this.state.url}
+                  value={playlist.url}
                   onChange={this.handleUpdatePlaylistURL}
                   required={true}
                 />
@@ -222,7 +233,7 @@ class PlaylistAddTabView extends React.Component
                 <Label text={utvJSData.localization.title}/>
                 <TextInput
                   name="title"
-                  value={this.state.playlistTitle}
+                  value={playlist.playlistTitle}
                   disabled={true}
                 />
               </FormField>
@@ -230,9 +241,9 @@ class PlaylistAddTabView extends React.Component
                 <Label text={utvJSData.localization.album}/>
                 <SelectBox
                   name="album"
-                  value={this.state.album}
+                  value={playlist.album}
                   onChange={this.handleUpdateField}
-                  choices={this.state.albums}
+                  choices={supportData.albums}
                   required={true}
                   blankEntry={true}
                 />
@@ -241,7 +252,7 @@ class PlaylistAddTabView extends React.Component
                 <Label text={utvJSData.localization.quality}/>
                 <SelectBox
                   name="videoQuality"
-                  value={this.state.videoQuality}
+                  value={playlist.videoQuality}
                   onChange={this.handleUpdateField}
                   choices={[
                     {name: '1080p', value: 'hd1080'},
@@ -255,7 +266,7 @@ class PlaylistAddTabView extends React.Component
                 <Label text={utvJSData.localization.controls}/>
                 <Toggle
                   name="showControls"
-                  value={this.state.showControls}
+                  value={playlist.showControls}
                   onChange={this.handleUpdateToggleField}
                 />
                 <FieldHint text={utvJSData.localization.showPlayerControlsHint}/>
@@ -266,7 +277,7 @@ class PlaylistAddTabView extends React.Component
                 />
                 <CancelButton
                   title={utvJSData.localization.cancel}
-                  onClick={() => this.props.changeView()}
+                  onClick={() => changeView()}
                 />
               </FormField>
             </Form>
@@ -277,7 +288,7 @@ class PlaylistAddTabView extends React.Component
             <SectionHeader text={utvJSData.localization.playlistItems}/>
             <PlaylistMultiSelect
               toggleAllVideosSelection={this.toggleAllVideosSelection}
-              videos={this.state.playlistVideos}
+              videos={playlist.playlistVideos}
             />
             {playlistNode}
           </Card>

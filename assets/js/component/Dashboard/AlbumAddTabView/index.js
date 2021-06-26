@@ -29,8 +29,8 @@ class AlbumAddTabView extends React.Component
   }
 
   addAlbum = async() => {
-    const { album, changeView, setFeedbackMessage } = this.state;
-    const { selectedGallery } = this.props;
+    const { album } = this.state;
+    const { selectedGallery, changeView, setFeedbackMessage } = this.props;
 
     const rsp = await logic.createAlbum(selectedGallery, album);
 

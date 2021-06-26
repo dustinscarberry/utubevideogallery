@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-const InfoLine = ({text, icon}) => {
+const InfoLine = ({text, icon, isHTML}) => {
   const classes = ['utv-infoline'];
 
   if (icon) {
@@ -16,12 +16,15 @@ const InfoLine = ({text, icon}) => {
       classes.push('utv-status-warning');
   }
 
-  return <span className={classnames(classes)}>{text}</span>
+  return <span className={classnames(classes)}>
+    { isHTML ? <span dangerouslySetInnerHTML={{ __html: text }}></span> : text }
+  </span>
 }
 
 InfoLine.propTypes = {
   text: PropTypes.string,
-  icon: PropTypes.string
+  icon: PropTypes.string,
+  isHTML: PropTypes.bool
 }
 
 export default InfoLine;
