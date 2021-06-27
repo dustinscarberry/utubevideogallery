@@ -32,7 +32,6 @@ class SettingsTabView extends React.Component
         version: undefined,
         wpVersion: undefined,
         playerControlsColor: undefined,
-        playerControlsTheme: undefined,
         popupPlayerWidth: undefined,
         popupPlayerOverlayColor: undefined,
         popupPlayerOverlayOpacity: undefined,
@@ -75,7 +74,6 @@ class SettingsTabView extends React.Component
         version: data.version,
         wpVersion: data.wpVersion,
         playerControlsColor: data.playerControlsColor,
-        playerControlsTheme: data.playerControlsTheme,
         popupPlayerWidth: data.popupPlayerWidth,
         popupPlayerOverlayColor: data.popupPlayerOverlayColor,
         popupPlayerOverlayOpacity: data.popupPlayerOverlayOpacity,
@@ -282,17 +280,7 @@ class SettingsTabView extends React.Component
                 icon={settings.youtubeAPIKeyValid ? 'active' : 'inactive'}
                 isHTML={true}
               />
-            <FieldHint text="Youtube API Key"/>
-              <Label text={utvJSData.localization.youtubeControlsTheme}/>
-              <SelectBox
-                name="playerControlsTheme"
-                value={settings.playerControlsTheme}
-                onChange={this.handleUpdateField}
-                choices={[
-                  {name: utvJSData.localization.light, value: 'light'},
-                  {name: utvJSData.localization.dark, value: 'dark'}
-                ]}
-              />
+              <FieldHint text="Youtube API Key"/>
               <Label text={utvJSData.localization.youtubeControlsColor}/>
               <SelectBox
                 name="playerControlsColor"

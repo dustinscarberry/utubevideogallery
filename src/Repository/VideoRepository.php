@@ -120,13 +120,15 @@ class VideoRepository
     if ($form->getAlbumID() != null)
       $updatedFields['ALB_ID'] = $form->getAlbumID();
 
+    if ($form->getStartTime() !== null)
+      $updatedFields['VID_STARTTIME'] = $form->getStartTime();
+
+    if ($form->getEndTime() !== null)
+      $updatedFields['VID_ENDTIME'] = $form->getEndTime();
+
     // set required update fields
     $updatedFields['VID_UPDATEDATE'] = current_time('timestamp');
     $updatedFields['VID_THUMBTYPE'] = 'default';
-
-    // set semi required update fields
-    $updatedFields['VID_STARTTIME'] = $form->getStartTime();
-    $updatedFields['VID_ENDTIME'] = $form->getEndTime();
 
     if ($wpdb->update(
       $wpdb->prefix . 'utubevideo_video',

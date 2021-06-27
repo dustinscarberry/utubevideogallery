@@ -108,7 +108,7 @@ class PlaylistRepository
     if ($form->getVideoQuality() != null)
       $updatedFields['PLAY_QUALITY'] = $form->getVideoQuality();
 
-    if ($form->getShowControls() != null)
+    if ($form->getShowControls() !== null)
       $updatedFields['PLAY_CHROME'] = $form->getShowControls();
 
     // set required update fields

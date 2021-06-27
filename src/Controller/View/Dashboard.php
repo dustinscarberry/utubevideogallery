@@ -148,7 +148,6 @@ class Dashboard
         'removeVideoPopupScripts' => __('Remove Video Popup Scripts', 'utvg'),
         'removeVideoPopupScriptsHint' => __('Remove scripts if provided by another plugin'),
         'apiKey' => __('API Key', 'utvg'),
-        'youtubeControlsTheme' => __('Controls Theme', 'utvg'),
         'youtubeControlsColor' => __('Controls Color', 'utvg'),
         'autoplayVideos' => __('Autoplay Videos', 'utvg'),
         'hideVideoDetails' => __('Hide Videos Details'),

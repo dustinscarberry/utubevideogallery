@@ -48,7 +48,7 @@ class App
     );
 
     // add embedded thumbnail sizing css
-    $css = '.utv-panel-thumbnails{padding:' . $this->options['thumbnailPadding'] . 'px;grid-gap:' . $this->options['thumbnailPadding'] . 'px}';
+    $css = '.utv-panel-thumbnails,.utv-gallery-thumbnails{grid-gap:' . $this->options['thumbnailPadding'] . 'px;grid-template-columns: repeat(auto-fill,minmax(' . $this->options['thumbnailWidth'] . 'px,1fr))}.utv-panel-thumbnails{padding:' . $this->options['thumbnailPadding'] . 'px}';
 
     // add thumbnail border radius if defined
     if ($this->options['thumbnailBorderRadius'] > 0)

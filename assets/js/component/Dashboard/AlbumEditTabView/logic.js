@@ -45,7 +45,7 @@ export const updateAlbum = (albumID, albumData, cleanedThumbnail) => {
     title: albumData.title,
     thumbnail: cleanedThumbnail,
     videoSorting: albumData.videoSorting,
-    galleryID: albumData.galleryID
+    galleryID: albumData.gallery
   }, {
     headers: {'X-WP-Nonce': utvJSData.restNonce}
   });

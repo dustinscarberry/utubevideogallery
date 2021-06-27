@@ -20,9 +20,6 @@ class SettingsFactory
     if (isset($req['playerControlsColor']))
       $settings->setPlayerControlsColor($req['playerControlsColor']);
 
-    if (isset($req['playerControlsTheme']))
-      $settings->setPlayerControlsTheme($req['playerControlsTheme']);
-
     if (isset($req['popupPlayerWidth']) && $req['popupPlayerWidth'] > 0)
       $settings->setPopupPlayerWidth($req['popupPlayerWidth']);
 

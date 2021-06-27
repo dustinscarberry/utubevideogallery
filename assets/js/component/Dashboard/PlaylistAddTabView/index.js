@@ -27,13 +27,14 @@ class PlaylistAddTabView extends React.Component
     super(props);
     this.state = {
       playlist: {
-        url: undefined,
+        url: '',
         videoQuality: 'hd1080',
         showControls: false,
         source: undefined,
         sourceID: undefined,
-        playlistTitle: undefined,
-        playlistVideos: []
+        playlistTitle: '',
+        playlistVideos: [],
+        album: undefined
       },
       supportData: {
         albums: []
@@ -82,8 +83,6 @@ class PlaylistAddTabView extends React.Component
       let remoteVideos = apiData.data.data;
       remoteVideos = logic.parseRemotePlaylistData(remoteVideos);
 
-      console.log(remoteVideos);
-
       const playlist = cloneDeep(this.state.playlist);
       playlist.playlistTitle = remoteVideos.title;
       playlist.playlistVideos = remoteVideos.videos;
@@ -94,64 +93,67 @@ class PlaylistAddTabView extends React.Component
 
   // add new playlist
   addPlaylist = async () => {
+    const { playlist } = this.state;
+    const { changeView, setFeedbackMessage } = this.props;
+
     this.setState({isLoading: true});
 
     // save base playlist
-    const basePlaylist = await logic.createPlaylist(this.state);
+    const basePlaylist = await logic.createPlaylist(playlist);
 
     if (apiHelper.isValidResponse(basePlaylist)) {
       // get playlist id
-      let playlistID = apiHelper.getAPIData(basePlaylist);
-      playlistID = playlistID.id;
+      const data = basePlaylist.data.data;
+      const playlistID = data.id;
 
       // save playlist videos
       await this.addPlaylistVideoData(playlistID);
 
-      this.props.setFeedbackMessage(utvJSData.localization.feedbackPlaylistAdded);
+      setFeedbackMessage(utvJSData.localization.feedbackPlaylistAdded);
     }
     else if (apiHelper.isErrorResponse(basePlaylist))
-      this.props.setFeedbackMessage(apiHelper.getErrorMessage(basePlaylist), 'error');
+      setFeedbackMessage(apiHelper.getErrorMessage(basePlaylist), 'error');
 
-    this.props.changeView();
+    changeView();
   }
 
   // add each playlist video
   addPlaylistVideoData = async (playlistID) =>  {
-    // create all videos that are selected
-    for (let video of this.state.playlist.playlistVideos) {
-      if (video.selected) {
-        //create video
-        const rsp = await logic.createVideo(
-          video.sourceID,
-          video.title,
-          playlistID,
-          this.state
-        );
+    const { playlist } = this.state;
+    const { setFeedbackMessage } = this.props;
 
-        // feedback of video creation
-        this.props.setFeedbackMessage(logic.getVideoCreateMessage(video.title));
+    // add all videos that are selected
+    for (const video of playlist.playlistVideos) {
+      // create video if selected
+      if (video.selected) {
+        await logic.createVideo(playlistID, video, playlist);
+        setFeedbackMessage(logic.getVideoCreateMessage(video.title));
       }
     }
   }
 
+  // update field
   handleUpdateField = (e) => {
     const playlist = cloneDeep(this.state.playlist);
     playlist[e.target.name] = e.target.value;
     this.setState({playlist});
   }
 
+  // update toggle field
   handleUpdateToggleField = (e) => {
     const playlist = cloneDeep(this.state.playlist);
     playlist[e.target.name] = !playlist[e.target.name];
     this.setState({playlist});
   }
 
+  // update playlist video title
   handleUpdateVideoTitle = (dataIndex, e) => {
     const playlist = cloneDeep(this.state.playlist);
     playlist.playlistVideos[dataIndex].title = e.target.value;
     this.setState({playlist});
   }
 
+  // update playlist url
   handleUpdatePlaylistURL = (e) => {
     const playlist = cloneDeep(this.state.playlist);
     playlist.url = e.target.value;
@@ -161,7 +163,6 @@ class PlaylistAddTabView extends React.Component
       const urlParts = logic.parsePlaylistURL(e.target.value);
 
       if (urlParts) {
-        const playlist = cloneDeep(this.state.playlist);
         playlist.source = urlParts.source;
         playlist.sourceID = urlParts.sourceID;
         this.setState({playlist});
@@ -220,6 +221,11 @@ class PlaylistAddTabView extends React.Component
               submit={this.addPlaylist}
               errorclass="utv-invalid-feedback"
             >
+
+
+
+
+
               <FormField>
                 <Label text={utvJSData.localization.url}/>
                 <TextInput
@@ -245,7 +251,7 @@ class PlaylistAddTabView extends React.Component
                   onChange={this.handleUpdateField}
                   choices={supportData.albums}
                   required={true}
-                  blankEntry={true}
+                  blankChoice
                 />
               </FormField>
               <FormField>

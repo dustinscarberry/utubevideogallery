@@ -33,7 +33,7 @@ class PlaylistType
       $this->videoQuality = sanitize_text_field($req['videoQuality']);
 
     if (isset($req['showControls']))
-      $this->showControls = ($req['showControls'] ? 0 : 1);
+      $this->showControls = ($req['showControls'] === true ? 1 : 0);
 
     if (isset($req['albumID']))
       $this->albumID = sanitize_key($req['albumID']);

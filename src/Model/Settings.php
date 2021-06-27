@@ -41,17 +41,6 @@ class Settings implements \JsonSerializable
     return $this;
   }
 
-  function getPlayerControlsTheme()
-  {
-    return $this->settings['playerControlTheme'];
-  }
-
-  function setPlayerControlsTheme($value)
-  {
-    $this->settings['playerControlTheme'] = sanitize_text_field($value);
-    return $this;
-  }
-
   function getPlayerControlsColor()
   {
     return $this->settings['playerProgressColor'];
@@ -298,7 +287,6 @@ class Settings implements \JsonSerializable
     return [
       'version' => $this->getVersion(),
       'popupPlayerWidth' => $this->getPopupPlayerWidth(),
-      'playerControlsTheme' => $this->getPlayerControlsTheme(),
       'playerControlsColor' => $this->getPlayerControlsColor(),
       'popupPlayerOverlayOpacity' => $this->getPopupPlayerOverlayOpacity(),
       'popupPlayerOverlayColor' => $this->getPopupPlayerOverlayColor(),

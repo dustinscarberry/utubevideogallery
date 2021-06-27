@@ -98,6 +98,7 @@ A user must be an editor or above in order to manage video galleries and change 
 * Grid thumbnail layout
 * Api Key validity checks
 * Updated missing image
+* Removed controls theme color (no longer used by YouTube)
 
 = 2.0.5 =
 

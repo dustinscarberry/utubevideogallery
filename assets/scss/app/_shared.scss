@@ -1,15 +1,22 @@
 .utv-panel-thumbnails,
-.utv-video-gallery-thumbnails {
+.utv-gallery-thumbnails {
   text-align: left;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
   align-items: start;
   grid-gap: 20px; // default
-  padding: 20px; // default
 
   img {
     display: block;
   }
+}
+
+.utv-panel-thumbnails {
+  padding: 20px; // default
+}
+
+.utv-gallery-thumbnails {
+  padding-top: 15px;
 }
 
 .utv-gallery .utv-thumbnail,

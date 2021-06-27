@@ -16,7 +16,7 @@ export const getGalleryClasses = (iconType, selectedAlbum = undefined) => {
 
 export const getThumbnailsClasses = (thumbnailType) => {
   const classes = [
-    'utv-video-gallery-thumbnails',
+    'utv-gallery-thumbnails',
     'utv-align-center'
   ];
 

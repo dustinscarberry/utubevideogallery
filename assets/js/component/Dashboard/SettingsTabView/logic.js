@@ -9,7 +9,6 @@ export const fetchSettings = () => {
 export const updateSettings = (settings) => {
   return axios.patch('/wp-json/utubevideogallery/v1/settings', {
     playerControlsColor: settings.playerControlsColor,
-    playerControlsTheme: settings.playerControlsTheme,
     popupPlayerWidth: settings.popupPlayerWidth,
     popupPlayerOverlayColor: settings.popupPlayerOverlayColor,
     popupPlayerOverlsayOpacity: settings.popupPlayerOverlayOpacity,

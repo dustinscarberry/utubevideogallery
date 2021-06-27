@@ -15,14 +15,14 @@ export const createPlaylist = (state) => {
 }
 
 // create video
-export const createVideo = (sourceID, title, playlistID, state) => {
+export const createVideo = (playlistID, video, playlist) => {
   return axios.post('/wp-json/utubevideogallery/v1/videos', {
-    sourceID: sourceID,
-    title: title,
-    quality: state.videoQuality,
-    showControls: state.showControls,
-    source: state.source,
-    albumID: state.album,
+    sourceID: video.sourceID,
+    title: video.title,
+    quality: playlist.videoQuality,
+    showControls: playlist.showControls,
+    source: playlist.source,
+    albumID: playlist.album,
     playlistID: playlistID
   }, {
     headers: {'X-WP-Nonce': utvJSData.restNonce}
