@@ -173,17 +173,6 @@ class Settings implements \JsonSerializable
     return $this;
   }
 
-  function getRemoveVideoPopupScript()
-  {
-    return $this->settings['skipMagnificPopup'] == 'yes' ? true : false;
-  }
-
-  function setRemoveVideoPopupScript($value)
-  {
-    $this->settings['skipMagnificPopup'] = ($value ? 'yes' : 'no');
-    return $this;
-  }
-
   function getShowVideoDescription()
   {
     return $this->settings['showVideoDescription'] ? true : false;
@@ -299,7 +288,6 @@ class Settings implements \JsonSerializable
       'youtubeHideDetails' => $this->getYouTubeHideDetails(),
       'vimeoAutoplay' => $this->getVimeoAutoplay(),
       'vimeoHideDetails' => $this->getVimeoHideDetails(),
-      'removeVideoPopupScript' => $this->getRemoveVideoPopupScript(),
       'showVideoDescription' => $this->getShowVideoDescription(),
       'phpVersion' => $this->getPHPVersion(),
       'wpVersion' => $this->getWPVersion(),

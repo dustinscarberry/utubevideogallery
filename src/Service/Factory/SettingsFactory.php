@@ -44,9 +44,6 @@ class SettingsFactory
     if (isset($req['youtubeAPIKey']))
       $settings->setYouTubeApiKey($req['youtubeAPIKey']);
 
-    if (isset($req['removeVideoPopupScript']))
-      $settings->setRemoveVideoPopupScript($req['removeVideoPopupScript']);
-
     if (isset($req['vimeoAutoplay']))
       $settings->setVimeoAutoplay($req['vimeoAutoplay']);
 

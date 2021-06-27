@@ -35,7 +35,6 @@ class SettingsTabView extends React.Component
         popupPlayerWidth: undefined,
         popupPlayerOverlayColor: undefined,
         popupPlayerOverlayOpacity: undefined,
-        removeVideoPopupScript: undefined,
         thumbnailBorderRadius: undefined,
         thumbnailWidth: undefined,
         originalThumbnailWidth: undefined,
@@ -77,7 +76,6 @@ class SettingsTabView extends React.Component
         popupPlayerWidth: data.popupPlayerWidth,
         popupPlayerOverlayColor: data.popupPlayerOverlayColor,
         popupPlayerOverlayOpacity: data.popupPlayerOverlayOpacity,
-        removeVideoPopupScript: data.removeVideoPopupScript,
         thumbnailBorderRadius: data.thumbnailBorderRadius,
         thumbnailWidth: data.thumbnailWidth,
         originalThumbnailWidth: data.thumbnailWidth,
@@ -255,15 +253,6 @@ class SettingsTabView extends React.Component
                 onChange={this.handleUpdateToggleField}
               />
               <FieldHint text={utvJSData.localization.showVideoDescriptionHint}/>
-            </FormField>
-            <FormField>
-              <Label text={utvJSData.localization.removeVideoPopupScripts}/>
-              <Toggle
-                name="removeVideoPopupScript"
-                value={settings.removeVideoPopupScript}
-                onChange={this.handleUpdateToggleField}
-              />
-              <FieldHint text={utvJSData.localization.removeVideoPopupScriptsHint}/>
             </FormField>
           </Card>
           <Card>

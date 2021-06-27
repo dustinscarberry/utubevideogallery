@@ -12,7 +12,6 @@ export const updateSettings = (settings) => {
     popupPlayerWidth: settings.popupPlayerWidth,
     popupPlayerOverlayColor: settings.popupPlayerOverlayColor,
     popupPlayerOverlsayOpacity: settings.popupPlayerOverlayOpacity,
-    removeVideoPopupScript: settings.removeVideoPopupScript,
     thumbnailBorderRadius: settings.thumbnailBorderRadius,
     thumbnailWidth: settings.thumbnailWidth,
     thumbnailHorizontalPadding: settings.thumbnailHorizontalPadding,

@@ -145,8 +145,6 @@ class Dashboard
         'overlayOpactiy' => __('Overlay Opacity', 'utvg'),
         'showVideoDescription' => __('Show Video Descriptions', 'utvg'),
         'showVideoDescriptionHint' => __('Enable or disable video descriptions', 'utvg'),
-        'removeVideoPopupScripts' => __('Remove Video Popup Scripts', 'utvg'),
-        'removeVideoPopupScriptsHint' => __('Remove scripts if provided by another plugin'),
         'apiKey' => __('API Key', 'utvg'),
         'youtubeControlsColor' => __('Controls Color', 'utvg'),
         'autoplayVideos' => __('Autoplay Videos', 'utvg'),
