@@ -99,6 +99,7 @@ A user must be an editor or above in order to manage video galleries and change 
 * Api Key validity checks
 * Updated missing image
 * Removed controls theme color (no longer used by YouTube)
+* Removed script removal feature
 
 = 2.0.5 =
 
