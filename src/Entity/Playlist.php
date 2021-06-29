@@ -10,7 +10,6 @@ class Playlist implements JsonSerializable
   private $title;
   private $source;
   private $sourceID;
-  private $videoQuality;
   private $showControls;
   private $updateDate;
   private $albumID;
@@ -27,7 +26,6 @@ class Playlist implements JsonSerializable
     $this->title = $dbRow->PLAY_TITLE;
     $this->source = $dbRow->PLAY_SOURCE;
     $this->sourceID = $dbRow->PLAY_SOURCEID;
-    $this->videoQuality = $dbRow->PLAY_QUALITY;
     $this->showControls = $dbRow->PLAY_CHROME ? true : false;
     $this->updateDate = $dbRow->PLAY_UPDATEDATE;
     $this->albumID = $dbRow->ALB_ID;
@@ -52,11 +50,6 @@ class Playlist implements JsonSerializable
   function getSourceID()
   {
     return $this->sourceID;
-  }
-
-  function getVideoQuality()
-  {
-    return $this->quality;
   }
 
   function getShowControls()

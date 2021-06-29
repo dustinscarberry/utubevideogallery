@@ -33,7 +33,6 @@ class PlaylistFactory
       $form->getTitle(),
       $form->getSource(),
       $form->getSourceID(),
-      $form->getVideoQuality(),
       $form->getShowControls(),
       $form->getAlbumID()
     );

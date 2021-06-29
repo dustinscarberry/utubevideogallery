@@ -34,7 +34,6 @@ class VideoEditTabView extends React.Component
         sourceID: undefined,
         title: undefined,
         description: undefined,
-        quality: undefined,
         showControls: undefined,
         startTime: '',
         endTime: '',
@@ -71,7 +70,6 @@ class VideoEditTabView extends React.Component
         sourceID: data.sourceID,
         title: data.title,
         description: data.description ? data.description : undefined,
-        quality: data.quality,
         showControls: data.showControls == 1 ? true : false,
         startTime: data.startTime ? data.startTime : '',
         endTime: data.endTime ? data.endTime : '',
@@ -105,7 +103,7 @@ class VideoEditTabView extends React.Component
 
   handleUpdateToggleField = (e) => {
     const video = cloneDeep(this.state.video);
-    video[e.target.name] = !video[e.target.value];
+    video[e.target.name] = !video[e.target.name];
     this.setState({video});
   }
 
@@ -177,19 +175,6 @@ class VideoEditTabView extends React.Component
                   value={video.album}
                   onChange={this.handleUpdateField}
                   choices={supportData.albums}
-                />
-              </FormField>
-              <FormField>
-                <Label text={utvJSData.localization.quality}/>
-                <SelectBox
-                  name="quality"
-                  value={video.quality}
-                  onChange={this.handleUpdateField}
-                  choices={[
-                    {name: '1080p', value: 'hd1080'},
-                    {name: '720p', value: 'hd720'},
-                    {name: '480p', value: 'large'}
-                  ]}
                 />
               </FormField>
               <FormField>

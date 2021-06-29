@@ -30,7 +30,6 @@ class PlaylistEditTabView extends React.Component
       title: undefined,
       source: undefined,
       sourceID: undefined,
-      videoQuality: undefined,
       showControls: undefined,
       updateDate: undefined,
       albumID: undefined,
@@ -60,7 +59,6 @@ class PlaylistEditTabView extends React.Component
         title: data.title,
         source: data.source,
         sourceID: data.sourceID,
-        videoQuality: data.videoQuality,
         showControls: data.showControls,
         updateDate: data.updateDate,
         albumID: data.albumID,
@@ -222,19 +220,6 @@ class PlaylistEditTabView extends React.Component
                   name="albumName"
                   value={this.state.albumName}
                   disabled={true}
-                />
-              </FormField>
-              <FormField>
-                <Label text={utvJSData.localization.quality}/>
-                <SelectBox
-                  name="videoQuality"
-                  value={this.state.videoQuality}
-                  onChange={this.handleUpdateField}
-                  choices={[
-                    {name: '480p', value: 'large'},
-                    {name: '720p', value: 'hd720'},
-                    {name: '1080p', value: 'hd1080'}
-                  ]}
                 />
               </FormField>
               <FormField>

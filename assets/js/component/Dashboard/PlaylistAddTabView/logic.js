@@ -6,7 +6,6 @@ export const createPlaylist = (state) => {
     title: state.playlistTitle,
     source: state.source,
     sourceID: state.sourceID,
-    videoQuality: state.videoQuality,
     showControls: state.showControls,
     albumID: state.album
   }, {
@@ -19,7 +18,6 @@ export const createVideo = (playlistID, video, playlist) => {
   return axios.post('/wp-json/utubevideogallery/v1/videos', {
     sourceID: video.sourceID,
     title: video.title,
-    quality: playlist.videoQuality,
     showControls: playlist.showControls,
     source: playlist.source,
     albumID: playlist.album,

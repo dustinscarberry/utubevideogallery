@@ -82,7 +82,6 @@ export const getFormattedSource = (source) => {
 // update playlist
 export const updatePlaylist = (playlistID, playlistData) => {
   return axios.patch('/wp-json/utubevideogallery/v1/playlists/' + playlistID, {
-    videoQuality: playlistData.videoQuality,
     showControls: playlistData.showControls
   }, {
     headers: {'X-WP-Nonce': utvJSData.restNonce}
@@ -121,7 +120,6 @@ export const createVideo = (playlistID, video, state) => {
     sourceID: video.sourceID,
     title: video.title,
     description: video.description,
-    quality: state.videoQuality,
     showControls: state.showControls,
     source: state.source,
     albumID: state.albumID,
@@ -136,7 +134,6 @@ export const updateVideo = (video, state) => {
   return axios.patch('/wp-json/utubevideogallery/v1/videos/' + video.localID, {
     title: video.title,
     description: video.description,
-    quality: state.videoQuality,
     controls: state.showControls
   }, {
     headers: {'X-WP-Nonce': utvJSData.restNonce}

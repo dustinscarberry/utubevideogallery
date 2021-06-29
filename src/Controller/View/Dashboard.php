@@ -96,7 +96,6 @@ class Dashboard
         'watch' => __('Watch', 'utvg'),
         'url' => __('URL', 'utvg'),
         'description' => __('Description', 'utvg'),
-        'quality' => __('Quality', 'utvg'),
         'controls' => __('Controls', 'utvg'),
         'startTime' => __('Start Time', 'utvg'),
         'endTime' => __('End Time', 'utvg'),

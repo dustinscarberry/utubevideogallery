@@ -34,7 +34,6 @@ class VideoAddTabView extends React.Component
       sourceID: undefined,
       title: '',
       description: '',
-      quality: 'hd1080',
       showControls: false,
       startTime: undefined,
       endTime: undefined
@@ -123,19 +122,6 @@ class VideoAddTabView extends React.Component
                     name="description"
                     value={this.state.description}
                     onChange={this.changeValue}
-                  />
-                </FormField>
-                <FormField>
-                  <Label text={utvJSData.localization.quality}/>
-                  <SelectBox
-                    name="quality"
-                    value={this.state.quality}
-                    onChange={this.changeValue}
-                    choices={[
-                      {name: '480p', value: 'large'},
-                      {name: '720p', value: 'hd720'},
-                      {name: '1080p', value: 'hd1080'}
-                    ]}
                   />
                 </FormField>
                 <FormField>

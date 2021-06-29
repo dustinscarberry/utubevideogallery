@@ -63,7 +63,7 @@ class VideoRepository
         'VID_DESCRIPTION' => $form->getDescription(),
         'VID_URL' => $form->getSourceID(),
         'VID_THUMBTYPE' => $thumbnailType,
-        'VID_QUALITY' => $form->getQuality(),
+        'VID_QUALITY' => 'hd1080',
         'VID_CHROME' => $form->getShowControls(),
         'VID_STARTTIME' => $form->getStartTime(),
         'VID_ENDTIME' => $form->getEndTime(),
@@ -107,9 +107,6 @@ class VideoRepository
 
     if ($form->getDescription() != null)
       $updatedFields['VID_DESCRIPTION'] = $form->getDescription();
-
-    if ($form->getQuality() != null)
-      $updatedFields['VID_QUALITY'] = $form->getQuality();
 
     if ($form->getShowControls() !== null)
       $updatedFields['VID_CHROME'] = $form->getShowControls();

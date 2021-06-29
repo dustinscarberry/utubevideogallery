@@ -10,7 +10,6 @@ class VideoType
   private $sourceID;
   private $title;
   private $description;
-  private $quality;
   private $showControls;
   private $startTime;
   private $endTime;
@@ -32,9 +31,6 @@ class VideoType
 
     if (isset($req['description']))
       $this->description = sanitize_text_field($req['description']);
-
-    if (isset($req['quality']))
-      $this->quality = sanitize_text_field($req['quality']);
 
     if (isset($req['showControls']))
       $this->showControls = ($req['showControls'] ? 1 : 0);
@@ -80,11 +76,6 @@ class VideoType
   function getDescription()
   {
     return $this->description;
-  }
-
-  function getQuality()
-  {
-    return $this->quality;
   }
 
   function getShowControls()
@@ -180,7 +171,6 @@ class VideoType
     // check for required fields
     if (
       empty($this->sourceID)
-      || empty($this->quality)
       || !isset($this->showControls)
       || empty($this->source)
       || !isset($this->albumID)

@@ -13,7 +13,6 @@ class Video implements JsonSerializable
   private $thumbnail;
   private $thumbnailType;
   private $sourceID;
-  private $quality;
   private $showControls;
   private $startTime;
   private $endTime;
@@ -37,7 +36,6 @@ class Video implements JsonSerializable
     $this->thumbnail = $dbRow->VID_URL . $dbRow->VID_ID;
     $this->thumbnailType = $dbRow->THUMBNAIL_TYPE;
     $this->sourceID = $dbRow->VID_URL;
-    $this->quality = $dbRow->VID_QUALITY;
     $this->showControls = $dbRow->VID_CHROME;
     $this->startTime = $dbRow->VID_STARTTIME;
     $this->endTime = $dbRow->VID_ENDTIME;
@@ -81,11 +79,6 @@ class Video implements JsonSerializable
   function getSourceID()
   {
     return $this->sourceID;
-  }
-
-  function getQuality()
-  {
-    return $this->quality;
   }
 
   function getShowControls()

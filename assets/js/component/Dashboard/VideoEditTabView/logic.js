@@ -10,7 +10,6 @@ export const updateVideo = (videoID, videoData) => {
   return axios.patch('/wp-json/utubevideogallery/v1/videos/' + videoID, {
     title: videoData.title,
     description: videoData.description,
-    quality: videoData.quality,
     showControls: videoData.showControls,
     startTime: videoData.startTime,
     endTime: videoData.endTime,

@@ -21,6 +21,8 @@ class YouTubeApi
 
     $thumbnailSources = $data->items[0]->snippet->thumbnails;
 
+    if (!$thumbnailSources) return false;
+
     end($thumbnailSources);
     $thumbnailKey = key($thumbnailSources);
 

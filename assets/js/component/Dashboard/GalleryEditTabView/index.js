@@ -82,9 +82,9 @@ class GalleryEditTabView extends React.Component
       && gallery.thumbnailType != gallery.originalThumbnailType
     ) {
       await this.rebuildThumbnails();
-      const gallery = cloneDeep(gallery);
-      gallery.originalThumbnailType = gallery.thumbnailType;
-      this.setState({gallery});
+      const galleryClone = cloneDeep(gallery);
+      galleryClone.originalThumbnailType = galleryClone.thumbnailType;
+      this.setState({gallery: galleryClone});
     }
 
     // user feedback

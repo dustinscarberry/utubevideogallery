@@ -62,7 +62,6 @@ class GalleryDataFactory
         $videoData->slugID = $video->getSourceID();
         $videoData->thumbnail = $thumbnailDirectory . '/utubevideo-cache/' . $video->getThumbnail() . '.jpg';
         $videoData->source = $video->getSource();
-        $videoData->quality = $video->getQuality();
         $videoData->chrome = ($video->getShowControls() == 1 ? true : false);
         $videoData->startTime = $video->getStartTime();
         $videoData->endTime = $video->getEndTime();

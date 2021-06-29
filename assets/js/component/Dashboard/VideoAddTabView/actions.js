@@ -8,7 +8,6 @@ export function createVideo(state, albumID)
       sourceID: state.sourceID,
       title: state.title,
       description: state.description,
-      quality: state.quality,
       showControls: state.showControls,
       startTime: state.startTime,
       endTime: state.endTime,

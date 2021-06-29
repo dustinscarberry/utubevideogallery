@@ -11,7 +11,6 @@ class PlaylistType
   private $title;
   private $source;
   private $sourceID;
-  private $videoQuality;
   private $showControls;
   private $albumID;
 
@@ -28,9 +27,6 @@ class PlaylistType
 
     if (isset($req['sourceID']))
       $this->sourceID = sanitize_text_field($req['sourceID']);
-
-    if (isset($req['videoQuality']))
-      $this->videoQuality = sanitize_text_field($req['videoQuality']);
 
     if (isset($req['showControls']))
       $this->showControls = ($req['showControls'] === true ? 1 : 0);
@@ -57,11 +53,6 @@ class PlaylistType
   function getSourceID()
   {
     return $this->sourceID;
-  }
-
-  function getVideoQuality()
-  {
-    return $this->videoQuality;
   }
 
   function getShowControls()
@@ -93,7 +84,6 @@ class PlaylistType
     if (empty($this->title)
       || empty($this->source)
       || empty($this->sourceID)
-      || empty($this->videoQuality)
       || empty($this->albumID)
     )
       throw new UserMessageException(__('Invalid parameters', 'utvg'));

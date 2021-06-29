@@ -28,7 +28,6 @@ class PlaylistAddTabView extends React.Component
     this.state = {
       playlist: {
         url: '',
-        videoQuality: 'hd1080',
         showControls: false,
         source: undefined,
         sourceID: undefined,
@@ -252,20 +251,6 @@ class PlaylistAddTabView extends React.Component
                   choices={supportData.albums}
                   required={true}
                   blankChoice
-                />
-              </FormField>
-              <FormField>
-                <Label text={utvJSData.localization.quality}/>
-                <SelectBox
-                  name="videoQuality"
-                  value={playlist.videoQuality}
-                  onChange={this.handleUpdateField}
-                  choices={[
-                    {name: '1080p', value: 'hd1080'},
-                    {name: '720p', value: 'hd720'},
-                    {name: '480p', value: 'large'}
-                  ]}
-                  required={true}
                 />
               </FormField>
               <FormField>

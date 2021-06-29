@@ -51,9 +51,9 @@ class ThumbnailFactory
 
     // save thumbnail based on type
     if ($video->getThumbnailType() == 'square')
-      self::saveSquareThumbnail($image, $pluginOptions['thumbnailWidth'], $destinationPath, $filename);
+      self::saveSquareThumbnail($image, $thumbnailWidth, $destinationPath, $filename);
     else
-      self::saveRectangleThumbnail($image, $pluginOptions['thumbnailWidth'], $destinationPath, $filename);
+      self::saveRectangleThumbnail($image, $thumbnailWidth, $destinationPath, $filename);
   }
 
   // save square thumbnail
@@ -99,8 +99,8 @@ class ThumbnailFactory
   // attempt to load missing thumbnail source
   private function getMissingThumbnail()
   {
-    // // TODO: fix loading path
-    $image = wp_get_image_editor(plugins_url('missing.jpg', dirname(__FILE__)));
+    $missingUrl = WP_PLUGIN_DIR . '/utubevideogallery/public/img/missing@2x.jpg';
+    $image = wp_get_image_editor($missingUrl);
 
     if (is_wp_error($image))
       throw new UserMessageException(__('Imagick or GD may be missing or bad YouTube API Key', 'utvg'));
