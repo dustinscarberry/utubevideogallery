@@ -23,7 +23,7 @@ export const getVideoPreview = (source, sourceID, startTime, endTime) => {
   if (source == 'youtube')
     return `https://www.youtube.com/embed/${sourceID}` +
       `?modestbranding=1&rel=0&showinfo=0&autohide=0&iv_load_policy=3` +
-      `&color=white&theme=dark&autoplay=0&start=${startTime}&end=${endTime}`;
+      `&color=white&autoplay=0&start=${startTime}&end=${endTime}`;
   else if (source == 'vimeo')
     return `https://player.vimeo.com/video/${sourceID}` +
       `?title=0&portrait=0&byline=0&badge=0&autoplay=0#t=${startTime}`;
