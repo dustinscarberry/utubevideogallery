@@ -1,6 +1,6 @@
 {
   "name": "utubevideo-gallery",
-  "version": "1.0.0",
+  "version": "2.0.6",
   "description": "A YouTube and Vimeo video gallery plugin for WordPress.",
   "main": "index.js",
   "scripts": {

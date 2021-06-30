@@ -27,7 +27,6 @@ License: GPL2
 
 namespace Dscarberry\UTubeVideoGallery;
 
-
 use Dscarberry\UTubeVideoGallery\Controller\View\Dashboard;
 use Dscarberry\UTubeVideoGallery\Controller\View\App;
 use Dscarberry\UTubeVideoGallery\Service\Maintenance;

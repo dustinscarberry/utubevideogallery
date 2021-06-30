@@ -1,5 +1,5 @@
 === uTubeVideo Gallery ===
-Contributors: dman25560
+Contributors: dustinscarberry
 Donate link: https://www.dscarberry.com/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
 Requires at least: 4.9.0
@@ -13,16 +13,13 @@ Display unlimited galleries of YouTube videos in any post or page within your si
 
 == Description ==
 
-This plugin allows the displaying of galleries of YouTube videos within any post or page within your site. Just install and start creating.
+This plugin allows embedding galleries of YouTube videos within any post or page within your site. Just install and start creating.
 
 Features Include:
 
 - Unlimited video galleries (YouTube and Vimeo support)
-- Built in Magnific Popup support with options to use Magnific Popup already installed by another plugin
-- Thumbnail images for videos are cached on your own website
 - Set size of video player
 - Set progress bar color of video player
-- Set starting resolution of videos (480p, 720p, or 1080p)
 - Order video albums by newest or oldest videos first, as well as custom re-ordering of videos / albums
 - Ability to display albums or just  videos
 - Use either square or rectangle thumbnails for videos
@@ -96,11 +93,12 @@ A user must be an editor or above in order to manage video galleries and change 
 
 * Code restructuring
 * Grid thumbnail layout
-* Api Key validity checks
+* API Key validity checks
 * Updated missing image
 * Removed controls theme color (no longer used by YouTube)
 * Removed script removal feature
 * Removed video quality (no longer relevant)
+* Bug fixes
 
 = 2.0.5 =
 

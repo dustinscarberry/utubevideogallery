@@ -14,19 +14,15 @@ Alternatively you may [download the plugin here](https://wordpress.org/plugins/u
 
 - **Max Player Width** - Max width of popup video player for gallery views.
 
-- **Thumbnail Width** - Thumbnail size used for all video thumbnails, unless overwritten in shortcode.
+- **Thumbnail Width** - Thumbnail size used for all video thumbnails.
 
-- **Thumbnail Horizontal Padding** - Horizontal padding between video thumbnails.
-
-- **Thumbnail Vertical Padding** - Vertical padding between video thumbnails.
+- **Thumbnail Padding** - Padding between video thumbnails.
 
 - **Thumbnail Border Radius** - Border rounding for video thumbnails.
 
 - **Overlay Color** - Video popup player overlay background color.
 
 - **Overlay Opacity** - Video popup player overlay opacity.
-
-- **Remove Video Popup Scripts** - Remove video popup player scripts if using a plugin that already loads "Magnific Popup"
 
 - **(YouTube) API Key** - Your API key for YouTube API's **(this is required in order to add YouTube videos)**
 
@@ -36,8 +32,6 @@ Alternatively you may [download the plugin here](https://wordpress.org/plugins/u
 4. Click "Create Credentials" and then "API key". (This will be the key you insert into the plugin settings)
 5. On the sidebar on the left click "Library".
 6. Select the "YouTube Data API v3" and enable it.
-
-- **(YouTube) Controls Theme** - Controls theme for the YouTube video player.
 
 - **(YouTube) Controls Color** - Controls color for the YouTube video player.
 
@@ -73,7 +67,7 @@ To insert a gallery into a page or post, just copy and paste the shortcode given
 
 To create a playlist under the "Saved Playlists" tab click the "Add Playlist" button. Here you can add playlists from either YouTube or Vimeo and select which videos you want to import. When importing videos you must choose an album for them to be added to.
 
-Valid playlist url formats include:
+Valid playlist URL formats include:
 
 -- https://www.youtube.com/watch?v=xxxxx&list=xxxx  
 -- https://vimeo.com/album/xxxx
@@ -111,7 +105,7 @@ There are a few options you can use with your shortcodes to modify / over-ride s
 
 #### How many video galleries, albums or videos can I create?
 
-As many as needed.
+There are no limits.
 
 #### Can I use any YouTube or Vimeo video?
 
@@ -143,7 +137,7 @@ Video order is based on the order of the album(s) in the gallery and then orderi
 
 #### What happened to permalinks / permalink status?
 
-Galleries are now based on React and therefore do not cause a page reload. In doing so permalinks have been removed. This also allows multisite compatibility.
+Galleries are now based on React and therefore do not cause a page reload. In doing so permalinks have been removed. This also allowed the introduction of multisite compatibility.
 
 #### What user permissions are required to use this plugin?
 
