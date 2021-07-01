@@ -23,7 +23,9 @@ class VideoAPIv1 extends APIv1
         'callback' => [$this, 'getAlbumItems'],
         'args' => [
           'albumID' => [
-            'validate_callback' => 'is_numeric'
+            'validate_callback' => function($v) {
+              return is_numeric($v);
+            }
           ]
         ]
       ]
@@ -38,7 +40,9 @@ class VideoAPIv1 extends APIv1
         'callback' => [$this, 'getGalleryItems'],
         'args' => [
           'galleryID' => [
-            'validate_callback' => 'is_numeric'
+            'validate_callback' => function($v) {
+              return is_numeric($v);
+            }
           ]
         ]
       ]
@@ -77,7 +81,9 @@ class VideoAPIv1 extends APIv1
           'callback' => [$this, 'getItem'],
           'args' => [
             'videoID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {
@@ -89,7 +95,9 @@ class VideoAPIv1 extends APIv1
           'callback' => [$this, 'deleteItem'],
           'args' => [
             'videoID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {
@@ -101,7 +109,9 @@ class VideoAPIv1 extends APIv1
           'callback' => [$this, 'updateItem'],
           'args' => [
             'videoID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {

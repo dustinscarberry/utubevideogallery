@@ -41,7 +41,9 @@ class PlaylistAPIv1 extends APIv1
           'callback' => [$this, 'getItem'],
           'args' => [
             'playlistID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {
@@ -53,7 +55,9 @@ class PlaylistAPIv1 extends APIv1
           'callback' => [$this, 'deleteItem'],
           'args' => [
             'playlistID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {
@@ -65,7 +69,9 @@ class PlaylistAPIv1 extends APIv1
           'callback' => [$this, 'updateItem'],
           'args' => [
             'playlistID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {

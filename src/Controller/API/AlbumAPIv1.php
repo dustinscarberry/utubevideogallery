@@ -22,7 +22,9 @@ class AlbumAPIv1 extends APIv1
         'callback' => [$this, 'getGalleryItems'],
         'args' => [
           'galleryID' => [
-            'validate_callback' => 'is_numeric'
+            'validate_callback' => function($v) {
+              return is_numeric($v);
+            }
           ]
         ]
       ]
@@ -58,7 +60,9 @@ class AlbumAPIv1 extends APIv1
           'callback' => [$this, 'getItem'],
           'args' => [
             'albumID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {
@@ -70,7 +74,9 @@ class AlbumAPIv1 extends APIv1
           'callback' => [$this, 'deleteItem'],
           'args' => [
             'albumID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {
@@ -82,7 +88,9 @@ class AlbumAPIv1 extends APIv1
           'callback' => [$this, 'updateItem'],
           'args' => [
             'albumID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {

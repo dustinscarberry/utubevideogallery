@@ -44,7 +44,9 @@ class GalleryAPIv1 extends APIv1
           'callback' => [$this, 'getItem'],
           'args' => [
             'galleryID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {
@@ -56,7 +58,9 @@ class GalleryAPIv1 extends APIv1
           'callback' => [$this, 'deleteItem'],
           'args' => [
             'galleryID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {
@@ -68,7 +72,9 @@ class GalleryAPIv1 extends APIv1
           'callback' => [$this, 'updateItem'],
           'args' => [
             'galleryID' => [
-              'validate_callback' => 'is_numeric'
+              'validate_callback' => function($v) {
+                return is_numeric($v);
+              }
             ]
           ],
           'permission_callback' => function() {
