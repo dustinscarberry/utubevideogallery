@@ -8,7 +8,7 @@ use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 
 class VimeoPlaylistFactory
 {
-  static function getPlaylistData(VimeoPlaylistType $form)
+  public static function getPlaylistData(VimeoPlaylistType $form)
   {
     //initialize return object
     $playlistData = new \stdClass();

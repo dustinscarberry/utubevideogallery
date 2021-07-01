@@ -35,7 +35,7 @@ class ThumbnailFactory
   }
 
   // save thumbnail
-  private function saveThumbnail($video, $sourceUrl, $thumbnailWidth)
+  private static function saveThumbnail($video, $sourceUrl, $thumbnailWidth)
   {
     // set base paths
     $dir = wp_upload_dir();
@@ -57,7 +57,7 @@ class ThumbnailFactory
   }
 
   // save square thumbnail
-  private function saveSquareThumbnail($image, $thumbnailWidth, $destinationPath, $filename)
+  private static function saveSquareThumbnail($image, $thumbnailWidth, $destinationPath, $filename)
   {
     // save retina image
     $image->resize($thumbnailWidth * 2, $thumbnailWidth * 2, true);
@@ -71,7 +71,7 @@ class ThumbnailFactory
   }
 
   // save rectangle thumbnail
-  private function saveRectangleThumbnail($image, $thumbnailWidth, $destinationPath, $filename)
+  private static function saveRectangleThumbnail($image, $thumbnailWidth, $destinationPath, $filename)
   {
     //check image size and crop to 1.77 if needed
     $imageSize = $image->get_size();
@@ -97,7 +97,7 @@ class ThumbnailFactory
   }
 
   // attempt to load missing thumbnail source
-  private function getMissingThumbnail()
+  private static function getMissingThumbnail()
   {
     $missingUrl = WP_PLUGIN_DIR . '/utubevideogallery/public/img/missing@2x.jpg';
     $image = wp_get_image_editor($missingUrl);
@@ -109,7 +109,7 @@ class ThumbnailFactory
   }
 
   // get thumbnail source url
-  private function getThumbnailSourceURL($videoSourceType, $videoSlug, $youTubeApiKey = '')
+  private static function getThumbnailSourceURL($videoSourceType, $videoSlug, $youTubeApiKey = '')
   {
     if ($videoSourceType == 'youtube')
       return YouTubeApi::getYouTubeVideoThumbnail($videoSlug, $youTubeApiKey);

@@ -7,7 +7,7 @@ use Dscarberry\UTubeVideoGallery\Entity\Playlist;
 class PlaylistRepository
 {
   // get playlist
-  static function getItem(int $playlistID)
+  public static function getItem(int $playlistID)
   {
     global $wpdb;
 
@@ -31,7 +31,7 @@ class PlaylistRepository
   }
 
   // get playlists
-  static function getItems()
+  public static function getItems()
   {
     global $wpdb;
     $data = [];
@@ -50,7 +50,7 @@ class PlaylistRepository
   }
 
   // create playlist
-  static function createItem(
+  public static function createItem(
     $title,
     $source,
     $sourceID,
@@ -78,7 +78,7 @@ class PlaylistRepository
   }
 
   // delete playlist
-  static function deleteItem(int $playlistID)
+  public static function deleteItem(int $playlistID)
   {
     global $wpdb;
 
@@ -92,7 +92,7 @@ class PlaylistRepository
   }
 
   // update playlist
-  static function updateItem($form)
+  public static function updateItem($form)
   {
     global $wpdb;
 

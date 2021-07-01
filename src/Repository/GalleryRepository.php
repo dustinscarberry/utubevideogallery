@@ -7,7 +7,7 @@ use Dscarberry\UTubeVideoGallery\Entity\Gallery;
 class GalleryRepository
 {
   // get gallery
-  static function getItem(int $galleryID)
+  public static function getItem(int $galleryID)
   {
     global $wpdb;
 
@@ -42,7 +42,7 @@ class GalleryRepository
   }
 
   // get all galleries
-  static function getItems()
+  public static function getItems()
   {
     global $wpdb;
     $data = [];
@@ -71,7 +71,7 @@ class GalleryRepository
   }
 
   // create gallery
-  static function createItem(
+  public static function createItem(
     $title,
     $albumSorting,
     $thumbnailType,
@@ -97,7 +97,7 @@ class GalleryRepository
   }
 
   // delete gallery
-  static function deleteItem(int $galleryID)
+  public static function deleteItem(int $galleryID)
   {
     global $wpdb;
 
@@ -111,7 +111,7 @@ class GalleryRepository
   }
 
   // update gallery
-  static function updateItem($form)
+  public static function updateItem($form)
   {
     global $wpdb;
 

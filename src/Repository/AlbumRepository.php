@@ -7,7 +7,7 @@ use Dscarberry\UTubeVideoGallery\Entity\Album;
 class AlbumRepository
 {
   // get album
-  static function getItem(int $albumID)
+  public static function getItem(int $albumID)
   {
     global $wpdb;
 
@@ -42,7 +42,7 @@ class AlbumRepository
   }
 
   // get all albums
-  static function getItems()
+  public static function getItems()
   {
     global $wpdb;
     $data = [];
@@ -71,7 +71,7 @@ class AlbumRepository
   }
 
   // create album
-  static function createItem(
+  public static function createItem(
     $title,
     $slug,
     $videoSorting,
@@ -100,7 +100,7 @@ class AlbumRepository
   }
 
   // delete album
-  static function deleteItem(int $albumID)
+  public static function deleteItem(int $albumID)
   {
     global $wpdb;
 
@@ -115,7 +115,7 @@ class AlbumRepository
   }
 
   // update album
-  static function updateItem($form)
+  public static function updateItem($form)
   {
     global $wpdb;
 
@@ -152,7 +152,7 @@ class AlbumRepository
   }
 
   // update album sort position
-  static function updateItemPosition(int $albumID, int $position)
+  public static function updateItemPosition(int $albumID, int $position)
   {
     global $wpdb;
 
@@ -167,7 +167,7 @@ class AlbumRepository
   }
 
   // get all albums in a gallery
-  static function getItemsByGallery(int $galleryID)
+  public static function getItemsByGallery(int $galleryID)
   {
     global $wpdb;
     $data = [];
@@ -203,7 +203,7 @@ class AlbumRepository
   }
 
   // get all published albums in a gallery
-  static function getPublishedItemsByGallery(int $galleryID, string $sortDirection = 'desc')
+  public static function getPublishedItemsByGallery(int $galleryID, string $sortDirection = 'desc')
   {
     global $wpdb;
     $data = [];
@@ -240,7 +240,7 @@ class AlbumRepository
   }
 
   // delete all albums in a gallery
-  static function deleteItemsByGallery(int $galleryID)
+  public static function deleteItemsByGallery(int $galleryID)
   {
     global $wpdb;
 
@@ -254,7 +254,7 @@ class AlbumRepository
   }
 
   // get next album sort position in a gallery
-  static function getNextSortPositionByGallery(int $galleryID)
+  public static function getNextSortPositionByGallery(int $galleryID)
   {
     global $wpdb;
 

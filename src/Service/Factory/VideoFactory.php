@@ -11,7 +11,7 @@ use Dscarberry\UTubeVideoGallery\Exception\UserMessageException;
 class VideoFactory
 {
   //get video
-  static function getVideo(int $videoID)
+  public static function getVideo(int $videoID)
   {
     //get video
     $video = VideoRepository::getItem($videoID);
@@ -24,25 +24,25 @@ class VideoFactory
   }
 
   //get all videos
-  static function getVideos()
+  public static function getVideos()
   {
     return VideoRepository::getItems();
   }
 
   //get videos in album
-  static function getAlbumVideos(int $albumID)
+  public static function getAlbumVideos(int $albumID)
   {
     return VideoRepository::getItemsByAlbum($albumID);
   }
 
   //get videos in galllery
-  static function getGalleryVideos(int $galleryID)
+  public static function getGalleryVideos(int $galleryID)
   {
     return VideoRepository::getItemsByGallery($galleryID);
   }
 
   //create video
-  static function createVideo(VideoType $form)
+  public static function createVideo(VideoType $form)
   {
     //get next video sort position
     $nextSortPosition = VideoRepository::getNextSortPositionByAlbum($form->getAlbumID());
@@ -77,7 +77,7 @@ class VideoFactory
   }
 
   // update video
-  static function updateVideo(VideoType $form)
+  public static function updateVideo(VideoType $form)
   {
     // update video info
     if (!VideoRepository::updateItem($form))
@@ -89,7 +89,7 @@ class VideoFactory
   }
 
   // update videos order in album
-  static function updateVideosOrder(VideoOrderType $form)
+  public static function updateVideosOrder(VideoOrderType $form)
   {
     $videoCount = count($form->getVideoIDs());
 
@@ -98,7 +98,7 @@ class VideoFactory
   }
 
   // delete video
-  static function deleteVideo(int $videoID)
+  public static function deleteVideo(int $videoID)
   {
     //get video
     $video = VideoRepository::getItem($videoID);

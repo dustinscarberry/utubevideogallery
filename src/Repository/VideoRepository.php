@@ -7,7 +7,7 @@ use Dscarberry\UTubeVideoGallery\Entity\Video;
 class VideoRepository
 {
   // get video
-  static function getItem(int $videoID)
+  public static function getItem(int $videoID)
   {
     global $wpdb;
 
@@ -32,7 +32,7 @@ class VideoRepository
   }
 
   // get videos
-  static function getItems()
+  public static function getItems()
   {
     global $wpdb;
     $data = [];
@@ -50,7 +50,7 @@ class VideoRepository
   }
 
   // create video
-  static function createItem($form, int $nextSortPosition, $thumbnailType)
+  public static function createItem($form, int $nextSortPosition, $thumbnailType)
   {
     global $wpdb;
 
@@ -79,7 +79,7 @@ class VideoRepository
   }
 
   // delete video
-  static function deleteItem(int $videoID)
+  public static function deleteItem(int $videoID)
   {
     global $wpdb;
 
@@ -94,7 +94,7 @@ class VideoRepository
   }
 
   // update video
-  static function updateItem($form)
+  public static function updateItem($form)
   {
     global $wpdb;
 
@@ -138,7 +138,7 @@ class VideoRepository
   }
 
   // update video sort position
-  static function updateItemPosition(int $videoID, int $position)
+  public static function updateItemPosition(int $videoID, int $position)
   {
     global $wpdb;
 
@@ -153,7 +153,7 @@ class VideoRepository
   }
 
   // get all videos in an album
-  static function getItemsByAlbum(int $albumID)
+  public static function getItemsByAlbum(int $albumID)
   {
     global $wpdb;
     $data = [];
@@ -179,7 +179,7 @@ class VideoRepository
   }
 
   // get all published videos in an album
-  static function getPublishedItemsByAlbum(int $albumID, $sortDirection = 'desc')
+  public static function getPublishedItemsByAlbum(int $albumID, $sortDirection = 'desc')
   {
     global $wpdb;
     $data = [];
@@ -206,7 +206,7 @@ class VideoRepository
   }
 
   // get all videos in a playlist
-  static function getItemsByPlaylist(int $playlistID)
+  public static function getItemsByPlaylist(int $playlistID)
   {
     global $wpdb;
     $data = [];
@@ -231,7 +231,7 @@ class VideoRepository
   }
 
   // get all videos in a gallery
-  static function getItemsByGallery(int $galleryID)
+  public static function getItemsByGallery(int $galleryID)
   {
     global $wpdb;
     $data = [];
@@ -265,7 +265,7 @@ class VideoRepository
   }
 
   // get next video sort position in an album
-  static function getNextSortPositionByAlbum(int $albumID)
+  public static function getNextSortPositionByAlbum(int $albumID)
   {
     global $wpdb;
 
@@ -290,7 +290,7 @@ class VideoRepository
   }
 
   // get video thumbnail type for album
-  static function getThumbnailTypeByAlbum($albumID = false)
+  public static function getThumbnailTypeByAlbum($albumID = false)
   {
     global $wpdb;
 
@@ -315,7 +315,7 @@ class VideoRepository
   }
 
   // delete all videos in an album
-  static function deleteItemsByAlbum($albumID = false)
+  public static function deleteItemsByAlbum($albumID = false)
   {
     global $wpdb;
 
@@ -330,7 +330,7 @@ class VideoRepository
   }
 
   // delete all video in a gallery
-  static function deleteItemsByGallery($galleryID)
+  public static function deleteItemsByGallery($galleryID)
   {
     global $wpdb;
 
