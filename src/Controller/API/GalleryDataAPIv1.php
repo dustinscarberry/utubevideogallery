@@ -21,7 +21,9 @@ class GalleryDataAPIv1 extends APIv1
         'methods' => WP_REST_Server::READABLE,
         'callback' => [$this, 'getItem'],
         'args' => [
-          'galleryID'
+          'galleryID' => [
+            'validate_callback' => 'is_numeric'
+          ]
         ]
       ]
     );

@@ -40,7 +40,9 @@ class PlaylistAPIv1 extends APIv1
           'methods' => WP_REST_Server::READABLE,
           'callback' => [$this, 'getItem'],
           'args' => [
-            'playlistID'
+            'playlistID' => [
+              'validate_callback' => 'is_numeric'
+            ]
           ],
           'permission_callback' => function() {
             return current_user_can('edit_others_posts');
@@ -50,7 +52,9 @@ class PlaylistAPIv1 extends APIv1
           'methods' => WP_REST_Server::DELETABLE,
           'callback' => [$this, 'deleteItem'],
           'args' => [
-            'playlistID'
+            'playlistID' => [
+              'validate_callback' => 'is_numeric'
+            ]
           ],
           'permission_callback' => function() {
             return current_user_can('edit_others_posts');
@@ -60,7 +64,9 @@ class PlaylistAPIv1 extends APIv1
           'methods' => 'PATCH',
           'callback' => [$this, 'updateItem'],
           'args' => [
-            'playlistID'
+            'playlistID' => [
+              'validate_callback' => 'is_numeric'
+            ]
           ],
           'permission_callback' => function() {
             return current_user_can('edit_others_posts');

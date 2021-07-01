@@ -20,7 +20,10 @@ class GalleryAPIv1 extends APIv1
       [
         [
           'methods' => WP_REST_Server::READABLE,
-          'callback' => [$this, 'getItems']
+          'callback' => [$this, 'getItems'],
+          'permission_callback' => function() {
+            return true;
+          }
         ],
         [
           'methods' => WP_REST_Server::CREATABLE,
@@ -40,7 +43,9 @@ class GalleryAPIv1 extends APIv1
           'methods' => WP_REST_Server::READABLE,
           'callback' => [$this, 'getItem'],
           'args' => [
-            'galleryID'
+            'galleryID' => [
+              'validate_callback' => 'is_numeric'
+            ]
           ],
           'permission_callback' => function() {
             return current_user_can('edit_others_posts');
@@ -50,7 +55,9 @@ class GalleryAPIv1 extends APIv1
           'methods' => WP_REST_Server::DELETABLE,
           'callback' => [$this, 'deleteItem'],
           'args' => [
-            'galleryID'
+            'galleryID' => [
+              'validate_callback' => 'is_numeric'
+            ]
           ],
           'permission_callback' => function() {
             return current_user_can('edit_others_posts');
@@ -60,7 +67,9 @@ class GalleryAPIv1 extends APIv1
           'methods' => 'PATCH',
           'callback' => [$this, 'updateItem'],
           'args' => [
-            'galleryID'
+            'galleryID' => [
+              'validate_callback' => 'is_numeric'
+            ]
           ],
           'permission_callback' => function() {
             return current_user_can('edit_others_posts');

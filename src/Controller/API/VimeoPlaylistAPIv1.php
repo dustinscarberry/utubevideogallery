@@ -22,7 +22,9 @@ class VimeoPlaylistAPIv1 extends APIv1
         'methods' => WP_REST_Server::READABLE,
         'callback' => [$this, 'getAllItems'],
         'args' => [
-          'sourceID'
+          'sourceID' => [
+            'validate_callback' => 'is_numeric'
+          ]
         ],
         'permission_callback' => function() {
           return current_user_can('edit_others_posts');

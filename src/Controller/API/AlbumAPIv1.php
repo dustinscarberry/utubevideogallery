@@ -21,7 +21,9 @@ class AlbumAPIv1 extends APIv1
         'methods' => WP_REST_Server::READABLE,
         'callback' => [$this, 'getGalleryItems'],
         'args' => [
-          'galleryID'
+          'galleryID' => [
+            'validate_callback' => 'is_numeric'
+          ]
         ]
       ]
     );
@@ -55,7 +57,9 @@ class AlbumAPIv1 extends APIv1
           'methods' => WP_REST_Server::READABLE,
           'callback' => [$this, 'getItem'],
           'args' => [
-            'albumID'
+            'albumID' => [
+              'validate_callback' => 'is_numeric'
+            ]
           ],
           'permission_callback' => function() {
             return current_user_can('edit_others_posts');
@@ -65,7 +69,9 @@ class AlbumAPIv1 extends APIv1
           'methods' => WP_REST_Server::DELETABLE,
           'callback' => [$this, 'deleteItem'],
           'args' => [
-            'albumID'
+            'albumID' => [
+              'validate_callback' => 'is_numeric'
+            ]
           ],
           'permission_callback' => function() {
             return current_user_can('edit_others_posts');
@@ -75,7 +81,9 @@ class AlbumAPIv1 extends APIv1
           'methods' => 'PATCH',
           'callback' => [$this, 'updateItem'],
           'args' => [
-            'albumID'
+            'albumID' => [
+              'validate_callback' => 'is_numeric'
+            ]
           ],
           'permission_callback' => function() {
             return current_user_can('edit_others_posts');
