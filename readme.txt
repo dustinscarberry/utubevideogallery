@@ -98,7 +98,7 @@ A user must be an editor or above in order to manage video galleries and change 
 * Removed controls theme color (no longer used by YouTube)
 * Removed script removal feature
 * Removed video quality (no longer relevant)
-* PHP 8 compatibility
+* PHP 8 support
 * Bug fixes
 
 = 2.0.5 =
