@@ -34,7 +34,7 @@ class Video implements JsonSerializable
     $this->description = $dbRow->VID_DESCRIPTION;
     $this->source = $dbRow->VID_SOURCE;
     $this->thumbnail = $dbRow->VID_URL . $dbRow->VID_ID;
-    $this->thumbnailType = $dbRow->THUMBNAIL_TYPE;
+    $this->thumbnailType = isset($dbRow->THUMBNAIL_TYPE) ? $dbRow->THUMBNAIL_TYPE : null;
     $this->sourceID = $dbRow->VID_URL;
     $this->showControls = $dbRow->VID_CHROME;
     $this->startTime = $dbRow->VID_STARTTIME;
