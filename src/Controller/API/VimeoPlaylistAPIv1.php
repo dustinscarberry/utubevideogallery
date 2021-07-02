@@ -24,7 +24,7 @@ class VimeoPlaylistAPIv1 extends APIv1
         'args' => [
           'sourceID' => [
             'validate_callback' => function($v) {
-              return is_numeric($v);
+              return true;
             }
           ]
         ],
