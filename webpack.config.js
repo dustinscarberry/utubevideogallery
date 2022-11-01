@@ -36,10 +36,7 @@ module.exports = {
     ]
   },
   plugins: [
-    new MiniCssExtractPlugin({filename: '../css/[name].min.css'}),
-    new webpack.ProvidePlugin({
-      process: 'process/browser',
-    })
+    new MiniCssExtractPlugin({filename: '../css/[name].min.css'})
   ],
   optimization: {
     minimize: true,
