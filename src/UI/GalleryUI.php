@@ -30,11 +30,11 @@ class GalleryUI
   {
     return '<div
       class="utv-gallery-root"
-      data-id="' . $this->atts['id'] . '"
-      data-icontype="' . $this->atts['icon'] . '"
-      data-max-videos="' . $this->atts['maxvideos'] . '"
-      data-max-albums="' . $this->atts['maxalbums'] . '"
-      data-thumbnails-per-page="' . $this->atts['thumbnailsperpage'] . '"
+      data-id="' . esc_attr($this->atts['id']) . '"
+      data-icontype="' . esc_attr($this->atts['icon']) . '"
+      data-max-videos="' . esc_attr($this->atts['maxvideos']) . '"
+      data-max-albums="' . esc_attr($this->atts['maxalbums']) . '"
+      data-thumbnails-per-page="' . esc_attr($this->atts['thumbnailsperpage']) . '"
     ></div>';
   }
 }

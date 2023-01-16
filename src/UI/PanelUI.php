@@ -28,12 +28,12 @@ class PanelUI
   {
     return '<div
       class="utv-panel-root"
-      data-id="' . $this->atts['id'] . '"
-      data-controls="' . $this->atts['controls'] . '"
-      data-videos-per-page="' . $this->atts['panelvideocount'] . '"
-      data-theme="' . $this->atts['theme'] . '"
-      data-icon="' . $this->atts['icon'] . '"
-      data-max-videos="' . $this->atts['maxvideos'] . '"
+      data-id="' . esc_attr($this->atts['id']) . '"
+      data-controls="' . esc_attr($this->atts['controls']) . '"
+      data-videos-per-page="' . esc_attr($this->atts['panelvideocount']) . '"
+      data-theme="' . esc_attr($this->atts['theme']) . '"
+      data-icon="' . esc_attr($this->atts['icon']) . '"
+      data-max-videos="' . esc_attr($this->atts['maxvideos']) . '"
     ></div>';
   }
 }
