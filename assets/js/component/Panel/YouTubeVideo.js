@@ -1,4 +1,3 @@
-import React from 'react';
 import Iframe from 'component/shared/Iframe';
 import { getYouTubeEmbedURL } from 'helpers/youtube-helpers';
 

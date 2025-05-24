@@ -4,7 +4,6 @@ import Cell from './Cell';
 import ActionCell from './ActionCell';
 import { DragSource } from 'react-dnd';
 import { DropTarget } from 'react-dnd';
-import { findDOMNode } from 'react-dom';
 
 const itemType = 'row';
 
@@ -40,7 +39,7 @@ const rowTarget = {
 			return;
 
     //determine rectangle on screen
-    const hoverBoundingRect = (findDOMNode(component)).getBoundingClientRect();
+    const hoverBoundingRect = props.tableBodyRef.current.getBoundingClientRect();
 
     //get vertical middle
     const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
@@ -97,7 +96,8 @@ class RowDraggable extends React.Component
       toggleRowCheckbox,
       connectDragSource,
       connectDropTarget,
-      isDragging
+      isDragging,
+      tableBodyRef
     } = this.props;
 
     const { expanded } = this.state;

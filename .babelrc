@@ -3,16 +3,16 @@
     [
       "@babel/preset-env",
       {
-      "targets": {
-        "ie": "11"
-      },
+      "targets": ">1%, not ie 11",
       "useBuiltIns": false,
       "debug": false,
       "modules": false
     }],
-    "@babel/preset-react"
+    [
+      "@babel/preset-react", {
+        "runtime": "automatic"
+      }
+    ]
   ],
-  "plugins": [
-    "@babel/plugin-proposal-class-properties"
-  ]
+  "plugins": []
 }

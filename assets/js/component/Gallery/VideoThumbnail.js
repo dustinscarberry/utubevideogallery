@@ -1,5 +1,3 @@
-import React from 'react';
-
 const VideoThumbnail = ({title, image, value, onOpenVideo}) => {
   return <div className="utv-thumbnail" onClick={() => onOpenVideo(value)}>
     <a>

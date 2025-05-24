@@ -1,7 +1,6 @@
-import React from 'react';
+import { useRef } from 'react';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
-import Row from './Row';
 import RowDraggable from './RowDraggable';
 
 const TableBodyDraggable = (props) => {
@@ -16,9 +15,11 @@ const TableBodyDraggable = (props) => {
     reorderRows
   } = props;
 
+  const tableBodyRef = useRef();
+
   return (
     <DndProvider backend={HTML5Backend}>
-      <tbody>
+      <tbody ref={tableBodyRef}>
 
         {data.map((row, i) =>
           <RowDraggable
@@ -30,6 +31,7 @@ const TableBodyDraggable = (props) => {
             toggleRowCheckbox={toggleRowCheckbox}
             moveRow={moveRow}
             reorderRows={reorderRows}
+            tableBodyRef={tableBodyRef}
           />
         )}
 

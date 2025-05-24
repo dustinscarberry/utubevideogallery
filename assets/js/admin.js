@@ -1,8 +1,7 @@
 import '../scss/admin.scss';
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import Dashboard from './component/Dashboard';
 
-const dashboard = document.getElementById('utv-dashboard-root');
-if (dashboard)
-  ReactDOM.render(<Dashboard/>, dashboard);
+const dashboardRoot = document.getElementById('utv-dashboard-root');
+if (dashboardRoot)
+  createRoot(dashboardRoot).render(<Dashboard/>);

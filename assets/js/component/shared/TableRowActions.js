@@ -1,5 +1,3 @@
-import React from 'react';
-
 const TableRowActions = ({actions}) => {
   const actionNodes = [];
   for (let i = 0; i < actions.length; i++) {

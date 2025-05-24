@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PageHandle = ({page, selected, onChangePage}) => {
   const handleClasses = ['utv-panel-paging-handle'];
 

@@ -3,7 +3,7 @@
 Plugin Name: uTubeVideo Gallery
 Plugin URI: http://www.dscarberry.com/
 Description: This plugin allows you to create YouTube video galleries to embed in a WordPress site.
-Version: 2.0.9
+Version: 2.0.11
 Author: Dustin Scarberry
 Author URI: http://www.dscarberry.com/
 License: GPL2

@@ -1,4 +1,3 @@
-import React from 'react';
 import Iframe from './Iframe';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';

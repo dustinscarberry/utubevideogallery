@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PublishedIcon = ({isPublished, togglePublishStatus}) => {
   if (isPublished)
     return <i

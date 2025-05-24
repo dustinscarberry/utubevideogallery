@@ -1,4 +1,3 @@
-import React from 'react';
 import ThumbnailsGrid from 'component/shared/ThumbnailsGrid';
 import AlbumThumbnail from './AlbumThumbnail';
 import { getThumbnailsClasses } from 'helpers/gallery-helpers';

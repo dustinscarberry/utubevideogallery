@@ -39,7 +39,7 @@ class Dashboard
     wp_enqueue_script('jquery');
 
     // babel polyfill fallback
-    if (!wp_script_is('wp-polyfill', 'registered'))
+    /*if (!wp_script_is('wp-polyfill', 'registered'))
       wp_enqueue_script(
         'babel-polyfill',
         'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.11.5/polyfill.min.js',
@@ -49,6 +49,7 @@ class Dashboard
       );
     else
       wp_enqueue_script('wp-polyfill');
+    */
 
     wp_enqueue_script(
       'utv-admin-js',

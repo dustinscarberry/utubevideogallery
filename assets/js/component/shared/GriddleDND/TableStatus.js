@@ -1,5 +1,3 @@
-import React from 'react';
-
 const TableStatus = ({recordCount, recordLabel}) => {
   const statusLabel = recordCount + ' ' + recordLabel;
 

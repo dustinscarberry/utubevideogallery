@@ -1,4 +1,3 @@
-import React from 'react';
 import PlaylistPreviewItem from 'component/shared/PlaylistPreviewItem';
 
 const PlaylistVideoSelection = ({

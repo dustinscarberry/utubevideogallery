@@ -43,6 +43,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  img {
+    height: auto;
+    max-width: 100%;
+    width: auto;
+}
 }
 
 .utv-gallery .utv-play-btn,

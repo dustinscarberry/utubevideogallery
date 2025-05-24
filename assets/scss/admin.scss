@@ -1,7 +1,7 @@
 /* Admin CSS */
-@import 'admin/layout';
-@import 'admin/components';
-@import 'admin/inputs';
-@import 'admin/utility';
-@import 'admin/tabs';
-@import 'admin/ccgriddle';
+@use 'admin/layout';
+@use 'admin/components';
+@use 'admin/inputs';
+@use 'admin/utility';
+@use 'admin/tabs';
+@use 'admin/ccgriddle';

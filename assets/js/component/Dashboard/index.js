@@ -1,4 +1,4 @@
-import React from 'react';
+import { Component } from 'react';
 import Tabs from 'component/shared/Tabs';
 import Pane from 'component/shared/Pane';
 import GalleryTabView from './GalleryTabView';
@@ -17,7 +17,7 @@ import SettingsTabView from './SettingsTabView';
 import DocumentationTabView from './DocumentationTabView';
 import UserFeedback from 'component/shared/UserFeedback';
 
-class Dashboard extends React.Component
+class Dashboard extends Component
 {
   constructor(props) {
     super(props);

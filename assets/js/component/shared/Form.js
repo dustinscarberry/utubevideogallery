@@ -1,18 +1,20 @@
-import React from 'react';
+import { Component, createRef } from 'react';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
-class Form extends React.Component
+class Form extends Component
 {
   constructor(props) {
     super(props);
     this.state = {
       isValidated: false
     };
+
+    this.form = createRef();
   }
 
   validate = () => {
-    let form = this.refs.form;
+    let form = this.form.current;
     let formValid = form.checkValidity() || false;
 
     for (let i = 0; i < form.length; i++) {
@@ -55,7 +57,7 @@ class Form extends React.Component
     const { isValidated } = this.state;
 
     return <form
-      ref="form"
+      ref={this.form}
       onSubmit={this.onSubmit}
       className={classnames(classes, {'was-validated': isValidated})}
       noValidate

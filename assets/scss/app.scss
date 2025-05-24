@@ -1,6 +1,6 @@
 /* Frontend CSS */
-@import 'app/shared';
-@import 'app/gallery';
-@import 'app/panel';
-@import 'app/utility';
-@import 'app/override';
+@use 'app/shared';
+@use 'app/gallery';
+@use 'app/panel';
+@use 'app/utility';
+@use 'app/override';

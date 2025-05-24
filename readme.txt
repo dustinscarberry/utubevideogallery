@@ -3,9 +3,9 @@ Contributors: dustinscarberry
 Donate link: https://www.dscarberry.com/utubevideo-gallery/
 Tags: video, gallery, youtube, vimeo
 Requires at least: 4.9.0
-Requires PHP: 7.0
-Tested up to: 6.1
-Stable tag: 2.0.9
+Requires PHP: 8.0
+Tested up to: 6.8
+Stable tag: 2.0.11
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,14 @@ A user must be an editor or above in order to manage video galleries and change 
 6. Admin view
 
 == Changelog ==
+
+= 2.0.11 =
+
+* Refactoring / compatibility with latest version of WordPress
+
+= 2.0.10 =
+
+* Bug fixes
 
 = 2.0.9 =
 

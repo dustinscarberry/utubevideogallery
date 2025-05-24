@@ -1,5 +1,3 @@
-import React from 'react';
-
 const PlaylistMultiSelect = ({videos, toggleAllVideosSelection}) => {
   // short circuit if no videos
   if (!videos || videos.length < 1)

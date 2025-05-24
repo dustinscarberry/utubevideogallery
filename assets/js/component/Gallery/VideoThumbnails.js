@@ -1,4 +1,3 @@
-import React from 'react';
 import ThumbnailsGrid from 'component/shared/ThumbnailsGrid';
 import VideoThumbnail from './VideoThumbnail';
 import { getThumbnailsClasses } from 'helpers/gallery-helpers';

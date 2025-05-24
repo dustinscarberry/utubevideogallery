@@ -1,4 +1,3 @@
-import React from 'react';
 import Iframe from 'component/shared/Iframe';
 import { getVimeoEmbedURL } from 'helpers/vimeo-helpers';
 

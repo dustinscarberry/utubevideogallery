@@ -1,4 +1,3 @@
-import React from 'react';
 import YouTubeVideo from './YouTubeVideo';
 import VimeoVideo from './VimeoVideo';
 
