@@ -12,7 +12,6 @@ import Breadcrumbs from 'component/shared/Breadcrumbs';
 import Form from 'component/shared/Form';
 import FormField from 'component/shared/FormField';
 import Label from 'component/shared/Label';
-import FieldHint from 'component/shared/FieldHint';
 import TextInput from 'component/shared/TextInput';
 import SelectBox from 'component/shared/SelectBox';
 import SubmitButton from 'component/shared/SubmitButton';
